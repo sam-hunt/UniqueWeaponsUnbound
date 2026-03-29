@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -10,40 +11,56 @@ namespace UniqueWeaponsUnbound
         protected override bool Undrafted => true;
         protected override bool Multiselect => false;
 
-        protected override FloatMenuOption GetSingleOptionFor(
+        public override IEnumerable<FloatMenuOption> GetOptionsFor(
             Thing clickedThing, FloatMenuContext context)
         {
             if (!(clickedThing is Building_WorkTable workbench))
-                return null;
+                yield break;
 
             if (!WeaponCustomizationUtility.IsCustomizationWorkbench(workbench))
-                return null;
+                yield break;
 
             Pawn pawn = context.FirstSelectedPawn;
             if (pawn == null)
-                return null;
+                yield break;
 
-            Thing weapon = pawn.equipment?.Primary;
-            if (weapon == null)
-                return null;
+            // Entry point 1: equipped weapon
+            Thing equipped = pawn.equipment?.Primary;
+            if (equipped != null)
+            {
+                FloatMenuOption option = GetOptionForWeapon(
+                    pawn, equipped, workbench);
+                if (option != null)
+                    yield return option;
+            }
 
+            // Entry point 2: inventory weapons
+            if (pawn.inventory?.innerContainer != null)
+            {
+                foreach (Thing item in pawn.inventory.innerContainer)
+                {
+                    if (!item.def.IsWeapon)
+                        continue;
+
+                    FloatMenuOption option = GetOptionForWeapon(
+                        pawn, item, workbench);
+                    if (option != null)
+                        yield return option;
+                }
+            }
+        }
+
+        private static FloatMenuOption GetOptionForWeapon(
+            Pawn pawn, Thing weapon, Building_WorkTable workbench)
+        {
             // Variant exists + UniqueSmithing gate
             AcceptanceReport customizable = WeaponCustomizationUtility.IsCustomizable(weapon);
             if (!customizable.Accepted && customizable.Reason.NullOrEmpty())
                 return null;
 
             // Resolve base/unique defs for workbench and craftability checks
-            ThingDef baseDef, uniqueDef;
-            if (WeaponCustomizationUtility.IsUniqueWeapon(weapon.def))
-            {
-                uniqueDef = weapon.def;
-                baseDef = WeaponCustomizationUtility.GetBaseVariant(weapon.def);
-            }
-            else
-            {
-                baseDef = weapon.def;
-                uniqueDef = WeaponCustomizationUtility.GetUniqueVariant(weapon.def);
-            }
+            WeaponCustomizationUtility.ResolveWeaponDefs(weapon,
+                out ThingDef baseDef, out ThingDef uniqueDef);
 
             // Workbench: recipe match, then tech-level tier fallback
             TechLevel weaponTechLevel = WeaponCustomizationUtility.GetWeaponTechLevel(weapon);
@@ -89,7 +106,9 @@ namespace UniqueWeaponsUnbound
                     {
                         Job job = JobMaker.MakeJob(
                             UWU_JobDefOf.UWU_CustomizeWeapon);
+                        job.targetB = weapon;
                         job.targetC = workbench;
+                        job.count = 1;
                         pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
                     }),
                 pawn, workbench);

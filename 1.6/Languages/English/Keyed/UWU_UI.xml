@@ -3,6 +3,7 @@
   <UWU_CustomizeWeapon>Customize {0}</UWU_CustomizeWeapon>
   <UWU_RequiresResearch>requires {0}</UWU_RequiresResearch>
   <UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
+  <UWU_NoSuitableWorkbench>no suitable workbench</UWU_NoSuitableWorkbench>
 
   <UWU_Cancel>Cancel</UWU_Cancel>
   <UWU_Reset>Reset</UWU_Reset>

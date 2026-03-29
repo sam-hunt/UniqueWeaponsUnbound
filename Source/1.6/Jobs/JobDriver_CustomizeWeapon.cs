@@ -12,6 +12,7 @@ namespace UniqueWeaponsUnbound
     public class JobDriver_CustomizeWeapon : JobDriver
     {
         private const TargetIndex IngredientIndex = TargetIndex.A;
+        private const TargetIndex WeaponIndex = TargetIndex.B;
         private const TargetIndex WorkbenchIndex = TargetIndex.C;
         private const int WorkTicksPerOp = 1000;
         private const int IngredientSearchRadius = 10;
@@ -20,6 +21,7 @@ namespace UniqueWeaponsUnbound
         private Thing weapon;
         private int currentOpIndex;
         private string phaseReport;
+        private WeaponReturnMode returnMode;
         private Dictionary<ThingDef, float> refundLedger = new Dictionary<ThingDef, float>();
 
         private Building_WorkTable Workbench =>
@@ -27,9 +29,17 @@ namespace UniqueWeaponsUnbound
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
-            // Only reserve the workbench upfront. Ingredient reservation is
-            // deferred to a toil after the dialog provides the spec.
-            return pawn.Reserve(Workbench, job, 1, -1, null, errorOnFailed);
+            if (!pawn.Reserve(Workbench, job, 1, -1, null, errorOnFailed))
+                return false;
+
+            // Only reserve weapon if it's spawned on the map (ground weapon case).
+            // Equipped/inventory weapons don't need map reservations.
+            Thing w = job.GetTarget(WeaponIndex).Thing;
+            if (w != null && w.Spawned
+                && !pawn.Reserve(w, job, 1, -1, null, errorOnFailed))
+                return false;
+
+            return true;
         }
 
         private bool FindAndReserveIngredients(bool errorOnFailed)
@@ -102,7 +112,7 @@ namespace UniqueWeaponsUnbound
                 return phaseReport;
 
             string weaponLabel = weapon?.LabelShortCap
-                ?? pawn.equipment?.Primary?.LabelShortCap
+                ?? job.GetTarget(WeaponIndex).Thing?.LabelShortCap
                 ?? "weapon";
 
             if (spec != null && currentOpIndex >= 0 && currentOpIndex < spec.operations.Count)
@@ -131,7 +141,7 @@ namespace UniqueWeaponsUnbound
             CompRefuelable fuelComp = Workbench.TryGetComp<CompRefuelable>();
 
             this.FailOnDespawnedNullOrForbidden(WorkbenchIndex);
-            // weapon is null during the dialog phase; only check once set
+            // weapon is null during the acquire/carry phase; only check once set
             this.FailOn(() => weapon != null && weapon.Destroyed);
             // Interrupt if workbench loses power or runs out of fuel
             this.FailOn(() =>
@@ -163,39 +173,119 @@ namespace UniqueWeaponsUnbound
                     refundLedger.Clear();
                 }
 
-                // If the job was interrupted after the weapon was placed on the
-                // workbench, re-equip it so the pawn doesn't walk away unarmed.
-                if (weapon != null && !weapon.Destroyed && weapon.Spawned
-                    && pawn.equipment?.Primary == null
-                    && weapon is ThingWithComps twc)
-                {
-                    weapon.DeSpawn();
-                    pawn.equipment.AddEquipment(twc);
-                    twc.def.soundInteract?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
-                }
+                // On interruption, queue a follow-up job so the pawn walks
+                // back to retrieve the weapon naturally (no teleporting).
+                QueueWeaponRecovery();
             });
 
+            // === ACQUIRE WEAPON ===
+            // Derive returnMode from the weapon's current location and move it
+            // into the pawn's carryTracker. For equipped/inventory weapons this
+            // is a direct transfer (no ground drop). For ground weapons the
+            // subsequent toils handle goto + pickup.
+
+            Toil acquireWeapon = ToilMaker.MakeToil("MakeNewToils");
+            acquireWeapon.initAction = delegate
+            {
+                Thing w = job.GetTarget(WeaponIndex).Thing;
+                if (w == null || w.Destroyed)
+                {
+                    EndJobWith(JobCondition.Incompletable);
+                    return;
+                }
+
+                weapon = w;
+
+                if (pawn.equipment?.Primary == w)
+                {
+                    returnMode = WeaponReturnMode.Reequip;
+                    pawn.equipment.Remove((ThingWithComps)w);
+                    if (!pawn.carryTracker.TryStartCarry(w))
+                    {
+                        pawn.equipment.AddEquipment((ThingWithComps)w);
+                        EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
+                }
+                else if (pawn.inventory?.innerContainer?.Contains(w) == true)
+                {
+                    returnMode = WeaponReturnMode.ReturnToInventory;
+                    pawn.inventory.innerContainer.Remove(w);
+                    if (!pawn.carryTracker.TryStartCarry(w))
+                    {
+                        pawn.inventory.innerContainer.TryAdd(w);
+                        EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
+                }
+                else if (w.Spawned)
+                {
+                    returnMode = WeaponReturnMode.LeaveOnWorkbench;
+                    // Ground weapon — subsequent toils handle goto + pickup
+                }
+                else
+                {
+                    Log.Error("[Unique Weapons Unbound] Weapon is in unknown state at job start.");
+                    EndJobWith(JobCondition.Errored);
+                }
+            };
+            acquireWeapon.defaultCompleteMode = ToilCompleteMode.Instant;
+            yield return acquireWeapon;
+
+            // If pawn is already carrying the weapon (equipped/inventory path),
+            // skip the goto + pickup toils and jump straight to the workbench.
+            Toil gotoWorkbench = Toils_Goto.GotoThing(WorkbenchIndex, PathEndMode.InteractionCell);
+
+            yield return Toils_Jump.JumpIf(gotoWorkbench,
+                () => pawn.carryTracker.CarriedThing != null);
+
+            // Ground weapon path: walk to weapon, pick it up
+            yield return Toils_Goto.GotoThing(WeaponIndex, PathEndMode.ClosestTouch)
+                .FailOnDespawnedNullOrForbidden(WeaponIndex);
+
+            yield return Toils_Haul.StartCarryThing(WeaponIndex);
+
+            // === HAUL TO WORKBENCH & PLACE ===
+
+            yield return gotoWorkbench;
+
+            Toil placeWeapon = ToilMaker.MakeToil("MakeNewToils");
+            placeWeapon.initAction = delegate
+            {
+                string label = weapon?.LabelShortCap ?? "weapon";
+                phaseReport = "UWU_PlacingWeapon".Translate(label, Workbench.LabelShortCap);
+
+                Thing carried = pawn.carryTracker.CarriedThing;
+                if (carried != null)
+                {
+                    if (!pawn.carryTracker.TryDropCarriedThing(
+                            Workbench.Position, ThingPlaceMode.Direct, out _))
+                        pawn.carryTracker.TryDropCarriedThing(
+                            Workbench.Position, ThingPlaceMode.Near, out _);
+
+                    pawn.Reserve(weapon, job);
+                    pawn.Map.physicalInteractionReservationManager.Reserve(pawn, job, weapon);
+                }
+            };
+            placeWeapon.defaultCompleteMode = ToilCompleteMode.Instant;
+            yield return placeWeapon;
+
             // === DIALOG PHASE ===
-            // Walk to the workbench and open the customization dialog.
+            // The weapon is now on the workbench. Open the customization dialog.
             // The dialog's forcePause keeps the game paused while the player
             // makes choices. On the first tick after the dialog closes, we
             // check whether a spec was stored (confirm) or not (cancel).
-            // Because the job stays running throughout, any shift-queued
-            // orders placed before the dialog are preserved.
-
-            yield return Toils_Goto.GotoThing(WorkbenchIndex, PathEndMode.InteractionCell);
 
             Toil waitForDialog = ToilMaker.MakeToil("MakeNewToils");
             waitForDialog.initAction = delegate
             {
-                Thing w = pawn.equipment?.Primary;
-                if (w == null)
+                if (weapon == null || weapon.Destroyed)
                 {
                     EndJobWith(JobCondition.Incompletable);
                     return;
                 }
                 Find.WindowStack.Add(
-                    new Dialog_WeaponCustomization(pawn, w, Workbench));
+                    new Dialog_WeaponCustomization(pawn, weapon, Workbench));
             };
             waitForDialog.tickAction = delegate
             {
@@ -215,8 +305,6 @@ namespace UniqueWeaponsUnbound
             yield return waitForDialog;
 
             // === CONSUME SPEC + FIND INGREDIENTS ===
-            // The spec is now available. Consume it, initialize the refund
-            // ledger, and find/reserve ingredient stacks for hauling.
 
             Toil consumeSpec = ToilMaker.MakeToil("MakeNewToils");
             consumeSpec.initAction = delegate
@@ -228,35 +316,12 @@ namespace UniqueWeaponsUnbound
                     EndJobWith(JobCondition.Errored);
                     return;
                 }
-                weapon = pawn.equipment?.Primary;
 
                 if (!FindAndReserveIngredients(true))
                     EndJobWith(JobCondition.Incompletable);
             };
             consumeSpec.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return consumeSpec;
-
-            // === PLACE WEAPON PHASE ===
-
-            // Unequip weapon and place on workbench
-            Toil placeWeapon = ToilMaker.MakeToil("MakeNewToils");
-            placeWeapon.initAction = delegate
-            {
-                string label = weapon?.LabelShortCap ?? "weapon";
-                phaseReport = "UWU_PlacingWeapon".Translate(label, Workbench.LabelShortCap);
-                ThingWithComps equipped = pawn.equipment?.Primary;
-                if (equipped != null)
-                {
-                    pawn.equipment.Remove(equipped);
-                    if (!GenPlace.TryPlaceThing(equipped, Workbench.Position, pawn.Map, ThingPlaceMode.Direct))
-                        GenPlace.TryPlaceThing(equipped, Workbench.Position, pawn.Map, ThingPlaceMode.Near);
-                    pawn.Reserve(equipped, job);
-                    pawn.Map.physicalInteractionReservationManager.Reserve(pawn, job, equipped);
-                    weapon = equipped;
-                }
-            };
-            placeWeapon.defaultCompleteMode = ToilCompleteMode.Instant;
-            yield return placeWeapon;
 
             // === HAUL PHASE ===
             // targetQueueA is populated at runtime by the consume-spec toil,
@@ -361,7 +426,7 @@ namespace UniqueWeaponsUnbound
             finalize.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return finalize;
 
-            // === PAUSE: brief moment before picking up the finished weapon ===
+            // === PAUSE: brief moment before returning the finished weapon ===
 
             Toil admire = Toils_General.Wait(300, WorkbenchIndex);
             admire.initAction = delegate
@@ -370,21 +435,57 @@ namespace UniqueWeaponsUnbound
             };
             yield return admire;
 
-            // === RE-EQUIP ===
+            // === RETURN WEAPON ===
+            // Post-completion behavior is driven by returnMode, derived during
+            // the acquire phase from the weapon's original location.
 
-            Toil reequip = ToilMaker.MakeToil("MakeNewToils");
-            reequip.initAction = delegate
+            Toil returnWeaponToil = ToilMaker.MakeToil("MakeNewToils");
+            returnWeaponToil.initAction = delegate
             {
-                if (weapon is ThingWithComps twc)
-                {
-                    if (weapon.Spawned)
-                        weapon.DeSpawn();
-                    pawn.equipment.AddEquipment(twc);
-                    twc.def.soundInteract?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
-                }
+                QueueWeaponRecovery();
+                weapon = null; // Prevent finish action from double-recovering
             };
-            reequip.defaultCompleteMode = ToilCompleteMode.Instant;
-            yield return reequip;
+            returnWeaponToil.defaultCompleteMode = ToilCompleteMode.Instant;
+            yield return returnWeaponToil;
+        }
+
+        /// <summary>
+        /// Queues a follow-up job so the pawn walks to the weapon and picks it
+        /// up via the standard equip/take-inventory job drivers. Used for both
+        /// normal completion (pawn is at workbench, job completes near-instantly)
+        /// and interruption recovery (pawn walks back to retrieve weapon).
+        /// </summary>
+        private void QueueWeaponRecovery()
+        {
+            if (weapon == null || weapon.Destroyed)
+                return;
+
+            if (pawn.Map == null)
+                return;
+
+            // Drop from carry if the pawn is still holding the weapon
+            if (pawn.carryTracker?.CarriedThing == weapon)
+                pawn.carryTracker.TryDropCarriedThing(pawn.Position, ThingPlaceMode.Near, out _);
+
+            if (!weapon.Spawned || weapon.Destroyed)
+                return;
+
+            switch (returnMode)
+            {
+                case WeaponReturnMode.Reequip:
+                    pawn.jobs.jobQueue.EnqueueFirst(
+                        JobMaker.MakeJob(JobDefOf.Equip, weapon));
+                    break;
+
+                case WeaponReturnMode.ReturnToInventory:
+                    Job takeJob = JobMaker.MakeJob(JobDefOf.TakeInventory, weapon);
+                    takeJob.count = 1;
+                    pawn.jobs.jobQueue.EnqueueFirst(takeJob);
+                    break;
+
+                case WeaponReturnMode.LeaveOnWorkbench:
+                    break;
+            }
         }
 
         private void ApplyOperation(CustomizationOp op)

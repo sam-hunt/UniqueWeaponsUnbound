@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using RimWorld;
+using UnityEngine;
 using Verse;
+using Verse.AI;
 
 namespace UniqueWeaponsUnbound
 {
@@ -299,6 +301,128 @@ namespace UniqueWeaponsUnbound
                 return def.techLevel;
 
             return TechLevel.Undefined;
+        }
+
+        /// <summary>
+        /// Resolves the base and unique ThingDefs for a weapon, regardless of
+        /// whether the weapon is currently in its base or unique form.
+        /// </summary>
+        public static void ResolveWeaponDefs(Thing weapon, out ThingDef baseDef, out ThingDef uniqueDef)
+        {
+            if (IsUniqueWeapon(weapon.def))
+            {
+                uniqueDef = weapon.def;
+                baseDef = GetBaseVariant(weapon.def);
+            }
+            else
+            {
+                baseDef = weapon.def;
+                uniqueDef = GetUniqueVariant(weapon.def);
+            }
+        }
+
+        /// <summary>
+        /// Result of searching for a valid workbench to customize a weapon at.
+        /// Either contains a workbench or the highest-priority rejection reason.
+        /// </summary>
+        public struct WorkbenchSearchResult
+        {
+            public Building_WorkTable Workbench;
+            public AcceptanceReport BestRejection;
+            public bool Found => Workbench != null;
+        }
+
+        /// <summary>
+        /// Finds the closest valid colonist workbench for customizing the specified weapon.
+        /// Runs the same gating chain as the workbench float menu provider (tier, operational,
+        /// reachability, forbidden). If no workbench qualifies, returns the highest-priority
+        /// rejection reason encountered.
+        /// </summary>
+        public static WorkbenchSearchResult FindBestWorkbench(
+            Pawn pawn, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
+            IntVec3 distanceOrigin)
+        {
+            Building_WorkTable bestWorkbench = null;
+            float bestDistSq = float.MaxValue;
+            int bestRejectionPriority = -1;
+            AcceptanceReport bestRejection = false;
+            IntVec3 origin = distanceOrigin;
+
+            foreach (Building building in pawn.Map.listerBuildings.allBuildingsColonist)
+            {
+                if (!(building is Building_WorkTable workbench))
+                    continue;
+                if (!weaponWorkbenchDefs.Contains(workbench.def))
+                    continue;
+
+                // Tier check (priority 4)
+                AcceptanceReport tierReport = CanCustomizeAtWorkbench(
+                    baseDef, uniqueDef, weaponTechLevel, workbench);
+                if (!tierReport.Accepted)
+                {
+                    if (bestRejectionPriority < 4)
+                    {
+                        bestRejectionPriority = 4;
+                        bestRejection = tierReport;
+                    }
+                    continue;
+                }
+
+                // Operational check (priority 3)
+                AcceptanceReport opReport = GetWorkbenchOperationalReport(workbench);
+                if (!opReport.Accepted)
+                {
+                    if (bestRejectionPriority < 3)
+                    {
+                        bestRejectionPriority = 3;
+                        bestRejection = opReport;
+                    }
+                    continue;
+                }
+
+                // Reachability check (priority 2)
+                if (!pawn.CanReach(workbench, PathEndMode.InteractionCell, Danger.Deadly))
+                {
+                    if (bestRejectionPriority < 2)
+                    {
+                        bestRejectionPriority = 2;
+                        bestRejection = "NoPath".Translate();
+                    }
+                    continue;
+                }
+
+                // Forbidden check (priority 1)
+                if (workbench.IsForbidden(pawn))
+                {
+                    if (bestRejectionPriority < 1)
+                    {
+                        bestRejectionPriority = 1;
+                        bestRejection = "ForbiddenLower".Translate();
+                    }
+                    continue;
+                }
+
+                // Valid candidate — track closest
+                float distSq = (origin - workbench.Position).LengthHorizontalSquared;
+                if (distSq < bestDistSq)
+                {
+                    bestDistSq = distSq;
+                    bestWorkbench = workbench;
+                }
+            }
+
+            var result = new WorkbenchSearchResult();
+            if (bestWorkbench != null)
+            {
+                result.Workbench = bestWorkbench;
+            }
+            else
+            {
+                result.BestRejection = bestRejectionPriority >= 0
+                    ? bestRejection
+                    : "UWU_NoSuitableWorkbench".Translate();
+            }
+            return result;
         }
 
         /// <summary>

@@ -3,7 +3,6 @@
 # Feature work
 
 - customize gizmo on the weapon /w acceptance report
-- customize float menu option on weapon right click /w pawn
 - More trait-specific rules, inlay, emp, incendiary etc?
 
 ## Testing/Cleanup
@@ -12,6 +11,9 @@
 - Test with unique weapon without base variant (default cost per tech level)
 - Test uncraftable unique weapons
 - Test other pawns touching reserved weapon while pawn has post-completion weapon interaction specified
+- Test pick up and haul
+- Test simple sidearms
+- Test CE?
 
 ## Infographics
 
