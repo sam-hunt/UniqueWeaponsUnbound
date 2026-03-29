@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ResearchProjectDef>
+    <defName>UniqueSmithing</defName>
+    <label>unique smithing</label>
+    <description>Upgrade and customize neolithic and medieval weapons at a smithy, adding or removing traits to suit your needs.</description>
+    <baseCost>800</baseCost>
+    <techLevel>Medieval</techLevel>
+    <prerequisites>
+      <li>Smithing</li>
+    </prerequisites>
+    <researchViewX>3.00</researchViewX>
+    <researchViewY>4.90</researchViewY>
+    <customUnlockTexts>
+      <li>Customize neolithic weapons</li>
+      <li>Customize medieval weapons</li>
+    </customUnlockTexts>
+    <generalRules>
+      <rulesStrings>
+        <li>subject->unique smithing</li>
+        <li>subject_story->learned to modify unique weapons by studying their traits</li>
+        <li>subject_story->experimented with ancient weapon enhancements</li>
+        <li>subject_gerund->smithing unique weapons</li>
+      </rulesStrings>
+    </generalRules>
+  </ResearchProjectDef>
+
+</Defs>

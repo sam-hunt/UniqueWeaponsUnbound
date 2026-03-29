@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <JobDef>
+    <defName>UWU_CustomizeWeapon</defName>
+    <driverClass>UniqueWeaponsUnbound.JobDriver_CustomizeWeapon</driverClass>
+    <reportString>customizing weapon.</reportString>
+    <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
+  </JobDef>
+</Defs>

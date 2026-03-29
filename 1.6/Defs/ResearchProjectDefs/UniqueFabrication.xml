@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ResearchProjectDef>
+    <defName>UniqueFabrication</defName>
+    <label>unique fabrication</label>
+    <description>Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs.</description>
+    <baseCost>2000</baseCost>
+    <techLevel>Spacer</techLevel>
+    <requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+    <requiredResearchFacilities>
+      <li>MultiAnalyzer</li>
+    </requiredResearchFacilities>
+    <prerequisites>
+      <li>UniqueMachining</li>
+      <li>Fabrication</li>
+    </prerequisites>
+    <techprintCount>1</techprintCount>
+    <techprintCommonality>5</techprintCommonality>
+    <techprintMarketValue>1500</techprintMarketValue>
+    <heldByFactionCategoryTags>
+      <li>Empire</li>
+      <li>Outlander</li>
+      <li>TradersGuild</li>
+    </heldByFactionCategoryTags>
+    <researchViewX>17.00</researchViewX>
+    <researchViewY>4.80</researchViewY>
+    <customUnlockTexts>
+      <li>Upgrade and customize spacer weapons</li>
+      <li>Upgrade and customize ultratech weapons</li>
+    </customUnlockTexts>
+    <generalRules>
+      <rulesStrings>
+        <li>subject->unique fabrication</li>
+        <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+        <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+        <li>subject_gerund->fabricating unique weapons</li>
+      </rulesStrings>
+    </generalRules>
+  </ResearchProjectDef>
+
+</Defs>

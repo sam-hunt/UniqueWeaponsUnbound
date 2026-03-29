@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ResearchProjectDef>
+    <defName>UniqueMachining</defName>
+    <label>unique machining</label>
+    <description>Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs.</description>
+    <baseCost>1200</baseCost>
+    <techLevel>Industrial</techLevel>
+    <prerequisites>
+      <li>UniqueSmithing</li>
+      <li>Gunsmithing</li>
+    </prerequisites>
+    <researchViewX>7.00</researchViewX>
+    <researchViewY>5.40</researchViewY>
+    <customUnlockTexts>
+      <li>Upgrade and customize industrial unique weapons</li>
+    </customUnlockTexts>
+    <generalRules>
+      <rulesStrings>
+        <li>subject->unique machining</li>
+        <li>subject_story->reverse-engineered unique weapon modifications using industrial tools</li>
+        <li>subject_story->perfected the art of applying weapon traits with precision machinery</li>
+        <li>subject_gerund->machining unique weapons</li>
+      </rulesStrings>
+    </generalRules>
+  </ResearchProjectDef>
+
+</Defs>

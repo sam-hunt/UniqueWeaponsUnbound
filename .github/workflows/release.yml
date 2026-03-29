@@ -1,0 +1,46 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build
+        run: dotnet build UniqueWeaponsUnbound.sln -c Release
+
+      - name: Package mod
+        run: |
+          set -e
+          mkdir -p release/UniqueWeaponsUnbound/About
+          mkdir -p release/UniqueWeaponsUnbound/1.6/Assemblies
+          mkdir -p release/UniqueWeaponsUnbound/1.6/Defs
+          mkdir -p release/UniqueWeaponsUnbound/1.6/Patches
+          cp About/About.xml release/UniqueWeaponsUnbound/About/
+          [ -f About/Preview.png ] && cp About/Preview.png release/UniqueWeaponsUnbound/About/ || true
+          cp LoadFolders.xml release/UniqueWeaponsUnbound/
+          cp 1.6/Assemblies/UniqueWeaponsUnbound.dll release/UniqueWeaponsUnbound/1.6/Assemblies/
+          [ -d 1.6/Defs ] && [ "$(ls -A 1.6/Defs)" ] && cp -r 1.6/Defs/* release/UniqueWeaponsUnbound/1.6/Defs/ || true
+          [ -d 1.6/Patches ] && [ "$(ls -A 1.6/Patches)" ] && cp -r 1.6/Patches/* release/UniqueWeaponsUnbound/1.6/Patches/ || true
+          [ -d 1.6/Languages ] && cp -r 1.6/Languages release/UniqueWeaponsUnbound/1.6/ || true
+          cd release && zip -r ../UniqueWeaponsUnbound-${{ github.ref_name }}.zip UniqueWeaponsUnbound
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: UniqueWeaponsUnbound-${{ github.ref_name }}.zip
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') || contains(github.ref_name, '-rc') }}

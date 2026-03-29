@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <UWU_CustomizeWeapon>Customize {0}</UWU_CustomizeWeapon>
+  <UWU_RequiresResearch>requires {0}</UWU_RequiresResearch>
+  <UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
+
+  <UWU_Cancel>Cancel</UWU_Cancel>
+  <UWU_Reset>Reset</UWU_Reset>
+  <UWU_Confirm>Confirm</UWU_Confirm>
+
+  <UWU_CustomizingWeapon>Customizing {0}</UWU_CustomizingWeapon>
+  <UWU_AddingTrait>Adding {0} to {1}</UWU_AddingTrait>
+  <UWU_RemovingTrait>Removing {0} from {1}</UWU_RemovingTrait>
+  <UWU_ApplyingCosmetics>Customizing appearance of {0}</UWU_ApplyingCosmetics>
+  <UWU_PlacingWeapon>Placing {0} on {1}</UWU_PlacingWeapon>
+  <UWU_GatheringMaterials>Gathering materials for {0}</UWU_GatheringMaterials>
+  <UWU_AdmiringWork>Admiring work</UWU_AdmiringWork>
+  <UWU_InsufficientResources>Not enough resources to customize this weapon.</UWU_InsufficientResources>
+</LanguageData>
