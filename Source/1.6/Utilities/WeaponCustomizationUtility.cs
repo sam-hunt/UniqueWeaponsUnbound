@@ -385,8 +385,13 @@ namespace UniqueWeaponsUnbound
             Map map, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
             IntVec3 distanceOrigin, Func<Building_WorkTable, AcceptanceReport> accessCheck)
         {
-            Building_WorkTable bestWorkbench = null;
-            float bestDistSq = float.MaxValue;
+            // Track two tiers: prefer unreserved benches, fall back to reserved.
+            // This avoids interrupting in-progress work when a free bench is available,
+            // while still allowing it when all valid benches are occupied.
+            Building_WorkTable bestFree = null;
+            float bestFreeDistSq = float.MaxValue;
+            Building_WorkTable bestReserved = null;
+            float bestReservedDistSq = float.MaxValue;
             int bestRejectionPriority = -1;
             AcceptanceReport bestRejection = false;
 
@@ -436,16 +441,28 @@ namespace UniqueWeaponsUnbound
                     continue;
                 }
 
-                // Valid candidate — track closest
+                // Valid candidate — sort into free vs reserved, track closest in each
                 float distSq = (distanceOrigin - workbench.Position).LengthHorizontalSquared;
-                if (distSq < bestDistSq)
+                if (map.reservationManager.IsReserved(workbench))
                 {
-                    bestDistSq = distSq;
-                    bestWorkbench = workbench;
+                    if (distSq < bestReservedDistSq)
+                    {
+                        bestReservedDistSq = distSq;
+                        bestReserved = workbench;
+                    }
+                }
+                else
+                {
+                    if (distSq < bestFreeDistSq)
+                    {
+                        bestFreeDistSq = distSq;
+                        bestFree = workbench;
+                    }
                 }
             }
 
             var result = new WorkbenchSearchResult();
+            Building_WorkTable bestWorkbench = bestFree ?? bestReserved;
             if (bestWorkbench != null)
             {
                 result.Workbench = bestWorkbench;

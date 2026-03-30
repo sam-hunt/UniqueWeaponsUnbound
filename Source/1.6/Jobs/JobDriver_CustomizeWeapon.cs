@@ -15,7 +15,6 @@ namespace UniqueWeaponsUnbound
         private const TargetIndex WeaponIndex = TargetIndex.B;
         private const TargetIndex WorkbenchIndex = TargetIndex.C;
         private const int WorkTicksPerOp = 1000;
-        private const int IngredientSearchRadius = 10;
 
         private CustomizationSpec spec;
         private Thing weapon;
@@ -23,6 +22,7 @@ namespace UniqueWeaponsUnbound
         private string phaseReport;
         private WeaponReturnMode returnMode;
         private Dictionary<ThingDef, float> refundLedger = new Dictionary<ThingDef, float>();
+        private List<Thing> placedIngredients = new List<Thing>();
 
         private Building_WorkTable Workbench =>
             (Building_WorkTable)job.GetTarget(WorkbenchIndex).Thing;
@@ -98,12 +98,54 @@ namespace UniqueWeaponsUnbound
                 if (existing == null)
                     return cell;
                 if (existing.CanStackWith(ingredient)
-                    && existing.stackCount < existing.def.stackLimit)
+                    && existing.stackCount < existing.def.stackLimit
+                    && pawn.CanReserve(existing))
                     return cell;
             }
 
             // Workbench cells full — fall back to center position (Near will radiate)
             return Workbench.Position;
+        }
+
+        /// <summary>
+        /// Consumes resources from the tracked placedIngredients list rather than
+        /// scanning nearby cells. Mirrors vanilla's pattern of consuming from
+        /// job.placedThings. Destroyed stacks are removed from the list.
+        /// </summary>
+        private bool ConsumeFromPlacedIngredients(List<ThingDefCountClass> costs)
+        {
+            foreach (ThingDefCountClass cost in costs)
+            {
+                int remaining = cost.count;
+                for (int i = placedIngredients.Count - 1; i >= 0 && remaining > 0; i--)
+                {
+                    Thing stack = placedIngredients[i];
+                    if (stack.Destroyed || !stack.Spawned || stack.def != cost.thingDef)
+                        continue;
+
+                    int take = Mathf.Min(remaining, stack.stackCount);
+                    remaining -= take;
+
+                    if (take >= stack.stackCount)
+                    {
+                        stack.Destroy();
+                        placedIngredients.RemoveAt(i);
+                    }
+                    else
+                    {
+                        stack.SplitOff(take).Destroy();
+                    }
+                }
+
+                if (remaining > 0)
+                {
+                    Log.Warning($"[Unique Weapons Unbound] Could not consume all " +
+                        $"{cost.thingDef.LabelCap} from placed ingredients: " +
+                        $"needed {cost.count}, short by {remaining}.");
+                    return false;
+                }
+            }
+            return true;
         }
 
         public override string GetReport()
@@ -366,8 +408,12 @@ namespace UniqueWeaponsUnbound
                 if (carried != null)
                 {
                     IntVec3 cell = FindIngredientPlaceCell(carried);
-                    if (!pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out _))
-                        pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out _);
+                    Thing resultingThing;
+                    if (!pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out resultingThing))
+                        pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out resultingThing);
+
+                    if (resultingThing != null && !placedIngredients.Contains(resultingThing))
+                        placedIngredients.Add(resultingThing);
                 }
             };
             dropIngredient.defaultCompleteMode = ToilCompleteMode.Instant;
@@ -540,7 +586,7 @@ namespace UniqueWeaponsUnbound
                     }
 
                     // Debit refund ledger first, then consume remainder from
-                    // hauled stacks near workbench
+                    // placed ingredient stacks at the workbench
                     if (op.cost != null && op.cost.Count > 0)
                     {
                         var adjustedCost = new List<ThingDefCountClass>();
@@ -559,11 +605,7 @@ namespace UniqueWeaponsUnbound
                                 adjustedCost.Add(new ThingDefCountClass(cost.thingDef, remaining));
                         }
                         if (adjustedCost.Count > 0)
-                        {
-                            WeaponModificationUtility.ConsumeResourcesNear(
-                                pawn.Map, Workbench.Position, adjustedCost,
-                                IngredientSearchRadius);
-                        }
+                            ConsumeFromPlacedIngredients(adjustedCost);
                     }
                     WeaponModificationUtility.AddTrait(weapon, op.trait);
 

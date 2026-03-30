@@ -6,7 +6,6 @@
 
 ## Testing/Cleanup
 
-- Workbenches busy/reservation?
 - Test with unique weapon without base variant (default cost per tech level)
 - Test uncraftable unique weapons
 - Test other pawns touching reserved weapon while pawn has post-completion weapon interaction specified
