@@ -60,35 +60,55 @@ namespace UniqueWeaponsUnbound
                 rowRect.width * 0.35f, rowRect.height);
             Widgets.Label(labelRect, trait.LabelCap);
 
-            // Cost icons (right-aligned) — shows the isolated delta from toggling:
-            // - Selected original traits: half-refund in green (removing yields refund)
-            // - Selected new additions: full cost, red if insufficient
-            // - Unselected original traits: no cost (already on weapon, no delta)
-            // - Unselected new traits: full cost, red if hypothetically unaffordable
+            // Cost icons (right-aligned):
+            // - Selected original: preview of removal (refund green / neg cost hypothetical red)
+            // - Unselected original: committed removal (refund green / neg cost red if short)
+            // - Selected new: committed addition cost, red if insufficient
+            // - Unselected new: hypothetical addition cost, red if hypothetically unaffordable
             Rect costRect = new Rect(rowRect.x + rowRect.width * 0.7f, rowRect.y,
                 rowRect.width * 0.3f - 4f, rowRect.height);
             bool isOriginal = originalTraits.Contains(trait);
             if (isSelected && isOriginal)
             {
-                // Show half-refund amount in green
-                List<ThingDefCountClass> refund = TraitCostUtility.GetTotalRefund(
-                    weapon, new[] { trait });
-                DrawCostIcons(costRect, refund, rightAlign: true,
-                    greenQuantities: true);
+                // Preview: what removal would cost/refund if toggled
+                List<ThingDefCountClass> removalResult =
+                    TraitCostUtility.GetRemovalCost(weapon, trait);
+                if (TraitCostUtility.IsNegativeTrait(trait))
+                {
+                    DrawCostIcons(costRect, removalResult, rightAlign: true,
+                        insufficientResources: GetHypotheticalInsufficient(removalResult));
+                }
+                else
+                {
+                    DrawCostIcons(costRect, removalResult, rightAlign: true,
+                        greenQuantities: true);
+                }
             }
             else if (!isSelected && isOriginal)
             {
-                // No cost — trait is already on the weapon
+                // Committed removal — show actual cost or refund
+                List<ThingDefCountClass> removalResult =
+                    TraitCostUtility.GetRemovalCost(weapon, trait);
+                if (TraitCostUtility.IsNegativeTrait(trait))
+                {
+                    DrawCostIcons(costRect, removalResult, rightAlign: true,
+                        insufficientResources: insufficientResources);
+                }
+                else if (UWU_Mod.Settings.refundFraction > 0f)
+                {
+                    DrawCostIcons(costRect, removalResult, rightAlign: true,
+                        greenQuantities: true);
+                }
             }
             else if (isSelected)
             {
-                List<ThingDefCountClass> costs = TraitCostUtility.GetTraitCost(weapon, trait);
+                List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(weapon, trait);
                 DrawCostIcons(costRect, costs, rightAlign: true,
                     insufficientResources: insufficientResources);
             }
             else
             {
-                List<ThingDefCountClass> costs = TraitCostUtility.GetTraitCost(weapon, trait);
+                List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(weapon, trait);
                 DrawCostIcons(costRect, costs, rightAlign: true,
                     insufficientResources: GetHypotheticalInsufficient(costs));
             }

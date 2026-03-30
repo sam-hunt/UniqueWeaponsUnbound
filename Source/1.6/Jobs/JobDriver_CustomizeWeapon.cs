@@ -556,6 +556,28 @@ namespace UniqueWeaponsUnbound
                         }
                     }
 
+                    // Negative trait removals cost resources instead of refunding them.
+                    // Debit refund ledger first, then consume from placed ingredients.
+                    if (op.cost != null && op.cost.Count > 0)
+                    {
+                        var adjustedCost = new List<ThingDefCountClass>();
+                        foreach (ThingDefCountClass cost in op.cost)
+                        {
+                            int remaining = cost.count;
+                            if (refundLedger.TryGetValue(cost.thingDef, out float credit)
+                                && credit > 0f)
+                            {
+                                int debit = Mathf.Min(remaining, Mathf.FloorToInt(credit));
+                                remaining -= debit;
+                                refundLedger[cost.thingDef] = credit - debit;
+                            }
+                            if (remaining > 0)
+                                adjustedCost.Add(new ThingDefCountClass(cost.thingDef, remaining));
+                        }
+                        if (adjustedCost.Count > 0)
+                            ConsumeFromPlacedIngredients(adjustedCost);
+                    }
+
                     // If removing the last trait, convert unique→base atomically
                     CompUniqueWeapon removeComp = weapon.TryGetComp<CompUniqueWeapon>();
                     if (removeComp != null && removeComp.TraitsListForReading.Count == 0)

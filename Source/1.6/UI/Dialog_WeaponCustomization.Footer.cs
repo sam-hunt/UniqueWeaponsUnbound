@@ -214,10 +214,19 @@ namespace UniqueWeaponsUnbound
                 {
                     type = OpType.RemoveTrait,
                     trait = trait,
-                    refund = UWU_Mod.Settings.refundFraction > 0f
-                        ? TraitCostUtility.GetTraitCost(weapon, trait)
-                        : null,
                 };
+
+                if (TraitCostUtility.IsNegativeTrait(trait))
+                {
+                    // Negative trait removal costs resources (reduced by RefundFraction)
+                    op.cost = TraitCostUtility.GetRemovalCost(weapon, trait);
+                }
+                else
+                {
+                    op.refund = UWU_Mod.Settings.refundFraction > 0f
+                        ? TraitCostUtility.GetTraitCost(weapon, trait)
+                        : null;
+                }
 
                 remainingOriginalTraits.Remove(trait);
 
@@ -306,7 +315,7 @@ namespace UniqueWeaponsUnbound
                 {
                     type = OpType.AddTrait,
                     trait = trait,
-                    cost = TraitCostUtility.GetTraitCost(weapon, trait),
+                    cost = TraitCostUtility.GetAdditionCost(weapon, trait),
                 };
 
                 if (trait.forcedColor != null)

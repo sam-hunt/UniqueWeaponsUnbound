@@ -434,7 +434,7 @@ namespace UniqueWeaponsUnbound
         {
             // Compute affordability state for cost coloring across all draw calls
             List<ThingDefCountClass> frameCost =
-                TraitCostUtility.GetTotalCost(weapon, TraitsToAdd);
+                TraitCostUtility.GetTotalCost(weapon, TraitsToAdd, TraitsToRemove);
 
             currentTotalRefund = UWU_Mod.Settings.refundFraction > 0f
                 ? TraitCostUtility.GetTotalRefund(weapon, TraitsToRemove)

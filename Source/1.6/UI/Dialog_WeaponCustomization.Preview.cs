@@ -76,7 +76,7 @@ namespace UniqueWeaponsUnbound
                     if (!originalTraits.Contains(trait))
                     {
                         List<ThingDefCountClass> chipCosts =
-                            TraitCostUtility.GetTraitCost(weapon, trait);
+                            TraitCostUtility.GetAdditionCost(weapon, trait);
                         Rect chipCostRect = new Rect(
                             labelRect.xMax, chipRect.y,
                             chipRect.xMax - labelRect.xMax - 4f, chipRect.height);
