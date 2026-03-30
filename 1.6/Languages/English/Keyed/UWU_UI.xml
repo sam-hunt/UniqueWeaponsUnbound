@@ -4,6 +4,8 @@
   <UWU_RequiresResearch>requires {0}</UWU_RequiresResearch>
   <UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
   <UWU_NoSuitableWorkbench>no suitable workbench</UWU_NoSuitableWorkbench>
+  <UWU_CustomizeGizmoLabel>Customize</UWU_CustomizeGizmoLabel>
+  <UWU_CustomizeGizmoDesc>Select a colonist to customize this weapon at a nearby workbench.</UWU_CustomizeGizmoDesc>
 
   <UWU_Cancel>Cancel</UWU_Cancel>
   <UWU_Reset>Reset</UWU_Reset>

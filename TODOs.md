@@ -2,8 +2,7 @@
 
 # Feature work
 
-- customize gizmo on the weapon /w acceptance report
-- More trait-specific rules, inlay, emp, incendiary etc?
+- More trait-specific rules, inlay, emp, incendiary etc? as new mod def type?
 
 ## Testing/Cleanup
 

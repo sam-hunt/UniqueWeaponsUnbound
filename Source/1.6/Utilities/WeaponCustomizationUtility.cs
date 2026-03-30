@@ -334,21 +334,63 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Finds the closest valid colonist workbench for customizing the specified weapon.
-        /// Runs the same gating chain as the workbench float menu provider (tier, operational,
-        /// reachability, forbidden). If no workbench qualifies, returns the highest-priority
-        /// rejection reason encountered.
+        /// Pawn-specific overload: checks reachability via the pawn's pathfinder and
+        /// forbidden status relative to the pawn.
         /// </summary>
         public static WorkbenchSearchResult FindBestWorkbench(
             Pawn pawn, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
             IntVec3 distanceOrigin)
         {
+            return FindBestWorkbenchCore(pawn.Map, baseDef, uniqueDef, weaponTechLevel,
+                distanceOrigin, workbench =>
+                {
+                    if (!pawn.CanReach(workbench, PathEndMode.InteractionCell, Danger.Deadly))
+                        return "NoPath".Translate();
+                    if (workbench.IsForbidden(pawn))
+                        return "ForbiddenLower".Translate();
+                    return true;
+                });
+        }
+
+        /// <summary>
+        /// Finds the closest valid colonist workbench for customizing the specified weapon.
+        /// Pawn-independent overload: checks generic reachability from a map position and
+        /// forbidden status relative to the player faction. Used for gizmo enabled/disabled
+        /// state where no specific pawn is known yet.
+        /// </summary>
+        public static WorkbenchSearchResult FindBestWorkbench(
+            Map map, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
+            IntVec3 distanceOrigin)
+        {
+            return FindBestWorkbenchCore(map, baseDef, uniqueDef, weaponTechLevel,
+                distanceOrigin, workbench =>
+                {
+                    if (!map.reachability.CanReach(distanceOrigin, workbench,
+                            PathEndMode.InteractionCell,
+                            TraverseParms.For(TraverseMode.PassDoors)))
+                        return "NoPath".Translate();
+                    if (workbench.IsForbidden(Faction.OfPlayer))
+                        return "ForbiddenLower".Translate();
+                    return true;
+                });
+        }
+
+        /// <summary>
+        /// Common core for workbench search. Iterates colonist workbenches, applies tier
+        /// and operational checks, then delegates reachability/forbidden checks to the
+        /// caller-provided predicate. Returns the closest valid workbench or the
+        /// highest-priority rejection reason.
+        /// </summary>
+        private static WorkbenchSearchResult FindBestWorkbenchCore(
+            Map map, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
+            IntVec3 distanceOrigin, Func<Building_WorkTable, AcceptanceReport> accessCheck)
+        {
             Building_WorkTable bestWorkbench = null;
             float bestDistSq = float.MaxValue;
             int bestRejectionPriority = -1;
             AcceptanceReport bestRejection = false;
-            IntVec3 origin = distanceOrigin;
 
-            foreach (Building building in pawn.Map.listerBuildings.allBuildingsColonist)
+            foreach (Building building in map.listerBuildings.allBuildingsColonist)
             {
                 if (!(building is Building_WorkTable workbench))
                     continue;
@@ -380,30 +422,22 @@ namespace UniqueWeaponsUnbound
                     continue;
                 }
 
-                // Reachability check (priority 2)
-                if (!pawn.CanReach(workbench, PathEndMode.InteractionCell, Danger.Deadly))
+                // Caller-provided access check (reachability + forbidden)
+                AcceptanceReport accessReport = accessCheck(workbench);
+                if (!accessReport.Accepted)
                 {
-                    if (bestRejectionPriority < 2)
+                    // Determine priority from the rejection reason
+                    int priority = accessReport.Reason == "ForbiddenLower".Translate() ? 1 : 2;
+                    if (bestRejectionPriority < priority)
                     {
-                        bestRejectionPriority = 2;
-                        bestRejection = "NoPath".Translate();
-                    }
-                    continue;
-                }
-
-                // Forbidden check (priority 1)
-                if (workbench.IsForbidden(pawn))
-                {
-                    if (bestRejectionPriority < 1)
-                    {
-                        bestRejectionPriority = 1;
-                        bestRejection = "ForbiddenLower".Translate();
+                        bestRejectionPriority = priority;
+                        bestRejection = accessReport;
                     }
                     continue;
                 }
 
                 // Valid candidate — track closest
-                float distSq = (origin - workbench.Position).LengthHorizontalSquared;
+                float distSq = (distanceOrigin - workbench.Position).LengthHorizontalSquared;
                 if (distSq < bestDistSq)
                 {
                     bestDistSq = distSq;
