@@ -17,7 +17,7 @@ namespace UniqueWeaponsUnbound
             if (!(clickedThing is Building_WorkTable workbench))
                 yield break;
 
-            if (!WeaponCustomizationUtility.IsCustomizationWorkbench(workbench))
+            if (!WorkbenchUtility.IsCustomizationWorkbench(workbench))
                 yield break;
 
             Pawn pawn = context.FirstSelectedPawn;
@@ -54,28 +54,28 @@ namespace UniqueWeaponsUnbound
             Pawn pawn, Thing weapon, Building_WorkTable workbench)
         {
             // Variant exists + UniqueSmithing gate
-            AcceptanceReport customizable = WeaponCustomizationUtility.IsCustomizable(weapon);
+            AcceptanceReport customizable = CustomizationRules.IsCustomizable(weapon);
             if (!customizable.Accepted && customizable.Reason.NullOrEmpty())
                 return null;
 
             // Resolve base/unique defs for workbench and craftability checks
-            WeaponCustomizationUtility.ResolveWeaponDefs(weapon,
+            WeaponRegistry.ResolveWeaponDefs(weapon,
                 out ThingDef baseDef, out ThingDef uniqueDef);
 
             // Workbench: recipe match, then tech-level tier fallback
-            TechLevel weaponTechLevel = WeaponCustomizationUtility.GetWeaponTechLevel(weapon);
-            AcceptanceReport workbenchReport = WeaponCustomizationUtility.CanCustomizeAtWorkbench(
+            TechLevel weaponTechLevel = CustomizationRules.GetWeaponTechLevel(weapon);
+            AcceptanceReport workbenchReport = WorkbenchUtility.CanCustomizeAtWorkbench(
                 baseDef, uniqueDef, weaponTechLevel, workbench);
             if (!workbenchReport.Accepted)
                 return DisabledOrHidden(weapon, workbenchReport);
 
             // Workbench operational (power/fuel)
-            AcceptanceReport operational = WeaponCustomizationUtility.GetWorkbenchOperationalReport(workbench);
+            AcceptanceReport operational = WorkbenchUtility.GetWorkbenchOperationalReport(workbench);
             if (!operational.Accepted)
                 return DisabledOrHidden(weapon, operational);
 
             // Recipe research (craftability)
-            AcceptanceReport craftable = WeaponCustomizationUtility.GetCraftabilityReport(baseDef);
+            AcceptanceReport craftable = CustomizationRules.GetCraftabilityReport(baseDef);
             if (!craftable.Accepted)
                 return DisabledOrHidden(weapon, craftable);
 

@@ -178,8 +178,8 @@ namespace UniqueWeaponsUnbound
         private static List<ThingDefCountClass> RunPipeline(
             Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
-            ThingDef baseDef = WeaponCustomizationUtility.IsUniqueWeapon(weapon.def)
-                ? WeaponCustomizationUtility.GetBaseVariant(weapon.def)
+            ThingDef baseDef = WeaponRegistry.IsUniqueWeapon(weapon.def)
+                ? WeaponRegistry.GetBaseVariant(weapon.def)
                 : weapon.def;
 
             if (baseDef == null)

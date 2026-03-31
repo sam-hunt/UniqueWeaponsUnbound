@@ -46,8 +46,8 @@ namespace UniqueWeaponsUnbound
     {
         public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
-            ThingDef baseDef = WeaponCustomizationUtility.IsUniqueWeapon(weapon.def)
-                ? WeaponCustomizationUtility.GetBaseVariant(weapon.def)
+            ThingDef baseDef = WeaponRegistry.IsUniqueWeapon(weapon.def)
+                ? WeaponRegistry.GetBaseVariant(weapon.def)
                 : weapon.def;
             if (baseDef == null)
                 return;

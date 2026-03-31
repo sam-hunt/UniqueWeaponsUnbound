@@ -263,9 +263,9 @@ namespace UniqueWeaponsUnbound
             // (a) Weapon starts as unique but all original traits are removed → base
             // (b) Weapon starts as base (non-unique) → already in base state
             bool willBeBaseAfterRemovals = remainingOriginalTraits.Count == 0
-                && WeaponCustomizationUtility.IsUniqueWeapon(weapon.def)
+                && WeaponRegistry.IsUniqueWeapon(weapon.def)
                 && baseDef != null;
-            bool startsAsBase = !WeaponCustomizationUtility.IsUniqueWeapon(weapon.def);
+            bool startsAsBase = !WeaponRegistry.IsUniqueWeapon(weapon.def);
             bool deferCosmetics = (willBeBaseAfterRemovals || startsAsBase) && adds.Count > 0;
 
             string deferredName = null;

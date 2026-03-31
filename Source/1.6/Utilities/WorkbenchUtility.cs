@@ -9,15 +9,12 @@ using Verse.AI;
 namespace UniqueWeaponsUnbound
 {
     /// <summary>
-    /// Central utility for determining which weapons are customizable.
-    /// Caches base↔unique weapon pair mappings at startup and provides
-    /// runtime checks for research, craftability, and customizability.
+    /// Workbench tier classification (smithy / machining / fabrication),
+    /// VEF recipe-inheritance expansion, and runtime workbench search
+    /// for weapon customization.
     /// </summary>
-    public static class WeaponCustomizationUtility
+    public static class WorkbenchUtility
     {
-        private static Dictionary<ThingDef, ThingDef> baseToUnique;
-        private static Dictionary<ThingDef, ThingDef> uniqueToBase;
-
         private static HashSet<ThingDef> smithyDefs;
         private static HashSet<ThingDef> machiningDefs;
         private static HashSet<ThingDef> fabricationDefs;
@@ -27,33 +24,11 @@ namespace UniqueWeaponsUnbound
         private static string fabricationLabel;
 
         /// <summary>
-        /// Builds the base↔unique weapon pair cache. Must be called during
-        /// StaticConstructorOnStartup (after all defs are loaded).
+        /// Initializes workbench tier sets and the weapon-workbench registry.
+        /// Must be called during StaticConstructorOnStartup (after all defs are loaded).
         /// </summary>
         public static void Initialize()
         {
-            baseToUnique = new Dictionary<ThingDef, ThingDef>();
-            uniqueToBase = new Dictionary<ThingDef, ThingDef>();
-
-            foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
-            {
-                if (!def.HasComp(typeof(CompUniqueWeapon)))
-                    continue;
-
-                ThingDef baseDef = FindBaseWeapon(def);
-                if (baseDef != null)
-                {
-                    uniqueToBase[def] = baseDef;
-                    baseToUnique[baseDef] = def;
-                }
-                else
-                {
-                    Log.Warning($"[Unique Weapons Unbound] Unique weapon {def.defName} has no detectable base weapon.");
-                }
-            }
-
-            Log.Message($"[Unique Weapons Unbound] Cached {uniqueToBase.Count} base/unique weapon pairs.");
-
             // Initialize workbench tier sets from vanilla anchors
             smithyDefs = ResolveDefSet("FueledSmithy", "ElectricSmithy");
             machiningDefs = ResolveDefSet("TableMachining");
@@ -69,256 +44,6 @@ namespace UniqueWeaponsUnbound
 
             // Build the set of all workbench defs that have at least one weapon recipe
             InitializeWeaponWorkbenches();
-        }
-
-        /// <summary>
-        /// Detects the base weapon for a unique weapon def.
-        /// Primary: descriptionHyperlinks. Fallback: naming convention.
-        /// </summary>
-        private static ThingDef FindBaseWeapon(ThingDef uniqueDef)
-        {
-            // Primary: descriptionHyperlinks — works for modded weapons that may not follow naming conventions
-            if (uniqueDef.descriptionHyperlinks != null)
-            {
-                foreach (DefHyperlink link in uniqueDef.descriptionHyperlinks)
-                {
-                    if (link.def is ThingDef linked && linked.IsWeapon && !linked.HasComp(typeof(CompUniqueWeapon)))
-                        return linked;
-                }
-            }
-
-            // Fallback: naming convention ({BaseDefName}_Unique)
-            if (uniqueDef.defName.EndsWith("_Unique"))
-            {
-                string baseName = uniqueDef.defName.Substring(0, uniqueDef.defName.Length - "_Unique".Length);
-                return DefDatabase<ThingDef>.GetNamedSilentFail(baseName);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Returns the unique variant for a base weapon def, or null if none exists.
-        /// </summary>
-        public static ThingDef GetUniqueVariant(ThingDef baseDef)
-        {
-            return baseToUnique.TryGetValue(baseDef, out ThingDef unique) ? unique : null;
-        }
-
-        /// <summary>
-        /// Returns the base weapon for a unique weapon def, or null if not found.
-        /// </summary>
-        public static ThingDef GetBaseVariant(ThingDef uniqueDef)
-        {
-            return uniqueToBase.TryGetValue(uniqueDef, out ThingDef baseDef) ? baseDef : null;
-        }
-
-        /// <summary>
-        /// Whether the def is a unique weapon (has CompUniqueWeapon).
-        /// </summary>
-        public static bool IsUniqueWeapon(ThingDef def)
-        {
-            return def.HasComp(typeof(CompUniqueWeapon));
-        }
-
-        /// <summary>
-        /// Whether this weapon has a customization path and the player has unlocked
-        /// the required customization research. Does not check craftability (recipe
-        /// research) — call <see cref="GetCraftabilityReport"/> separately so callers
-        /// can insert context-dependent checks (e.g. workbench tier) in between.
-        /// Returns AcceptanceReport with a rejection reason if not customizable.
-        /// Returns false with no reason when the option should be hidden entirely.
-        /// </summary>
-        public static AcceptanceReport IsCustomizable(Thing weapon)
-        {
-            ThingDef def = weapon.def;
-
-            ThingDef baseDef;
-            if (IsUniqueWeapon(def))
-            {
-                baseDef = GetBaseVariant(def);
-                if (baseDef == null)
-                    return false;
-            }
-            else
-            {
-                if (GetUniqueVariant(def) == null)
-                    return false;
-                baseDef = def;
-            }
-
-            // Don't surface any customization UI until the player has completed
-            // UniqueSmithing, so we don't clutter menus for uninterested players.
-            if (!UWU_ResearchDefOf.UniqueSmithing.IsFinished)
-                return false;
-
-            ResearchProjectDef requiredResearch = GetRequiredResearch(baseDef.techLevel);
-            if (requiredResearch == null)
-                return false;
-
-            if (!requiredResearch.IsFinished)
-                return "UWU_RequiresResearch".Translate(requiredResearch.label);
-
-            return true;
-        }
-
-        /// <summary>
-        /// Whether the base weapon's crafting prerequisites are met.
-        /// Returns AcceptanceReport with the blocking research name, or false
-        /// with no reason for uncraftable weapons without the mod setting.
-        /// </summary>
-        public static AcceptanceReport GetCraftabilityReport(ThingDef baseDef)
-        {
-            if (baseDef.recipeMaker == null)
-                return UWU_Mod.Settings.allowUncraftableCustomization;
-
-            ResearchProjectDef recipeResearch = baseDef.recipeMaker.researchPrerequisite;
-            if (recipeResearch != null && !recipeResearch.IsFinished)
-                return "UWU_RequiresResearch".Translate(recipeResearch.label);
-
-            return true;
-        }
-
-        /// <summary>
-        /// Returns the required research project for customizing weapons of the given tech level,
-        /// or null if the tech level is not customizable (e.g. Archotech without mod setting).
-        /// </summary>
-        public static ResearchProjectDef GetRequiredResearch(TechLevel techLevel)
-        {
-            switch (techLevel)
-            {
-                case TechLevel.Neolithic:
-                case TechLevel.Medieval:
-                    return UWU_ResearchDefOf.UniqueSmithing;
-
-                case TechLevel.Industrial:
-                    return UWU_ResearchDefOf.UniqueMachining;
-
-                case TechLevel.Spacer:
-                    return UWU_ResearchDefOf.UniqueFabrication;
-
-                case TechLevel.Ultra:
-                    if (UWU_Mod.Settings.allowUltratechCustomization)
-                        return UWU_ResearchDefOf.UniqueFabrication;
-                    return null;
-
-                case TechLevel.Archotech:
-                    if (UWU_Mod.Settings.allowArchotechCustomization)
-                        return UWU_ResearchDefOf.UniqueFabrication;
-                    return null;
-
-                default:
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// Whether the player has completed the required research for the given tech level.
-        /// </summary>
-        public static bool HasRequiredResearch(TechLevel techLevel)
-        {
-            ResearchProjectDef required = GetRequiredResearch(techLevel);
-            return required != null && required.IsFinished;
-        }
-
-        /// <summary>
-        /// Whether a base weapon's crafting recipe exists and its prerequisite research is done.
-        /// </summary>
-        public static bool IsBaseCraftable(ThingDef baseDef)
-        {
-            if (baseDef.recipeMaker == null)
-            {
-                return UWU_Mod.Settings.allowUncraftableCustomization;
-            }
-
-            ResearchProjectDef recipeResearch = baseDef.recipeMaker.researchPrerequisite;
-            return recipeResearch == null || recipeResearch.IsFinished;
-        }
-
-        /// <summary>
-        /// Resolves a display label for a set of workbench defNames by finding the
-        /// common suffix of their labels. For a single def, returns its label directly.
-        /// This handles cases like "fueled smithy" / "electric smithy" → "smithy".
-        /// </summary>
-        private static string ResolveWorkbenchLabel(HashSet<ThingDef> defs)
-        {
-            List<string> labels = new List<string>();
-            foreach (ThingDef def in defs)
-            {
-                labels.Add(def.label);
-            }
-
-            if (labels.Count == 0)
-                return "?";
-            if (labels.Count == 1)
-                return labels[0];
-
-            // Find the longest common suffix across all labels.
-            string reference = labels[0];
-            int commonLength = reference.Length;
-            for (int i = 1; i < labels.Count; i++)
-            {
-                string other = labels[i];
-                int matchLen = 0;
-                int ri = reference.Length - 1;
-                int oi = other.Length - 1;
-                while (ri >= 0 && oi >= 0 && reference[ri] == other[oi])
-                {
-                    matchLen++;
-                    ri--;
-                    oi--;
-                }
-                commonLength = Math.Min(commonLength, matchLen);
-            }
-
-            if (commonLength > 0)
-            {
-                string suffix = reference.Substring(reference.Length - commonLength).TrimStart();
-                if (suffix.Length > 0)
-                    return suffix;
-            }
-
-            return labels[0];
-        }
-
-        /// <summary>
-        /// Returns the tech level relevant for customization checks.
-        /// For unique weapons, returns the base weapon's tech level.
-        /// For base weapons with a unique variant, returns the weapon's own tech level.
-        /// Returns TechLevel.Undefined if the weapon has no customization path.
-        /// </summary>
-        public static TechLevel GetWeaponTechLevel(Thing weapon)
-        {
-            ThingDef def = weapon.def;
-
-            if (IsUniqueWeapon(def))
-            {
-                ThingDef baseDef = GetBaseVariant(def);
-                return baseDef?.techLevel ?? TechLevel.Undefined;
-            }
-
-            if (GetUniqueVariant(def) != null)
-                return def.techLevel;
-
-            return TechLevel.Undefined;
-        }
-
-        /// <summary>
-        /// Resolves the base and unique ThingDefs for a weapon, regardless of
-        /// whether the weapon is currently in its base or unique form.
-        /// </summary>
-        public static void ResolveWeaponDefs(Thing weapon, out ThingDef baseDef, out ThingDef uniqueDef)
-        {
-            if (IsUniqueWeapon(weapon.def))
-            {
-                uniqueDef = weapon.def;
-                baseDef = GetBaseVariant(weapon.def);
-            }
-            else
-            {
-                baseDef = weapon.def;
-                uniqueDef = GetUniqueVariant(weapon.def);
-            }
         }
 
         /// <summary>
@@ -557,6 +282,52 @@ namespace UniqueWeaponsUnbound
                     set.Add(def);
             }
             return set;
+        }
+
+        /// <summary>
+        /// Resolves a display label for a set of workbench defNames by finding the
+        /// common suffix of their labels. For a single def, returns its label directly.
+        /// This handles cases like "fueled smithy" / "electric smithy" → "smithy".
+        /// </summary>
+        private static string ResolveWorkbenchLabel(HashSet<ThingDef> defs)
+        {
+            List<string> labels = new List<string>();
+            foreach (ThingDef def in defs)
+            {
+                labels.Add(def.label);
+            }
+
+            if (labels.Count == 0)
+                return "?";
+            if (labels.Count == 1)
+                return labels[0];
+
+            // Find the longest common suffix across all labels.
+            string reference = labels[0];
+            int commonLength = reference.Length;
+            for (int i = 1; i < labels.Count; i++)
+            {
+                string other = labels[i];
+                int matchLen = 0;
+                int ri = reference.Length - 1;
+                int oi = other.Length - 1;
+                while (ri >= 0 && oi >= 0 && reference[ri] == other[oi])
+                {
+                    matchLen++;
+                    ri--;
+                    oi--;
+                }
+                commonLength = Math.Min(commonLength, matchLen);
+            }
+
+            if (commonLength > 0)
+            {
+                string suffix = reference.Substring(reference.Length - commonLength).TrimStart();
+                if (suffix.Length > 0)
+                    return suffix;
+            }
+
+            return labels[0];
         }
 
         /// <summary>

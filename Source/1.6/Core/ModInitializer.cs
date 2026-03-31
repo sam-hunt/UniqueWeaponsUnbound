@@ -11,7 +11,8 @@ namespace UniqueWeaponsUnbound
             var harmony = new Harmony("shunter.uniqueweaponsunbound");
             harmony.PatchAll();
 
-            WeaponCustomizationUtility.Initialize();
+            WeaponRegistry.Initialize();
+            WorkbenchUtility.Initialize();
             TraitCostUtility.Initialize();
 
             Log.Message("[Unique Weapons Unbound] Initialized with " +

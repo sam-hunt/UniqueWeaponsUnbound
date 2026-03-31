@@ -582,7 +582,7 @@ namespace UniqueWeaponsUnbound
                     CompUniqueWeapon removeComp = weapon.TryGetComp<CompUniqueWeapon>();
                     if (removeComp != null && removeComp.TraitsListForReading.Count == 0)
                     {
-                        ThingDef baseDef = WeaponCustomizationUtility.GetBaseVariant(weapon.def);
+                        ThingDef baseDef = WeaponRegistry.GetBaseVariant(weapon.def);
                         if (baseDef != null)
                             ConvertWeaponInPlace(baseDef);
                     }
@@ -600,9 +600,9 @@ namespace UniqueWeaponsUnbound
 
                 case OpType.AddTrait:
                     // If weapon is currently base, convert base→unique first
-                    if (!WeaponCustomizationUtility.IsUniqueWeapon(weapon.def))
+                    if (!WeaponRegistry.IsUniqueWeapon(weapon.def))
                     {
-                        ThingDef uniqueDef = WeaponCustomizationUtility.GetUniqueVariant(weapon.def);
+                        ThingDef uniqueDef = WeaponRegistry.GetUniqueVariant(weapon.def);
                         if (uniqueDef != null)
                             ConvertWeaponInPlace(uniqueDef);
                     }
@@ -671,7 +671,7 @@ namespace UniqueWeaponsUnbound
                 weapon.Destroy();
 
             // Apply desired texture on base→unique so it doesn't flash a random variant
-            if (WeaponCustomizationUtility.IsUniqueWeapon(targetDef)
+            if (WeaponRegistry.IsUniqueWeapon(targetDef)
                 && spec.finalTextureIndex.HasValue)
                 WeaponModificationUtility.SetTextureIndex(newWeapon, spec.finalTextureIndex.Value);
 

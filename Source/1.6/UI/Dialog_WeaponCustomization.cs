@@ -121,15 +121,15 @@ namespace UniqueWeaponsUnbound
             onlyOneOfTypeAllowed = true;
 
             // Determine unique/base defs
-            if (WeaponCustomizationUtility.IsUniqueWeapon(weapon.def))
+            if (WeaponRegistry.IsUniqueWeapon(weapon.def))
             {
                 uniqueDef = weapon.def;
-                baseDef = WeaponCustomizationUtility.GetBaseVariant(weapon.def);
+                baseDef = WeaponRegistry.GetBaseVariant(weapon.def);
             }
             else
             {
                 baseDef = weapon.def;
-                uniqueDef = WeaponCustomizationUtility.GetUniqueVariant(weapon.def);
+                uniqueDef = WeaponRegistry.GetUniqueVariant(weapon.def);
             }
 
             // Snapshot original traits

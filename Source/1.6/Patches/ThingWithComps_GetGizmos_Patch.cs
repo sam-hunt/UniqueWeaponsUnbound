@@ -20,13 +20,13 @@ namespace UniqueWeaponsUnbound.Patches
             if (!__instance.def.IsWeapon || !__instance.Spawned)
                 yield break;
 
-            AcceptanceReport customizable = WeaponCustomizationUtility.IsCustomizable(__instance);
+            AcceptanceReport customizable = CustomizationRules.IsCustomizable(__instance);
             if (!customizable.Accepted && customizable.Reason.NullOrEmpty())
                 yield break;
 
-            WeaponCustomizationUtility.ResolveWeaponDefs(__instance,
+            WeaponRegistry.ResolveWeaponDefs(__instance,
                 out ThingDef baseDef, out ThingDef uniqueDef);
-            TechLevel techLevel = WeaponCustomizationUtility.GetWeaponTechLevel(__instance);
+            TechLevel techLevel = CustomizationRules.GetWeaponTechLevel(__instance);
 
             Command_Action gizmo = new Command_Action();
             gizmo.defaultLabel = "UWU_CustomizeGizmoLabel".Translate();
@@ -34,7 +34,7 @@ namespace UniqueWeaponsUnbound.Patches
             gizmo.icon = UWU_Textures.Customize;
 
             // Layer 2: Disabled state (pawn-independent checks)
-            AcceptanceReport craftable = WeaponCustomizationUtility.GetCraftabilityReport(baseDef);
+            AcceptanceReport craftable = CustomizationRules.GetCraftabilityReport(baseDef);
             if (!craftable.Accepted && !craftable.Reason.NullOrEmpty())
             {
                 gizmo.Disabled = true;
@@ -47,7 +47,7 @@ namespace UniqueWeaponsUnbound.Patches
             }
             else
             {
-                var workbenchCheck = WeaponCustomizationUtility.FindBestWorkbench(
+                var workbenchCheck = WorkbenchUtility.FindBestWorkbench(
                     __instance.Map, baseDef, uniqueDef, techLevel, __instance.Position);
                 if (!workbenchCheck.Found)
                 {
@@ -71,7 +71,7 @@ namespace UniqueWeaponsUnbound.Patches
                 {
                     if (!(targetInfo.Thing is Pawn p))
                         return false;
-                    return WeaponCustomizationUtility.FindBestWorkbench(
+                    return WorkbenchUtility.FindBestWorkbench(
                         p, capturedBaseDef, capturedUniqueDef,
                         capturedTechLevel, weapon.Position).Found;
                 };
@@ -84,7 +84,7 @@ namespace UniqueWeaponsUnbound.Patches
                         if (pawn == null)
                             return;
 
-                        var result = WeaponCustomizationUtility.FindBestWorkbench(
+                        var result = WorkbenchUtility.FindBestWorkbench(
                             pawn, capturedBaseDef, capturedUniqueDef,
                             capturedTechLevel, weapon.Position);
                         if (!result.Found)

@@ -2,10 +2,7 @@
 
 ## Testing/Cleanup
 
-- Inlay should convert components
-- Test with unique weapon without base variant (default cost per tech level)
-- Test uncraftable unique weapons
-- Test other pawns touching reserved weapon while pawn has post-completion weapon interaction specified
+- Ensure uncraftable unique weapons and weapons without base def pass flow entrypoint gates
 - Test pick up and haul
 - Test simple sidearms
 - Test CE?

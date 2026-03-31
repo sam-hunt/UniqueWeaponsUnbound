@@ -6,7 +6,7 @@ namespace UniqueWeaponsUnbound
 {
     /// <summary>
     /// Entry point 3: right-click a weapon on the ground to customize it.
-    /// Auto-selects the best workbench via <see cref="WeaponCustomizationUtility.FindBestWorkbench"/>.
+    /// Auto-selects the best workbench via <see cref="WorkbenchUtility.FindBestWorkbench"/>.
     /// </summary>
     public class FloatMenuOptionProvider_CustomizeGroundWeapon : FloatMenuOptionProvider
     {
@@ -31,18 +31,18 @@ namespace UniqueWeaponsUnbound
             Thing weapon = clickedThing;
 
             // Variant exists + UniqueSmithing gate
-            AcceptanceReport customizable = WeaponCustomizationUtility.IsCustomizable(weapon);
+            AcceptanceReport customizable = CustomizationRules.IsCustomizable(weapon);
             if (!customizable.Accepted && customizable.Reason.NullOrEmpty())
                 return null;
 
             // Resolve base/unique defs
-            WeaponCustomizationUtility.ResolveWeaponDefs(weapon,
+            WeaponRegistry.ResolveWeaponDefs(weapon,
                 out ThingDef baseDef, out ThingDef uniqueDef);
 
-            TechLevel weaponTechLevel = WeaponCustomizationUtility.GetWeaponTechLevel(weapon);
+            TechLevel weaponTechLevel = CustomizationRules.GetWeaponTechLevel(weapon);
 
             // Recipe research (craftability) — cheap O(1) check before workbench search
-            AcceptanceReport craftable = WeaponCustomizationUtility.GetCraftabilityReport(baseDef);
+            AcceptanceReport craftable = CustomizationRules.GetCraftabilityReport(baseDef);
             if (!craftable.Accepted)
                 return DisabledOrHidden(weapon, craftable);
 
@@ -64,7 +64,7 @@ namespace UniqueWeaponsUnbound
             // player order, matching vanilla's behavior for equipping forbidden weapons.
 
             // Find best workbench (most expensive check — runs last)
-            var result = WeaponCustomizationUtility.FindBestWorkbench(
+            var result = WorkbenchUtility.FindBestWorkbench(
                 pawn, baseDef, uniqueDef, weaponTechLevel, weapon.Position);
 
             if (!result.Found)
