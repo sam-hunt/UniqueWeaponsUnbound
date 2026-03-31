@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- ===== Pipeline foundation (always run) ===== -->
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_BaseCost</defName>
+    <label>base cost from recipe</label>
+    <workerClass>UniqueWeaponsUnbound.BaseCostWorker</workerClass>
+    <priority>100</priority>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_QualityMultiplier</defName>
+    <label>quality multiplier</label>
+    <workerClass>UniqueWeaponsUnbound.QualityMultiplierWorker</workerClass>
+    <priority>200</priority>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <!-- ===== Thematic rules (keyword-matched) ===== -->
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_ToxSwap</defName>
+    <label>toxic component swap</label>
+    <workerClass>UniqueWeaponsUnbound.ToxSwapWorker</workerClass>
+    <priority>1000</priority>
+    <labelKeywords>
+      <li>tox</li>
+      <li>toxic</li>
+      <li>paralytic</li>
+      <li>acid-injector</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_IncendiarySwap</defName>
+    <label>incendiary component swap</label>
+    <workerClass>UniqueWeaponsUnbound.IncendiarySwapWorker</workerClass>
+    <priority>1100</priority>
+    <labelKeywords>
+      <li>incendiary</li>
+      <li>blast</li>
+      <li>pitch-soaked</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_EmpSplit</defName>
+    <label>EMP value split</label>
+    <workerClass>UniqueWeaponsUnbound.EmpSplitWorker</workerClass>
+    <priority>1200</priority>
+    <labelKeywords>
+      <li>emp</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_Lightweight</defName>
+    <label>lightweight swap</label>
+    <workerClass>UniqueWeaponsUnbound.PartialSwapWorker</workerClass>
+    <priority>1300</priority>
+    <labelKeywords>
+      <li>lightweight</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_Flarestriker</defName>
+    <label>flarestriker value split</label>
+    <workerClass>UniqueWeaponsUnbound.FlareSplitWorker</workerClass>
+    <priority>1400</priority>
+    <labelKeywords>
+      <li>flarestriker</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_HeavyScrap</defName>
+    <label>heavy scrap flat cost</label>
+    <workerClass>UniqueWeaponsUnbound.FlatCostWorker</workerClass>
+    <priority>1500</priority>
+    <requireAllKeywords>true</requireAllKeywords>
+    <labelKeywords>
+      <li>heavy</li>
+      <li>scrap</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_ChargeCategoryGated</defName>
+    <label>charge weapons (category-gated)</label>
+    <workerClass>UniqueWeaponsUnbound.ConvertToSpacerWorker</workerClass>
+    <priority>1600</priority>
+    <labelKeywords>
+      <li>charge</li>
+      <li>charger</li>
+      <li>frequency</li>
+    </labelKeywords>
+    <weaponCategories>
+      <li>Pistol</li>
+      <li>PulseCharge</li>
+      <li>BeamWeapon</li>
+    </weaponCategories>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_ChargeUnconditional</defName>
+    <label>charge weapons (unconditional)</label>
+    <workerClass>UniqueWeaponsUnbound.ConvertToSpacerWorker</workerClass>
+    <priority>1700</priority>
+    <labelKeywords>
+      <li>crypto</li>
+      <li>capacitor</li>
+      <li>ultracoils</li>
+      <li>thump</li>
+      <li>rail</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_Akimbo</defName>
+    <label>akimbo cost multiplier</label>
+    <workerClass>UniqueWeaponsUnbound.CostMultiplierWorker</workerClass>
+    <priority>1800</priority>
+    <labelKeywords>
+      <li>akimbo</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <!-- ===== Fallback (always runs last) ===== -->
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_MaterialOverride</defName>
+    <label>material override fallback</label>
+    <workerClass>UniqueWeaponsUnbound.MaterialOverrideWorker</workerClass>
+    <priority>9000</priority>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+</Defs>
