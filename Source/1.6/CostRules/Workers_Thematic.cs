@@ -12,7 +12,7 @@ namespace UniqueWeaponsUnbound
         protected abstract int ComponentMultiplier { get; }
         protected virtual float SplitFraction => 0.7f;
 
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             CostRuleHelpers.ApplyComponentSwapOrSplit(
                 costs, Replacement, ComponentMultiplier, SplitFraction);
@@ -28,7 +28,20 @@ namespace UniqueWeaponsUnbound
     public class IncendiarySwapWorker : ComponentSwapOrSplitWorker
     {
         protected override ThingDef Replacement => CostRuleHelpers.Chemfuel;
-        protected override int ComponentMultiplier => 15;
+        protected override int ComponentMultiplier => 10;
+
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            // Fold spacer components into industrial so the base swap catches both
+            ThingDefCountClass spacer = costs.Find(c => c.thingDef == CostRuleHelpers.ComponentSpacer);
+            if (spacer != null)
+            {
+                int count = spacer.count;
+                costs.Remove(spacer);
+                CostRuleHelpers.AddOrMerge(costs, CostRuleHelpers.ComponentIndustrial, count);
+            }
+            base.Apply(costs, weapon, trait, isRemoval);
+        }
     }
 
     // --- Value split (shared base) ---
@@ -38,7 +51,7 @@ namespace UniqueWeaponsUnbound
         protected abstract ThingDef Replacement { get; }
         protected virtual float SplitFraction => 0.7f;
 
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             CostRuleHelpers.ApplyValueSplit(costs, Replacement, SplitFraction);
         }
@@ -47,6 +60,12 @@ namespace UniqueWeaponsUnbound
     public class EmpSplitWorker : ValueSplitWorker
     {
         protected override ThingDef Replacement => CostRuleHelpers.ComponentIndustrial;
+
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            CostRuleHelpers.RemoveMaterials(costs, CostRuleHelpers.ComponentSpacer);
+            base.Apply(costs, weapon, trait, isRemoval);
+        }
     }
 
     public class FlareSplitWorker : ValueSplitWorker
@@ -58,7 +77,7 @@ namespace UniqueWeaponsUnbound
 
     public class PartialSwapWorker : TraitCostRuleWorker
     {
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             if (CostRuleHelpers.Birdskin != null)
                 CostRuleHelpers.ApplyPartialSwapByCount(
@@ -68,7 +87,7 @@ namespace UniqueWeaponsUnbound
 
     public class FlatCostWorker : TraitCostRuleWorker
     {
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             CostRuleHelpers.ApplyFlatCost(costs, CostRuleHelpers.SteelSlagChunk, 1);
         }
@@ -76,7 +95,7 @@ namespace UniqueWeaponsUnbound
 
     public class ConvertToSpacerWorker : TraitCostRuleWorker
     {
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             CostRuleHelpers.ApplyConvertAllToSpacer(costs);
         }
@@ -84,9 +103,45 @@ namespace UniqueWeaponsUnbound
 
     public class CostMultiplierWorker : TraitCostRuleWorker
     {
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             CostRuleHelpers.ApplyCostMultiplier(costs, 2f);
+        }
+    }
+
+    public class GripWorker : TraitCostRuleWorker
+    {
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            CostRuleHelpers.RemoveMaterials(costs,
+                CostRuleHelpers.ComponentIndustrial, CostRuleHelpers.ComponentSpacer);
+        }
+    }
+
+    public class InlayWorker : TraitCostRuleWorker
+    {
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            CostRuleHelpers.RemoveMaterials(costs,
+                CostRuleHelpers.ComponentIndustrial, CostRuleHelpers.ComponentSpacer);
+        }
+    }
+
+    public class ComfortWorker : TraitCostRuleWorker
+    {
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            CostRuleHelpers.ConvertHalfByCount(costs, CostRuleHelpers.Thrumbofur);
+        }
+    }
+
+    public class OrnamentalWorker : TraitCostRuleWorker
+    {
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            CostRuleHelpers.RemoveMaterials(costs,
+                CostRuleHelpers.ComponentIndustrial, CostRuleHelpers.ComponentSpacer);
+            CostRuleHelpers.ConvertHalfByCount(costs, CostRuleHelpers.Silver);
         }
     }
 }

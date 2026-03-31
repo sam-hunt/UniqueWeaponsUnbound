@@ -69,7 +69,7 @@ namespace UniqueWeaponsUnbound
                     Text.Anchor = TextAnchor.MiddleLeft;
                     Rect labelRect = new Rect(
                         chipRect.x + 4f, chipRect.y,
-                        chipRect.width * 0.55f, chipRect.height);
+                        chipRect.width * 0.5f, chipRect.height);
                     Widgets.Label(labelRect, trait.LabelCap);
 
                     // Cost icons (right-aligned) — only for newly added traits

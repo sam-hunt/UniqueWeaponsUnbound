@@ -6,11 +6,45 @@ using Verse;
 namespace UniqueWeaponsUnbound
 {
     /// <summary>
-    /// Populates the initial cost list from the weapon's crafting recipe.
+    /// Provides a fallback base cost derived from the weapon's tech level.
+    /// Runs first in the pipeline so that weapons without a craftable base def
+    /// still have a reasonable cost. Weapons with recipes will have these costs
+    /// replaced by <see cref="BaseCostFromRecipeWorker"/>.
     /// </summary>
-    public class BaseCostWorker : TraitCostRuleWorker
+    public class TechLevelCostWorker : TraitCostRuleWorker
     {
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            TechLevel tech = weapon.def.techLevel;
+
+            switch (tech)
+            {
+                case TechLevel.Neolithic:
+                    costs.Add(new ThingDefCountClass(ThingDefOf.WoodLog, 100));
+                    break;
+                case TechLevel.Medieval:
+                    costs.Add(new ThingDefCountClass(ThingDefOf.Steel, 100));
+                    break;
+                case TechLevel.Industrial:
+                    costs.Add(new ThingDefCountClass(ThingDefOf.Steel, 80));
+                    costs.Add(new ThingDefCountClass(ThingDefOf.ComponentIndustrial, 6));
+                    break;
+                default: // Spacer, Ultra, Archotech
+                    costs.Add(new ThingDefCountClass(ThingDefOf.Plasteel, 80));
+                    costs.Add(new ThingDefCountClass(ThingDefOf.ComponentSpacer, 4));
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Replaces costs with the weapon's actual crafting recipe ingredients.
+    /// Only acts when the weapon has a craftable base def with recipe costs;
+    /// otherwise leaves the tech-level fallback costs in place.
+    /// </summary>
+    public class BaseCostFromRecipeWorker : TraitCostRuleWorker
+    {
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             ThingDef baseDef = WeaponCustomizationUtility.IsUniqueWeapon(weapon.def)
                 ? WeaponCustomizationUtility.GetBaseVariant(weapon.def)
@@ -18,10 +52,12 @@ namespace UniqueWeaponsUnbound
             if (baseDef == null)
                 return;
 
+            var recipeCosts = new List<ThingDefCountClass>();
+
             if (baseDef.costList != null)
             {
                 foreach (ThingDefCountClass entry in baseDef.costList)
-                    costs.Add(new ThingDefCountClass(entry.thingDef, entry.count));
+                    recipeCosts.Add(new ThingDefCountClass(entry.thingDef, entry.count));
             }
 
             if (baseDef.costStuffCount > 0)
@@ -29,7 +65,13 @@ namespace UniqueWeaponsUnbound
                 ThingDef stuff = weapon.Stuff
                     ?? GenStuff.DefaultStuffFor(baseDef)
                     ?? ThingDefOf.Steel;
-                costs.Add(new ThingDefCountClass(stuff, baseDef.costStuffCount));
+                recipeCosts.Add(new ThingDefCountClass(stuff, baseDef.costStuffCount));
+            }
+
+            if (recipeCosts.Count > 0)
+            {
+                costs.Clear();
+                costs.AddRange(recipeCosts);
             }
         }
     }
@@ -44,8 +86,8 @@ namespace UniqueWeaponsUnbound
         private static readonly Dictionary<QualityCategory, float> QualityMultipliers =
             new Dictionary<QualityCategory, float>
             {
-                { QualityCategory.Awful, 0.5f },
-                { QualityCategory.Poor, 0.75f },
+                { QualityCategory.Awful, 0.7f },
+                { QualityCategory.Poor, 0.85f },
                 { QualityCategory.Normal, 1.0f },
                 { QualityCategory.Good, 1.25f },
                 { QualityCategory.Excellent, 1.5f },
@@ -53,7 +95,7 @@ namespace UniqueWeaponsUnbound
                 { QualityCategory.Legendary, 2.5f },
             };
 
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             float qualityMult = GetQualityMultiplier(weapon);
             float totalMult = CostFraction * qualityMult;
@@ -72,12 +114,84 @@ namespace UniqueWeaponsUnbound
     }
 
     /// <summary>
+    /// Downgrades cost materials by one tech level for negative traits when adding.
+    /// Skipped for removal — removing a negative trait requires proper-tier materials
+    /// to restore the weapon to standard quality.
+    /// </summary>
+    public class NegativeDowngradeWorker : TraitCostRuleWorker
+    {
+        private static Dictionary<ThingDef, ThingDef> downgrades;
+
+        public override bool Matches(HashSet<string> labelWords, WeaponTraitDef trait)
+        {
+            return TraitCostUtility.IsNegativeTrait(trait);
+        }
+
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            if (isRemoval)
+                return;
+            if (downgrades == null)
+            {
+                downgrades = new Dictionary<ThingDef, ThingDef>
+                {
+                    { ThingDefOf.ComponentSpacer, ThingDefOf.ComponentIndustrial },
+                    { ThingDefOf.Plasteel, ThingDefOf.Steel },
+                    { ThingDefOf.ComponentIndustrial, ThingDefOf.Steel },
+                    { ThingDefOf.Steel, ThingDefOf.WoodLog },
+                };
+            }
+
+            var downgraded = new List<ThingDefCountClass>();
+            foreach (ThingDefCountClass cost in costs)
+            {
+                ThingDef mat = downgrades.TryGetValue(cost.thingDef, out ThingDef replacement)
+                    ? replacement
+                    : cost.thingDef;
+                CostRuleHelpers.AddOrMerge(downgraded, mat, cost.count);
+            }
+
+            costs.Clear();
+            costs.AddRange(downgraded);
+        }
+    }
+
+    /// <summary>
+    /// Prunes the cost list to at most 3 material types by removing the cheapest
+    /// entries (by unit market value) until the limit is met. Prevents UI overflow
+    /// from too many cost icons.
+    /// </summary>
+    public class CostPruneWorker : TraitCostRuleWorker
+    {
+        private const int MaxMaterialTypes = 3;
+
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            while (costs.Count > MaxMaterialTypes)
+            {
+                int cheapestIndex = 0;
+                float cheapestValue = costs[0].thingDef.BaseMarketValue;
+                for (int i = 1; i < costs.Count; i++)
+                {
+                    float value = costs[i].thingDef.BaseMarketValue;
+                    if (value < cheapestValue)
+                    {
+                        cheapestValue = value;
+                        cheapestIndex = i;
+                    }
+                }
+                costs.RemoveAt(cheapestIndex);
+            }
+        }
+    }
+
+    /// <summary>
     /// Fallback: auto-detects material names in the trait label and swaps raw resource
     /// costs with the detected material. Runs at low priority after all thematic rules.
     /// </summary>
     public class MaterialOverrideWorker : TraitCostRuleWorker
     {
-        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
+        public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             ThingDef overrideMaterial = CostRuleHelpers.GetMaterialOverride(trait);
             if (overrideMaterial != null)

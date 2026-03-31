@@ -38,7 +38,9 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Applies this rule's cost transformation. Called only when Matches() returns true.
+        /// <paramref name="isRemoval"/> indicates whether costs are being calculated for
+        /// trait removal (true) or addition (false). Most workers ignore this distinction.
         /// </summary>
-        public abstract void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait);
+        public abstract void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval);
     }
 }

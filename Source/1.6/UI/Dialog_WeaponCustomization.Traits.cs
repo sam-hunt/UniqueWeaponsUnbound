@@ -13,11 +13,23 @@ namespace UniqueWeaponsUnbound
         {
             float curY = rect.y;
 
+            // Reserve space at the bottom for the negative traits toggle
+            float checkSize = 24f;
+            float checkMargin = 5f;
+            float checkAreaHeight = 4f + checkSize + checkMargin * 3f;
+            float traitListHeight = rect.yMax - curY - checkAreaHeight;
+
             // Scrollable trait list
-            float traitListHeight = rect.yMax - curY;
             Rect traitListOuterRect = new Rect(rect.x, curY, rect.width, traitListHeight);
 
-            float totalTraitHeight = compatibleTraits.Count * (TraitRowHeight + TraitRowGap);
+            int visibleCount = 0;
+            foreach (WeaponTraitDef trait in compatibleTraits)
+            {
+                if (ShouldShowTrait(trait))
+                    visibleCount++;
+            }
+
+            float totalTraitHeight = visibleCount * (TraitRowHeight + TraitRowGap);
 
             Rect traitListInnerRect = new Rect(0f, 0f,
                 traitListOuterRect.width - 16f, totalTraitHeight);
@@ -27,11 +39,39 @@ namespace UniqueWeaponsUnbound
             float scrollY = 0f;
             foreach (WeaponTraitDef trait in compatibleTraits)
             {
-                DrawTraitRow(traitListInnerRect.x, ref scrollY,
-                    traitListInnerRect.width, trait);
+                if (ShouldShowTrait(trait))
+                    DrawTraitRow(traitListInnerRect.x, ref scrollY,
+                        traitListInnerRect.width, trait);
             }
 
             Widgets.EndScrollView();
+            curY += traitListHeight;
+
+            // Divider + toggle at the bottom
+            curY += 4f;
+            GUI.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+            Widgets.DrawLineHorizontal(rect.x, curY, rect.width);
+            GUI.color = Color.white;
+            curY += 4f;
+
+            curY += checkMargin;
+            Rect checkboxRect = new Rect(rect.x + checkMargin, curY, checkSize, checkSize);
+            Widgets.Checkbox(checkboxRect.x, checkboxRect.y, ref hideNegativeTraits, checkSize);
+            Rect checkLabelRect = new Rect(
+                checkboxRect.xMax + 4f, curY, rect.width - checkSize - checkMargin - 4f, checkSize);
+            Text.Anchor = TextAnchor.MiddleLeft;
+            Widgets.Label(checkLabelRect, "Hide negative traits");
+            Text.Anchor = TextAnchor.UpperLeft;
+        }
+
+        private bool ShouldShowTrait(WeaponTraitDef trait)
+        {
+            if (!hideNegativeTraits)
+                return true;
+            if (!TraitCostUtility.IsNegativeTrait(trait))
+                return true;
+            // Always show negative traits that are selected or on the weapon
+            return desiredTraits.Contains(trait) || originalTraits.Contains(trait);
         }
 
         private void DrawTraitRow(float x, ref float curY, float width, WeaponTraitDef trait)
@@ -60,17 +100,17 @@ namespace UniqueWeaponsUnbound
                 rowRect.width * 0.35f, rowRect.height);
             Widgets.Label(labelRect, trait.LabelCap);
 
-            // Cost icons (right-aligned):
-            // - Selected original: preview of removal (refund green / neg cost hypothetical red)
-            // - Unselected original: committed removal (refund green / neg cost red if short)
-            // - Selected new: committed addition cost, red if insufficient
+            // Cost icons (right-aligned) — shows the delta from toggling this row:
+            // - Selected original: removal preview (refund green / neg cost hypothetical red)
+            // - Unselected original: no cost (re-adding is free, trait is already on weapon)
+            // - Selected new: addition cost, red if insufficient
             // - Unselected new: hypothetical addition cost, red if hypothetically unaffordable
             Rect costRect = new Rect(rowRect.x + rowRect.width * 0.7f, rowRect.y,
                 rowRect.width * 0.3f - 4f, rowRect.height);
             bool isOriginal = originalTraits.Contains(trait);
             if (isSelected && isOriginal)
             {
-                // Preview: what removal would cost/refund if toggled
+                // Clicking would remove — show what removal would cost/refund
                 List<ThingDefCountClass> removalResult =
                     TraitCostUtility.GetRemovalCost(weapon, trait);
                 if (TraitCostUtility.IsNegativeTrait(trait))
@@ -86,19 +126,7 @@ namespace UniqueWeaponsUnbound
             }
             else if (!isSelected && isOriginal)
             {
-                // Committed removal — show actual cost or refund
-                List<ThingDefCountClass> removalResult =
-                    TraitCostUtility.GetRemovalCost(weapon, trait);
-                if (TraitCostUtility.IsNegativeTrait(trait))
-                {
-                    DrawCostIcons(costRect, removalResult, rightAlign: true,
-                        insufficientResources: insufficientResources);
-                }
-                else if (UWU_Mod.Settings.refundFraction > 0f)
-                {
-                    DrawCostIcons(costRect, removalResult, rightAlign: true,
-                        greenQuantities: true);
-                }
+                // Clicking would re-add — free, trait is already on the weapon
             }
             else if (isSelected)
             {

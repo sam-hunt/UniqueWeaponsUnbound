@@ -26,6 +26,8 @@ namespace UniqueWeaponsUnbound
         public static ThingDef Birdskin { get; private set; }
         public static ThingDef Bioferrite { get; private set; }
         public static ThingDef SteelSlagChunk { get; private set; }
+        public static ThingDef Thrumbofur { get; private set; }
+        public static ThingDef Silver { get; private set; }
 
         /// <summary>
         /// Builds the raw resource and material label caches and resolves ThingDefs.
@@ -67,6 +69,8 @@ namespace UniqueWeaponsUnbound
             Birdskin = DefDatabase<ThingDef>.GetNamedSilentFail("Leather_Bird");
             Bioferrite = DefDatabase<ThingDef>.GetNamedSilentFail("Bioferrite");
             SteelSlagChunk = DefDatabase<ThingDef>.GetNamedSilentFail("ChunkSlagSteel");
+            Thrumbofur = DefDatabase<ThingDef>.GetNamedSilentFail("Leather_Thrumbo");
+            Silver = ThingDefOf.Silver;
 
             Log.Message($"[Unique Weapons Unbound] Cached {rawResources.Count} raw resources, " +
                 $"{materialsByLabel.Count} material labels.");
@@ -244,6 +248,44 @@ namespace UniqueWeaponsUnbound
                 existing.count += count;
             else
                 costs.Add(new ThingDefCountClass(def, count));
+        }
+
+        /// <summary>
+        /// Removes all entries matching the given ThingDefs from the cost list.
+        /// </summary>
+        public static void RemoveMaterials(List<ThingDefCountClass> costs, params ThingDef[] materials)
+        {
+            costs.RemoveAll(c =>
+            {
+                for (int i = 0; i < materials.Length; i++)
+                {
+                    if (c.thingDef == materials[i])
+                        return true;
+                }
+                return false;
+            });
+        }
+
+        /// <summary>
+        /// Converts half (by count, floored) of every cost entry into the replacement material.
+        /// </summary>
+        public static void ConvertHalfByCount(List<ThingDefCountClass> costs, ThingDef replacement)
+        {
+            if (replacement == null)
+                return;
+
+            int totalReplacement = 0;
+            foreach (ThingDefCountClass cost in costs)
+            {
+                int half = Mathf.FloorToInt(cost.count * 0.5f);
+                if (half <= 0)
+                    continue;
+                cost.count -= half;
+                totalReplacement += half;
+            }
+
+            if (totalReplacement > 0)
+                AddOrMerge(costs, replacement, totalReplacement);
         }
 
         /// <summary>

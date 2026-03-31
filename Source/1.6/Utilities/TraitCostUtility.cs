@@ -10,6 +10,8 @@ namespace UniqueWeaponsUnbound
     /// Orchestrates trait cost calculation by running data-driven rules from
     /// <see cref="TraitCostRuleDef"/> in priority order. Provides the public API
     /// for addition costs, removal costs/refunds, and negative trait detection.
+    /// The pipeline supports asymmetric costs: some rules (e.g. NegativeDowngrade)
+    /// behave differently for addition vs removal context.
     /// </summary>
     public static class TraitCostUtility
     {
@@ -19,8 +21,8 @@ namespace UniqueWeaponsUnbound
         /// </summary>
         public static float RefundFraction => UWU_Mod.Settings?.refundFraction ?? 0.5f;
 
-        private static readonly Dictionary<(ThingDef, ThingDef, float, WeaponTraitDef), List<ThingDefCountClass>> costCache =
-            new Dictionary<(ThingDef, ThingDef, float, WeaponTraitDef), List<ThingDefCountClass>>();
+        private static readonly Dictionary<(ThingDef, ThingDef, float, WeaponTraitDef, bool), List<ThingDefCountClass>> costCache =
+            new Dictionary<(ThingDef, ThingDef, float, WeaponTraitDef, bool), List<ThingDefCountClass>>();
 
         private static List<TraitCostRuleDef> cachedRules;
 
@@ -41,36 +43,12 @@ namespace UniqueWeaponsUnbound
         }
 
         /// <summary>
-        /// Calculates the base resource cost of a trait by running all matching rules
-        /// in priority order. Returns an empty list if no rules produce costs.
+        /// Calculates the base resource cost of a trait for addition context.
+        /// Runs all matching rules in priority order with isRemoval=false.
         /// </summary>
         public static List<ThingDefCountClass> GetTraitCost(Thing weapon, WeaponTraitDef trait)
         {
-            ThingDef baseDef = WeaponCustomizationUtility.IsUniqueWeapon(weapon.def)
-                ? WeaponCustomizationUtility.GetBaseVariant(weapon.def)
-                : weapon.def;
-
-            if (baseDef == null)
-                return new List<ThingDefCountClass>();
-
-            float qualityMult = QualityMultiplierWorker.GetQualityMultiplier(weapon);
-            var cacheKey = (baseDef, weapon.Stuff, qualityMult, trait);
-            if (costCache.TryGetValue(cacheKey, out List<ThingDefCountClass> cached))
-                return CloneCosts(cached);
-
-            var costs = new List<ThingDefCountClass>();
-            HashSet<string> labelWords = CostRuleHelpers.SplitLabelWords(trait.label);
-
-            foreach (TraitCostRuleDef ruleDef in cachedRules)
-            {
-                if (ruleDef.Worker.Matches(labelWords, trait))
-                    ruleDef.Worker.Apply(costs, weapon, trait);
-            }
-
-            costs.RemoveAll(c => c.count <= 0);
-
-            costCache[cacheKey] = CloneCosts(costs);
-            return costs;
+            return RunPipeline(weapon, trait, isRemoval: false);
         }
 
         /// <summary>
@@ -94,10 +72,11 @@ namespace UniqueWeaponsUnbound
         /// <summary>
         /// Returns the per-trait cost of ADDING this trait. For negative traits,
         /// the cost is reduced by RefundFraction (nobody pays full price for a downgrade).
+        /// Uses the addition pipeline (materials may be downgraded for negative traits).
         /// </summary>
         public static List<ThingDefCountClass> GetAdditionCost(Thing weapon, WeaponTraitDef trait)
         {
-            List<ThingDefCountClass> costs = GetTraitCost(weapon, trait);
+            List<ThingDefCountClass> costs = RunPipeline(weapon, trait, isRemoval: false);
             if (IsNegativeTrait(trait))
             {
                 foreach (ThingDefCountClass c in costs)
@@ -111,12 +90,12 @@ namespace UniqueWeaponsUnbound
         /// Returns the per-trait result of REMOVING this trait.
         /// For positive traits: materials the player receives back (refund, base * RefundFraction).
         /// For negative traits: materials the player must PAY (cost, base * RefundFraction).
-        /// Both directions use RefundFraction — the symmetry keeps removal costs fair.
+        /// Uses the removal pipeline (original-tier materials preserved for negative traits).
         /// Call <see cref="IsNegativeTrait"/> to determine whether the result is a refund or a cost.
         /// </summary>
         public static List<ThingDefCountClass> GetRemovalCost(Thing weapon, WeaponTraitDef trait)
         {
-            List<ThingDefCountClass> costs = GetTraitCost(weapon, trait);
+            List<ThingDefCountClass> costs = RunPipeline(weapon, trait, isRemoval: true);
             foreach (ThingDefCountClass c in costs)
                 c.count = IsNegativeTrait(trait)
                     ? Mathf.CeilToInt(c.count * RefundFraction)
@@ -175,22 +154,12 @@ namespace UniqueWeaponsUnbound
         public static List<ThingDefCountClass> GetTotalRefund(
             Thing weapon, IEnumerable<WeaponTraitDef> traits)
         {
-            List<ThingDefCountClass> raw = AggregateCosts(weapon,
-                traits.Where(t => !IsNegativeTrait(t)));
-            foreach (ThingDefCountClass entry in raw)
-                entry.count = Mathf.FloorToInt(entry.count * RefundFraction);
-            raw.RemoveAll(c => c.count <= 0);
-            return raw;
-        }
-
-        private static List<ThingDefCountClass> AggregateCosts(
-            Thing weapon, IEnumerable<WeaponTraitDef> traits)
-        {
             var totals = new Dictionary<ThingDef, int>();
-
             foreach (WeaponTraitDef trait in traits)
             {
-                foreach (ThingDefCountClass cost in GetTraitCost(weapon, trait))
+                if (IsNegativeTrait(trait))
+                    continue;
+                foreach (ThingDefCountClass cost in RunPipeline(weapon, trait, isRemoval: true))
                 {
                     if (totals.ContainsKey(cost.thingDef))
                         totals[cost.thingDef] += cost.count;
@@ -199,7 +168,41 @@ namespace UniqueWeaponsUnbound
                 }
             }
 
-            return totals.Select(kv => new ThingDefCountClass(kv.Key, kv.Value)).ToList();
+            var raw = totals.Select(kv => new ThingDefCountClass(kv.Key, kv.Value)).ToList();
+            foreach (ThingDefCountClass entry in raw)
+                entry.count = Mathf.FloorToInt(entry.count * RefundFraction);
+            raw.RemoveAll(c => c.count <= 0);
+            return raw;
+        }
+
+        private static List<ThingDefCountClass> RunPipeline(
+            Thing weapon, WeaponTraitDef trait, bool isRemoval)
+        {
+            ThingDef baseDef = WeaponCustomizationUtility.IsUniqueWeapon(weapon.def)
+                ? WeaponCustomizationUtility.GetBaseVariant(weapon.def)
+                : weapon.def;
+
+            if (baseDef == null)
+                return new List<ThingDefCountClass>();
+
+            float qualityMult = QualityMultiplierWorker.GetQualityMultiplier(weapon);
+            var cacheKey = (baseDef, weapon.Stuff, qualityMult, trait, isRemoval);
+            if (costCache.TryGetValue(cacheKey, out List<ThingDefCountClass> cached))
+                return CloneCosts(cached);
+
+            var costs = new List<ThingDefCountClass>();
+            HashSet<string> labelWords = CostRuleHelpers.SplitLabelWords(trait.label);
+
+            foreach (TraitCostRuleDef ruleDef in cachedRules)
+            {
+                if (ruleDef.Worker.Matches(labelWords, trait))
+                    ruleDef.Worker.Apply(costs, weapon, trait, isRemoval);
+            }
+
+            costs.RemoveAll(c => c.count <= 0);
+
+            costCache[cacheKey] = CloneCosts(costs);
+            return costs;
         }
 
         private static List<ThingDefCountClass> CloneCosts(List<ThingDefCountClass> costs)

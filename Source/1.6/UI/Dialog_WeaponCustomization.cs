@@ -67,6 +67,7 @@ namespace UniqueWeaponsUnbound
         private Vector2 traitListScroll;
         private int activeTab; // 0 = Traits, 1 = Texture, 2 = Color
         private bool nameLocked;
+        private bool hideNegativeTraits;
         private string lastAutoName;
 
         // Affordability state — recomputed each frame in DoWindowContents
@@ -143,6 +144,9 @@ namespace UniqueWeaponsUnbound
 
             // Cache the full compatible trait list for this weapon type
             compatibleTraits = TraitValidationUtility.GetCompatibleTraits(uniqueDef);
+
+            // Default to hiding negative traits unless the weapon already has one
+            hideNegativeTraits = !originalTraits.Any(t => TraitCostUtility.IsNegativeTrait(t));
 
             // Snapshot original name via reflection
             if (uniqueComp != null && CompNameField != null)
