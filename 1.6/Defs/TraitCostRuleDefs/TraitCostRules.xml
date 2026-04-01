@@ -54,7 +54,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_IncendiarySwap</defName>
     <label>incendiary component swap</label>
-    <description>Replaces components with chemfuel (15x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value.</description>
+    <description>Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value.</description>
     <workerClass>UniqueWeaponsUnbound.IncendiarySwapWorker</workerClass>
     <priority>1100</priority>
     <labelKeywords>

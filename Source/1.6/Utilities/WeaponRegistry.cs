@@ -33,10 +33,6 @@ namespace UniqueWeaponsUnbound
                     uniqueToBase[def] = baseDef;
                     baseToUnique[baseDef] = def;
                 }
-                else
-                {
-                    Log.Warning($"[Unique Weapons Unbound] Unique weapon {def.defName} has no detectable base weapon.");
-                }
             }
 
             Log.Message($"[Unique Weapons Unbound] Cached {uniqueToBase.Count} base/unique weapon pairs.");

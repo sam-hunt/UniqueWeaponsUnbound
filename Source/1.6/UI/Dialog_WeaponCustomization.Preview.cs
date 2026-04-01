@@ -75,8 +75,7 @@ namespace UniqueWeaponsUnbound
                     // Cost icons (right-aligned) — only for newly added traits
                     if (!originalTraits.Contains(trait))
                     {
-                        List<ThingDefCountClass> chipCosts =
-                            TraitCostUtility.GetAdditionCost(weapon, trait);
+                        List<ThingDefCountClass> chipCosts = GetAdditionCost(trait);
                         Rect chipCostRect = new Rect(
                             labelRect.xMax, chipRect.y,
                             chipRect.xMax - labelRect.xMax - 4f, chipRect.height);

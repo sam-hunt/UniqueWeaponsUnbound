@@ -219,12 +219,12 @@ namespace UniqueWeaponsUnbound
                 if (TraitCostUtility.IsNegativeTrait(trait))
                 {
                     // Negative trait removal costs resources (reduced by RefundFraction)
-                    op.cost = TraitCostUtility.GetRemovalCost(weapon, trait);
+                    op.cost = GetRemovalCost(trait);
                 }
                 else
                 {
                     op.refund = UWU_Mod.Settings.refundFraction > 0f
-                        ? TraitCostUtility.GetTraitCost(weapon, trait)
+                        ? CachedPipelineCost(trait, isRemoval: false)
                         : null;
                 }
 
@@ -315,7 +315,7 @@ namespace UniqueWeaponsUnbound
                 {
                     type = OpType.AddTrait,
                     trait = trait,
-                    cost = TraitCostUtility.GetAdditionCost(weapon, trait),
+                    cost = GetAdditionCost(trait),
                 };
 
                 if (trait.forcedColor != null)

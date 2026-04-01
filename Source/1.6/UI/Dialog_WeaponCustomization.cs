@@ -79,6 +79,11 @@ namespace UniqueWeaponsUnbound
         private List<ThingDefCountClass> currentTotalRefund;
         private Dictionary<ThingDef, int> surplusBalance;
 
+        // Pipeline cost cache — scoped to this dialog instance.
+        // Key: (trait, isRemoval). Populated lazily, freed on dialog close.
+        private readonly Dictionary<(WeaponTraitDef, bool), List<ThingDefCountClass>> pipelineCache =
+            new Dictionary<(WeaponTraitDef, bool), List<ThingDefCountClass>>();
+
         // Layout constants
         private static readonly Vector2 ButtonSize = new Vector2(120f, 40f);
         private const float LeftPanePct = 0.35f;
@@ -334,6 +339,125 @@ namespace UniqueWeaponsUnbound
         }
 
         /// <summary>
+        /// Returns a cached copy of the raw pipeline cost for the given trait and direction.
+        /// The weapon, stuff, and quality are implicit (one dialog = one weapon).
+        /// Callers may mutate the returned list without affecting the cache.
+        /// </summary>
+        private List<ThingDefCountClass> CachedPipelineCost(WeaponTraitDef trait, bool isRemoval)
+        {
+            var key = (trait, isRemoval);
+            if (pipelineCache.TryGetValue(key, out List<ThingDefCountClass> cached))
+                return CloneCosts(cached);
+
+            List<ThingDefCountClass> costs = TraitCostUtility.RunPipeline(weapon, trait, isRemoval);
+            pipelineCache[key] = CloneCosts(costs);
+            return costs;
+        }
+
+        private static List<ThingDefCountClass> CloneCosts(List<ThingDefCountClass> costs)
+        {
+            var clone = new List<ThingDefCountClass>(costs.Count);
+            foreach (ThingDefCountClass entry in costs)
+                clone.Add(new ThingDefCountClass(entry.thingDef, entry.count));
+            return clone;
+        }
+
+        /// <summary>
+        /// Dialog-local equivalent of <see cref="TraitCostUtility.GetAdditionCost"/>,
+        /// using the dialog's pipeline cache.
+        /// </summary>
+        private List<ThingDefCountClass> GetAdditionCost(WeaponTraitDef trait)
+        {
+            List<ThingDefCountClass> costs = CachedPipelineCost(trait, isRemoval: false);
+            if (TraitCostUtility.IsNegativeTrait(trait))
+            {
+                foreach (ThingDefCountClass c in costs)
+                    c.count = Mathf.CeilToInt(c.count * TraitCostUtility.RefundFraction);
+                costs.RemoveAll(c => c.count <= 0);
+            }
+            return costs;
+        }
+
+        /// <summary>
+        /// Dialog-local equivalent of <see cref="TraitCostUtility.GetRemovalCost"/>,
+        /// using the dialog's pipeline cache.
+        /// </summary>
+        private List<ThingDefCountClass> GetRemovalCost(WeaponTraitDef trait)
+        {
+            List<ThingDefCountClass> costs = CachedPipelineCost(trait, isRemoval: true);
+            foreach (ThingDefCountClass c in costs)
+                c.count = TraitCostUtility.IsNegativeTrait(trait)
+                    ? Mathf.CeilToInt(c.count * TraitCostUtility.RefundFraction)
+                    : Mathf.FloorToInt(c.count * TraitCostUtility.RefundFraction);
+            costs.RemoveAll(c => c.count <= 0);
+            return costs;
+        }
+
+        /// <summary>
+        /// Dialog-local equivalent of <see cref="TraitCostUtility.GetTotalCost"/>,
+        /// using the dialog's pipeline cache.
+        /// </summary>
+        private List<ThingDefCountClass> GetTotalCost()
+        {
+            var totals = new Dictionary<ThingDef, int>();
+
+            foreach (WeaponTraitDef trait in TraitsToAdd)
+            {
+                foreach (ThingDefCountClass cost in GetAdditionCost(trait))
+                {
+                    if (totals.ContainsKey(cost.thingDef))
+                        totals[cost.thingDef] += cost.count;
+                    else
+                        totals[cost.thingDef] = cost.count;
+                }
+            }
+
+            foreach (WeaponTraitDef trait in TraitsToRemove)
+            {
+                if (!TraitCostUtility.IsNegativeTrait(trait))
+                    continue;
+                foreach (ThingDefCountClass cost in GetRemovalCost(trait))
+                {
+                    if (totals.ContainsKey(cost.thingDef))
+                        totals[cost.thingDef] += cost.count;
+                    else
+                        totals[cost.thingDef] = cost.count;
+                }
+            }
+
+            return totals.Select(kv => new ThingDefCountClass(kv.Key, kv.Value)).ToList();
+        }
+
+        /// <summary>
+        /// Dialog-local equivalent of <see cref="TraitCostUtility.GetTotalRefund"/>,
+        /// using the dialog's pipeline cache. Aggregates raw pipeline costs across
+        /// positive traits first, then applies RefundFraction once per material
+        /// to avoid cumulative rounding loss.
+        /// </summary>
+        private List<ThingDefCountClass> GetTotalRefund()
+        {
+            var totals = new Dictionary<ThingDef, int>();
+            foreach (WeaponTraitDef trait in TraitsToRemove)
+            {
+                if (TraitCostUtility.IsNegativeTrait(trait))
+                    continue;
+                foreach (ThingDefCountClass cost in CachedPipelineCost(trait, isRemoval: true))
+                {
+                    if (totals.ContainsKey(cost.thingDef))
+                        totals[cost.thingDef] += cost.count;
+                    else
+                        totals[cost.thingDef] = cost.count;
+                }
+            }
+
+            var raw = totals.Select(kv => new ThingDefCountClass(kv.Key, kv.Value)).ToList();
+            foreach (ThingDefCountClass entry in raw)
+                entry.count = Mathf.FloorToInt(entry.count * TraitCostUtility.RefundFraction);
+            raw.RemoveAll(c => c.count <= 0);
+            return raw;
+        }
+
+        /// <summary>
         /// Resolves the unique weapon def's graphic and returns the number of texture variants.
         /// Unwraps Graphic_RandomRotated if needed to access the underlying Graphic_Random.
         /// Returns 1 if the graphic is not a random-variant type.
@@ -437,11 +561,10 @@ namespace UniqueWeaponsUnbound
         public override void DoWindowContents(Rect inRect)
         {
             // Compute affordability state for cost coloring across all draw calls
-            List<ThingDefCountClass> frameCost =
-                TraitCostUtility.GetTotalCost(weapon, TraitsToAdd, TraitsToRemove);
+            List<ThingDefCountClass> frameCost = GetTotalCost();
 
             currentTotalRefund = UWU_Mod.Settings.refundFraction > 0f
-                ? TraitCostUtility.GetTotalRefund(weapon, TraitsToRemove)
+                ? GetTotalRefund()
                 : null;
             ComputeNetCostAndSurplus(frameCost, currentTotalRefund,
                 out currentNetCost, out currentSurplus);

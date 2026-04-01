@@ -111,8 +111,7 @@ namespace UniqueWeaponsUnbound
             if (isSelected && isOriginal)
             {
                 // Clicking would remove — show what removal would cost/refund
-                List<ThingDefCountClass> removalResult =
-                    TraitCostUtility.GetRemovalCost(weapon, trait);
+                List<ThingDefCountClass> removalResult = GetRemovalCost(trait);
                 if (TraitCostUtility.IsNegativeTrait(trait))
                 {
                     DrawCostIcons(costRect, removalResult, rightAlign: true,
@@ -130,13 +129,13 @@ namespace UniqueWeaponsUnbound
             }
             else if (isSelected)
             {
-                List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(weapon, trait);
+                List<ThingDefCountClass> costs = GetAdditionCost(trait);
                 DrawCostIcons(costRect, costs, rightAlign: true,
                     insufficientResources: insufficientResources);
             }
             else
             {
-                List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(weapon, trait);
+                List<ThingDefCountClass> costs = GetAdditionCost(trait);
                 DrawCostIcons(costRect, costs, rightAlign: true,
                     insufficientResources: GetHypotheticalInsufficient(costs));
             }

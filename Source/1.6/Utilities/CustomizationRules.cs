@@ -21,18 +21,15 @@ namespace UniqueWeaponsUnbound
         {
             ThingDef def = weapon.def;
 
-            ThingDef baseDef;
             if (WeaponRegistry.IsUniqueWeapon(def))
             {
-                baseDef = WeaponRegistry.GetBaseVariant(def);
-                if (baseDef == null)
-                    return false;
+                // Unique weapons are always in the customization system
+                // regardless of whether a base def exists.
             }
             else
             {
                 if (WeaponRegistry.GetUniqueVariant(def) == null)
                     return false;
-                baseDef = def;
             }
 
             // Don't surface any customization UI until the player has completed
@@ -40,7 +37,7 @@ namespace UniqueWeaponsUnbound
             if (!UWU_ResearchDefOf.UniqueSmithing.IsFinished)
                 return false;
 
-            ResearchProjectDef requiredResearch = GetRequiredResearch(baseDef.techLevel);
+            ResearchProjectDef requiredResearch = GetRequiredResearch(def.techLevel);
             if (requiredResearch == null)
                 return false;
 
@@ -55,12 +52,13 @@ namespace UniqueWeaponsUnbound
         /// Returns AcceptanceReport with the blocking research name, or false
         /// with no reason for uncraftable weapons without the mod setting.
         /// </summary>
-        public static AcceptanceReport GetCraftabilityReport(ThingDef baseDef)
+        public static AcceptanceReport GetCraftabilityReport(ThingDef baseDef, ThingDef uniqueDef)
         {
-            if (baseDef.recipeMaker == null)
+            RecipeMakerProperties recipeMaker = baseDef?.recipeMaker ?? uniqueDef?.recipeMaker;
+            if (recipeMaker == null)
                 return UWU_Mod.Settings.allowUncraftableCustomization;
 
-            ResearchProjectDef recipeResearch = baseDef.recipeMaker.researchPrerequisite;
+            ResearchProjectDef recipeResearch = recipeMaker.researchPrerequisite;
             if (recipeResearch != null && !recipeResearch.IsFinished)
                 return "UWU_RequiresResearch".Translate(recipeResearch.label);
 
@@ -110,23 +108,7 @@ namespace UniqueWeaponsUnbound
         }
 
         /// <summary>
-        /// Whether a base weapon's crafting recipe exists and its prerequisite research is done.
-        /// </summary>
-        public static bool IsBaseCraftable(ThingDef baseDef)
-        {
-            if (baseDef.recipeMaker == null)
-            {
-                return UWU_Mod.Settings.allowUncraftableCustomization;
-            }
-
-            ResearchProjectDef recipeResearch = baseDef.recipeMaker.researchPrerequisite;
-            return recipeResearch == null || recipeResearch.IsFinished;
-        }
-
-        /// <summary>
-        /// Returns the tech level relevant for customization checks.
-        /// For unique weapons, returns the base weapon's tech level.
-        /// For base weapons with a unique variant, returns the weapon's own tech level.
+        /// Returns the weapon's tech level if it participates in the customization system.
         /// Returns TechLevel.Undefined if the weapon has no customization path.
         /// </summary>
         public static TechLevel GetWeaponTechLevel(Thing weapon)
@@ -134,10 +116,7 @@ namespace UniqueWeaponsUnbound
             ThingDef def = weapon.def;
 
             if (WeaponRegistry.IsUniqueWeapon(def))
-            {
-                ThingDef baseDef = WeaponRegistry.GetBaseVariant(def);
-                return baseDef?.techLevel ?? TechLevel.Undefined;
-            }
+                return def.techLevel;
 
             if (WeaponRegistry.GetUniqueVariant(def) != null)
                 return def.techLevel;

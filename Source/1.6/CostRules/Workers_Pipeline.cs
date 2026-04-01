@@ -49,23 +49,27 @@ namespace UniqueWeaponsUnbound
             ThingDef baseDef = WeaponRegistry.IsUniqueWeapon(weapon.def)
                 ? WeaponRegistry.GetBaseVariant(weapon.def)
                 : weapon.def;
-            if (baseDef == null)
+
+            // Fall back to the weapon's own def for recipe resolution.
+            // Handles base-def-less unique weapons that have their own crafting recipe.
+            ThingDef recipeDef = baseDef ?? weapon.def;
+            if (recipeDef == null)
                 return;
 
             var recipeCosts = new List<ThingDefCountClass>();
 
-            if (baseDef.costList != null)
+            if (recipeDef.costList != null)
             {
-                foreach (ThingDefCountClass entry in baseDef.costList)
+                foreach (ThingDefCountClass entry in recipeDef.costList)
                     recipeCosts.Add(new ThingDefCountClass(entry.thingDef, entry.count));
             }
 
-            if (baseDef.costStuffCount > 0)
+            if (recipeDef.costStuffCount > 0)
             {
                 ThingDef stuff = weapon.Stuff
-                    ?? GenStuff.DefaultStuffFor(baseDef)
+                    ?? GenStuff.DefaultStuffFor(recipeDef)
                     ?? ThingDefOf.Steel;
-                recipeCosts.Add(new ThingDefCountClass(stuff, baseDef.costStuffCount));
+                recipeCosts.Add(new ThingDefCountClass(stuff, recipeDef.costStuffCount));
             }
 
             if (recipeCosts.Count > 0)

@@ -75,7 +75,7 @@ namespace UniqueWeaponsUnbound
                 return DisabledOrHidden(weapon, operational);
 
             // Recipe research (craftability)
-            AcceptanceReport craftable = CustomizationRules.GetCraftabilityReport(baseDef);
+            AcceptanceReport craftable = CustomizationRules.GetCraftabilityReport(baseDef, uniqueDef);
             if (!craftable.Accepted)
                 return DisabledOrHidden(weapon, craftable);
 

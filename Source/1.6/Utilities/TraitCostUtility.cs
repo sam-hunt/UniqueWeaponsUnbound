@@ -21,9 +21,6 @@ namespace UniqueWeaponsUnbound
         /// </summary>
         public static float RefundFraction => UWU_Mod.Settings?.refundFraction ?? 0.5f;
 
-        private static readonly Dictionary<(ThingDef, ThingDef, float, WeaponTraitDef, bool), List<ThingDefCountClass>> costCache =
-            new Dictionary<(ThingDef, ThingDef, float, WeaponTraitDef, bool), List<ThingDefCountClass>>();
-
         private static List<TraitCostRuleDef> cachedRules;
 
         /// <summary>
@@ -33,7 +30,6 @@ namespace UniqueWeaponsUnbound
         public static void Initialize()
         {
             CostRuleHelpers.Initialize();
-            costCache.Clear();
 
             cachedRules = DefDatabase<TraitCostRuleDef>.AllDefs
                 .OrderBy(d => d.priority)
@@ -175,21 +171,9 @@ namespace UniqueWeaponsUnbound
             return raw;
         }
 
-        private static List<ThingDefCountClass> RunPipeline(
+        internal static List<ThingDefCountClass> RunPipeline(
             Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
-            ThingDef baseDef = WeaponRegistry.IsUniqueWeapon(weapon.def)
-                ? WeaponRegistry.GetBaseVariant(weapon.def)
-                : weapon.def;
-
-            if (baseDef == null)
-                return new List<ThingDefCountClass>();
-
-            float qualityMult = QualityMultiplierWorker.GetQualityMultiplier(weapon);
-            var cacheKey = (baseDef, weapon.Stuff, qualityMult, trait, isRemoval);
-            if (costCache.TryGetValue(cacheKey, out List<ThingDefCountClass> cached))
-                return CloneCosts(cached);
-
             var costs = new List<ThingDefCountClass>();
             HashSet<string> labelWords = CostRuleHelpers.SplitLabelWords(trait.label);
 
@@ -200,17 +184,7 @@ namespace UniqueWeaponsUnbound
             }
 
             costs.RemoveAll(c => c.count <= 0);
-
-            costCache[cacheKey] = CloneCosts(costs);
             return costs;
-        }
-
-        private static List<ThingDefCountClass> CloneCosts(List<ThingDefCountClass> costs)
-        {
-            var clone = new List<ThingDefCountClass>(costs.Count);
-            foreach (ThingDefCountClass entry in costs)
-                clone.Add(new ThingDefCountClass(entry.thingDef, entry.count));
-            return clone;
         }
     }
 }
