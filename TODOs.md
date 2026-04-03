@@ -1,12 +1,5 @@
 # TODOs
 
-## Testing/Cleanup
-
-- Ensure uncraftable unique weapons and weapons without base def pass flow entrypoint gates
-- Test pick up and haul
-- Test simple sidearms
-- Test CE?
-
 ## Infographics
 
 - Hero art cataphract with unique charge rifle

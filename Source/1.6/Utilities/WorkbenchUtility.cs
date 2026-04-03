@@ -67,7 +67,7 @@ namespace UniqueWeaponsUnbound
             IntVec3 distanceOrigin)
         {
             return FindBestWorkbenchCore(pawn.Map, baseDef, uniqueDef, weaponTechLevel,
-                distanceOrigin, workbench =>
+                distanceOrigin, pawn, workbench =>
                 {
                     if (!pawn.CanReach(workbench, PathEndMode.InteractionCell, Danger.Deadly))
                         return "NoPath".Translate();
@@ -88,7 +88,7 @@ namespace UniqueWeaponsUnbound
             IntVec3 distanceOrigin)
         {
             return FindBestWorkbenchCore(map, baseDef, uniqueDef, weaponTechLevel,
-                distanceOrigin, workbench =>
+                distanceOrigin, null, workbench =>
                 {
                     if (!map.reachability.CanReach(distanceOrigin, workbench,
                             PathEndMode.InteractionCell,
@@ -108,7 +108,8 @@ namespace UniqueWeaponsUnbound
         /// </summary>
         private static WorkbenchSearchResult FindBestWorkbenchCore(
             Map map, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
-            IntVec3 distanceOrigin, Func<Building_WorkTable, AcceptanceReport> accessCheck)
+            IntVec3 distanceOrigin, Pawn pawn,
+            Func<Building_WorkTable, AcceptanceReport> accessCheck)
         {
             // Track two tiers: prefer unreserved benches, fall back to reserved.
             // This avoids interrupting in-progress work when a free bench is available,
@@ -168,7 +169,11 @@ namespace UniqueWeaponsUnbound
 
                 // Valid candidate — sort into free vs reserved, track closest in each
                 float distSq = (distanceOrigin - workbench.Position).LengthHorizontalSquared;
-                if (map.reservationManager.IsReserved(workbench))
+                bool reservedByOther = pawn != null
+                    ? map.reservationManager.IsReserved(workbench)
+                        && !map.reservationManager.ReservedBy(workbench, pawn)
+                    : map.reservationManager.IsReserved(workbench);
+                if (reservedByOther)
                 {
                     if (distSq < bestReservedDistSq)
                     {
