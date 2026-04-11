@@ -12,6 +12,8 @@
 - mod setting to remove weapon research req
 - mod setting to remove tech tier research req
 - mod setting to remove appropriate workbench req
+- Add TraitCostRuleDef api info for modders
+- localization strings in language folders?
 
 ## Infographics
 

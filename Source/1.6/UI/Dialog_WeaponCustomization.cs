@@ -56,6 +56,7 @@ namespace UniqueWeaponsUnbound
         private readonly int textureVariantCount;
         private readonly List<ColorDef> availableWeaponColors;
         private readonly ColorDef initialDesiredColor;
+        private readonly bool isRelic; // Ideology DLC: weapon is an ideoligion relic
 
         // Desired state — mutated by user interaction
         private readonly List<WeaponTraitDef> desiredTraits;
@@ -160,6 +161,17 @@ namespace UniqueWeaponsUnbound
                 originalName = "";
             desiredName = originalName;
             nameLocked = !string.IsNullOrEmpty(originalName);
+
+            // Ideology DLC: if the weapon is a relic, use the precept's display name
+            // as the desired name. This writes the relic name into CompUniqueWeapon.name
+            // so it persists even if relic status is later revoked via ideology reform.
+            // The name field is disabled for relics — editing happens via form/reform.
+            if (ModsConfig.IdeologyActive && weapon.StyleSourcePrecept is Precept_Relic relicPrecept)
+            {
+                isRelic = true;
+                desiredName = relicPrecept.LabelCap;
+                nameLocked = true;
+            }
 
             // Snapshot original color via reflection and build available colors list
             if (uniqueComp != null && CompColorField != null)
@@ -285,7 +297,7 @@ namespace UniqueWeaponsUnbound
                     desiredColor = availableWeaponColors.RandomElement();
             }
 
-            if (!nameLocked && desiredTraits.Count > 0 && !IsRevertedToBase)
+            if (!nameLocked && !isRelic && desiredTraits.Count > 0 && !IsRevertedToBase)
             {
                 desiredName = GenerateWeaponName();
                 lastAutoName = desiredName;

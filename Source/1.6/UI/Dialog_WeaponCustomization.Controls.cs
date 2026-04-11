@@ -7,6 +7,10 @@ namespace UniqueWeaponsUnbound
 {
     public partial class Dialog_WeaponCustomization
     {
+        // TODO: localize
+        private const string RelicNameTooltip =
+            "This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion.";
+
         // --- Right pane: controls ---
 
         private void DrawControlsPanel(Rect rect)
@@ -38,22 +42,29 @@ namespace UniqueWeaponsUnbound
         private void DrawNameRow(float x, ref float curY, float width)
         {
             bool disabled = IsRevertedToBase;
+            bool nameDisabled = disabled || isRelic;
 
             // Name field row: [field] [Randomize]
             float fieldWidth = width - RandomButtonWidth - 4f;
             Rect fieldRect = new Rect(x, curY, fieldWidth, NameFieldHeight);
 
-            if (disabled)
+            if (nameDisabled)
             {
-                // Show base def name in a disabled field
+                // Show read-only name: desiredName for relics (set to relic precept name
+                // in constructor), base def name when reverted to base.
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
                 Widgets.DrawBox(fieldRect);
                 Text.Anchor = TextAnchor.MiddleLeft;
                 Rect textInsetRect = fieldRect.ContractedBy(4f, 0f);
-                string baseName = baseDef?.LabelCap ?? "";
-                Widgets.Label(textInsetRect, baseName);
+                string displayName = disabled
+                    ? baseDef?.LabelCap ?? ""
+                    : desiredName ?? "";
+                Widgets.Label(textInsetRect, displayName);
                 GUI.color = prevColor;
+
+                if (isRelic && !disabled)
+                    TooltipHandler.TipRegion(fieldRect, RelicNameTooltip);
             }
             else
             {
@@ -71,14 +82,16 @@ namespace UniqueWeaponsUnbound
                 RandomButtonWidth,
                 NameFieldHeight);
 
-            bool randomDisabled = disabled || desiredTraits.Count == 0;
+            bool randomDisabled = nameDisabled || desiredTraits.Count == 0;
             if (randomDisabled)
             {
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
                 Widgets.ButtonText(randomRect, "Randomize"); // TODO: localize
                 GUI.color = prevColor;
-                if (desiredTraits.Count == 0 && !disabled)
+                if (isRelic && !disabled)
+                    TooltipHandler.TipRegion(randomRect, RelicNameTooltip);
+                else if (desiredTraits.Count == 0 && !nameDisabled)
                     TooltipHandler.TipRegion(randomRect,
                         "Select at least one trait first"); // TODO: localize
             }
@@ -102,7 +115,8 @@ namespace UniqueWeaponsUnbound
                 width - checkboxSize - checkboxGap, checkboxRowHeight);
             bool autoRegen = !nameLocked;
 
-            if (disabled)
+            Rect checkboxFullRect = new Rect(x, curY, width, checkboxRowHeight);
+            if (nameDisabled)
             {
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
@@ -113,6 +127,9 @@ namespace UniqueWeaponsUnbound
                     "Auto-regenerate name when traits change"); // TODO: localize
                 Text.Anchor = TextAnchor.UpperLeft;
                 GUI.color = prevColor;
+
+                if (isRelic && !disabled)
+                    TooltipHandler.TipRegion(checkboxFullRect, RelicNameTooltip);
             }
             else
             {
