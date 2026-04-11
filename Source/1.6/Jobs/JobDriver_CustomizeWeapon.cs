@@ -665,6 +665,10 @@ namespace UniqueWeaponsUnbound
             IntVec3 pos = weapon.Position;
             Map map = weapon.Map;
 
+            // Transfer relic status BEFORE destroying the old weapon so that
+            // Thing.Destroy() does not fire Notify_ThingLost on the precept.
+            WeaponModificationUtility.TransferRelicStatus(weapon, newWeapon);
+
             if (weapon.Spawned)
                 weapon.Destroy();
             else if (!weapon.Destroyed)
