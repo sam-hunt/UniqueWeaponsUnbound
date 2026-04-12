@@ -16,10 +16,17 @@ namespace UniqueWeaponsUnbound
     public static class TraitCostUtility
     {
         /// <summary>
-        /// Fraction of the trait's addition cost returned when removing a trait.
+        /// Global multiplier applied to all pipeline costs before any other adjustments.
+        /// Reads from mod settings; falls back to 1.0 (no change) if settings are not yet loaded.
+        /// </summary>
+        public static float CostMultiplier => UWU_Mod.Settings?.costMultiplier ?? 1f;
+
+        /// <summary>
+        /// Fraction of the trait's cost returned when removing a trait (or paid for
+        /// secondary operations like negative trait additions/removals).
         /// Reads from mod settings; falls back to 0.5 if settings are not yet loaded.
         /// </summary>
-        public static float RefundFraction => UWU_Mod.Settings?.refundFraction ?? 0.5f;
+        public static float RefundRate => UWU_Mod.Settings?.refundRate ?? 0.5f;
 
         private static List<TraitCostRuleDef> cachedRules;
 
@@ -40,17 +47,20 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Calculates the base resource cost of a trait for addition context.
-        /// Runs all matching rules in priority order with isRemoval=false.
+        /// Runs all matching rules in priority order with isRemoval=false,
+        /// then applies <see cref="CostMultiplier"/>.
         /// </summary>
         public static List<ThingDefCountClass> GetTraitCost(Thing weapon, WeaponTraitDef trait)
         {
-            return RunPipeline(weapon, trait, isRemoval: false);
+            List<ThingDefCountClass> costs = RunPipeline(weapon, trait, isRemoval: false);
+            ApplyCostMultiplier(costs);
+            return costs;
         }
 
         /// <summary>
         /// Returns true if the trait is "negative" (undesirable), detected by a
         /// MarketValue stat factor below 1.0. Negative traits have inverted costs:
-        /// cheaper to add (RefundFraction), and cost RefundFraction to remove.
+        /// cheaper to add (RefundRate), and cost RefundRate to remove.
         /// </summary>
         public static bool IsNegativeTrait(WeaponTraitDef trait)
         {
@@ -66,36 +76,40 @@ namespace UniqueWeaponsUnbound
         }
 
         /// <summary>
-        /// Returns the per-trait cost of ADDING this trait. For negative traits,
-        /// the cost is reduced by RefundFraction (nobody pays full price for a downgrade).
+        /// Returns the per-trait cost of ADDING this trait. Applies <see cref="CostMultiplier"/>
+        /// to the pipeline output first. For negative traits, the cost is further reduced by
+        /// <see cref="RefundRate"/> (nobody pays full price for a downgrade).
         /// Uses the addition pipeline (materials may be downgraded for negative traits).
         /// </summary>
         public static List<ThingDefCountClass> GetAdditionCost(Thing weapon, WeaponTraitDef trait)
         {
             List<ThingDefCountClass> costs = RunPipeline(weapon, trait, isRemoval: false);
+            ApplyCostMultiplier(costs);
             if (IsNegativeTrait(trait))
             {
                 foreach (ThingDefCountClass c in costs)
-                    c.count = Mathf.CeilToInt(c.count * RefundFraction);
+                    c.count = Mathf.CeilToInt(c.count * RefundRate);
                 costs.RemoveAll(c => c.count <= 0);
             }
             return costs;
         }
 
         /// <summary>
-        /// Returns the per-trait result of REMOVING this trait.
-        /// For positive traits: materials the player receives back (refund, base * RefundFraction).
-        /// For negative traits: materials the player must PAY (cost, base * RefundFraction).
+        /// Returns the per-trait result of REMOVING this trait. Applies <see cref="CostMultiplier"/>
+        /// to the pipeline output first, then <see cref="RefundRate"/>.
+        /// For positive traits: materials the player receives back (refund).
+        /// For negative traits: materials the player must PAY (cost).
         /// Uses the removal pipeline (original-tier materials preserved for negative traits).
         /// Call <see cref="IsNegativeTrait"/> to determine whether the result is a refund or a cost.
         /// </summary>
         public static List<ThingDefCountClass> GetRemovalCost(Thing weapon, WeaponTraitDef trait)
         {
             List<ThingDefCountClass> costs = RunPipeline(weapon, trait, isRemoval: true);
+            ApplyCostMultiplier(costs);
             foreach (ThingDefCountClass c in costs)
                 c.count = IsNegativeTrait(trait)
-                    ? Mathf.CeilToInt(c.count * RefundFraction)
-                    : Mathf.FloorToInt(c.count * RefundFraction);
+                    ? Mathf.CeilToInt(c.count * RefundRate)
+                    : Mathf.FloorToInt(c.count * RefundRate);
             costs.RemoveAll(c => c.count <= 0);
             return costs;
         }
@@ -144,8 +158,9 @@ namespace UniqueWeaponsUnbound
         /// Calculates the total resource refund for removing traits from the given weapon.
         /// Only positive (non-negative) traits produce refunds. Negative trait removals
         /// cost resources instead and are included in <see cref="GetTotalCost"/>.
-        /// Aggregates raw costs across positive traits first, then applies RefundFraction
-        /// and floors once per material to avoid cumulative rounding loss.
+        /// Aggregates raw costs across positive traits first, then applies
+        /// <see cref="CostMultiplier"/> and <see cref="RefundRate"/> once per material
+        /// to avoid cumulative rounding loss.
         /// </summary>
         public static List<ThingDefCountClass> GetTotalRefund(
             Thing weapon, IEnumerable<WeaponTraitDef> traits)
@@ -165,10 +180,25 @@ namespace UniqueWeaponsUnbound
             }
 
             var raw = totals.Select(kv => new ThingDefCountClass(kv.Key, kv.Value)).ToList();
+            ApplyCostMultiplier(raw);
             foreach (ThingDefCountClass entry in raw)
-                entry.count = Mathf.FloorToInt(entry.count * RefundFraction);
+                entry.count = Mathf.FloorToInt(entry.count * RefundRate);
             raw.RemoveAll(c => c.count <= 0);
             return raw;
+        }
+
+        /// <summary>
+        /// Scales all costs by <see cref="CostMultiplier"/>, rounding up.
+        /// No-op when the multiplier is 1. Removes entries that round to zero.
+        /// </summary>
+        internal static void ApplyCostMultiplier(List<ThingDefCountClass> costs)
+        {
+            float multiplier = CostMultiplier;
+            if (multiplier == 1f)
+                return;
+            foreach (ThingDefCountClass c in costs)
+                c.count = Mathf.CeilToInt(c.count * multiplier);
+            costs.RemoveAll(c => c.count <= 0);
         }
 
         internal static List<ThingDefCountClass> RunPipeline(

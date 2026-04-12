@@ -381,10 +381,11 @@ namespace UniqueWeaponsUnbound
         private List<ThingDefCountClass> GetAdditionCost(WeaponTraitDef trait)
         {
             List<ThingDefCountClass> costs = CachedPipelineCost(trait, isRemoval: false);
+            TraitCostUtility.ApplyCostMultiplier(costs);
             if (TraitCostUtility.IsNegativeTrait(trait))
             {
                 foreach (ThingDefCountClass c in costs)
-                    c.count = Mathf.CeilToInt(c.count * TraitCostUtility.RefundFraction);
+                    c.count = Mathf.CeilToInt(c.count * TraitCostUtility.RefundRate);
                 costs.RemoveAll(c => c.count <= 0);
             }
             return costs;
@@ -397,10 +398,11 @@ namespace UniqueWeaponsUnbound
         private List<ThingDefCountClass> GetRemovalCost(WeaponTraitDef trait)
         {
             List<ThingDefCountClass> costs = CachedPipelineCost(trait, isRemoval: true);
+            TraitCostUtility.ApplyCostMultiplier(costs);
             foreach (ThingDefCountClass c in costs)
                 c.count = TraitCostUtility.IsNegativeTrait(trait)
-                    ? Mathf.CeilToInt(c.count * TraitCostUtility.RefundFraction)
-                    : Mathf.FloorToInt(c.count * TraitCostUtility.RefundFraction);
+                    ? Mathf.CeilToInt(c.count * TraitCostUtility.RefundRate)
+                    : Mathf.FloorToInt(c.count * TraitCostUtility.RefundRate);
             costs.RemoveAll(c => c.count <= 0);
             return costs;
         }
@@ -443,8 +445,8 @@ namespace UniqueWeaponsUnbound
         /// <summary>
         /// Dialog-local equivalent of <see cref="TraitCostUtility.GetTotalRefund"/>,
         /// using the dialog's pipeline cache. Aggregates raw pipeline costs across
-        /// positive traits first, then applies RefundFraction once per material
-        /// to avoid cumulative rounding loss.
+        /// positive traits first, then applies CostMultiplier and RefundRate once
+        /// per material to avoid cumulative rounding loss.
         /// </summary>
         private List<ThingDefCountClass> GetTotalRefund()
         {
@@ -463,8 +465,9 @@ namespace UniqueWeaponsUnbound
             }
 
             var raw = totals.Select(kv => new ThingDefCountClass(kv.Key, kv.Value)).ToList();
+            TraitCostUtility.ApplyCostMultiplier(raw);
             foreach (ThingDefCountClass entry in raw)
-                entry.count = Mathf.FloorToInt(entry.count * TraitCostUtility.RefundFraction);
+                entry.count = Mathf.FloorToInt(entry.count * TraitCostUtility.RefundRate);
             raw.RemoveAll(c => c.count <= 0);
             return raw;
         }
@@ -575,7 +578,8 @@ namespace UniqueWeaponsUnbound
             // Compute affordability state for cost coloring across all draw calls
             List<ThingDefCountClass> frameCost = GetTotalCost();
 
-            currentTotalRefund = UWU_Mod.Settings.refundFraction > 0f
+            currentTotalRefund = UWU_Mod.Settings.refundRate > 0f
+                    && UWU_Mod.Settings.costMultiplier > 0f
                 ? GetTotalRefund()
                 : null;
             ComputeNetCostAndSurplus(frameCost, currentTotalRefund,

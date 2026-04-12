@@ -218,12 +218,13 @@ namespace UniqueWeaponsUnbound
 
                 if (TraitCostUtility.IsNegativeTrait(trait))
                 {
-                    // Negative trait removal costs resources (reduced by RefundFraction)
+                    // Negative trait removal costs resources (reduced by RefundRate)
                     op.cost = GetRemovalCost(trait);
                 }
                 else
                 {
-                    op.refund = UWU_Mod.Settings.refundFraction > 0f
+                    op.refund = UWU_Mod.Settings.refundRate > 0f
+                            && UWU_Mod.Settings.costMultiplier > 0f
                         ? CachedPipelineCost(trait, isRemoval: false)
                         : null;
                 }

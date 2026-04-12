@@ -22,11 +22,17 @@ namespace UniqueWeaponsUnbound
             GameFont prev = Text.Font;
             Text.Font = GameFont.Medium;
 
-            string pct = (Settings.refundFraction * 100f).ToString("F0");
-            string suffix = Settings.refundFraction == 0.5f ? " (default)" : "";
-            listing.Label("Trait removal refund: " + pct + "%" + suffix);
-            Settings.refundFraction = listing.Slider(Settings.refundFraction, 0f, 1f);
-            Settings.refundFraction = Mathf.Round(Settings.refundFraction * 20f) / 20f;
+            string costPct = (Settings.costMultiplier * 100f).ToString("F0");
+            string costSuffix = Settings.costMultiplier == 1f ? " (default)" : "";
+            listing.Label("Cost multiplier: " + costPct + "%" + costSuffix);
+            Settings.costMultiplier = listing.Slider(Settings.costMultiplier, 0f, 3f);
+            Settings.costMultiplier = Mathf.Round(Settings.costMultiplier * 20f) / 20f;
+
+            string refundPct = (Settings.refundRate * 100f).ToString("F0");
+            string refundSuffix = Settings.refundRate == 0.5f ? " (default)" : "";
+            listing.Label("Refund rate: " + refundPct + "%" + refundSuffix);
+            Settings.refundRate = listing.Slider(Settings.refundRate, 0f, 1f);
+            Settings.refundRate = Mathf.Round(Settings.refundRate * 20f) / 20f;
 
             listing.Gap();
 

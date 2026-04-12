@@ -542,13 +542,16 @@ namespace UniqueWeaponsUnbound
                     WeaponModificationUtility.RemoveTrait(weapon, op.trait);
 
                     // Credit refund to the virtual ledger atomically with the removal.
-                    // Raw costs are stored on the op; apply RefundFraction here as float
-                    // to defer rounding until resources are actually spawned or consumed.
+                    // Raw costs are stored on the op; apply CostMultiplier and RefundRate
+                    // here as float to defer rounding until resources are actually spawned
+                    // or consumed.
                     if (op.refund != null)
                     {
                         foreach (ThingDefCountClass refund in op.refund)
                         {
-                            float credit = refund.count * TraitCostUtility.RefundFraction;
+                            float credit = refund.count
+                                * TraitCostUtility.CostMultiplier
+                                * TraitCostUtility.RefundRate;
                             if (refundLedger.ContainsKey(refund.thingDef))
                                 refundLedger[refund.thingDef] += credit;
                             else
