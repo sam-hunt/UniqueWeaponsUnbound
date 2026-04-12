@@ -10,8 +10,6 @@ namespace UniqueWeaponsUnbound
 
         private void DrawColorTab(Rect rect)
         {
-            float curY = rect.y;
-
             // Disabled: reverted to base
             if (IsRevertedToBase)
             {
@@ -63,13 +61,59 @@ namespace UniqueWeaponsUnbound
                 return;
             }
 
-            // Normal: clickable swatch grid
+            // Normal: scrollable swatch grids
+            float scrollWidth = rect.width - 16f;
             int cols = Mathf.Max(1,
-                Mathf.FloorToInt(rect.width / (ColorSwatchSize + ColorSwatchGap)));
+                Mathf.FloorToInt(scrollWidth / (ColorSwatchSize + ColorSwatchGap)));
 
+            float innerHeight = MeasureColorSections(cols);
+            Rect innerRect = new Rect(0f, 0f, scrollWidth, innerHeight);
+
+            Widgets.BeginScrollView(rect, ref colorTabScroll, innerRect);
+
+            float curY = 0f;
+            float startX = 0f;
+
+            // --- Weapon colors ---
+            Text.Font = GameFont.Small;
+            Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
+                "Weapon colors"); // TODO: localize
+            curY += SectionHeaderHeight;
+
+            DrawColorGrid(ref curY, startX, cols, availableWeaponColors, false);
+
+            // --- Ideology colors (Ideo + Misc palette, when DLC active) ---
+            if (UWU_Mod.Settings.enableIdeologyColors
+                && availableIdeoColors != null && availableIdeoColors.Count > 0)
+            {
+                curY += 10f;
+                Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
+                    "Ideology colors"); // TODO: localize
+                curY += SectionHeaderHeight;
+
+                DrawColorGrid(ref curY, startX, cols, availableIdeoColors, true);
+            }
+
+            // --- Structure colors ---
+            if (UWU_Mod.Settings.enableStructureColors && availableStructureColors.Count > 0)
+            {
+                curY += 10f;
+                Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
+                    "Structure colors"); // TODO: localize
+                curY += SectionHeaderHeight;
+
+                DrawColorGrid(ref curY, startX, cols, availableStructureColors, false);
+            }
+
+            Widgets.EndScrollView();
+        }
+
+        private void DrawColorGrid(
+            ref float curY, float startX, int cols,
+            System.Collections.Generic.List<ColorDef> colors, bool showIdeoOverlays)
+        {
             int col = 0;
-            float startX = rect.x;
-            foreach (ColorDef colorDef in availableWeaponColors)
+            foreach (ColorDef colorDef in colors)
             {
                 Rect swatchRect = new Rect(
                     startX + col * (ColorSwatchSize + ColorSwatchGap),
@@ -77,10 +121,11 @@ namespace UniqueWeaponsUnbound
                     ColorSwatchSize,
                     ColorSwatchSize);
 
-                // Draw the swatch
                 Widgets.DrawBoxSolid(swatchRect, colorDef.color);
 
-                // Selected highlight (no border on unselected)
+                if (showIdeoOverlays)
+                    DrawIdeoColorOverlay(swatchRect, colorDef);
+
                 if (colorDef == desiredColor)
                 {
                     Widgets.DrawBox(swatchRect, 2);
@@ -88,14 +133,12 @@ namespace UniqueWeaponsUnbound
                     Widgets.DrawBox(swatchRect, 3);
                 }
 
-                // Hover highlight
                 if (Mouse.IsOver(swatchRect))
                 {
                     Widgets.DrawHighlight(swatchRect);
                     TooltipHandler.TipRegion(swatchRect, colorDef.LabelCap);
                 }
 
-                // Click to select
                 if (Widgets.ButtonInvisible(swatchRect))
                     desiredColor = colorDef;
 
@@ -105,6 +148,86 @@ namespace UniqueWeaponsUnbound
                     col = 0;
                     curY += ColorSwatchSize + ColorSwatchGap;
                 }
+            }
+
+            if (col > 0)
+                curY += ColorSwatchSize + ColorSwatchGap;
+        }
+
+        private float MeasureColorSections(int cols)
+        {
+            float height = 0f;
+
+            // Weapon colors
+            height += SectionHeaderHeight;
+            height += GridHeight(availableWeaponColors.Count, cols);
+
+            // Ideology colors
+            if (UWU_Mod.Settings.enableIdeologyColors
+                && availableIdeoColors != null && availableIdeoColors.Count > 0)
+            {
+                height += 10f + SectionHeaderHeight;
+                height += GridHeight(availableIdeoColors.Count, cols);
+            }
+
+            // Structure colors
+            if (UWU_Mod.Settings.enableStructureColors && availableStructureColors.Count > 0)
+            {
+                height += 10f + SectionHeaderHeight;
+                height += GridHeight(availableStructureColors.Count, cols);
+            }
+
+            return height;
+        }
+
+        private static float GridHeight(int count, int cols)
+        {
+            if (count <= 0)
+                return 0f;
+            int rows = (count + cols - 1) / cols;
+            return rows * (ColorSwatchSize + ColorSwatchGap);
+        }
+
+        private void DrawIdeoColorOverlay(Rect swatchRect, ColorDef colorDef)
+        {
+            Texture2D overlayTex = null;
+            string tooltipKey = null;
+
+            // Favorite color takes priority (matching vanilla styling station order)
+            if (pawn.story?.favoriteColor != null
+                && GenColor.IndistinguishableFrom(colorDef.color, pawn.story.favoriteColor.color))
+            {
+                overlayTex = UWU_Textures.FavoriteColor;
+                tooltipKey = "FavoriteColorPickerTip";
+            }
+            else if (pawn.Ideo?.colorDef != null && !Find.IdeoManager.classicMode
+                && GenColor.IndistinguishableFrom(colorDef.color, pawn.Ideo.colorDef.color))
+            {
+                overlayTex = UWU_Textures.IdeoColor;
+                tooltipKey = "IdeoColorPickerTip";
+            }
+
+            if (overlayTex != null)
+            {
+                Rect iconRect = GenUI.ContractedBy(swatchRect, 4f);
+
+                // Shadow pass
+                GUI.color = ColorExtension.ToTransparent(Color.black, 0.2f);
+                GUI.DrawTexture(
+                    new Rect(iconRect.x + 2f, iconRect.y + 2f, iconRect.width, iconRect.height),
+                    overlayTex);
+
+                // Main pass
+                GUI.color = ColorExtension.ToTransparent(Color.white, 0.8f);
+                GUI.DrawTexture(iconRect, overlayTex);
+
+                GUI.color = Color.white;
+            }
+
+            if (tooltipKey != null && Mouse.IsOver(swatchRect))
+            {
+                TooltipHandler.TipRegion(swatchRect,
+                    tooltipKey.Translate(pawn.Named("PAWN")));
             }
         }
     }

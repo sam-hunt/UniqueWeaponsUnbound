@@ -55,6 +55,8 @@ namespace UniqueWeaponsUnbound
         private readonly ColorDef originalColor;
         private readonly int textureVariantCount;
         private readonly List<ColorDef> availableWeaponColors;
+        private readonly List<ColorDef> availableIdeoColors; // Ideology DLC: Ideo + Misc colors
+        private readonly List<ColorDef> availableStructureColors;
         private readonly ColorDef initialDesiredColor;
         private readonly bool isRelic; // Ideology DLC: weapon is an ideoligion relic
 
@@ -66,6 +68,7 @@ namespace UniqueWeaponsUnbound
 
         // UI state
         private Vector2 traitListScroll;
+        private Vector2 colorTabScroll;
         private int activeTab; // 0 = Traits, 1 = Texture, 2 = Color
         private bool nameLocked;
         private bool hideNegativeTraits;
@@ -104,7 +107,7 @@ namespace UniqueWeaponsUnbound
         private const float RandomButtonWidth = 85f;
         private const float TabBarHeight = 32f;
         private const float ColorSwatchSize = 36f;
-        private const float ColorSwatchGap = 10f;
+        private const float ColorSwatchGap = 8f;
         private const float TextureCellSize = 152f;
         private const float TextureCellGap = 12f;
         private const float ColorIndicatorSize = 16f;
@@ -185,7 +188,43 @@ namespace UniqueWeaponsUnbound
                 if (colorDef.colorType == ColorType.Weapon && colorDef.randomlyPickable)
                     availableWeaponColors.Add(colorDef);
             }
-            availableWeaponColors.SortBy(c => c.label);
+            availableWeaponColors.SortByColor(c => c.color);
+
+            if (ModsConfig.IdeologyActive)
+            {
+                availableIdeoColors = new List<ColorDef>();
+                foreach (ColorDef colorDef in DefDatabase<ColorDef>.AllDefs)
+                {
+                    if (colorDef.colorType == ColorType.Ideo || colorDef.colorType == ColorType.Misc)
+                        availableIdeoColors.Add(colorDef);
+                }
+                availableIdeoColors.SortByColor(c => c.color);
+            }
+
+            // Structure colors: exclude colors already in weapon/ideo sections
+            // and colors that match any compatible trait's forced color.
+            HashSet<Color> excludedColors = new HashSet<Color>();
+            foreach (ColorDef cd in availableWeaponColors)
+                excludedColors.Add(cd.color);
+            if (availableIdeoColors != null)
+            {
+                foreach (ColorDef cd in availableIdeoColors)
+                    excludedColors.Add(cd.color);
+            }
+            foreach (WeaponTraitDef trait in compatibleTraits)
+            {
+                if (trait.forcedColor != null)
+                    excludedColors.Add(trait.forcedColor.color);
+            }
+
+            availableStructureColors = new List<ColorDef>();
+            foreach (ColorDef colorDef in DefDatabase<ColorDef>.AllDefs)
+            {
+                if (colorDef.colorType == ColorType.Structure
+                    && !excludedColors.Contains(colorDef.color))
+                    availableStructureColors.Add(colorDef);
+            }
+            availableStructureColors.SortByColor(c => c.color);
 
             desiredColor = originalColor;
             if (desiredColor == null && availableWeaponColors.Count > 0)

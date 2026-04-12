@@ -1,3 +1,4 @@
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -6,6 +7,8 @@ namespace UniqueWeaponsUnbound
     public class UWU_Mod : Mod
     {
         public static UWU_Settings Settings { get; private set; }
+
+        private Vector2 settingsScroll;
 
         public UWU_Mod(ModContentPack content) : base(content)
         {
@@ -16,8 +19,18 @@ namespace UniqueWeaponsUnbound
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
+            float buttonHeight = 30f;
+            float buttonGap = 10f;
+            Rect viewRect = new Rect(inRect.x, inRect.y, inRect.width, inRect.height - buttonHeight - buttonGap);
+            Rect buttonRect = new Rect(inRect.x, inRect.yMax - buttonHeight, 200f, buttonHeight);
+
+            // Estimate inner height generously so the listing never clips
+            float innerHeight = 800f;
+            Rect innerRect = new Rect(0f, 0f, viewRect.width - 16f, innerHeight);
+            Widgets.BeginScrollView(viewRect, ref settingsScroll, innerRect);
+
             Listing_Standard listing = new Listing_Standard();
-            listing.Begin(inRect);
+            listing.Begin(innerRect);
             GameFont prev = Text.Font;
 
             listing.Gap();
@@ -25,7 +38,7 @@ namespace UniqueWeaponsUnbound
             Text.Font = GameFont.Medium;
             listing.Label("Trait costs");
             Text.Font = GameFont.Small;
-            listing.GapLine();
+            listing.Gap(12.0f);
 
             string costPct = (Settings.traitCostMultiplier * 100f).ToString("F0");
             string costSuffix = Settings.traitCostMultiplier == 1f ? " (default)" : "";
@@ -54,12 +67,11 @@ namespace UniqueWeaponsUnbound
                 Settings.traitRefundRate = Mathf.Round(Settings.traitRefundRate * 20f) / 20f;
             }
 
-            listing.Gap();
+            listing.Gap(18.0f);
 
             Text.Font = GameFont.Medium;
             listing.Label("Prerequisites");
             Text.Font = GameFont.Small;
-            listing.GapLine();
 
             listing.CheckboxLabeled(
                 "Require customization research",
@@ -75,8 +87,7 @@ namespace UniqueWeaponsUnbound
                 "Require weapon crafting research",
                 ref Settings.requireRecipeResearch,
                 "Require the completion of any research that would enable crafting " +
-                "the weapon, in addition to the unique smithing/machining/fabrication " +
-                "research. For example, customizing a charge rifle would also require " +
+                "the weapon. For example, customizing a charge rifle would require " +
                 "Pulse-charged munitions.");
 
             listing.Gap();
@@ -111,12 +122,29 @@ namespace UniqueWeaponsUnbound
                 "Allow customization of archotech weapons, " +
                 "requiring Advanced Weapon Customization research.");
 
-            listing.Gap();
+            listing.Gap(24.0f);
 
             Text.Font = GameFont.Medium;
             listing.Label("Miscellaneous");
             Text.Font = GameFont.Small;
-            listing.GapLine();
+
+            if (ModsConfig.IdeologyActive)
+            {
+                listing.CheckboxLabeled(
+                    "Enable Ideology color options",
+                    ref Settings.enableIdeologyColors,
+                    "Show Ideology and miscellaneous color palettes in the " +
+                    "weapon customization color picker.");
+
+                listing.Gap();
+            }
+
+            listing.CheckboxLabeled(
+                "Enable structure color options",
+                ref Settings.enableStructureColors,
+                "Show structure color palette in the weapon customization color picker.");
+
+            listing.Gap();
 
             listing.CheckboxLabeled(
                 "Enforce sole-trait restrictions",
@@ -126,6 +154,12 @@ namespace UniqueWeaponsUnbound
 
             Text.Font = prev;
             listing.End();
+            Widgets.EndScrollView();
+
+            if (Widgets.ButtonText(buttonRect, "Reset to defaults"))
+            {
+                Settings.ResetToDefaults();
+            }
         }
     }
 }

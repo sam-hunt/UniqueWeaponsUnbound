@@ -3,13 +3,15 @@
 ## Features
 
 - Customize unique weapon relics on form/reform ideology
-- mod settings reset button
+- Mod setting to disallow basedef upgrades
+- Mod setting to disallow basedef downgrade
 
 ## Cleanup
 
-- Check readme is up to date
+- Test without ideology active
 - Add TraitCostRuleDef api info for modders
 - localization strings in language folders?
+- split out any oversize files
 
 ## Infographics
 

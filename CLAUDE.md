@@ -25,7 +25,7 @@ RIMWORLD_PATH="/path/to/RimWorld" dotnet build UniqueWeaponsUnbound.sln -c Relea
 # Or: dotnet build -p:RimWorldPath="/path/to/RimWorld"
 ```
 
-The build system auto-detects the RimWorld installation path on Windows/Linux/Mac. For CI builds without RimWorld installed, it falls back to the `Krafs.Rimworld.Ref` NuGet package.
+The build system auto-detects the RimWorld installation path on Windows/Linux/Mac. For CI builds without RimWorld installed, it falls back to the `Krafs.Rimworld.Ref` NuGet package. For local development and api inspection (monodis, ilspycmd etc), the local installation should be preferred as the source of truth.
 
 **Releases:** Push a tag matching `v*.*.*` to trigger the GitHub Actions release workflow (`.github/workflows/release.yml`), which builds, packages, and creates a GitHub release.
 

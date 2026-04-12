@@ -11,8 +11,25 @@ namespace UniqueWeaponsUnbound
         public bool allowUltratechCustomization = true;
         public bool allowUncraftableCustomization = true;
         public bool enforceCanGenerateAlone;
+        public bool enableIdeologyColors = true;
+        public bool enableStructureColors = true;
         public float traitCostMultiplier = 1f;
         public float traitRefundRate = 0.5f;
+
+        public void ResetToDefaults()
+        {
+            requireCustomizationResearch = true;
+            requireRecipeResearch = true;
+            requireAppropriateWorkbench = true;
+            allowArchotechCustomization = false;
+            allowUltratechCustomization = true;
+            allowUncraftableCustomization = true;
+            enforceCanGenerateAlone = false;
+            enableIdeologyColors = true;
+            enableStructureColors = true;
+            traitCostMultiplier = 1f;
+            traitRefundRate = 0.5f;
+        }
 
         public override void ExposeData()
         {
@@ -24,6 +41,8 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref allowUltratechCustomization, "allowUltratechCustomization", true);
             Scribe_Values.Look(ref allowUncraftableCustomization, "allowUncraftableCustomization", true);
             Scribe_Values.Look(ref enforceCanGenerateAlone, "enforceCanGenerateAlone");
+            Scribe_Values.Look(ref enableIdeologyColors, "enableIdeologyColors", true);
+            Scribe_Values.Look(ref enableStructureColors, "enableStructureColors", true);
             Scribe_Values.Look(ref traitCostMultiplier, "traitCostMultiplier", 1f);
             Scribe_Values.Look(ref traitRefundRate, "traitRefundRate", 0.5f);
         }
