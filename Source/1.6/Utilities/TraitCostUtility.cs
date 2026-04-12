@@ -19,14 +19,14 @@ namespace UniqueWeaponsUnbound
         /// Global multiplier applied to all pipeline costs before any other adjustments.
         /// Reads from mod settings; falls back to 1.0 (no change) if settings are not yet loaded.
         /// </summary>
-        public static float CostMultiplier => UWU_Mod.Settings?.costMultiplier ?? 1f;
+        public static float CostMultiplier => UWU_Mod.Settings?.traitCostMultiplier ?? 1f;
 
         /// <summary>
         /// Fraction of the trait's cost returned when removing a trait (or paid for
         /// secondary operations like negative trait additions/removals).
         /// Reads from mod settings; falls back to 0.5 if settings are not yet loaded.
         /// </summary>
-        public static float RefundRate => UWU_Mod.Settings?.refundRate ?? 0.5f;
+        public static float RefundRate => UWU_Mod.Settings?.traitRefundRate ?? 0.5f;
 
         private static List<TraitCostRuleDef> cachedRules;
 

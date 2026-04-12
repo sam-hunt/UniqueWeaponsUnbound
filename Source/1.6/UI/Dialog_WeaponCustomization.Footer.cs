@@ -223,8 +223,8 @@ namespace UniqueWeaponsUnbound
                 }
                 else
                 {
-                    op.refund = UWU_Mod.Settings.refundRate > 0f
-                            && UWU_Mod.Settings.costMultiplier > 0f
+                    op.refund = UWU_Mod.Settings.traitRefundRate > 0f
+                            && UWU_Mod.Settings.traitCostMultiplier > 0f
                         ? CachedPipelineCost(trait, isRemoval: false)
                         : null;
                 }

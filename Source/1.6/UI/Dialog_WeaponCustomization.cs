@@ -578,8 +578,8 @@ namespace UniqueWeaponsUnbound
             // Compute affordability state for cost coloring across all draw calls
             List<ThingDefCountClass> frameCost = GetTotalCost();
 
-            currentTotalRefund = UWU_Mod.Settings.refundRate > 0f
-                    && UWU_Mod.Settings.costMultiplier > 0f
+            currentTotalRefund = UWU_Mod.Settings.traitRefundRate > 0f
+                    && UWU_Mod.Settings.traitCostMultiplier > 0f
                 ? GetTotalRefund()
                 : null;
             ComputeNetCostAndSurplus(frameCost, currentTotalRefund,

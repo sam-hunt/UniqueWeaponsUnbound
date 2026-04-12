@@ -18,33 +18,56 @@ namespace UniqueWeaponsUnbound
         {
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(inRect);
-
             GameFont prev = Text.Font;
-            Text.Font = GameFont.Medium;
-
-            string costPct = (Settings.costMultiplier * 100f).ToString("F0");
-            string costSuffix = Settings.costMultiplier == 1f ? " (default)" : "";
-            listing.Label("Cost multiplier: " + costPct + "%" + costSuffix);
-            Settings.costMultiplier = listing.Slider(Settings.costMultiplier, 0f, 3f);
-            Settings.costMultiplier = Mathf.Round(Settings.costMultiplier * 20f) / 20f;
-
-            string refundPct = (Settings.refundRate * 100f).ToString("F0");
-            string refundSuffix = Settings.refundRate == 0.5f ? " (default)" : "";
-            listing.Label("Refund rate: " + refundPct + "%" + refundSuffix);
-            Settings.refundRate = listing.Slider(Settings.refundRate, 0f, 1f);
-            Settings.refundRate = Mathf.Round(Settings.refundRate * 20f) / 20f;
 
             listing.Gap();
 
+            Text.Font = GameFont.Medium;
+            listing.Label("Trait costs");
+            Text.Font = GameFont.Small;
+
+            string costPct = (Settings.traitCostMultiplier * 100f).ToString("F0");
+            string costSuffix = Settings.traitCostMultiplier == 1f ? " (default)" : "";
+            listing.Label("Trait cost multiplier: " + costPct + "%" + costSuffix);
+            Settings.traitCostMultiplier = listing.Slider(Settings.traitCostMultiplier, 0f, 3f);
+            Settings.traitCostMultiplier = Mathf.Round(Settings.traitCostMultiplier * 20f) / 20f;
+
+            bool costsFree = Settings.traitCostMultiplier == 0f;
+            string refundPct = (Settings.traitRefundRate * 100f).ToString("F0");
+            string refundSuffix = Settings.traitRefundRate == 0.5f ? " (default)" : "";
+            if (costsFree)
+            {
+                Color prevColor = GUI.color;
+                GUI.color = Color.gray;
+                listing.Label("Trait refund rate: " + refundPct + "%" + refundSuffix);
+                Rect sliderRect = listing.GetRect(22f);
+                Widgets.HorizontalSlider(sliderRect, Settings.traitRefundRate, 0f, 1f);
+                TooltipHandler.TipRegion(sliderRect,
+                    "Trait refund rate has no effect while trait cost multiplier is 0%.");
+                GUI.color = prevColor;
+            }
+            else
+            {
+                listing.Label("Trait refund rate: " + refundPct + "%" + refundSuffix);
+                Settings.traitRefundRate = listing.Slider(Settings.traitRefundRate, 0f, 1f);
+                Settings.traitRefundRate = Mathf.Round(Settings.traitRefundRate * 20f) / 20f;
+            }
+
+            listing.Gap();
+
+            Text.Font = GameFont.Medium;
+            listing.Label("Prerequisites");
+            Text.Font = GameFont.Small;
+
             listing.CheckboxLabeled(
-                "Allow uncraftable weapon customization",
+                "Allow customizing uncraftable weapons",
                 ref Settings.allowUncraftableCustomization,
                 "Allow customization of weapons that have no crafting recipe.");
 
             listing.Gap();
 
             listing.CheckboxLabeled(
-                "Allow ultratech weapon customization",
+                "Allow customizing ultratech-level weapons",
                 ref Settings.allowUltratechCustomization,
                 "Allow customization of ultratech weapons, " +
                 "requiring Advanced Weapon Customization research.");
@@ -52,7 +75,7 @@ namespace UniqueWeaponsUnbound
             listing.Gap();
 
             listing.CheckboxLabeled(
-                "Allow archotech weapon customization",
+                "Allow customizing archotech-level weapons",
                 ref Settings.allowArchotechCustomization,
                 "Allow customization of archotech weapons, " +
                 "requiring Advanced Weapon Customization research.");

@@ -8,8 +8,8 @@ namespace UniqueWeaponsUnbound
         public bool allowUltratechCustomization = true;
         public bool allowUncraftableCustomization = true;
         public bool enforceCanGenerateAlone;
-        public float costMultiplier = 1f;
-        public float refundRate = 0.5f;
+        public float traitCostMultiplier = 1f;
+        public float traitRefundRate = 0.5f;
 
         public override void ExposeData()
         {
@@ -18,8 +18,8 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref allowUltratechCustomization, "allowUltratechCustomization", true);
             Scribe_Values.Look(ref allowUncraftableCustomization, "allowUncraftableCustomization", true);
             Scribe_Values.Look(ref enforceCanGenerateAlone, "enforceCanGenerateAlone");
-            Scribe_Values.Look(ref costMultiplier, "costMultiplier", 1f);
-            Scribe_Values.Look(ref refundRate, "refundRate", 0.5f);
+            Scribe_Values.Look(ref traitCostMultiplier, "traitCostMultiplier", 1f);
+            Scribe_Values.Look(ref traitRefundRate, "traitRefundRate", 0.5f);
         }
     }
 }
