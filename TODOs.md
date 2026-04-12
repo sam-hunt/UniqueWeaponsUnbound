@@ -3,15 +3,15 @@
 ## Features
 
 - Customize unique weapon relics on form/reform ideology
+- mod setting to remove tech tier research req
+- mod setting to remove appropriate workbench req
+- mod settings reset button
+- dev mode debug colors
 
 ## Cleanup
 
-- dev mode debug colors
 - Screenshot on readme
 - Check readme is up to date
-- mod setting to remove weapon research req
-- mod setting to remove tech tier research req
-- mod setting to remove appropriate workbench req
 - Add TraitCostRuleDef api info for modders
 - localization strings in language folders?
 

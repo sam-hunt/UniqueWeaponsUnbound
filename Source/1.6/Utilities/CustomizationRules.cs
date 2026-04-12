@@ -58,9 +58,12 @@ namespace UniqueWeaponsUnbound
             if (recipeMaker == null)
                 return UWU_Mod.Settings.allowUncraftableCustomization;
 
-            ResearchProjectDef recipeResearch = recipeMaker.researchPrerequisite;
-            if (recipeResearch != null && !recipeResearch.IsFinished)
-                return "UWU_RequiresResearch".Translate(recipeResearch.label);
+            if (UWU_Mod.Settings.requireRecipeResearch)
+            {
+                ResearchProjectDef recipeResearch = recipeMaker.researchPrerequisite;
+                if (recipeResearch != null && !recipeResearch.IsFinished)
+                    return "UWU_RequiresResearch".Translate(recipeResearch.label);
+            }
 
             return true;
         }

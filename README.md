@@ -7,6 +7,8 @@
 [![Version](https://img.shields.io/badge/Version-0.1.0-brightgreen.svg)](https://github.com/sam-hunt/UniqueWeaponsUnbound/releases)
 [![Development Status](https://img.shields.io/badge/Status-In%20Development-yellow.svg)](https://github.com/sam-hunt/UniqueWeaponsUnbound/releases)
 
+![Preview](About/Preview.png)
+
 ## About
 
 RimWorld's Odyssey DLC introduced unique weapons — special variants of existing weapons with 1-3 weapon traits that alter properties like accuracy, weight, name, color, or grant abilities. But once you find one, you're stuck with whatever traits it rolled.

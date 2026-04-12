@@ -60,6 +60,16 @@ namespace UniqueWeaponsUnbound
             Text.Font = GameFont.Small;
 
             listing.CheckboxLabeled(
+                "Require weapon crafting research",
+                ref Settings.requireRecipeResearch,
+                "Require the completion of any research that would enable crafting " +
+                "the weapon, in addition to the unique smithing/machining/fabrication " +
+                "research. For example, customizing a charge rifle would also require " +
+                "Pulse-charged munitions.");
+
+            listing.Gap();
+
+            listing.CheckboxLabeled(
                 "Allow customizing uncraftable weapons",
                 ref Settings.allowUncraftableCustomization,
                 "Allow customization of weapons that have no crafting recipe.");
