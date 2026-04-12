@@ -70,6 +70,15 @@ namespace UniqueWeaponsUnbound
             listing.Gap();
 
             listing.CheckboxLabeled(
+                "Require appropriate workbench",
+                ref Settings.requireAppropriateWorkbench,
+                "Require that the workbench matches the weapon's tech level. " +
+                "When disabled, any workbench that can craft weapons is sufficient " +
+                "for customizing all weapons.");
+
+            listing.Gap();
+
+            listing.CheckboxLabeled(
                 "Allow customizing uncraftable weapons",
                 ref Settings.allowUncraftableCustomization,
                 "Allow customization of weapons that have no crafting recipe.");

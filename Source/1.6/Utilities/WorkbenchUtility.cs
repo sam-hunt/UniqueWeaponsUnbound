@@ -225,6 +225,10 @@ namespace UniqueWeaponsUnbound
             ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
             Building_WorkTable workbench)
         {
+            // Setting disabled — any weapon-crafting workbench is sufficient
+            if (!UWU_Mod.Settings.requireAppropriateWorkbench)
+                return true;
+
             // Layer 2: Direct recipe match — if this bench can craft this weapon, allow customization
             if (WorkbenchHasRecipeFor(workbench.def, baseDef, uniqueDef))
                 return true;
