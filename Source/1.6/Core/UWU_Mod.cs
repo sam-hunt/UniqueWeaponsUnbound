@@ -25,6 +25,7 @@ namespace UniqueWeaponsUnbound
             Text.Font = GameFont.Medium;
             listing.Label("Trait costs");
             Text.Font = GameFont.Small;
+            listing.GapLine();
 
             string costPct = (Settings.traitCostMultiplier * 100f).ToString("F0");
             string costSuffix = Settings.traitCostMultiplier == 1f ? " (default)" : "";
@@ -58,6 +59,17 @@ namespace UniqueWeaponsUnbound
             Text.Font = GameFont.Medium;
             listing.Label("Prerequisites");
             Text.Font = GameFont.Small;
+            listing.GapLine();
+
+            listing.CheckboxLabeled(
+                "Require customization research",
+                ref Settings.requireCustomizationResearch,
+                "Require the completion of the Unique Smithing, Unique Machining, " +
+                "or Unique Fabrication research projects before customizing weapons " +
+                "of the corresponding tech level. When disabled, these research " +
+                "projects are hidden from the research tree.");
+
+            listing.Gap();
 
             listing.CheckboxLabeled(
                 "Require weapon crafting research",
@@ -100,6 +112,11 @@ namespace UniqueWeaponsUnbound
                 "requiring Advanced Weapon Customization research.");
 
             listing.Gap();
+
+            Text.Font = GameFont.Medium;
+            listing.Label("Miscellaneous");
+            Text.Font = GameFont.Small;
+            listing.GapLine();
 
             listing.CheckboxLabeled(
                 "Enforce sole-trait restrictions",

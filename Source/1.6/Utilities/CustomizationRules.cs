@@ -32,17 +32,26 @@ namespace UniqueWeaponsUnbound
                     return false;
             }
 
-            // Don't surface any customization UI until the player has completed
-            // UniqueSmithing, so we don't clutter menus for uninterested players.
-            if (!UWU_ResearchDefOf.UniqueSmithing.IsFinished)
-                return false;
+            if (UWU_Mod.Settings.requireCustomizationResearch)
+            {
+                // Don't surface any customization UI until the player has completed
+                // UniqueSmithing, so we don't clutter menus for uninterested players.
+                if (!UWU_ResearchDefOf.UniqueSmithing.IsFinished)
+                    return false;
 
-            ResearchProjectDef requiredResearch = GetRequiredResearch(def.techLevel);
-            if (requiredResearch == null)
-                return false;
+                ResearchProjectDef requiredResearch = GetRequiredResearch(def.techLevel);
+                if (requiredResearch == null)
+                    return false;
 
-            if (!requiredResearch.IsFinished)
-                return "UWU_RequiresResearch".Translate(requiredResearch.label);
+                if (!requiredResearch.IsFinished)
+                    return "UWU_RequiresResearch".Translate(requiredResearch.label);
+            }
+            else
+            {
+                // Even without research requirements, tech-level gating still applies
+                if (GetRequiredResearch(def.techLevel) == null)
+                    return false;
+            }
 
             return true;
         }

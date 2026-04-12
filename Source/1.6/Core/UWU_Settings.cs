@@ -4,6 +4,7 @@ namespace UniqueWeaponsUnbound
 {
     public class UWU_Settings : ModSettings
     {
+        public bool requireCustomizationResearch = true;
         public bool requireRecipeResearch = true;
         public bool requireAppropriateWorkbench = true;
         public bool allowArchotechCustomization;
@@ -16,6 +17,7 @@ namespace UniqueWeaponsUnbound
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref requireCustomizationResearch, "requireCustomizationResearch", true);
             Scribe_Values.Look(ref requireRecipeResearch, "requireRecipeResearch", true);
             Scribe_Values.Look(ref requireAppropriateWorkbench, "requireAppropriateWorkbench", true);
             Scribe_Values.Look(ref allowArchotechCustomization, "allowArchotechCustomization");
