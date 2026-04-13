@@ -9,6 +9,7 @@ namespace UniqueWeaponsUnbound
         public static UWU_Settings Settings { get; private set; }
 
         private Vector2 settingsScroll;
+        private float settingsHeight;
 
         public UWU_Mod(ModContentPack content) : base(content)
         {
@@ -24,13 +25,12 @@ namespace UniqueWeaponsUnbound
             Rect viewRect = new Rect(inRect.x, inRect.y, inRect.width, inRect.height - buttonHeight - buttonGap);
             Rect buttonRect = new Rect(inRect.x, inRect.yMax - buttonHeight, 200f, buttonHeight);
 
-            // Estimate inner height generously so the listing never clips
-            float innerHeight = 800f;
-            Rect innerRect = new Rect(0f, 0f, viewRect.width - 16f, innerHeight);
+            float innerWidth = viewRect.width - 16f;
+            Rect innerRect = new Rect(0f, 0f, innerWidth, Mathf.Max(settingsHeight, viewRect.height));
             Widgets.BeginScrollView(viewRect, ref settingsScroll, innerRect);
 
             Listing_Standard listing = new Listing_Standard();
-            listing.Begin(innerRect);
+            listing.Begin(new Rect(0f, 0f, innerWidth, 99999f));
             GameFont prev = Text.Font;
 
             listing.Gap();
@@ -128,6 +128,16 @@ namespace UniqueWeaponsUnbound
             listing.Label("Miscellaneous");
             Text.Font = GameFont.Small;
 
+            listing.CheckboxLabeled(
+                "Allow weapon def conversion",
+                ref Settings.allowDefConversion,
+                "Allow weapons to convert between base and unique defs during " +
+                "customization. When disabled, only already-unique weapons can be " +
+                "customized, and removing all traits keeps the weapon as a zero-trait " +
+                "unique instead of reverting to its base weapon.");
+
+            listing.Gap();
+
             if (ModsConfig.IdeologyActive)
             {
                 listing.CheckboxLabeled(
@@ -152,7 +162,10 @@ namespace UniqueWeaponsUnbound
                 "Some traits cannot be the only trait on a weapon during vanilla generation. " +
                 "Enable this to enforce the same restriction during customization.");
 
+            listing.Gap(60f);
+
             Text.Font = prev;
+            settingsHeight = listing.CurHeight;
             listing.End();
             Widgets.EndScrollView();
 

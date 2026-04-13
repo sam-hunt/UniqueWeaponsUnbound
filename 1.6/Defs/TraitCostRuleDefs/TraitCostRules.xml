@@ -105,7 +105,7 @@
     <defName>UWU_HeavyScrap</defName>
     <label>heavy scrap flat cost</label>
     <description>Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk.</description>
-    <workerClass>UniqueWeaponsUnbound.FlatCostWorker</workerClass>
+    <workerClass>UniqueWeaponsUnbound.SlagReplacementWorker</workerClass>
     <priority>1500</priority>
     <requireAllKeywords>true</requireAllKeywords>
     <labelKeywords>
@@ -151,7 +151,7 @@
     <defName>UWU_Akimbo</defName>
     <label>akimbo cost multiplier</label>
     <description>Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost.</description>
-    <workerClass>UniqueWeaponsUnbound.CostMultiplierWorker</workerClass>
+    <workerClass>UniqueWeaponsUnbound.DoubleCostWorker</workerClass>
     <priority>1800</priority>
     <labelKeywords>
       <li>akimbo</li>
@@ -162,7 +162,7 @@
     <defName>UWU_Grip</defName>
     <label>grip component removal</label>
     <description>Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts.</description>
-    <workerClass>UniqueWeaponsUnbound.GripWorker</workerClass>
+    <workerClass>UniqueWeaponsUnbound.ComponentRemovalWorker</workerClass>
     <priority>1900</priority>
     <labelKeywords>
       <li>grip</li>
@@ -197,7 +197,7 @@
     <defName>UWU_Inlay</defName>
     <label>inlay component removal</label>
     <description>Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts.</description>
-    <workerClass>UniqueWeaponsUnbound.InlayWorker</workerClass>
+    <workerClass>UniqueWeaponsUnbound.ComponentRemovalWorker</workerClass>
     <priority>8000</priority>
     <labelKeywords>
       <li>inlay</li>

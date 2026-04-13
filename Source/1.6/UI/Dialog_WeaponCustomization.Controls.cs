@@ -57,9 +57,11 @@ namespace UniqueWeaponsUnbound
                 Widgets.DrawBox(fieldRect);
                 Text.Anchor = TextAnchor.MiddleLeft;
                 Rect textInsetRect = fieldRect.ContractedBy(4f, 0f);
-                string displayName = disabled
-                    ? baseDef?.LabelCap ?? ""
-                    : desiredName ?? "";
+                string displayName = isRelic
+                    ? desiredName ?? ""
+                    : disabled
+                        ? baseDef?.LabelCap ?? ""
+                        : desiredName ?? "";
                 Widgets.Label(textInsetRect, displayName);
                 GUI.color = prevColor;
 

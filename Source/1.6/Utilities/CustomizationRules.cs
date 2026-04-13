@@ -30,6 +30,11 @@ namespace UniqueWeaponsUnbound
             {
                 if (WeaponRegistry.GetUniqueVariant(def) == null)
                     return false;
+
+                // When def conversion is disabled, only already-unique weapons
+                // can enter the customization system.
+                if (!UWU_Mod.Settings.allowDefConversion)
+                    return false;
             }
 
             if (UWU_Mod.Settings.requireCustomizationResearch)

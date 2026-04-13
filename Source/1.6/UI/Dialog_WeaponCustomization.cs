@@ -249,7 +249,7 @@ namespace UniqueWeaponsUnbound
                 if (desiredTraits.Count > 0)
                     return uniqueDef;
                 // No desired traits — revert to base if one exists
-                if (baseDef != null)
+                if (baseDef != null && UWU_Mod.Settings.allowDefConversion)
                     return baseDef;
                 // Unique weapon with no detected base — keep unique def with zero traits.
                 // This handles edge cases where a unique weapon has no base weapon mapping.
@@ -261,7 +261,7 @@ namespace UniqueWeaponsUnbound
         /// True when weapon will revert to its non-unique base def (no traits, base exists).
         /// Name/texture/color controls are disabled in this state.
         /// </summary>
-        private bool IsRevertedToBase => desiredTraits.Count == 0 && baseDef != null;
+        private bool IsRevertedToBase => desiredTraits.Count == 0 && baseDef != null && UWU_Mod.Settings.allowDefConversion;
 
         /// <summary>
         /// The effective display color: forced color from traits takes priority,
