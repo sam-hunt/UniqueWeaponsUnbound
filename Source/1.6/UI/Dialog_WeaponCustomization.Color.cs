@@ -190,22 +190,28 @@ namespace UniqueWeaponsUnbound
 
         private void DrawIdeoColorOverlay(Rect swatchRect, ColorDef colorDef)
         {
-            Texture2D overlayTex = null;
-            string tooltipKey = null;
+            bool isFavorite = pawn.story?.favoriteColor != null
+                && GenColor.IndistinguishableFrom(colorDef.color, pawn.story.favoriteColor.color);
 
-            // Favorite color takes priority (matching vanilla styling station order)
-            if (pawn.story?.favoriteColor != null
-                && GenColor.IndistinguishableFrom(colorDef.color, pawn.story.favoriteColor.color))
-            {
-                overlayTex = UWU_Textures.FavoriteColor;
-                tooltipKey = "FavoriteColorPickerTip";
-            }
-            else if (pawn.Ideo?.colorDef != null && !Find.IdeoManager.classicMode
-                && GenColor.IndistinguishableFrom(colorDef.color, pawn.Ideo.colorDef.color))
-            {
+            bool isPawnIdeo = pawn.Ideo?.colorDef != null
+                && !Find.IdeoManager.classicMode
+                && GenColor.IndistinguishableFrom(colorDef.color, pawn.Ideo.colorDef.color);
+
+            bool isRelicIdeo = relicIdeo?.colorDef != null
+                && !Find.IdeoManager.classicMode
+                && GenColor.IndistinguishableFrom(colorDef.color, relicIdeo.colorDef.color);
+
+            // Overlay icon: relic ideo flame takes highest priority (the weapon's
+            // identity is most relevant in this dialog), then favorite heart,
+            // then pawn ideo flame. Vanilla gives favorite priority over pawn
+            // ideo; we only elevate relic ideo above that.
+            Texture2D overlayTex = null;
+            if (isRelicIdeo)
                 overlayTex = UWU_Textures.IdeoColor;
-                tooltipKey = "IdeoColorPickerTip";
-            }
+            else if (isFavorite)
+                overlayTex = UWU_Textures.FavoriteColor;
+            else if (isPawnIdeo)
+                overlayTex = UWU_Textures.IdeoColor;
 
             if (overlayTex != null)
             {
@@ -224,10 +230,23 @@ namespace UniqueWeaponsUnbound
                 GUI.color = Color.white;
             }
 
-            if (tooltipKey != null && Mouse.IsOver(swatchRect))
+            // Tooltips: register all applicable tips (they stack on hover)
+            if (Mouse.IsOver(swatchRect))
             {
-                TooltipHandler.TipRegion(swatchRect,
-                    tooltipKey.Translate(pawn.Named("PAWN")));
+                if (isRelicIdeo)
+                    TooltipHandler.TipRegion(swatchRect,
+                        "UWU_RelicIdeoColorTip".Translate(
+                            weapon.StyleSourcePrecept.LabelCap.Colorize(
+                                ColoredText.NameColor),
+                            relicIdeo.name.Colorize(ColoredText.NameColor)));
+
+                if (isFavorite)
+                    TooltipHandler.TipRegion(swatchRect,
+                        "FavoriteColorPickerTip".Translate(pawn.Named("PAWN")));
+
+                if (isPawnIdeo)
+                    TooltipHandler.TipRegion(swatchRect,
+                        "IdeoColorPickerTip".Translate(pawn.Named("PAWN")));
             }
         }
     }

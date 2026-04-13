@@ -59,6 +59,7 @@ namespace UniqueWeaponsUnbound
         private readonly List<ColorDef> availableStructureColors;
         private readonly ColorDef initialDesiredColor;
         private readonly bool isRelic; // Ideology DLC: weapon is an ideoligion relic
+        private readonly Ideo relicIdeo; // Ideology DLC: the ideoligion this relic belongs to
 
         // Desired state — mutated by user interaction
         private readonly List<WeaponTraitDef> desiredTraits;
@@ -172,6 +173,7 @@ namespace UniqueWeaponsUnbound
             if (ModsConfig.IdeologyActive && weapon.StyleSourcePrecept is Precept_Relic relicPrecept)
             {
                 isRelic = true;
+                relicIdeo = relicPrecept.ideo;
                 desiredName = relicPrecept.LabelCap;
                 nameLocked = true;
             }
