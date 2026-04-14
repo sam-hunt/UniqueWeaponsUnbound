@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
+
+  <!-- Float menu / Gizmo -->
   <UWU_CustomizeWeapon>Customize {0}</UWU_CustomizeWeapon>
   <UWU_RequiresResearch>requires {0}</UWU_RequiresResearch>
   <UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
@@ -7,10 +9,64 @@
   <UWU_CustomizeGizmoLabel>Customize</UWU_CustomizeGizmoLabel>
   <UWU_CustomizeGizmoDesc>Select a colonist to customize this weapon at a nearby workbench.</UWU_CustomizeGizmoDesc>
 
+  <!-- Dialog: Buttons -->
   <UWU_Cancel>Cancel</UWU_Cancel>
   <UWU_Reset>Reset</UWU_Reset>
   <UWU_Confirm>Confirm</UWU_Confirm>
+  <UWU_Randomize>Randomize</UWU_Randomize>
+  <UWU_ResetToDefaults>Reset to defaults</UWU_ResetToDefaults>
 
+  <!-- Dialog: Tabs -->
+  <UWU_TabTraits>Traits</UWU_TabTraits>
+  <UWU_TabTexture>Texture</UWU_TabTexture>
+  <UWU_TabColor>Color</UWU_TabColor>
+
+  <!-- Dialog: Controls -->
+  <UWU_RelicNameTooltip>This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion.</UWU_RelicNameTooltip>
+  <UWU_SelectTraitFirst>Select at least one trait first</UWU_SelectTraitFirst>
+  <UWU_AutoRegenName>Auto-regenerate name when traits change</UWU_AutoRegenName>
+  <UWU_HideNegativeTraits>Hide negative traits</UWU_HideNegativeTraits>
+
+  <!-- Dialog: Disabled-state messages -->
+  <UWU_SelectTraitsForTexture>Select traits to customize texture</UWU_SelectTraitsForTexture>
+  <UWU_SelectTraitsForColor>Select traits to customize color</UWU_SelectTraitsForColor>
+  <UWU_ColorDeterminedBy>Color determined by {0}</UWU_ColorDeterminedBy>
+
+  <!-- Dialog: Color sections -->
+  <UWU_WeaponColors>Weapon colors</UWU_WeaponColors>
+  <UWU_IdeologyColors>Ideology colors</UWU_IdeologyColors>
+  <UWU_StructureColors>Structure colors</UWU_StructureColors>
+
+  <!-- Dialog: Cost display -->
+  <UWU_NetRefund>Net refund: </UWU_NetRefund>
+  <UWU_RefundNone>None</UWU_RefundNone>
+  <UWU_NetCost>Net cost: </UWU_NetCost>
+  <UWU_CostFree>Free</UWU_CostFree>
+  <UWU_MissingResources>Missing resources</UWU_MissingResources>
+  <UWU_NotEnoughMaterials>Not enough materials on the map</UWU_NotEnoughMaterials>
+
+  <!-- Trait tooltips -->
+  <UWU_Effects>Effects:</UWU_Effects>
+  <UWU_DamageType>Damage type</UWU_DamageType>
+  <UWU_ExtraDamage>Extra damage</UWU_ExtraDamage>
+  <UWU_BurstSpeed>Burst speed</UWU_BurstSpeed>
+  <UWU_BurstCount>Burst count</UWU_BurstCount>
+  <UWU_StoppingPower>Stopping power</UWU_StoppingPower>
+  <UWU_IgnoresAccuracyPenalties>Ignores accuracy penalties</UWU_IgnoresAccuracyPenalties>
+
+  <!-- Trait validation -->
+  <UWU_AlreadyApplied>Already applied</UWU_AlreadyApplied>
+  <UWU_MaxTraitsReached>Maximum traits reached</UWU_MaxTraitsReached>
+  <UWU_ConflictsWith>Conflicts with {0}</UWU_ConflictsWith>
+  <UWU_CannotBeOnlyTrait>Cannot be the only trait</UWU_CannotBeOnlyTrait>
+  <UWU_TraitCannotBeOnlyTrait>{0} cannot be the only trait</UWU_TraitCannotBeOnlyTrait>
+
+  <!-- Fallbacks -->
+  <UWU_WeaponFallback>weapon</UWU_WeaponFallback>
+  <UWU_WeaponTypeFallback>Weapon</UWU_WeaponTypeFallback>
+  <UWU_ColorFallback>blue</UWU_ColorFallback>
+
+  <!-- Jobs -->
   <UWU_CustomizingWeapon>Customizing {0}</UWU_CustomizingWeapon>
   <UWU_AddingTrait>Adding {0} to {1}</UWU_AddingTrait>
   <UWU_RemovingTrait>Removing {0} from {1}</UWU_RemovingTrait>
@@ -20,4 +76,41 @@
   <UWU_AdmiringWork>Admiring work</UWU_AdmiringWork>
   <UWU_InsufficientResources>Not enough resources to customize this weapon.</UWU_InsufficientResources>
   <UWU_RelicIdeoColorTip>{0}'s ideoligion color. This weapon is a relic of the {1} ideoligion.</UWU_RelicIdeoColorTip>
+
+  <!-- Settings: Section headers -->
+  <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
+  <UWU_SettingsTraitCosts>Trait costs</UWU_SettingsTraitCosts>
+  <UWU_SettingsPrerequisites>Prerequisites</UWU_SettingsPrerequisites>
+  <UWU_SettingsMiscellaneous>Miscellaneous</UWU_SettingsMiscellaneous>
+
+  <!-- Settings: Trait costs -->
+  <UWU_TraitCostMultiplier>Trait cost multiplier: {0}%</UWU_TraitCostMultiplier>
+  <UWU_TraitRefundRate>Trait refund rate: {0}%</UWU_TraitRefundRate>
+  <UWU_DefaultSuffix> (default)</UWU_DefaultSuffix>
+  <UWU_RefundRateNoEffect>Trait refund rate has no effect while trait cost multiplier is 0%.</UWU_RefundRateNoEffect>
+
+  <!-- Settings: Prerequisites -->
+  <UWU_RequireCustomizationResearch>Require customization research</UWU_RequireCustomizationResearch>
+  <UWU_RequireCustomizationResearchDesc>Require the completion of the Unique Smithing, Unique Machining, or Unique Fabrication research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree.</UWU_RequireCustomizationResearchDesc>
+  <UWU_RequireRecipeResearch>Require weapon crafting research</UWU_RequireRecipeResearch>
+  <UWU_RequireRecipeResearchDesc>Require the completion of any research that would enable crafting the weapon. For example, customizing a charge rifle would require Pulse-charged munitions.</UWU_RequireRecipeResearchDesc>
+  <UWU_RequireWorkbench>Require appropriate workbench</UWU_RequireWorkbench>
+  <UWU_RequireWorkbenchDesc>Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons.</UWU_RequireWorkbenchDesc>
+  <UWU_AllowUncraftable>Allow customizing uncraftable weapons</UWU_AllowUncraftable>
+  <UWU_AllowUncraftableDesc>Allow customization of weapons that have no crafting recipe.</UWU_AllowUncraftableDesc>
+  <UWU_AllowUltratech>Allow customizing ultratech-level weapons</UWU_AllowUltratech>
+  <UWU_AllowUltratechDesc>Allow customization of ultratech weapons, requiring Advanced Weapon Customization research.</UWU_AllowUltratechDesc>
+  <UWU_AllowArchotech>Allow customizing archotech-level weapons</UWU_AllowArchotech>
+  <UWU_AllowArchotechDesc>Allow customization of archotech weapons, requiring Advanced Weapon Customization research.</UWU_AllowArchotechDesc>
+
+  <!-- Settings: Miscellaneous -->
+  <UWU_AllowDefConversion>Allow weapon def conversion</UWU_AllowDefConversion>
+  <UWU_AllowDefConversionDesc>Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon.</UWU_AllowDefConversionDesc>
+  <UWU_EnableIdeoColors>Enable Ideology color options</UWU_EnableIdeoColors>
+  <UWU_EnableIdeoColorsDesc>Show Ideology and miscellaneous color palettes in the weapon customization color picker.</UWU_EnableIdeoColorsDesc>
+  <UWU_EnableStructureColors>Enable structure color options</UWU_EnableStructureColors>
+  <UWU_EnableStructureColorsDesc>Show structure color palette in the weapon customization color picker.</UWU_EnableStructureColorsDesc>
+  <UWU_EnforceSoleTrait>Enforce sole-trait restrictions</UWU_EnforceSoleTrait>
+  <UWU_EnforceSoleTraitDesc>Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization.</UWU_EnforceSoleTraitDesc>
+
 </LanguageData>

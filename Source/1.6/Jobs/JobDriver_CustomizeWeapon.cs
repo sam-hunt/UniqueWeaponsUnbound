@@ -155,7 +155,7 @@ namespace UniqueWeaponsUnbound
 
             string weaponLabel = weapon?.LabelShortCap
                 ?? job.GetTarget(WeaponIndex).Thing?.LabelShortCap
-                ?? "weapon";
+                ?? "UWU_WeaponFallback".Translate();
 
             if (spec != null && currentOpIndex >= 0 && currentOpIndex < spec.operations.Count)
             {
@@ -294,7 +294,7 @@ namespace UniqueWeaponsUnbound
             Toil placeWeapon = ToilMaker.MakeToil("MakeNewToils");
             placeWeapon.initAction = delegate
             {
-                string label = weapon?.LabelShortCap ?? "weapon";
+                string label = weapon?.LabelShortCap ?? "UWU_WeaponFallback".Translate();
                 phaseReport = "UWU_PlacingWeapon".Translate(label, Workbench.LabelShortCap);
 
                 Thing carried = pawn.carryTracker.CarriedThing;
@@ -385,7 +385,7 @@ namespace UniqueWeaponsUnbound
             Toil setHaulReport = ToilMaker.MakeToil("MakeNewToils");
             setHaulReport.initAction = delegate
             {
-                string label = weapon?.LabelShortCap ?? "weapon";
+                string label = weapon?.LabelShortCap ?? "UWU_WeaponFallback".Translate();
                 phaseReport = "UWU_GatheringMaterials".Translate(label);
             };
             setHaulReport.defaultCompleteMode = ToilCompleteMode.Instant;

@@ -60,7 +60,7 @@ namespace UniqueWeaponsUnbound
             Rect checkLabelRect = new Rect(
                 checkboxRect.xMax + 4f, curY, rect.width - checkSize - checkMargin - 4f, checkSize);
             Text.Anchor = TextAnchor.MiddleLeft;
-            Widgets.Label(checkLabelRect, "Hide negative traits");
+            Widgets.Label(checkLabelRect, "UWU_HideNegativeTraits".Translate());
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
@@ -213,32 +213,32 @@ namespace UniqueWeaponsUnbound
             }
 
             if (trait.damageDefOverride != null)
-                effectLines.Add("  " + "Damage type" + ": " + trait.damageDefOverride.LabelCap);
+                effectLines.Add("  " + "UWU_DamageType".Translate() + ": " + trait.damageDefOverride.LabelCap);
 
             if (trait.extraDamages != null)
             {
                 foreach (ExtraDamage dmg in trait.extraDamages)
-                    effectLines.Add("  " + "Extra damage" + ": "
+                    effectLines.Add("  " + "UWU_ExtraDamage".Translate() + ": "
                         + dmg.amount + " " + dmg.def.LabelCap);
             }
 
             if (trait.burstShotSpeedMultiplier != 1f)
-                effectLines.Add("  " + "Burst speed" + ": x"
+                effectLines.Add("  " + "UWU_BurstSpeed".Translate() + ": x"
                     + trait.burstShotSpeedMultiplier.ToString("0.##"));
 
             if (trait.burstShotCountMultiplier != 1f)
-                effectLines.Add("  " + "Burst count" + ": x"
+                effectLines.Add("  " + "UWU_BurstCount".Translate() + ": x"
                     + trait.burstShotCountMultiplier.ToString("0.##"));
 
             if (trait.additionalStoppingPower > 0f)
-                effectLines.Add("  " + "Stopping power" + ": +"
+                effectLines.Add("  " + "UWU_StoppingPower".Translate() + ": +"
                     + trait.additionalStoppingPower.ToString("0.##"));
 
             if (trait.ignoresAccuracyMaluses)
-                effectLines.Add("  " + "Ignores accuracy penalties");
+                effectLines.Add("  " + "UWU_IgnoresAccuracyPenalties".Translate());
 
             if (effectLines.Count > 0)
-                parts.Add("Effects:" + "\n" + string.Join("\n", effectLines));
+                parts.Add("UWU_Effects".Translate() + "\n" + string.Join("\n", effectLines));
 
             return string.Join("\n\n", parts);
         }

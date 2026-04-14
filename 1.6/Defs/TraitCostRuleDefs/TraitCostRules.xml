@@ -90,6 +90,7 @@
     </weaponCategories>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
+  <!-- VEW/Anomaly maybe? -->
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_Flarestriker</defName>
     <label>flarestriker value split</label>
@@ -101,6 +102,7 @@
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
+  <!-- VEW -->
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_HeavyScrap</defName>
     <label>heavy scrap flat cost</label>
@@ -147,6 +149,7 @@
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
+  <!-- VEW -->
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_Akimbo</defName>
     <label>akimbo cost multiplier</label>
@@ -169,6 +172,7 @@
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
+  <!-- VEW -->
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_Comfort</defName>
     <label>comfort material conversion</label>
@@ -183,6 +187,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_Ornamental</defName>
     <label>ornamental conversion</label>
+    <!-- TODO: Rebalance silver, maybe by value or convert components too -->
     <description>Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering.</description>
     <workerClass>UniqueWeaponsUnbound.OrnamentalWorker</workerClass>
     <priority>2100</priority>

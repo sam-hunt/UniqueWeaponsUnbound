@@ -7,9 +7,7 @@ namespace UniqueWeaponsUnbound
 {
     public partial class Dialog_WeaponCustomization
     {
-        // TODO: localize
-        private const string RelicNameTooltip =
-            "This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion.";
+        private static string RelicNameTooltip => "UWU_RelicNameTooltip".Translate();
 
         // --- Right pane: controls ---
 
@@ -89,15 +87,15 @@ namespace UniqueWeaponsUnbound
             {
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
-                Widgets.ButtonText(randomRect, "Randomize"); // TODO: localize
+                Widgets.ButtonText(randomRect, "UWU_Randomize".Translate());
                 GUI.color = prevColor;
                 if (isRelic && !disabled)
                     TooltipHandler.TipRegion(randomRect, RelicNameTooltip);
                 else if (desiredTraits.Count == 0 && !nameDisabled)
                     TooltipHandler.TipRegion(randomRect,
-                        "Select at least one trait first"); // TODO: localize
+                        "UWU_SelectTraitFirst".Translate());
             }
-            else if (Widgets.ButtonText(randomRect, "Randomize")) // TODO: localize
+            else if (Widgets.ButtonText(randomRect, "UWU_Randomize".Translate()))
             {
                 desiredName = GenerateWeaponName();
                 lastAutoName = desiredName;
@@ -126,7 +124,7 @@ namespace UniqueWeaponsUnbound
                     checkboxSize, disabled: true);
                 Text.Anchor = TextAnchor.MiddleLeft;
                 Widgets.Label(checkboxLabelRect,
-                    "Auto-regenerate name when traits change"); // TODO: localize
+                    "UWU_AutoRegenName".Translate());
                 Text.Anchor = TextAnchor.UpperLeft;
                 GUI.color = prevColor;
 
@@ -139,7 +137,7 @@ namespace UniqueWeaponsUnbound
                     checkboxSize);
                 Text.Anchor = TextAnchor.MiddleLeft;
                 Widgets.Label(checkboxLabelRect,
-                    "Auto-regenerate name when traits change"); // TODO: localize
+                    "UWU_AutoRegenName".Translate());
                 Text.Anchor = TextAnchor.UpperLeft;
                 nameLocked = !autoRegen;
 
@@ -157,11 +155,11 @@ namespace UniqueWeaponsUnbound
         private void DrawTabs(Rect menuRect)
         {
             var tabs = new List<TabRecord>();
-            tabs.Add(new TabRecord("Traits", () => activeTab = 0, activeTab == 0)); // TODO: localize
-            tabs.Add(new TabRecord("Texture", () => activeTab = 1, activeTab == 1)); // TODO: localize
+            tabs.Add(new TabRecord("UWU_TabTraits".Translate(), () => activeTab = 0, activeTab == 0));
+            tabs.Add(new TabRecord("UWU_TabTexture".Translate(), () => activeTab = 1, activeTab == 1));
 
             // Pad the Color label so the swatch fits inside the tab
-            tabs.Add(new TabRecord("Color      ", () => activeTab = 2, activeTab == 2)); // TODO: localize
+            tabs.Add(new TabRecord("UWU_TabColor".Translate() + "      ", () => activeTab = 2, activeTab == 2));
 
             TabDrawer.DrawTabs(menuRect, tabs);
 
@@ -173,7 +171,7 @@ namespace UniqueWeaponsUnbound
                 // Tabs are evenly distributed across menuRect width
                 float tabWidth = menuRect.width / tabs.Count;
                 float colorTabCenterX = menuRect.x + 2.5f * tabWidth;
-                float colorLabelHalfWidth = Text.CalcSize("Color").x / 2f;
+                float colorLabelHalfWidth = Text.CalcSize("UWU_TabColor".Translate()).x / 2f;
                 float swatchX = colorTabCenterX - colorLabelHalfWidth - swatchSize - 21f;
                 float swatchY = menuRect.y - TabBarHeight * 0.5f - swatchSize * 0.5f + 1f;
                 Rect swatchRect = new Rect(swatchX, swatchY, swatchSize, swatchSize);

@@ -47,20 +47,20 @@ namespace UniqueWeaponsUnbound
             List<WeaponTraitDef> desiredTraits, WeaponTraitDef candidate)
         {
             if (desiredTraits.Contains(candidate))
-                return "Already applied"; // TODO: localize
+                return "UWU_AlreadyApplied".Translate();
 
             if (desiredTraits.Count >= MaxTraits)
-                return "Maximum traits reached"; // TODO: localize
+                return "UWU_MaxTraitsReached".Translate();
 
             foreach (WeaponTraitDef existing in desiredTraits)
             {
                 if (TraitsOverlap(candidate, existing))
-                    return "Conflicts with " + existing.LabelCap; // TODO: localize
+                    return "UWU_ConflictsWith".Translate(existing.LabelCap);
             }
 
             if (UWU_Mod.Settings.enforceCanGenerateAlone
                 && desiredTraits.Count == 0 && !candidate.canGenerateAlone)
-                return "Cannot be the only trait"; // TODO: localize
+                return "UWU_CannotBeOnlyTrait".Translate();
 
             return null;
         }
@@ -101,7 +101,7 @@ namespace UniqueWeaponsUnbound
                     ? desiredTraits[1]
                     : desiredTraits[0];
                 if (!remaining.canGenerateAlone)
-                    return remaining.LabelCap + " cannot be the only trait"; // TODO: localize
+                    return "UWU_TraitCannotBeOnlyTrait".Translate(remaining.LabelCap);
             }
             return null;
         }

@@ -122,7 +122,7 @@ namespace UniqueWeaponsUnbound
                 Text.Anchor = TextAnchor.MiddleLeft;
                 if (!hasSurplus)
                     GUI.color = Color.gray;
-                string refundLabel = "Net refund: "; // TODO: localize
+                string refundLabel = "UWU_NetRefund".Translate();
                 float refundLabelWidth = Text.CalcSize(refundLabel).x;
                 Widgets.Label(
                     new Rect(refundArea.x, refundArea.y,
@@ -142,7 +142,7 @@ namespace UniqueWeaponsUnbound
                     Widgets.Label(
                         new Rect(refundArea.x + refundLabelWidth, refundArea.y,
                             refundArea.width - refundLabelWidth, refundArea.height),
-                        "None"); // TODO: localize
+                        "UWU_RefundNone".Translate());
                     GUI.color = Color.white;
                 }
                 Text.Anchor = TextAnchor.UpperLeft;
@@ -155,7 +155,7 @@ namespace UniqueWeaponsUnbound
                 Text.Anchor = TextAnchor.MiddleLeft;
                 if (hasNetCost)
                 {
-                    string costLabel = "Net cost: "; // TODO: localize
+                    string costLabel = "UWU_NetCost".Translate();
                     float labelWidth = Text.CalcSize(costLabel).x;
                     Widgets.Label(
                         new Rect(netCostArea.x, netCostArea.y, labelWidth, netCostArea.height),
@@ -169,7 +169,7 @@ namespace UniqueWeaponsUnbound
                 }
                 else
                 {
-                    string costPrefix = "Net cost: "; // TODO: localize
+                    string costPrefix = "UWU_NetCost".Translate();
                     float prefixWidth = Text.CalcSize(costPrefix).x;
                     Widgets.Label(
                         new Rect(netCostArea.x, netCostArea.y, prefixWidth, netCostArea.height),
@@ -179,7 +179,7 @@ namespace UniqueWeaponsUnbound
                     Widgets.Label(
                         new Rect(netCostArea.x + prefixWidth, netCostArea.y,
                             netCostArea.width - prefixWidth, netCostArea.height),
-                        "Free"); // TODO: localize
+                        "UWU_CostFree".Translate());
                     GUI.color = prevFreeColor;
                 }
                 Text.Anchor = TextAnchor.UpperLeft;

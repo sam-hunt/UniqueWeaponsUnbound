@@ -6,7 +6,6 @@
 
 ## Cleanup
 
-- localization strings in language folders?
 - split out any oversize files?
 - small optimization: MayRequire VE Weapons attribute on some trait rules
 

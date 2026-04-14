@@ -17,7 +17,7 @@ namespace UniqueWeaponsUnbound
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
                 Widgets.Label(rect,
-                    "Select traits to customize color"); // TODO: localize
+                    "UWU_SelectTraitsForColor".Translate());
                 GUI.color = prevColor;
                 Text.Anchor = TextAnchor.UpperLeft;
                 return;
@@ -43,7 +43,7 @@ namespace UniqueWeaponsUnbound
                 Rect msgRect = new Rect(rect.x, blockY, rect.width, 20f);
                 GUI.color = new Color(0.8f, 0.8f, 0.5f);
                 Widgets.Label(msgRect,
-                    "Color determined by " + forcingTraitName); // TODO: localize
+                    "UWU_ColorDeterminedBy".Translate(forcingTraitName));
                 GUI.color = Color.white;
 
                 // Show forced color swatch
@@ -77,7 +77,7 @@ namespace UniqueWeaponsUnbound
             // --- Weapon colors ---
             Text.Font = GameFont.Small;
             Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
-                "Weapon colors"); // TODO: localize
+                "UWU_WeaponColors".Translate());
             curY += SectionHeaderHeight;
 
             DrawColorGrid(ref curY, startX, cols, availableWeaponColors, false);
@@ -88,7 +88,7 @@ namespace UniqueWeaponsUnbound
             {
                 curY += 10f;
                 Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
-                    "Ideology colors"); // TODO: localize
+                    "UWU_IdeologyColors".Translate());
                 curY += SectionHeaderHeight;
 
                 DrawColorGrid(ref curY, startX, cols, availableIdeoColors, true);
@@ -99,7 +99,7 @@ namespace UniqueWeaponsUnbound
             {
                 curY += 10f;
                 Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
-                    "Structure colors"); // TODO: localize
+                    "UWU_StructureColors".Translate());
                 curY += SectionHeaderHeight;
 
                 DrawColorGrid(ref curY, startX, cols, availableStructureColors, false);

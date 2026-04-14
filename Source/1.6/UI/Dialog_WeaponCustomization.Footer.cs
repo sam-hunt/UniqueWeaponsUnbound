@@ -174,7 +174,7 @@ namespace UniqueWeaponsUnbound
                 if (insufficientForConfirm)
                 {
                     // Red error text immediately left of the confirm button
-                    string errorText = "Missing resources"; // TODO: localize
+                    string errorText = "UWU_MissingResources".Translate();
                     float errorWidth = Text.CalcSize(errorText).x;
                     Rect errorRect = new Rect(
                         confirmRect.x - errorWidth - 8f,
@@ -189,7 +189,7 @@ namespace UniqueWeaponsUnbound
                     GUI.color = prevColor2;
 
                     TooltipHandler.TipRegion(confirmRect,
-                        "Not enough materials on the map"); // TODO: localize
+                        "UWU_NotEnoughMaterials".Translate());
                 }
             }
         }

@@ -554,9 +554,9 @@ namespace UniqueWeaponsUnbound
                 .FirstOrDefault();
             string weaponType = (props?.namerLabels != null && props.namerLabels.Count > 0)
                 ? props.namerLabels.RandomElement()
-                : "Weapon";
+                : "UWU_WeaponTypeFallback".Translate();
 
-            string colorLabel = EffectiveColor?.label ?? "blue";
+            string colorLabel = EffectiveColor?.label ?? "UWU_ColorFallback".Translate();
 
             GrammarRequest request = default;
             request.Includes.Add(RulePackDefOf.NamerUniqueWeapon);
@@ -651,7 +651,7 @@ namespace UniqueWeaponsUnbound
             // Title
             Text.Font = GameFont.Medium;
             Rect titleRect = new Rect(inRect.x, inRect.y, inRect.width, TitleHeight);
-            string titleLabel = "Customize " + weapon.LabelShortCap; // TODO: localize
+            string titleLabel = "UWU_CustomizeWeapon".Translate(weapon.LabelShortCap);
             Widgets.Label(titleRect, titleLabel);
             Text.Font = GameFont.Small;
 

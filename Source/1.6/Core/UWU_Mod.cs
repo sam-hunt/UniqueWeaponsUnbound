@@ -16,7 +16,7 @@ namespace UniqueWeaponsUnbound
             Settings = GetSettings<UWU_Settings>();
         }
 
-        public override string SettingsCategory() => "Unique Weapons Unbound";
+        public override string SettingsCategory() => "UWU_SettingsCategory".Translate();
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
@@ -30,39 +30,43 @@ namespace UniqueWeaponsUnbound
             Widgets.BeginScrollView(viewRect, ref settingsScroll, innerRect);
 
             Listing_Standard listing = new Listing_Standard();
-            listing.Begin(new Rect(0f, 0f, innerWidth, 99999f));
+            listing.Begin(new Rect(0f, 0f, innerWidth - 8f, 99999f));
             GameFont prev = Text.Font;
 
             listing.Gap();
 
             Text.Font = GameFont.Medium;
-            listing.Label("Trait costs");
+            listing.Label("UWU_SettingsTraitCosts".Translate());
             Text.Font = GameFont.Small;
             listing.Gap(12.0f);
 
             string costPct = (Settings.traitCostMultiplier * 100f).ToString("F0");
-            string costSuffix = Settings.traitCostMultiplier == 1f ? " (default)" : "";
-            listing.Label("Trait cost multiplier: " + costPct + "%" + costSuffix);
+            string costLabel = "UWU_TraitCostMultiplier".Translate(costPct);
+            if (Settings.traitCostMultiplier == 1f)
+                costLabel += "UWU_DefaultSuffix".Translate();
+            listing.Label(costLabel);
             Settings.traitCostMultiplier = listing.Slider(Settings.traitCostMultiplier, 0f, 3f);
             Settings.traitCostMultiplier = Mathf.Round(Settings.traitCostMultiplier * 20f) / 20f;
 
             bool costsFree = Settings.traitCostMultiplier == 0f;
             string refundPct = (Settings.traitRefundRate * 100f).ToString("F0");
-            string refundSuffix = Settings.traitRefundRate == 0.5f ? " (default)" : "";
+            string refundLabel = "UWU_TraitRefundRate".Translate(refundPct);
+            if (Settings.traitRefundRate == 0.5f)
+                refundLabel += "UWU_DefaultSuffix".Translate();
             if (costsFree)
             {
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
-                listing.Label("Trait refund rate: " + refundPct + "%" + refundSuffix);
+                listing.Label(refundLabel);
                 Rect sliderRect = listing.GetRect(22f);
                 Widgets.HorizontalSlider(sliderRect, Settings.traitRefundRate, 0f, 1f);
                 TooltipHandler.TipRegion(sliderRect,
-                    "Trait refund rate has no effect while trait cost multiplier is 0%.");
+                    "UWU_RefundRateNoEffect".Translate());
                 GUI.color = prevColor;
             }
             else
             {
-                listing.Label("Trait refund rate: " + refundPct + "%" + refundSuffix);
+                listing.Label(refundLabel);
                 Settings.traitRefundRate = listing.Slider(Settings.traitRefundRate, 0f, 1f);
                 Settings.traitRefundRate = Mathf.Round(Settings.traitRefundRate * 20f) / 20f;
             }
@@ -70,97 +74,85 @@ namespace UniqueWeaponsUnbound
             listing.Gap(18.0f);
 
             Text.Font = GameFont.Medium;
-            listing.Label("Prerequisites");
+            listing.Label("UWU_SettingsPrerequisites".Translate());
             Text.Font = GameFont.Small;
+            listing.Gap(6f);
 
             listing.CheckboxLabeled(
-                "Require customization research",
+                "UWU_AllowDefConversion".Translate(),
+                ref Settings.allowDefConversion,
+                "UWU_AllowDefConversionDesc".Translate());
+
+            listing.Gap();
+
+            listing.CheckboxLabeled(
+                "UWU_RequireCustomizationResearch".Translate(),
                 ref Settings.requireCustomizationResearch,
-                "Require the completion of the Unique Smithing, Unique Machining, " +
-                "or Unique Fabrication research projects before customizing weapons " +
-                "of the corresponding tech level. When disabled, these research " +
-                "projects are hidden from the research tree.");
+                "UWU_RequireCustomizationResearchDesc".Translate());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
-                "Require weapon crafting research",
+                "UWU_RequireRecipeResearch".Translate(),
                 ref Settings.requireRecipeResearch,
-                "Require the completion of any research that would enable crafting " +
-                "the weapon. For example, customizing a charge rifle would require " +
-                "Pulse-charged munitions.");
+                "UWU_RequireRecipeResearchDesc".Translate());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
-                "Require appropriate workbench",
+                "UWU_RequireWorkbench".Translate(),
                 ref Settings.requireAppropriateWorkbench,
-                "Require that the workbench matches the weapon's tech level. " +
-                "When disabled, any workbench that can craft weapons is sufficient " +
-                "for customizing all weapons.");
+                "UWU_RequireWorkbenchDesc".Translate());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
-                "Allow customizing uncraftable weapons",
+                "UWU_AllowUncraftable".Translate(),
                 ref Settings.allowUncraftableCustomization,
-                "Allow customization of weapons that have no crafting recipe.");
+                "UWU_AllowUncraftableDesc".Translate());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
-                "Allow customizing ultratech-level weapons",
+                "UWU_AllowUltratech".Translate(),
                 ref Settings.allowUltratechCustomization,
-                "Allow customization of ultratech weapons, " +
-                "requiring Advanced Weapon Customization research.");
+                "UWU_AllowUltratechDesc".Translate());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
-                "Allow customizing archotech-level weapons",
+                "UWU_AllowArchotech".Translate(),
                 ref Settings.allowArchotechCustomization,
-                "Allow customization of archotech weapons, " +
-                "requiring Advanced Weapon Customization research.");
+                "UWU_AllowArchotechDesc".Translate());
 
             listing.Gap(24.0f);
 
             Text.Font = GameFont.Medium;
-            listing.Label("Miscellaneous");
+            listing.Label("UWU_SettingsMiscellaneous".Translate());
             Text.Font = GameFont.Small;
-
-            listing.CheckboxLabeled(
-                "Allow weapon def conversion",
-                ref Settings.allowDefConversion,
-                "Allow weapons to convert between base and unique defs during " +
-                "customization. When disabled, only already-unique weapons can be " +
-                "customized, and removing all traits keeps the weapon as a zero-trait " +
-                "unique instead of reverting to its base weapon.");
-
-            listing.Gap();
+            listing.Gap(6f);
 
             if (ModsConfig.IdeologyActive)
             {
                 listing.CheckboxLabeled(
-                    "Enable Ideology color options",
+                    "UWU_EnableIdeoColors".Translate(),
                     ref Settings.enableIdeologyColors,
-                    "Show Ideology and miscellaneous color palettes in the " +
-                    "weapon customization color picker.");
+                    "UWU_EnableIdeoColorsDesc".Translate());
 
                 listing.Gap();
             }
 
             listing.CheckboxLabeled(
-                "Enable structure color options",
+                "UWU_EnableStructureColors".Translate(),
                 ref Settings.enableStructureColors,
-                "Show structure color palette in the weapon customization color picker.");
+                "UWU_EnableStructureColorsDesc".Translate());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
-                "Enforce sole-trait restrictions",
+                "UWU_EnforceSoleTrait".Translate(),
                 ref Settings.enforceCanGenerateAlone,
-                "Some traits cannot be the only trait on a weapon during vanilla generation. " +
-                "Enable this to enforce the same restriction during customization.");
+                "UWU_EnforceSoleTraitDesc".Translate());
 
             listing.Gap(60f);
 
@@ -169,7 +161,7 @@ namespace UniqueWeaponsUnbound
             listing.End();
             Widgets.EndScrollView();
 
-            if (Widgets.ButtonText(buttonRect, "Reset to defaults"))
+            if (Widgets.ButtonText(buttonRect, "UWU_ResetToDefaults".Translate()))
             {
                 Settings.ResetToDefaults();
             }

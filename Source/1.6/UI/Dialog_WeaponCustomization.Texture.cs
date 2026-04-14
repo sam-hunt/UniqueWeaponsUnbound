@@ -18,7 +18,7 @@ namespace UniqueWeaponsUnbound
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
                 Widgets.Label(rect,
-                    "Select traits to customize texture"); // TODO: localize
+                    "UWU_SelectTraitsForTexture".Translate());
                 GUI.color = prevColor;
                 Text.Anchor = TextAnchor.UpperLeft;
                 return;
