@@ -1,0 +1,105 @@
+[h1]About[/h1]
+The perfect unique weapon rarely drops with the perfect traits. Now you can close the gap: at existing crafting workbenches, with research gates, material costs, and balance settings that keep it feeling earned.
+
+[hr][/hr]
+[h2]Trait Customization[/h2]
+[list]
+[*]Add and remove weapon traits at smithies, machining tables, and fabrication benches
+[*]Convert normal weapons into unique variants by adding their first trait
+[*]Remove all traits to revert a unique weapon back to its base form
+[*]Full vanilla validation: max 3 traits, conflict rules, and category restrictions are all enforced
+[/list]
+
+[h2]Thematic Costs[/h2]
+Trait modifications aren't free. The cost system uses the weapon's own crafting recipe as a baseline, then scales by quality and transforms materials to match the trait's theme.
+[list]
+[*]Toxic traits cost herbal medicine instead of components. Incendiary traits use chemfuel. Charge traits demand advanced components.
+[*]Negative traits are cheaper to add (cruder work, downgraded materials) but cost resources to remove (restoring the weapon requires proper-tier work)
+[*]Material-intrinsic traits auto-detect from their trait names, so Gold Inlay costs gold, Depleted-uranium rounds costs uranium
+[*]Real-time cost preview with full material breakdown before you commit
+[/list]
+
+[h2]Colors, Textures & Names[/h2]
+[list]
+[*]Pick from standard weapon, Ideology (when DLC is active) and structure color palettes.
+[*]Ideo color and favorite color overlays help match your pawn's identity, just like Ideology's styling station
+[*]Browse texture variants for weapons with multiple visual styles
+[*]Auto-generate names using vanilla grammar or type your own
+[*]Trait-locked colors are clearly indicated so you know which trait controls the color
+[/list]
+
+[h2]Three Ways to Customize[/h2]
+[list]
+[*][b]Weapon gizmo:[/b] select a weapon on the ground, click the customize button, and pick a colonist
+[*][b]Workbench menu:[/b] select a colonist and right-click a workbench to customize their equipped or carried weapons
+[*][b]Ground weapon menu:[/b] right-click a weapon on the ground to send a colonist to the nearest suitable workbench
+[/list]
+
+[h2]Research Progression[/h2]
+Customization is gated behind three tiers of research that mirror weapon crafting progression:
+[olist]
+[*][b]Unique Smithing:[/b] Neolithic and Medieval weapons at smithies
+[*][b]Unique Machining:[/b] Industrial weapons at machining tables
+[*][b]Unique Fabrication:[/b] Spacer, ultratech, and archotech weapons at fabrication benches (requires techprint)
+[/olist]
+
+[h2]Ideology DLC Support[/h2]
+[list]
+[*]Ideology relics can be customized while preserving their relic status
+[*]Relic names stay locked and can only be changed through ideology reform, as intended
+[*]Ideo and favorite color overlays appear in the color picker
+[/list]
+
+[h2]Balance Your Way[/h2]
+Balance means something different to everyone. All of the following are configurable from mod settings:
+[list]
+[*][b]Trait cost multiplier[/b] (0–300%): scale costs up, down, or disable them entirely
+[*][b]Trait refund rate[/b] (0–100%): control how much material is returned when removing traits
+[*][b]Research requirements:[/b] disable customization research, weapon crafting research, or both
+[*][b]Workbench restrictions:[/b] allow any weapon-crafting workbench regardless of tech level
+[*][b]Ultratech and archotech gates:[/b] independently allow or block high-tier weapon customization
+[*][b]Uncraftable weapons:[/b] allow customization of weapons that have no crafting recipe
+[*][b]Sole-trait enforcement:[/b] optionally enforce vanilla's sole-trait generation restriction
+[/list]
+
+[hr][/hr]
+[h1]Mod Compatibility[/h1]
+[list]
+[*]Automatically compatible with mods that add new unique weapons, weapon traits, or crafting recipes. No hard-coded def references
+[*]Modded workbenches that inherit vanilla weapon recipes are detected automatically
+[*]Works with CE, PUAH, Ideology and Simple sidearms
+[*]Modders can extend the cost pipeline with XML-only rules or custom C# workers (see [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Modder's Guide[/url])
+[*]Safe to add to existing saves
+[*]Safe to remove from saves (safe-to-ignore red errors only)
+[/list]
+
+[hr][/hr]
+[h1]FAQ[/h1]
+[b]Q: Do I need the Odyssey DLC?[/b]
+A: Yes. This mod builds on Odyssey's unique weapon system.
+
+[b]Q: Does this work with Ideology?[/b]
+A: Yes. Ideology support is automatic. Relic handling and ideo color palettes appear when the DLC is active.
+
+[b]Q: Combat Extended?[/b]
+A: Yes? I don't know much about CE, but testing showed no errors. Trait costs adjust automatically for CE's adjusted crafting costs.
+
+[b]Q: Can I customize weapons from other mods?[/b]
+A: If the mod adds unique weapons using vanilla's CompUniqueWeapon system, they're automatically supported. Costs are calculated from the weapon's crafting recipe.
+
+[b]Q: Is this imbalanced?[/b]
+A: That's up to you. The default settings require research, matching workbenches, and meaningful material costs. If you want it harder, crank up the cost multiplier. If you want it easier, wind them down or skip the researches. Your colony, your rules.
+
+[b]Q: Can I interrupt a customization job safely?[/b]
+A: Yes. Each trait change is a separate crafting job. Interrupting won't lose resources; unfinished work is simply cancelled.
+
+[hr][/hr]
+[h2]Requirements[/h2]
+[list]
+[*][url=https://steamcommunity.com/workshop/filedetails/?id=2009463077]Harmony[/url]
+[*][url=https://store.steampowered.com/app/2380740/RimWorld__Odyssey/]Odyssey DLC[/url]
+[/list]
+
+[h2]Links[/h2]
+[url=https://github.com/sam-hunt/UniqueWeaponsUnbound]GitHub[/url] - Source code, bug reports, and feature requests
+Hero art by [url=https://steamcommunity.com/profiles/76561198094174176/myworkshopfiles/?appid=294100]IcingWithCheeseCake[/url]
