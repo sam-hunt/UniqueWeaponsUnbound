@@ -4,3 +4,23 @@ All notable changes to Unique Weapons Unbound will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2026-04-15
+
+### Added
+
+- Customize unique weapons at workbenches — add, remove, and swap traits
+- Three customization entry points: equipped, inventory, and ground items
+- Weapon gizmo for ground-item customization
+- Asymmetric cost pipeline with tech-level fallback and data-driven trait cost rules
+- Negative trait economics and thematic cost rules
+- Global cost multiplier setting and configurable refund rate
+- Research toggle and settings to bypass workbench tech-level and crafting research requirements
+- Mod settings panel with sections and smart controls
+- Multi-palette color picker with Ideology DLC support
+- Relic Ideology color overlay and stacking tooltips
+- Relic weapon name locking in customization dialog
+- Support for unique weapons without a base weapon variant
+- Full localization support — all UI strings extracted into keyed files
+
+[1.0.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.0
