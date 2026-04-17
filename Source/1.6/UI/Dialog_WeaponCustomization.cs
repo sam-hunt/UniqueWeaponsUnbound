@@ -71,6 +71,7 @@ namespace UniqueWeaponsUnbound
         private Vector2 traitListScroll;
         private Vector2 colorTabScroll;
         private Vector2 textureTabScroll;
+        private readonly QuickSearchWidget traitSearchWidget = new QuickSearchWidget();
         private int activeTab; // 0 = Traits, 1 = Texture, 2 = Color
         private bool nameLocked;
         private bool hideNegativeTraits;

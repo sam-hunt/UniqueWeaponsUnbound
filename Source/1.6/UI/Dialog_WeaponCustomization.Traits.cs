@@ -13,6 +13,11 @@ namespace UniqueWeaponsUnbound
         {
             float curY = rect.y;
 
+            // Search field at top — matches vanilla z-search look and behaviour
+            Rect searchRect = new Rect(rect.x, curY, rect.width, QuickSearchWidget.WidgetHeight);
+            traitSearchWidget.OnGUI(searchRect);
+            curY += QuickSearchWidget.WidgetHeight + 4f;
+
             // Reserve space at the bottom for the negative traits toggle
             float checkSize = 24f;
             float checkMargin = 5f;
@@ -28,6 +33,7 @@ namespace UniqueWeaponsUnbound
                 if (ShouldShowTrait(trait))
                     visibleCount++;
             }
+            traitSearchWidget.noResultsMatched = visibleCount == 0 && traitSearchWidget.filter.Active;
 
             float totalTraitHeight = visibleCount * (TraitRowHeight + TraitRowGap);
 
@@ -66,6 +72,10 @@ namespace UniqueWeaponsUnbound
 
         private bool ShouldShowTrait(WeaponTraitDef trait)
         {
+            // Active search overrides hide-negative so explicit matches aren't filtered out
+            if (traitSearchWidget.filter.Active)
+                return traitSearchWidget.filter.Matches(trait.label);
+
             if (!hideNegativeTraits)
                 return true;
             if (!TraitCostUtility.IsNegativeTrait(trait))
