@@ -13,6 +13,9 @@ namespace UniqueWeaponsUnbound
     {
         public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
+            if (UWU_Mod.Settings is { useRecipeBaseCost: false })
+                return;
+
             ThingDef baseDef = WeaponRegistry.IsUniqueWeapon(weapon.def)
                 ? WeaponRegistry.GetBaseVariant(weapon.def)
                 : weapon.def;

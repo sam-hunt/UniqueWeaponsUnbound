@@ -14,6 +14,8 @@ namespace UniqueWeaponsUnbound
         public bool enforceCanGenerateAlone;
         public bool enableIdeologyColors = true;
         public bool enableStructureColors = true;
+        public bool enableGroundCustomization = true;
+        public bool useRecipeBaseCost = true;
         public float traitCostMultiplier = 1f;
         public float traitRefundRate = 0.5f;
 
@@ -29,6 +31,8 @@ namespace UniqueWeaponsUnbound
             enforceCanGenerateAlone = false;
             enableIdeologyColors = true;
             enableStructureColors = true;
+            enableGroundCustomization = true;
+            useRecipeBaseCost = true;
             traitCostMultiplier = 1f;
             traitRefundRate = 0.5f;
         }
@@ -36,6 +40,7 @@ namespace UniqueWeaponsUnbound
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref useRecipeBaseCost, "useRecipeBaseCost", true);
             Scribe_Values.Look(ref requireCustomizationResearch, "requireCustomizationResearch", true);
             Scribe_Values.Look(ref requireRecipeResearch, "requireRecipeResearch", true);
             Scribe_Values.Look(ref requireAppropriateWorkbench, "requireAppropriateWorkbench", true);
@@ -46,6 +51,7 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref enforceCanGenerateAlone, "enforceCanGenerateAlone");
             Scribe_Values.Look(ref enableIdeologyColors, "enableIdeologyColors", true);
             Scribe_Values.Look(ref enableStructureColors, "enableStructureColors", true);
+            Scribe_Values.Look(ref enableGroundCustomization, "enableGroundCustomization", true);
             Scribe_Values.Look(ref traitCostMultiplier, "traitCostMultiplier", 1f);
             Scribe_Values.Look(ref traitRefundRate, "traitRefundRate", 0.5f);
         }

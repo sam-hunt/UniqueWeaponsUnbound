@@ -40,6 +40,13 @@ namespace UniqueWeaponsUnbound
             Text.Font = GameFont.Small;
             listing.Gap(12.0f);
 
+            listing.CheckboxLabeled(
+                "UWU_UseRecipeBaseCost".Translate(),
+                ref Settings.useRecipeBaseCost,
+                "UWU_UseRecipeBaseCostDesc".Translate());
+
+            listing.Gap();
+
             string costPct = (Settings.traitCostMultiplier * 100f).ToString("F0");
             string costLabel = "UWU_TraitCostMultiplier".Translate(costPct);
             if (Settings.traitCostMultiplier == 1f)
@@ -131,6 +138,13 @@ namespace UniqueWeaponsUnbound
             listing.Label("UWU_SettingsMiscellaneous".Translate());
             Text.Font = GameFont.Small;
             listing.Gap(6f);
+
+            listing.CheckboxLabeled(
+                "UWU_EnableGroundCustomization".Translate(),
+                ref Settings.enableGroundCustomization,
+                "UWU_EnableGroundCustomizationDesc".Translate());
+
+            listing.Gap();
 
             if (ModsConfig.IdeologyActive)
             {

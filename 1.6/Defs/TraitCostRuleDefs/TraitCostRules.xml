@@ -60,7 +60,10 @@
     <labelKeywords>
       <li>incendiary</li>
       <li>blast</li>
+      <li>blasts</li>
       <li>pitch-soaked</li>
+      <li>detonation</li>
+      <li>chemburster</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
@@ -72,6 +75,9 @@
     <priority>1200</priority>
     <labelKeywords>
       <li>emp</li>
+      <li>flux</li>
+      <li>voltaic</li>
+      <li>sonic</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
@@ -98,6 +104,7 @@
     <workerClass>UniqueWeaponsUnbound.FlareSplitWorker</workerClass>
     <priority>1400</priority>
     <labelKeywords>
+      <li>flare</li>
       <li>flarestriker</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
@@ -126,6 +133,7 @@
       <li>charge</li>
       <li>charger</li>
       <li>frequency</li>
+      <li>tesla</li>
     </labelKeywords>
     <weaponCategories>
       <li>Pistol</li>
@@ -142,6 +150,7 @@
     <priority>1700</priority>
     <labelKeywords>
       <li>crypto</li>
+      <li>cryo</li>
       <li>capacitor</li>
       <li>ultracoils</li>
       <li>thump</li>
@@ -149,8 +158,9 @@
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
-  <!-- VEW -->
+  <!-- VEW/AA -->
   <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <!-- TODO: Rename since oversized -->
     <defName>UWU_Akimbo</defName>
     <label>akimbo cost multiplier</label>
     <description>Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost.</description>
@@ -158,6 +168,7 @@
     <priority>1800</priority>
     <labelKeywords>
       <li>akimbo</li>
+      <li>oversized</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
@@ -195,6 +206,19 @@
       <li>ornamental</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <!-- TODO: hellsphere rule adds 1x signal chip, MayRequire Alpha Armory, Biotech -->
+  <!-- TODO: hemovoric rule adds 10x hemogen pack, MayRequire Alpha Armory, Biotech -->
+  <!-- TODO: skip rule adds 1x skip psytrainer, MayRequire Alpha Armory, Royalty -->
+  <!-- TODO: invisibility rule adds 1x invisibility psytrainer, MayRequire Alpha Armory, Royalty -->
+  <!-- TODO: adrenal rule adds 5x go-juice, MayRequire Alpha Armory -->
+  <!-- TODO: chainsaw rule adds 50x chemfuel, MayRequire Alpha Armory -->
+  <!-- TODO: satiating rule adds 3x lavish meal, MayRequire Alpha Armory -->
+  <!-- TODO: bayonet rule removes components, MayRequire Alpha Armory -->
+  <!-- TODO: undersized rule 0.6x costs, MayRequire Alpha Armory -->
+  <!-- TODO: healing/lifesteal rule 10x medicine based on tech level, MayRequire Alpha Armory -->
+  <!-- TODO: firefoam rule adds 3x firefoarm shell, MayRequire Alpha Armory -->
+  <!-- TODO: deadlife rule adds 3x deadlife shell, MayRequire Alpha Armory, Anomaly -->
 
   <!-- ===== Late-running rules ===== -->
 

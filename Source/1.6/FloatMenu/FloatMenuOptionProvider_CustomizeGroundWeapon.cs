@@ -17,6 +17,8 @@ namespace UniqueWeaponsUnbound
         protected override FloatMenuOption GetSingleOptionFor(
             Thing clickedThing, FloatMenuContext context)
         {
+            if (!UWU_Mod.Settings.enableGroundCustomization)
+                return null;
             if (clickedThing is Building)
                 return null;
             if (!clickedThing.def.IsWeapon)

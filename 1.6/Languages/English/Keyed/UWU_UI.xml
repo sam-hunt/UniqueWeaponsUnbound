@@ -88,6 +88,8 @@
   <UWU_TraitRefundRate>Trait refund rate: {0}%</UWU_TraitRefundRate>
   <UWU_DefaultSuffix> (default)</UWU_DefaultSuffix>
   <UWU_RefundRateNoEffect>Trait refund rate has no effect while trait cost multiplier is 0%.</UWU_RefundRateNoEffect>
+  <UWU_UseRecipeBaseCost>Derive base cost from crafting recipe</UWU_UseRecipeBaseCost>
+  <UWU_UseRecipeBaseCostDesc>When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs.</UWU_UseRecipeBaseCostDesc>
 
   <!-- Settings: Prerequisites -->
   <UWU_RequireCustomizationResearch>Require customization research</UWU_RequireCustomizationResearch>
@@ -112,5 +114,7 @@
   <UWU_EnableStructureColorsDesc>Show structure color palette in the weapon customization color picker.</UWU_EnableStructureColorsDesc>
   <UWU_EnforceSoleTrait>Enforce sole-trait restrictions</UWU_EnforceSoleTrait>
   <UWU_EnforceSoleTraitDesc>Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization.</UWU_EnforceSoleTraitDesc>
+  <UWU_EnableGroundCustomization>Enable ground weapon right-click menu</UWU_EnableGroundCustomization>
+  <UWU_EnableGroundCustomizationDesc>Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button.</UWU_EnableGroundCustomizationDesc>
 
 </LanguageData>
