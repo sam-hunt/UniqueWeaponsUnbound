@@ -9,8 +9,6 @@ namespace UniqueWeaponsUnbound
 
         private void DrawTextureTab(Rect rect)
         {
-            float curY = rect.y;
-
             // Disabled: reverted to base
             if (IsRevertedToBase)
             {
@@ -27,16 +25,26 @@ namespace UniqueWeaponsUnbound
             // Pre-render all variant previews (cached, rebuilds on color/def change)
             EnsureTextureVariantPreviews();
 
-            // Grid of clickable texture variant cells
+            // Grid of clickable texture variant cells, scrollable when other mods
+            // add more variants than fit in the tab area.
+            float scrollWidth = rect.width - 16f;
             int cols = Mathf.Max(1,
-                Mathf.FloorToInt(rect.width / (TextureCellSize + TextureCellGap)));
+                Mathf.FloorToInt(scrollWidth / (TextureCellSize + TextureCellGap)));
 
+            int rows = (textureVariantCount + cols - 1) / cols;
+            float innerHeight = rows > 0
+                ? rows * TextureCellSize + Mathf.Max(0, rows - 1) * TextureCellGap
+                : 0f;
+
+            Rect innerRect = new Rect(0f, 0f, scrollWidth, innerHeight);
+            Widgets.BeginScrollView(rect, ref textureTabScroll, innerRect);
+
+            float curY = 0f;
             int col = 0;
-            float startX = rect.x;
             for (int i = 0; i < textureVariantCount; i++)
             {
                 Rect cellRect = new Rect(
-                    startX + col * (TextureCellSize + TextureCellGap),
+                    col * (TextureCellSize + TextureCellGap),
                     curY,
                     TextureCellSize,
                     TextureCellSize);
@@ -77,6 +85,8 @@ namespace UniqueWeaponsUnbound
                     curY += TextureCellSize + TextureCellGap;
                 }
             }
+
+            Widgets.EndScrollView();
         }
     }
 }
