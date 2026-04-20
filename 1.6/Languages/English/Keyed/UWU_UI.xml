@@ -112,6 +112,8 @@
   <UWU_EnableIdeoColorsDesc>Show Ideology and miscellaneous color palettes in the weapon customization color picker.</UWU_EnableIdeoColorsDesc>
   <UWU_EnableStructureColors>Enable structure color options</UWU_EnableStructureColors>
   <UWU_EnableStructureColorsDesc>Show structure color palette in the weapon customization color picker.</UWU_EnableStructureColorsDesc>
+  <UWU_EnforceMaxTraitLimit>Enforce trait count limit</UWU_EnforceMaxTraitLimit>
+  <UWU_EnforceMaxTraitLimitDesc>Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply).</UWU_EnforceMaxTraitLimitDesc>
   <UWU_EnforceSoleTrait>Enforce sole-trait restrictions</UWU_EnforceSoleTrait>
   <UWU_EnforceSoleTraitDesc>Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization.</UWU_EnforceSoleTraitDesc>
   <UWU_EnableGroundCustomization>Enable ground weapon right-click menu</UWU_EnableGroundCustomization>

@@ -49,7 +49,7 @@ namespace UniqueWeaponsUnbound
             if (desiredTraits.Contains(candidate))
                 return "UWU_AlreadyApplied".Translate();
 
-            if (desiredTraits.Count >= MaxTraits)
+            if (UWU_Mod.Settings.enforceMaxTraitLimit && desiredTraits.Count >= MaxTraits)
                 return "UWU_MaxTraitsReached".Translate();
 
             foreach (WeaponTraitDef existing in desiredTraits)

@@ -69,6 +69,7 @@ namespace UniqueWeaponsUnbound
 
         // UI state
         private Vector2 traitListScroll;
+        private Vector2 desiredTraitsScroll;
         private Vector2 colorTabScroll;
         private Vector2 textureTabScroll;
         private readonly QuickSearchWidget traitSearchWidget = new QuickSearchWidget();
@@ -325,6 +326,7 @@ namespace UniqueWeaponsUnbound
             desiredTextureIndex = originalTextureIndex;
             desiredColor = initialDesiredColor;
             traitListScroll = Vector2.zero;
+            desiredTraitsScroll = Vector2.zero;
         }
 
         private void OnTraitsChanged()

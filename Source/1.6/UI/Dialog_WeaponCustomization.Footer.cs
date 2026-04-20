@@ -12,7 +12,8 @@ namespace UniqueWeaponsUnbound
 
         private void DrawCostIcons(
             Rect rect, List<ThingDefCountClass> costs, bool rightAlign = false,
-            HashSet<ThingDef> insufficientResources = null, bool greenQuantities = false)
+            HashSet<ThingDef> insufficientResources = null, bool greenQuantities = false,
+            int maxVisible = 0)
         {
             // TODO: Decide behavior for uncraftable weapons — TraitCostUtility returns
             // empty list. Currently shows nothing. May want "Free" label or a warning.
@@ -22,16 +23,24 @@ namespace UniqueWeaponsUnbound
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleLeft;
 
+            // When the list exceeds maxVisible, show (maxVisible - 1) items + ellipsis
+            // to signal that more is hidden and prompt the player to hover for the tooltip.
+            bool truncated = maxVisible > 0 && costs.Count > maxVisible;
+            int shownCount = truncated ? maxVisible - 1 : costs.Count;
+            const string ellipsis = "...";
+
             float curX;
             if (rightAlign)
             {
                 // Pre-calculate total width so we can start from the right edge
                 float totalWidth = 0f;
-                foreach (ThingDefCountClass cost in costs)
+                for (int i = 0; i < shownCount; i++)
                 {
                     totalWidth += CostIconSize + 1f;
-                    totalWidth += Text.CalcSize("x" + cost.count).x + 6f;
+                    totalWidth += Text.CalcSize("x" + costs[i].count).x + 6f;
                 }
+                if (truncated)
+                    totalWidth += Text.CalcSize(ellipsis).x + 6f;
                 if (totalWidth > 0f)
                     totalWidth -= 6f; // Remove trailing gap
                 curX = Mathf.Max(rect.x, rect.xMax - totalWidth);
@@ -41,8 +50,9 @@ namespace UniqueWeaponsUnbound
                 curX = rect.x;
             }
 
-            foreach (ThingDefCountClass cost in costs)
+            for (int i = 0; i < shownCount; i++)
             {
+                ThingDefCountClass cost = costs[i];
                 if (curX + CostIconSize > rect.xMax)
                     break;
 
@@ -77,6 +87,13 @@ namespace UniqueWeaponsUnbound
                     Widgets.Label(textRect, countText);
                 }
                 curX += textWidth + 6f;
+            }
+
+            if (truncated)
+            {
+                float ellipsisWidth = Text.CalcSize(ellipsis).x;
+                Rect ellipsisRect = new Rect(curX, rect.y, ellipsisWidth, rect.height);
+                Widgets.Label(ellipsisRect, ellipsis);
             }
 
             Text.Font = GameFont.Small;

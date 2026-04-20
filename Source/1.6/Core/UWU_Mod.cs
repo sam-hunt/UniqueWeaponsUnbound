@@ -164,6 +164,13 @@ namespace UniqueWeaponsUnbound
             listing.Gap();
 
             listing.CheckboxLabeled(
+                "UWU_EnforceMaxTraitLimit".Translate(),
+                ref Settings.enforceMaxTraitLimit,
+                "UWU_EnforceMaxTraitLimitDesc".Translate());
+
+            listing.Gap();
+
+            listing.CheckboxLabeled(
                 "UWU_EnforceSoleTrait".Translate(),
                 ref Settings.enforceCanGenerateAlone,
                 "UWU_EnforceSoleTraitDesc".Translate());

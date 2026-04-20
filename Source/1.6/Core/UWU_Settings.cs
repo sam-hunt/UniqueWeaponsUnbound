@@ -11,6 +11,7 @@ namespace UniqueWeaponsUnbound
         public bool allowUltratechCustomization = true;
         public bool allowUncraftableCustomization = true;
         public bool allowDefConversion = true;
+        public bool enforceMaxTraitLimit = true;
         public bool enforceCanGenerateAlone;
         public bool enableIdeologyColors = true;
         public bool enableStructureColors = true;
@@ -28,6 +29,7 @@ namespace UniqueWeaponsUnbound
             allowUltratechCustomization = true;
             allowUncraftableCustomization = true;
             allowDefConversion = true;
+            enforceMaxTraitLimit = true;
             enforceCanGenerateAlone = false;
             enableIdeologyColors = true;
             enableStructureColors = true;
@@ -48,6 +50,7 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref allowUltratechCustomization, "allowUltratechCustomization", true);
             Scribe_Values.Look(ref allowUncraftableCustomization, "allowUncraftableCustomization", true);
             Scribe_Values.Look(ref allowDefConversion, "allowDefConversion", true);
+            Scribe_Values.Look(ref enforceMaxTraitLimit, "enforceMaxTraitLimit", true);
             Scribe_Values.Look(ref enforceCanGenerateAlone, "enforceCanGenerateAlone");
             Scribe_Values.Look(ref enableIdeologyColors, "enableIdeologyColors", true);
             Scribe_Values.Look(ref enableStructureColors, "enableStructureColors", true);

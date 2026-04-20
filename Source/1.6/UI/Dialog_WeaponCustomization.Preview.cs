@@ -50,63 +50,79 @@ namespace UniqueWeaponsUnbound
             Text.Anchor = TextAnchor.UpperLeft;
             curY += 20f;
 
-            // Desired traits as clickable chips
-            if (desiredTraits.Count > 0)
-            {
-
-                foreach (WeaponTraitDef trait in desiredTraits)
-                {
-                    float chipWidth = rect.width - 16f;
-                    Rect chipRect = new Rect(rect.x + 8f, curY, chipWidth, TraitRowHeight);
-
-                    // Chip background with hover highlight
-                    bool hovered = Mouse.IsOver(chipRect);
-                    Widgets.DrawBoxSolid(chipRect, hovered
-                        ? new Color(0.3f, 0.3f, 0.3f, 0.5f)
-                        : new Color(0.2f, 0.2f, 0.2f, 0.4f));
-
-                    // Label
-                    Text.Anchor = TextAnchor.MiddleLeft;
-                    Rect labelRect = new Rect(
-                        chipRect.x + 4f, chipRect.y,
-                        chipRect.width * 0.5f, chipRect.height);
-                    Widgets.Label(labelRect, trait.LabelCap);
-
-                    // Cost icons (right-aligned) — only for newly added traits
-                    if (!originalTraits.Contains(trait))
-                    {
-                        List<ThingDefCountClass> chipCosts = GetAdditionCost(trait);
-                        Rect chipCostRect = new Rect(
-                            labelRect.xMax, chipRect.y,
-                            chipRect.xMax - labelRect.xMax - 4f, chipRect.height);
-                        DrawCostIcons(chipCostRect, chipCosts, rightAlign: true,
-                            insufficientResources: insufficientResources);
-                    }
-
-                    Text.Anchor = TextAnchor.UpperLeft;
-
-                    // Tooltip (same as traits tab)
-                    string tooltip = BuildTraitTooltip(trait);
-                    if (!string.IsNullOrEmpty(tooltip))
-                        TooltipHandler.TipRegion(chipRect, tooltip);
-
-                    // Click: switch to traits tab and scroll trait into view
-                    if (Widgets.ButtonInvisible(chipRect))
-                    {
-                        activeTab = 0;
-                        int traitIndex = compatibleTraits.IndexOf(trait);
-                        if (traitIndex >= 0)
-                            traitListScroll.y = traitIndex * (TraitRowHeight + TraitRowGap);
-                    }
-
-                    curY += TraitRowHeight + 2f;
-                }
-            }
-
             // Bottom-aligned cost and refund summary (always visible)
             {
                 float costRowHeight = CostIconSize + 8f;
                 float bottomPadding = 6f;
+
+                // Reserve space for the two summary rows so chips can scroll above them
+                float summaryHeight = costRowHeight * 2f + bottomPadding;
+                float chipsAreaHeight = Mathf.Max(0f, rect.yMax - curY - summaryHeight - 4f);
+
+                if (desiredTraits.Count > 0 && chipsAreaHeight > 0f)
+                {
+                    Rect chipsOuterRect = new Rect(
+                        rect.x + 8f, curY, rect.width - 16f, chipsAreaHeight);
+                    float chipStride = TraitRowHeight + 2f;
+                    float chipsContentHeight = desiredTraits.Count * chipStride;
+                    bool needsScroll = chipsContentHeight > chipsAreaHeight;
+                    float innerWidth = needsScroll
+                        ? chipsOuterRect.width - 16f
+                        : chipsOuterRect.width;
+                    Rect chipsInnerRect = new Rect(0f, 0f, innerWidth, chipsContentHeight);
+
+                    Widgets.BeginScrollView(chipsOuterRect, ref desiredTraitsScroll, chipsInnerRect);
+
+                    float chipY = 0f;
+                    foreach (WeaponTraitDef trait in desiredTraits)
+                    {
+                        Rect chipRect = new Rect(0f, chipY, innerWidth, TraitRowHeight);
+
+                        // Chip background with hover highlight
+                        bool hovered = Mouse.IsOver(chipRect);
+                        Widgets.DrawBoxSolid(chipRect, hovered
+                            ? new Color(0.3f, 0.3f, 0.3f, 0.5f)
+                            : new Color(0.2f, 0.2f, 0.2f, 0.4f));
+
+                        // Label
+                        Text.Anchor = TextAnchor.MiddleLeft;
+                        Rect labelRect = new Rect(
+                            chipRect.x + 4f, chipRect.y,
+                            chipRect.width * 0.5f, chipRect.height);
+                        Widgets.Label(labelRect, trait.LabelCap);
+
+                        // Cost icons (right-aligned) — only for newly added traits
+                        if (!originalTraits.Contains(trait))
+                        {
+                            List<ThingDefCountClass> chipCosts = GetAdditionCost(trait);
+                            Rect chipCostRect = new Rect(
+                                labelRect.xMax, chipRect.y,
+                                chipRect.xMax - labelRect.xMax - 4f, chipRect.height);
+                            DrawCostIcons(chipCostRect, chipCosts, rightAlign: true,
+                                insufficientResources: insufficientResources);
+                        }
+
+                        Text.Anchor = TextAnchor.UpperLeft;
+
+                        // Tooltip (same as traits tab)
+                        string tooltip = BuildTraitTooltip(trait);
+                        if (!string.IsNullOrEmpty(tooltip))
+                            TooltipHandler.TipRegion(chipRect, tooltip);
+
+                        // Click: switch to traits tab and scroll trait into view
+                        if (Widgets.ButtonInvisible(chipRect))
+                        {
+                            activeTab = 0;
+                            int traitIndex = compatibleTraits.IndexOf(trait);
+                            if (traitIndex >= 0)
+                                traitListScroll.y = traitIndex * (TraitRowHeight + TraitRowGap);
+                        }
+
+                        chipY += chipStride;
+                    }
+
+                    Widgets.EndScrollView();
+                }
 
                 bool hasSurplus = currentSurplus != null && currentSurplus.Count > 0;
                 bool hasNetCost = currentNetCost != null && currentNetCost.Count > 0;
@@ -135,7 +151,10 @@ namespace UniqueWeaponsUnbound
                         new Rect(refundArea.x + refundLabelWidth, refundArea.y,
                             refundArea.width - refundLabelWidth, refundArea.height),
                         currentSurplus,
-                        greenQuantities: true);
+                        greenQuantities: true,
+                        maxVisible: 5);
+                    TooltipHandler.TipRegion(refundArea,
+                        refundLabel + FormatCostList(currentSurplus));
                 }
                 else
                 {
@@ -165,7 +184,10 @@ namespace UniqueWeaponsUnbound
                         new Rect(netCostArea.x + labelWidth, netCostArea.y,
                             netCostArea.width - labelWidth, netCostArea.height),
                         currentNetCost,
-                        insufficientResources: insufficientResources);
+                        insufficientResources: insufficientResources,
+                        maxVisible: 5);
+                    TooltipHandler.TipRegion(netCostArea,
+                        costLabel + FormatCostList(currentNetCost));
                 }
                 else
                 {
@@ -184,6 +206,14 @@ namespace UniqueWeaponsUnbound
                 }
                 Text.Anchor = TextAnchor.UpperLeft;
             }
+        }
+
+        private static string FormatCostList(List<ThingDefCountClass> costs)
+        {
+            var sb = new System.Text.StringBuilder();
+            foreach (ThingDefCountClass cost in costs)
+                sb.Append("\n  ").Append(cost.thingDef.LabelCap).Append(" x").Append(cost.count);
+            return sb.ToString();
         }
 
         private void DrawPreviewIcon(Rect rect)
