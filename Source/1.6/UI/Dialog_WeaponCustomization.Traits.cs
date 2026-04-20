@@ -11,12 +11,12 @@ namespace UniqueWeaponsUnbound
 
         private void DrawTraitsTab(Rect rect)
         {
-            float curY = rect.y;
+            float curY = rect.y + 6f;
 
             // Search field at top — matches vanilla z-search look and behaviour
-            Rect searchRect = new Rect(rect.x, curY, rect.width, QuickSearchWidget.WidgetHeight);
+            Rect searchRect = new Rect(rect.x, curY, rect.width - 6f, QuickSearchWidget.WidgetHeight);
             traitSearchWidget.OnGUI(searchRect);
-            curY += QuickSearchWidget.WidgetHeight + 4f;
+            curY += QuickSearchWidget.WidgetHeight + 7f;
 
             // Reserve space at the bottom for the negative traits toggle
             float checkSize = 24f;
