@@ -34,8 +34,6 @@ namespace UniqueWeaponsUnbound
                     baseToUnique[baseDef] = def;
                 }
             }
-
-            Log.Message($"[Unique Weapons Unbound] Cached {uniqueToBase.Count} base/unique weapon pairs.");
         }
 
         /// <summary>

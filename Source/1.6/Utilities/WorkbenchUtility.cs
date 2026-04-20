@@ -355,7 +355,6 @@ namespace UniqueWeaponsUnbound
             if (field == null)
                 return;
 
-            int added = 0;
             foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
             {
                 if (def.modExtensions == null)
@@ -387,16 +386,10 @@ namespace UniqueWeaponsUnbound
                     }
 
                     if (bestTier != null)
-                    {
                         bestTier.Add(def);
-                        added++;
-                    }
                     break;
                 }
             }
-
-            if (added > 0)
-                Log.Message($"[Unique Weapons Unbound] Classified {added} modded workbench(es) via VEF recipe inheritance.");
         }
 
         /// <summary>
@@ -430,8 +423,6 @@ namespace UniqueWeaponsUnbound
             weaponWorkbenchDefs.UnionWith(smithyDefs);
             weaponWorkbenchDefs.UnionWith(machiningDefs);
             weaponWorkbenchDefs.UnionWith(fabricationDefs);
-
-            Log.Message($"[Unique Weapons Unbound] Found {weaponWorkbenchDefs.Count} workbench(es) with weapon recipes.");
         }
 
         /// <summary>

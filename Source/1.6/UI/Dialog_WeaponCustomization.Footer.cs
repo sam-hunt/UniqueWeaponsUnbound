@@ -170,8 +170,6 @@ namespace UniqueWeaponsUnbound
                         desiredName = GenerateWeaponName();
                     }
 
-                    LogPlannedChanges();
-
                     // Build ordered operations list and spec — use net cost
                     // (total addition cost minus expected refunds) for hauling.
                     // The running job's wait-for-dialog toil will detect the
@@ -363,72 +361,6 @@ namespace UniqueWeaponsUnbound
                 finalColor = ResultingDef == uniqueDef ? EffectiveColor : null,
                 finalTextureIndex = ResultingDef == uniqueDef ? desiredTextureIndex : (int?)null,
             };
-        }
-
-        // --- Actions ---
-
-        private void LogPlannedChanges()
-        {
-            string logMsg = "[Unique Weapons Unbound] Planned changes for "
-                + weapon.LabelCap + ":\n";
-
-            List<WeaponTraitDef> adds = TraitsToAdd.ToList();
-            List<WeaponTraitDef> removes = TraitsToRemove.ToList();
-
-            if (adds.Count > 0)
-                logMsg += "  Add: " + string.Join(", ", adds.Select(t => t.LabelCap)) + "\n";
-            if (removes.Count > 0)
-                logMsg += "  Remove: " + string.Join(", ", removes.Select(t => t.LabelCap)) + "\n";
-
-            logMsg += "  Result: " + ResultingDef.LabelCap + " with "
-                + desiredTraits.Count + " trait(s)\n";
-
-            // Name change
-            if (desiredName != originalName)
-            {
-                if (string.IsNullOrEmpty(originalName))
-                    logMsg += "  Name: \"" + desiredName + "\" (new)\n";
-                else
-                    logMsg += "  Name: \"" + originalName + "\" \u2192 \"" + desiredName + "\"\n";
-            }
-
-            // Texture change
-            if (desiredTextureIndex != originalTextureIndex)
-            {
-                logMsg += "  Texture: variant " + (originalTextureIndex + 1)
-                    + " \u2192 " + (desiredTextureIndex + 1)
-                    + " (of " + textureVariantCount + ")\n";
-            }
-
-            // Color change
-            ColorDef effectiveColor = EffectiveColor;
-            if (effectiveColor != originalColor)
-            {
-                string origLabel = originalColor?.LabelCap ?? "none";
-                string newLabel = effectiveColor?.LabelCap ?? "none";
-                logMsg += "  Color: " + origLabel + " \u2192 " + newLabel;
-                if (GetForcedColor() != null)
-                    logMsg += " (forced by trait)";
-                logMsg += "\n";
-            }
-
-            if (currentTotalRefund != null && currentTotalRefund.Count > 0)
-            {
-                logMsg += "  Refund: " + string.Join(", ",
-                    currentTotalRefund.Select(c => c.thingDef.LabelCap + " x" + c.count)) + "\n";
-            }
-
-            if (currentNetCost != null && currentNetCost.Count > 0)
-            {
-                logMsg += "  Net cost: " + string.Join(", ",
-                    currentNetCost.Select(c => c.thingDef.LabelCap + " x" + c.count));
-            }
-            else
-            {
-                logMsg += "  Net cost: Free";
-            }
-
-            Log.Message(logMsg);
         }
 
         public override void OnCancelKeyPressed()

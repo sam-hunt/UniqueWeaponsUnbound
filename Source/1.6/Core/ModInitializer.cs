@@ -14,9 +14,6 @@ namespace UniqueWeaponsUnbound
             WeaponRegistry.Initialize();
             WorkbenchUtility.Initialize();
             TraitCostUtility.Initialize();
-
-            Log.Message("[Unique Weapons Unbound] Initialized with " +
-                harmony.GetPatchedMethods().EnumerableCount() + " patches.");
         }
     }
 }

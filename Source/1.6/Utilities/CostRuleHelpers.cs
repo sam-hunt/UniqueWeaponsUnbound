@@ -71,9 +71,6 @@ namespace UniqueWeaponsUnbound
             SteelSlagChunk = DefDatabase<ThingDef>.GetNamedSilentFail("ChunkSlagSteel");
             Thrumbofur = DefDatabase<ThingDef>.GetNamedSilentFail("Leather_Thrumbo");
             Silver = ThingDefOf.Silver;
-
-            Log.Message($"[Unique Weapons Unbound] Cached {rawResources.Count} raw resources, " +
-                $"{materialsByLabel.Count} material labels.");
         }
 
         /// <summary>

@@ -465,9 +465,6 @@ namespace UniqueWeaponsUnbound
                 // Apply final color after Setup() to ensure it sticks
                 if (spec.finalColor != null && uniqueComp != null)
                     WeaponModificationUtility.SetColor(weapon, spec.finalColor);
-
-                Log.Message($"[Unique Weapons Unbound] Applied {spec.operations.Count} " +
-                    $"operation(s) to {weapon.LabelCap}.");
             };
             finalize.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return finalize;

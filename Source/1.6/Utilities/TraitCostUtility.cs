@@ -41,8 +41,6 @@ namespace UniqueWeaponsUnbound
             cachedRules = DefDatabase<TraitCostRuleDef>.AllDefs
                 .OrderBy(d => d.priority)
                 .ToList();
-
-            Log.Message($"[Unique Weapons Unbound] Loaded {cachedRules.Count} trait cost rules.");
         }
 
         /// <summary>
