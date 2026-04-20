@@ -4,7 +4,7 @@ The perfect unique weapon rarely drops with the perfect traits. Now you can clos
 [hr][/hr]
 [h2]Trait Customization[/h2]
 [list]
-[*]Add and remove weapon traits at smithies, machining tables, and fabrication benches
+[*]Add and remove weapon traits at smithies, machining tables, and fabrication benches etc
 [*]Convert normal weapons into unique variants by adding their first trait
 [*]Remove all traits to revert a unique weapon back to its base form
 [*]Full vanilla validation: max 3 traits, conflict rules, and category restrictions are all enforced
@@ -22,7 +22,6 @@ Trait modifications aren't free. The cost system uses the weapon's own crafting 
 [h2]Colors, Textures & Names[/h2]
 [list]
 [*]Pick from standard weapon, Ideology (when DLC is active) and structure color palettes.
-[*]Ideo color and favorite color overlays help match your pawn's identity, just like Ideology's styling station
 [*]Browse texture variants for weapons with multiple visual styles
 [*]Auto-generate names using vanilla grammar or type your own
 [*]Trait-locked colors are clearly indicated so you know which trait controls the color
@@ -50,15 +49,16 @@ Customization is gated behind three tiers of research that mirror weapon craftin
 [*]Ideo and favorite color overlays appear in the color picker
 [/list]
 
+
 [hr][/hr]
 [h1]Mod Compatibility[/h1]
 [list]
-[*]Automatically compatible with mods that add new unique weapons, weapon traits, or crafting recipes. No hard-coded def references
-[*]Modded workbenches that inherit vanilla weapon recipes are detected automatically
-[*]Works with CE, PUAH, Ideology and Simple sidearms
-[*]Modders can extend the cost pipeline with XML-only rules or custom C# workers (see [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Modder's Guide[/url])
 [*]Safe to add to existing saves
 [*]Safe to remove from saves (safe-to-ignore red errors only)
+[*]Automatically compatible with mods that add new unique weapons, weapon traits, or crafting recipes. No hard-coded def references
+[*]Modded workbenches that inherit vanilla weapon recipes are detected automatically
+[*]Works with CE, PUAH, Ideology, Simple sidearms, Make it Unique, Alpha Armory
+[*]Modders can extend the cost pipeline with XML-only rules or custom C# workers (see [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Modder's Guide[/url]). The XML API is pretty basic at the moment, but it will be getting some major love soon.
 [/list]
 
 [hr][/hr]
@@ -66,11 +66,8 @@ Customization is gated behind three tiers of research that mirror weapon craftin
 [b]Q: Do I need the Odyssey DLC?[/b]
 A: Yes. This mod builds on Odyssey's unique weapon system.
 
-[b]Q: Does this work with Ideology?[/b]
-A: Yes. Ideology support is automatic. Relic handling and ideo color palettes appear when the DLC is active.
-
-[b]Q: Combat Extended?[/b]
-A: Yes? I don't know much about CE, but testing showed no errors. Trait costs adjust automatically for CE's adjusted crafting costs.
+[b]Q: Why can't I customize [weapon name]?[/b]
+A: Only weapons that support vanilla's unique weapon system can be customized. Odyssey defines a [url=https://rimworldwiki.com/wiki/Unique_weapons]limited list of eligible weapons[/url], and mods are free to add their own. If a weapon isn't on that list, it's the base game (or the mod that adds it) that decides, not this mod.
 
 [b]Q: Can I customize weapons from other mods?[/b]
 A: If the mod adds unique weapons using vanilla's CompUniqueWeapon system, they're automatically supported. Costs are calculated from the weapon's crafting recipe.
@@ -80,6 +77,10 @@ A: That's up to you. The default settings require research, matching workbenches
 
 [b]Q: Can I interrupt a customization job safely?[/b]
 A: Yes. Each trait change is a separate crafting job. Interrupting won't lose resources; unfinished work is simply cancelled.
+
+[b]Q: Combat Extended?[/b]
+A: Yes? I don't know much about CE, but testing showed no errors. Trait costs adjust automatically for CE's adjusted crafting costs.
+
 
 [h2]Links[/h2]
 [url=https://github.com/sam-hunt/UniqueWeaponsUnbound]GitHub[/url] - Source code, bug reports, and feature requests
