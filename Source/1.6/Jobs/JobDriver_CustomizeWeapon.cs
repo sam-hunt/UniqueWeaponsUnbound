@@ -153,6 +153,111 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
+        /// <summary>
+        /// Returns the total reservable count of <paramref name="thingDef"/> across all
+        /// currently placed ingredient stacks, ignoring destroyed/despawned ones.
+        /// </summary>
+        private int CountInPlaced(ThingDef thingDef)
+        {
+            int available = 0;
+            for (int i = 0; i < placedIngredients.Count; i++)
+            {
+                Thing stack = placedIngredients[i];
+                if (stack.Destroyed || !stack.Spawned || stack.def != thingDef)
+                    continue;
+                available += stack.stackCount;
+            }
+            return available;
+        }
+
+        /// <summary>
+        /// Returns true if an op's cost could currently be paid from the refund
+        /// ledger plus placed ingredients, without committing any state. Used as a
+        /// pre-flight check before starting an op's work cycle so the pawn doesn't
+        /// waste 1000 ticks of work on an op we already know will abort.
+        /// </summary>
+        private bool CanAffordOpCost(List<ThingDefCountClass> opCost)
+        {
+            if (opCost == null || opCost.Count == 0)
+                return true;
+
+            foreach (ThingDefCountClass cost in opCost)
+            {
+                int remaining = cost.count;
+                if (refundLedger.TryGetValue(cost.thingDef, out float credit) && credit > 0f)
+                    remaining -= Mathf.Min(remaining, Mathf.FloorToInt(credit));
+                if (remaining > 0 && CountInPlaced(cost.thingDef) < remaining)
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Pays an op's cost: debits the refund ledger first, then consumes the
+        /// remainder from placed ingredient stacks at the workbench. Pre-checks
+        /// availability and only commits if the cost can be fully paid, so a
+        /// shortfall (e.g. ingredients destroyed by fire/explosion/deterioration)
+        /// leaves the ledger and the weapon untouched. Returns false on shortfall —
+        /// caller should notify the player and abort the job.
+        /// </summary>
+        private bool TryConsumeOpCost(List<ThingDefCountClass> opCost)
+        {
+            if (opCost == null || opCost.Count == 0)
+                return true;
+
+            // First pass: compute what we'd take from the ledger and from placed
+            // ingredients, without committing.
+            var fromPlaced = new List<ThingDefCountClass>();
+            var pendingDebit = new Dictionary<ThingDef, int>();
+            foreach (ThingDefCountClass cost in opCost)
+            {
+                int remaining = cost.count;
+                if (refundLedger.TryGetValue(cost.thingDef, out float credit) && credit > 0f)
+                {
+                    int debit = Mathf.Min(remaining, Mathf.FloorToInt(credit));
+                    if (debit > 0)
+                    {
+                        pendingDebit[cost.thingDef] = debit;
+                        remaining -= debit;
+                    }
+                }
+                if (remaining > 0)
+                    fromPlaced.Add(new ThingDefCountClass(cost.thingDef, remaining));
+            }
+
+            // Verify the placed-ingredient remainder can be satisfied before
+            // mutating any state.
+            foreach (ThingDefCountClass need in fromPlaced)
+            {
+                if (CountInPlaced(need.thingDef) < need.count)
+                    return false;
+            }
+
+            // Commit ledger debits and ingredient consumption.
+            foreach (KeyValuePair<ThingDef, int> kv in pendingDebit)
+                refundLedger[kv.Key] -= kv.Value;
+            if (fromPlaced.Count > 0)
+                ConsumeFromPlacedIngredients(fromPlaced);
+            return true;
+        }
+
+        /// <summary>
+        /// Surfaces a transient top-left message when an op can't be paid because
+        /// placed ingredients were destroyed at the workbench. Non-historical so it
+        /// fades quickly without polluting the event log — this is a normal, recoverable
+        /// outcome the player should notice but not have to acknowledge.
+        /// </summary>
+        private void NotifyIngredientShortfall(WeaponTraitDef trait)
+        {
+            string weaponLabel = weapon?.LabelShortCap ?? "UWU_WeaponFallback".Translate();
+            string traitLabel = trait?.LabelCap ?? "";
+            Messages.Message(
+                "UWU_IngredientShortfall".Translate(weaponLabel, traitLabel),
+                pawn,
+                MessageTypeDefOf.NegativeEvent,
+                historical: false);
+        }
+
         public override string GetReport()
         {
             if (phaseReport != null)
@@ -434,6 +539,25 @@ namespace UniqueWeaponsUnbound
 
             yield return startWorkLoop;
 
+            // Pre-flight: verify the upcoming op can be paid before sinking
+            // 1000 ticks of work into it. Catches placed-ingredient losses
+            // (fire, deterioration, etc.) at the start of each iteration so the
+            // pawn doesn't waste a full work cycle on a cost we already can't pay.
+            Toil precheckOp = ToilMaker.MakeToil("MakeNewToils");
+            precheckOp.initAction = delegate
+            {
+                if (spec == null || currentOpIndex >= spec.operations.Count)
+                    return;
+                CustomizationOp op = spec.operations[currentOpIndex];
+                if (!CanAffordOpCost(op.cost))
+                {
+                    NotifyIngredientShortfall(op.trait);
+                    EndJobWith(JobCondition.Incompletable);
+                }
+            };
+            precheckOp.defaultCompleteMode = ToilCompleteMode.Instant;
+            yield return precheckOp;
+
             Toil workToil = Toils_General.Wait(WorkTicksPerOp, WorkbenchIndex);
             workToil.AddPreTickAction(delegate
             {
@@ -456,7 +580,7 @@ namespace UniqueWeaponsUnbound
             applyOp.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return applyOp;
 
-            yield return Toils_Jump.JumpIf(workToil, () => currentOpIndex < spec.operations.Count);
+            yield return Toils_Jump.JumpIf(precheckOp, () => currentOpIndex < spec.operations.Count);
 
             // === FINALIZE ===
 
@@ -541,6 +665,16 @@ namespace UniqueWeaponsUnbound
             switch (op.type)
             {
                 case OpType.RemoveTrait:
+                    // Negative-trait removals carry a cost (op.cost). Pay it before
+                    // removing the trait so a placed-ingredient shortfall can't leave
+                    // the trait already gone with no payment recorded.
+                    if (!TryConsumeOpCost(op.cost))
+                    {
+                        NotifyIngredientShortfall(op.trait);
+                        EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
+
                     WeaponModificationUtility.RemoveTrait(weapon, op.trait);
 
                     // Credit refund to the virtual ledger atomically with the removal.
@@ -559,28 +693,6 @@ namespace UniqueWeaponsUnbound
                             else
                                 refundLedger[refund.thingDef] = credit;
                         }
-                    }
-
-                    // Negative trait removals cost resources instead of refunding them.
-                    // Debit refund ledger first, then consume from placed ingredients.
-                    if (op.cost != null && op.cost.Count > 0)
-                    {
-                        var adjustedCost = new List<ThingDefCountClass>();
-                        foreach (ThingDefCountClass cost in op.cost)
-                        {
-                            int remaining = cost.count;
-                            if (refundLedger.TryGetValue(cost.thingDef, out float credit)
-                                && credit > 0f)
-                            {
-                                int debit = Mathf.Min(remaining, Mathf.FloorToInt(credit));
-                                remaining -= debit;
-                                refundLedger[cost.thingDef] = credit - debit;
-                            }
-                            if (remaining > 0)
-                                adjustedCost.Add(new ThingDefCountClass(cost.thingDef, remaining));
-                        }
-                        if (adjustedCost.Count > 0)
-                            ConsumeFromPlacedIngredients(adjustedCost);
                     }
 
                     // If removing the last trait, convert unique→base atomically
@@ -605,6 +717,16 @@ namespace UniqueWeaponsUnbound
                     break;
 
                 case OpType.AddTrait:
+                    // Pay the cost first — if placed ingredients have been destroyed
+                    // (fire, explosion, deterioration), abort cleanly before any
+                    // mutation (def conversion, trait add) leaves a partial state.
+                    if (!TryConsumeOpCost(op.cost))
+                    {
+                        NotifyIngredientShortfall(op.trait);
+                        EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
+
                     // If weapon is currently base, convert base→unique first
                     if (!WeaponRegistry.IsUniqueWeapon(weapon.def) && UWU_Mod.Settings.allowDefConversion)
                     {
@@ -613,28 +735,6 @@ namespace UniqueWeaponsUnbound
                             ConvertWeaponInPlace(uniqueDef);
                     }
 
-                    // Debit refund ledger first, then consume remainder from
-                    // placed ingredient stacks at the workbench
-                    if (op.cost != null && op.cost.Count > 0)
-                    {
-                        var adjustedCost = new List<ThingDefCountClass>();
-                        foreach (ThingDefCountClass cost in op.cost)
-                        {
-                            int remaining = cost.count;
-                            if (refundLedger.TryGetValue(cost.thingDef, out float credit)
-                                && credit > 0f)
-                            {
-                                // Floor the credit to get whole units we can offset
-                                int debit = Mathf.Min(remaining, Mathf.FloorToInt(credit));
-                                remaining -= debit;
-                                refundLedger[cost.thingDef] = credit - debit;
-                            }
-                            if (remaining > 0)
-                                adjustedCost.Add(new ThingDefCountClass(cost.thingDef, remaining));
-                        }
-                        if (adjustedCost.Count > 0)
-                            ConsumeFromPlacedIngredients(adjustedCost);
-                    }
                     WeaponModificationUtility.AddTrait(weapon, op.trait);
 
                     // Apply bundled cosmetics (merged from a cosmetics op that
