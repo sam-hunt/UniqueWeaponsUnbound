@@ -59,9 +59,14 @@ namespace UniqueWeaponsUnbound
                         break;
                     if (!WeaponModificationUtility.CanPawnUseIngredient(stack, pawn))
                         continue;
+                    // CanReserve passed, but Reserve can still fail in the narrow window
+                    // between dialog close (forcePause ends) and this toil running on the
+                    // next tick. Skip and keep searching rather than queueing a stack we
+                    // didn't actually secure.
+                    if (!pawn.Reserve(stack, job, 1, -1, null, errorOnFailed: false))
+                        continue;
 
                     int toTake = Mathf.Min(remaining, stack.stackCount);
-                    pawn.Reserve(stack, job);
                     job.targetQueueA.Add(stack);
                     job.countQueue.Add(toTake);
                     remaining -= toTake;
@@ -71,7 +76,7 @@ namespace UniqueWeaponsUnbound
                 {
                     if (errorOnFailed)
                         Log.Warning($"[Unique Weapons Unbound] Not enough {cost.thingDef.LabelCap} " +
-                            $"on map: need {cost.count}, found {cost.count - remaining}.");
+                            $"reservable for customization: need {cost.count}, secured {cost.count - remaining}.");
                     return false;
                 }
             }
