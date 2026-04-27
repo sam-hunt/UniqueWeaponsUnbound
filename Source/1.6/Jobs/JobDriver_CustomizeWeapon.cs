@@ -23,9 +23,53 @@ namespace UniqueWeaponsUnbound
         private WeaponReturnMode returnMode;
         private Dictionary<ThingDef, float> refundLedger = new Dictionary<ThingDef, float>();
         private List<Thing> placedIngredients = new List<Thing>();
+        // First bail reason (translated, ready to surface). Read by the finish action
+        // when the job ends with Incompletable. First-set wins so downstream cascade
+        // failures don't overwrite the original cause.
+        private string bailMessage;
 
         private Building_WorkTable Workbench =>
             (Building_WorkTable)job.GetTarget(WorkbenchIndex).Thing;
+
+        /// <summary>
+        /// Best label for the weapon: the live Thing if we have one, otherwise the
+        /// job target (still labelled even if despawned), otherwise a fallback.
+        /// Stays valid through every bail path including pre-acquire failures.
+        /// </summary>
+        private string WeaponLabel
+        {
+            get
+            {
+                if (weapon != null && !weapon.Destroyed)
+                    return weapon.LabelShortCap;
+                Thing target = job?.GetTarget(WeaponIndex).Thing;
+                if (target != null)
+                    return target.LabelShortCap;
+                return "UWU_WeaponFallback".Translate();
+            }
+        }
+
+        /// <summary>
+        /// Records the first bail reason. Subsequent calls are ignored so a primary
+        /// failure isn't overwritten by a downstream cascade. The recorded text is
+        /// surfaced as a top-left Messages.Message when the finish action runs.
+        /// </summary>
+        private void SetBailMessage(string text)
+        {
+            if (string.IsNullOrEmpty(bailMessage))
+                bailMessage = text;
+        }
+
+        /// <summary>
+        /// Records the standard "ingredients lost mid-customization" bail message
+        /// for the given trait. Used by the precheck toil and by the per-op consume
+        /// paths in <see cref="ApplyOperation"/>.
+        /// </summary>
+        private void RecordShortfallBail(WeaponTraitDef trait)
+        {
+            string traitLabel = trait?.LabelCap ?? "";
+            SetBailMessage("UWU_IngredientShortfall".Translate(WeaponLabel, traitLabel));
+        }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -38,48 +82,6 @@ namespace UniqueWeaponsUnbound
             if (w != null && w.Spawned
                 && !pawn.Reserve(w, job, 1, -1, null, errorOnFailed))
                 return false;
-
-            return true;
-        }
-
-        private bool FindAndReserveIngredients(bool errorOnFailed)
-        {
-            if (spec.totalCost == null || spec.totalCost.Count == 0)
-                return true;
-
-            job.targetQueueA = new List<LocalTargetInfo>();
-            job.countQueue = new List<int>();
-
-            foreach (ThingDefCountClass cost in spec.totalCost)
-            {
-                int remaining = cost.count;
-                foreach (Thing stack in pawn.Map.listerThings.ThingsOfDef(cost.thingDef))
-                {
-                    if (remaining <= 0)
-                        break;
-                    if (!WeaponModificationUtility.CanPawnUseIngredient(stack, pawn))
-                        continue;
-                    // CanReserve passed, but Reserve can still fail in the narrow window
-                    // between dialog close (forcePause ends) and this toil running on the
-                    // next tick. Skip and keep searching rather than queueing a stack we
-                    // didn't actually secure.
-                    if (!pawn.Reserve(stack, job, 1, -1, null, errorOnFailed: false))
-                        continue;
-
-                    int toTake = Mathf.Min(remaining, stack.stackCount);
-                    job.targetQueueA.Add(stack);
-                    job.countQueue.Add(toTake);
-                    remaining -= toTake;
-                }
-
-                if (remaining > 0)
-                {
-                    if (errorOnFailed)
-                        Log.Warning($"[Unique Weapons Unbound] Not enough {cost.thingDef.LabelCap} " +
-                            $"reservable for customization: need {cost.count}, secured {cost.count - remaining}.");
-                    return false;
-                }
-            }
 
             return true;
         }
@@ -241,23 +243,6 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        /// <summary>
-        /// Surfaces a transient top-left message when an op can't be paid because
-        /// placed ingredients were destroyed at the workbench. Non-historical so it
-        /// fades quickly without polluting the event log — this is a normal, recoverable
-        /// outcome the player should notice but not have to acknowledge.
-        /// </summary>
-        private void NotifyIngredientShortfall(WeaponTraitDef trait)
-        {
-            string weaponLabel = weapon?.LabelShortCap ?? "UWU_WeaponFallback".Translate();
-            string traitLabel = trait?.LabelCap ?? "";
-            Messages.Message(
-                "UWU_IngredientShortfall".Translate(weaponLabel, traitLabel),
-                pawn,
-                MessageTypeDefOf.NegativeEvent,
-                historical: false);
-        }
-
         public override string GetReport()
         {
             if (phaseReport != null)
@@ -292,14 +277,34 @@ namespace UniqueWeaponsUnbound
             CompPowerTrader powerComp = Workbench.TryGetComp<CompPowerTrader>();
             CompRefuelable fuelComp = Workbench.TryGetComp<CompRefuelable>();
 
-            this.FailOnDespawnedNullOrForbidden(WorkbenchIndex);
-            // weapon is null during the acquire/carry phase; only check once set
-            this.FailOn(() => weapon != null && weapon.Destroyed);
-            // Interrupt if workbench loses power or runs out of fuel
+            // Workbench gone (despawned, destroyed, or forbidden)
             this.FailOn(() =>
-                (powerComp != null && !powerComp.PowerOn) ||
-                (fuelComp != null && !fuelComp.HasFuel));
-            AddFinishAction(delegate
+            {
+                Thing wb = job.GetTarget(WorkbenchIndex).Thing;
+                bool gone = wb == null || !wb.Spawned || wb.IsForbidden(pawn);
+                if (gone)
+                    SetBailMessage("UWU_BailWorkbenchUnavailable".Translate(WeaponLabel));
+                return gone;
+            });
+            // Weapon destroyed mid-job. weapon is null during the acquire/carry phase;
+            // only check once set.
+            this.FailOn(() =>
+            {
+                if (weapon == null || !weapon.Destroyed)
+                    return false;
+                SetBailMessage("UWU_BailWeaponLost".Translate(WeaponLabel));
+                return true;
+            });
+            // Workbench loses power or runs out of fuel mid-job.
+            this.FailOn(() =>
+            {
+                bool inactive = (powerComp != null && !powerComp.PowerOn)
+                    || (fuelComp != null && !fuelComp.HasFuel);
+                if (inactive)
+                    SetBailMessage("UWU_BailWorkbenchInactive".Translate(WeaponLabel));
+                return inactive;
+            });
+            AddFinishAction(delegate(JobCondition condition)
             {
                 CustomizationSpec.Clear(pawn);
 
@@ -325,6 +330,16 @@ namespace UniqueWeaponsUnbound
                     refundLedger.Clear();
                 }
 
+                // Surface the recorded bail reason as a transient top-left message.
+                // Restricted to Incompletable so player-driven interrupts (drafting,
+                // cancelling) and dev-error paths (Errored) stay silent.
+                if (condition == JobCondition.Incompletable
+                    && !string.IsNullOrEmpty(bailMessage))
+                {
+                    Messages.Message(bailMessage, pawn,
+                        MessageTypeDefOf.NegativeEvent, historical: false);
+                }
+
                 // On interruption, queue a follow-up job so the pawn walks
                 // back to retrieve the weapon naturally (no teleporting).
                 QueueWeaponRecovery();
@@ -342,6 +357,7 @@ namespace UniqueWeaponsUnbound
                 Thing w = job.GetTarget(WeaponIndex).Thing;
                 if (w == null || w.Destroyed)
                 {
+                    SetBailMessage("UWU_BailWeaponLost".Translate(WeaponLabel));
                     EndJobWith(JobCondition.Incompletable);
                     return;
                 }
@@ -393,7 +409,14 @@ namespace UniqueWeaponsUnbound
 
             // Ground weapon path: walk to weapon, pick it up
             yield return Toils_Goto.GotoThing(WeaponIndex, PathEndMode.ClosestTouch)
-                .FailOnDespawnedNullOrForbidden(WeaponIndex);
+                .FailOn(() =>
+                {
+                    Thing w = job.GetTarget(WeaponIndex).Thing;
+                    bool gone = w == null || !w.Spawned || w.IsForbidden(pawn);
+                    if (gone)
+                        SetBailMessage("UWU_BailWeaponInaccessible".Translate(WeaponLabel));
+                    return gone;
+                });
 
             yield return Toils_Haul.StartCarryThing(WeaponIndex);
 
@@ -433,6 +456,7 @@ namespace UniqueWeaponsUnbound
             {
                 if (weapon == null || weapon.Destroyed)
                 {
+                    SetBailMessage("UWU_BailWeaponLost".Translate(WeaponLabel));
                     EndJobWith(JobCondition.Incompletable);
                     return;
                 }
@@ -468,9 +492,10 @@ namespace UniqueWeaponsUnbound
                     EndJobWith(JobCondition.Errored);
                     return;
                 }
-
-                if (!FindAndReserveIngredients(true))
-                    EndJobWith(JobCondition.Incompletable);
+                // Ingredients were reserved synchronously when the player confirmed
+                // the dialog (under forcePause). job.targetQueueA / countQueue are
+                // already populated; this toil is just the boundary between dialog
+                // phase and haul phase.
             };
             consumeSpec.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return consumeSpec;
@@ -505,7 +530,14 @@ namespace UniqueWeaponsUnbound
             yield return extract;
 
             yield return Toils_Goto.GotoThing(IngredientIndex, PathEndMode.ClosestTouch)
-                .FailOnDespawnedNullOrForbidden(IngredientIndex);
+                .FailOn(() =>
+                {
+                    Thing ing = job.GetTarget(IngredientIndex).Thing;
+                    bool gone = ing == null || !ing.Spawned || ing.IsForbidden(pawn);
+                    if (gone)
+                        SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                    return gone;
+                });
 
             yield return Toils_Haul.StartCarryThing(IngredientIndex, putRemainderInQueue: true);
 
@@ -551,7 +583,7 @@ namespace UniqueWeaponsUnbound
                 CustomizationOp op = spec.operations[currentOpIndex];
                 if (!CanAffordOpCost(op.cost))
                 {
-                    NotifyIngredientShortfall(op.trait);
+                    RecordShortfallBail(op.trait);
                     EndJobWith(JobCondition.Incompletable);
                 }
             };
@@ -670,7 +702,7 @@ namespace UniqueWeaponsUnbound
                     // the trait already gone with no payment recorded.
                     if (!TryConsumeOpCost(op.cost))
                     {
-                        NotifyIngredientShortfall(op.trait);
+                        RecordShortfallBail(op.trait);
                         EndJobWith(JobCondition.Incompletable);
                         return;
                     }
@@ -722,7 +754,7 @@ namespace UniqueWeaponsUnbound
                     // mutation (def conversion, trait add) leaves a partial state.
                     if (!TryConsumeOpCost(op.cost))
                     {
-                        NotifyIngredientShortfall(op.trait);
+                        RecordShortfallBail(op.trait);
                         EndJobWith(JobCondition.Incompletable);
                         return;
                     }

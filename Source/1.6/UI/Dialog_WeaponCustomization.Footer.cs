@@ -172,9 +172,26 @@ namespace UniqueWeaponsUnbound
 
                     // Build ordered operations list and spec — use net cost
                     // (total addition cost minus expected refunds) for hauling.
-                    // The running job's wait-for-dialog toil will detect the
-                    // stored spec on the next tick and advance to work phase.
                     var spec = BuildCustomizationSpec(currentNetCost);
+
+                    // Reserve ingredients synchronously while forcePause holds the game
+                    // still — no other pawn AI runs between the per-frame availability
+                    // check and this commit, so what the player saw is what they get.
+                    Verse.AI.Job job = pawn.CurJob;
+                    if (job == null
+                        || !WeaponModificationUtility.TryReserveIngredientsForJob(
+                            pawn, job, spec.totalCost))
+                    {
+                        // Defensive — should be unreachable under forcePause. Leave the
+                        // dialog open so the per-frame availability recompute reveals the
+                        // new state on the next render.
+                        Log.Warning("[Unique Weapons Unbound] Confirmed customization but "
+                            + "could not reserve ingredients. Dialog left open.");
+                        return;
+                    }
+
+                    // The running job's wait-for-dialog toil detects the stored spec on
+                    // the next tick and advances straight to the haul phase.
                     CustomizationSpec.Store(pawn, spec);
                     Close();
                 }

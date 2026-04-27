@@ -8,6 +8,7 @@
 - Selecting traits in the lhs pane to scrollTo in the rhs pane doesn't account for search bar height
 - Customization interrupted message on more failure modes?
 - Dev mode mod settings page button to copy settings to clipboard
+- Unique Fab research project placement collides with VGE
 - Extend XML WeaponTraitCostDef schema/workers
 - Add Alpha Armory rules support
 - Rescale quality multipliers

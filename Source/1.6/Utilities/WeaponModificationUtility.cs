@@ -272,5 +272,55 @@ namespace UniqueWeaponsUnbound
             }
             return count;
         }
+
+        /// <summary>
+        /// Searches the map for stacks matching <paramref name="totalCost"/>, reserves
+        /// each against <paramref name="job"/>, and populates job.targetQueueA / countQueue
+        /// for the haul phase. Atomic: if the demand can't be fully satisfied, releases
+        /// any reservations it just made and returns false without mutating the job's queues.
+        /// Designed to be callable from the customization dialog while forcePause is active,
+        /// so the reservations are locked in before any other pawn AI runs.
+        /// </summary>
+        public static bool TryReserveIngredientsForJob(
+            Pawn pawn, Job job, List<ThingDefCountClass> totalCost)
+        {
+            if (totalCost == null || totalCost.Count == 0)
+                return true;
+
+            var reserved = new List<Thing>();
+            var queueA = new List<LocalTargetInfo>();
+            var countQueue = new List<int>();
+
+            foreach (ThingDefCountClass cost in totalCost)
+            {
+                int remaining = cost.count;
+                foreach (Thing stack in pawn.Map.listerThings.ThingsOfDef(cost.thingDef))
+                {
+                    if (remaining <= 0)
+                        break;
+                    if (!CanPawnUseIngredient(stack, pawn))
+                        continue;
+                    if (!pawn.Reserve(stack, job, 1, -1, null, errorOnFailed: false))
+                        continue;
+
+                    reserved.Add(stack);
+                    int toTake = UnityEngine.Mathf.Min(remaining, stack.stackCount);
+                    queueA.Add(stack);
+                    countQueue.Add(toTake);
+                    remaining -= toTake;
+                }
+
+                if (remaining > 0)
+                {
+                    foreach (Thing t in reserved)
+                        pawn.Map.reservationManager.Release(t, pawn, job);
+                    return false;
+                }
+            }
+
+            job.targetQueueA = queueA;
+            job.countQueue = countQueue;
+            return true;
+        }
     }
 }
