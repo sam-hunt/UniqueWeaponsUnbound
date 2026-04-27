@@ -5,6 +5,20 @@ All notable changes to Unique Weapons Unbound will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-04-28
+
+### Added
+
+- Minimum weapon quality threshold gate for customization
+
+### Fixed
+
+- Customization now aborts cleanly when placed ingredients are lost mid-job
+- Ingredient stacks that fail to reserve mid-job are now skipped instead of stalling
+- Unreachable materials are now reported as availability failures
+- Customization job failures are now surfaced to the player
+- When the weapon is lost simultaneously with another failure, the weapon-loss message takes priority
+
 ## [1.0.1] - 2026-04-21
 
 ### Added
@@ -35,5 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.0.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.2
 [1.0.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.1
 [1.0.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.0
