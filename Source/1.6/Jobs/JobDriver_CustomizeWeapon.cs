@@ -277,6 +277,16 @@ namespace UniqueWeaponsUnbound
             CompPowerTrader powerComp = Workbench.TryGetComp<CompPowerTrader>();
             CompRefuelable fuelComp = Workbench.TryGetComp<CompRefuelable>();
 
+            // Weapon destroyed mid-job. weapon is null during the acquire/carry phase;
+            // only check once set. Checked before workbench so simultaneous losses
+            // surface the weapon — the more player-relevant outcome.
+            this.FailOn(() =>
+            {
+                if (weapon == null || !weapon.Destroyed)
+                    return false;
+                SetBailMessage("UWU_BailWeaponLost".Translate(WeaponLabel));
+                return true;
+            });
             // Workbench gone (despawned, destroyed, forbidden, or walled off).
             // Covers both gotoWorkbench calls (carrying weapon, and carrying the
             // ingredient back) plus any phase where the workbench must remain
@@ -295,15 +305,6 @@ namespace UniqueWeaponsUnbound
                     return true;
                 }
                 return false;
-            });
-            // Weapon destroyed mid-job. weapon is null during the acquire/carry phase;
-            // only check once set.
-            this.FailOn(() =>
-            {
-                if (weapon == null || !weapon.Destroyed)
-                    return false;
-                SetBailMessage("UWU_BailWeaponLost".Translate(WeaponLabel));
-                return true;
             });
             // Workbench loses power or runs out of fuel mid-job.
             this.FailOn(() =>
