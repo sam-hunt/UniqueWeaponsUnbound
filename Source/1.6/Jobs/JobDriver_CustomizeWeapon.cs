@@ -277,14 +277,24 @@ namespace UniqueWeaponsUnbound
             CompPowerTrader powerComp = Workbench.TryGetComp<CompPowerTrader>();
             CompRefuelable fuelComp = Workbench.TryGetComp<CompRefuelable>();
 
-            // Workbench gone (despawned, destroyed, or forbidden)
+            // Workbench gone (despawned, destroyed, forbidden, or walled off).
+            // Covers both gotoWorkbench calls (carrying weapon, and carrying the
+            // ingredient back) plus any phase where the workbench must remain
+            // reachable to continue.
             this.FailOn(() =>
             {
                 Thing wb = job.GetTarget(WorkbenchIndex).Thing;
-                bool gone = wb == null || !wb.Spawned || wb.IsForbidden(pawn);
-                if (gone)
+                if (wb == null || !wb.Spawned || wb.IsForbidden(pawn))
+                {
                     SetBailMessage("UWU_BailWorkbenchUnavailable".Translate(WeaponLabel));
-                return gone;
+                    return true;
+                }
+                if (!pawn.CanReach(wb, PathEndMode.InteractionCell, Danger.Deadly))
+                {
+                    SetBailMessage("UWU_BailWorkbenchUnreachable".Translate(WeaponLabel));
+                    return true;
+                }
+                return false;
             });
             // Weapon destroyed mid-job. weapon is null during the acquire/carry phase;
             // only check once set.
@@ -412,7 +422,8 @@ namespace UniqueWeaponsUnbound
                 .FailOn(() =>
                 {
                     Thing w = job.GetTarget(WeaponIndex).Thing;
-                    bool gone = w == null || !w.Spawned || w.IsForbidden(pawn);
+                    bool gone = w == null || !w.Spawned || w.IsForbidden(pawn)
+                        || !pawn.CanReach(w, PathEndMode.ClosestTouch, Danger.Deadly);
                     if (gone)
                         SetBailMessage("UWU_BailWeaponInaccessible".Translate(WeaponLabel));
                     return gone;
@@ -533,10 +544,20 @@ namespace UniqueWeaponsUnbound
                 .FailOn(() =>
                 {
                     Thing ing = job.GetTarget(IngredientIndex).Thing;
-                    bool gone = ing == null || !ing.Spawned || ing.IsForbidden(pawn);
-                    if (gone)
+                    if (ing == null || !ing.Spawned || ing.IsForbidden(pawn))
+                    {
                         SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
-                    return gone;
+                        return true;
+                    }
+                    // Unreachable (e.g. a wall went up between pawn and stockpile).
+                    // Caught here so the job ends Incompletable with our message
+                    // rather than vanilla's silent Errored path from the pather.
+                    if (!pawn.CanReach(ing, PathEndMode.ClosestTouch, Danger.Deadly))
+                    {
+                        SetBailMessage("UWU_BailIngredientUnreachable".Translate(WeaponLabel));
+                        return true;
+                    }
+                    return false;
                 });
 
             yield return Toils_Haul.StartCarryThing(IngredientIndex, putRemainderInQueue: true);

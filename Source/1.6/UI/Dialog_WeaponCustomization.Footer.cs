@@ -220,8 +220,9 @@ namespace UniqueWeaponsUnbound
                     Text.Anchor = TextAnchor.UpperLeft;
                     GUI.color = prevColor2;
 
-                    TooltipHandler.TipRegion(confirmRect,
-                        "UWU_NotEnoughMaterials".Translate());
+                    TaggedString tooltip = "UWU_NotEnoughMaterials".Translate();
+                    TooltipHandler.TipRegion(errorRect, tooltip);
+                    TooltipHandler.TipRegion(confirmRect, tooltip);
                 }
             }
         }

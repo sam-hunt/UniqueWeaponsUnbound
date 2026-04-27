@@ -250,13 +250,18 @@ namespace UniqueWeaponsUnbound
         /// <summary>
         /// Determines whether a pawn can use the given thing as an ingredient.
         /// Checks: spawned, not forbidden to the pawn (considers allowed area),
-        /// and reservable by the pawn (not reserved by another pawn).
-        /// This is the single source of truth for ingredient accessibility — used by
-        /// both the dialog and the job driver.
+        /// reservable by the pawn (not reserved by another pawn), and reachable
+        /// from the pawn's current position. This is the single source of truth
+        /// for ingredient accessibility — used by both the dialog and the job
+        /// driver, so a stack walled off from the pawn never counts toward
+        /// availability and never gets reserved.
         /// </summary>
         public static bool CanPawnUseIngredient(Thing thing, Pawn pawn)
         {
-            return thing.Spawned && !thing.IsForbidden(pawn) && pawn.CanReserve(thing);
+            return thing.Spawned
+                && !thing.IsForbidden(pawn)
+                && pawn.CanReserve(thing)
+                && pawn.CanReach(thing, PathEndMode.ClosestTouch, Danger.Deadly);
         }
 
         /// <summary>
