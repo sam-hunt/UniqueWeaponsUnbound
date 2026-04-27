@@ -6,6 +6,7 @@
   <UWU_RequiresResearch>requires {0}</UWU_RequiresResearch>
   <UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
   <UWU_NoSuitableWorkbench>no suitable workbench</UWU_NoSuitableWorkbench>
+  <UWU_RequiresMinimumQuality>requires {0} quality or better</UWU_RequiresMinimumQuality>
   <UWU_CustomizeGizmoLabel>Customize</UWU_CustomizeGizmoLabel>
   <UWU_CustomizeGizmoDesc>Select a colonist to customize this weapon at a nearby workbench.</UWU_CustomizeGizmoDesc>
 
@@ -95,11 +96,14 @@
   <UWU_TraitCostMultiplier>Trait cost multiplier: {0}%</UWU_TraitCostMultiplier>
   <UWU_TraitRefundRate>Trait refund rate: {0}%</UWU_TraitRefundRate>
   <UWU_DefaultSuffix> (default)</UWU_DefaultSuffix>
+  <UWU_RecommendedSuffix> (recommended)</UWU_RecommendedSuffix>
   <UWU_RefundRateNoEffect>Trait refund rate has no effect while trait cost multiplier is 0%.</UWU_RefundRateNoEffect>
   <UWU_UseRecipeBaseCost>Derive base cost from crafting recipe</UWU_UseRecipeBaseCost>
   <UWU_UseRecipeBaseCostDesc>When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs.</UWU_UseRecipeBaseCostDesc>
 
   <!-- Settings: Prerequisites -->
+  <UWU_MinimumQuality>Minimum weapon quality: {0}</UWU_MinimumQuality>
+  <UWU_MinimumQualityDesc>Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation.</UWU_MinimumQualityDesc>
   <UWU_RequireCustomizationResearch>Require customization research</UWU_RequireCustomizationResearch>
   <UWU_RequireCustomizationResearchDesc>Require the completion of the Unique Smithing, Unique Machining, or Unique Fabrication research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree.</UWU_RequireCustomizationResearchDesc>
   <UWU_RequireRecipeResearch>Require weapon crafting research</UWU_RequireRecipeResearch>

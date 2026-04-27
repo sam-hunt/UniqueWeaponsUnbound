@@ -85,6 +85,18 @@ namespace UniqueWeaponsUnbound
             Text.Font = GameFont.Small;
             listing.Gap(6f);
 
+            string qualityLabel = "UWU_MinimumQuality".Translate(Settings.minimumQuality.GetLabel());
+            if (Settings.minimumQuality == QualityCategory.Awful)
+                qualityLabel += "UWU_DefaultSuffix".Translate();
+            else if (Settings.minimumQuality == QualityCategory.Normal)
+                qualityLabel += "UWU_RecommendedSuffix".Translate();
+            listing.Label(qualityLabel, tooltip: "UWU_MinimumQualityDesc".Translate());
+            float qualityValue = (int)Settings.minimumQuality;
+            qualityValue = listing.Slider(qualityValue, 0f, (int)QualityCategory.Legendary);
+            Settings.minimumQuality = (QualityCategory)Mathf.RoundToInt(qualityValue);
+
+            listing.Gap();
+
             listing.CheckboxLabeled(
                 "UWU_AllowDefConversion".Translate(),
                 ref Settings.allowDefConversion,

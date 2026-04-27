@@ -1,9 +1,11 @@
+using RimWorld;
 using Verse;
 
 namespace UniqueWeaponsUnbound
 {
     public class UWU_Settings : ModSettings
     {
+        public QualityCategory minimumQuality = QualityCategory.Awful;
         public bool requireCustomizationResearch = true;
         public bool requireRecipeResearch = true;
         public bool requireAppropriateWorkbench = true;
@@ -22,6 +24,7 @@ namespace UniqueWeaponsUnbound
 
         public void ResetToDefaults()
         {
+            minimumQuality = QualityCategory.Awful;
             requireCustomizationResearch = true;
             requireRecipeResearch = true;
             requireAppropriateWorkbench = true;
@@ -43,6 +46,7 @@ namespace UniqueWeaponsUnbound
         {
             base.ExposeData();
             Scribe_Values.Look(ref useRecipeBaseCost, "useRecipeBaseCost", true);
+            Scribe_Values.Look(ref minimumQuality, "minimumQuality", QualityCategory.Awful);
             Scribe_Values.Look(ref requireCustomizationResearch, "requireCustomizationResearch", true);
             Scribe_Values.Look(ref requireRecipeResearch, "requireRecipeResearch", true);
             Scribe_Values.Look(ref requireAppropriateWorkbench, "requireAppropriateWorkbench", true);

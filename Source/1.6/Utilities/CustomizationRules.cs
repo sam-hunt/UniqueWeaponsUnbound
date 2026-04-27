@@ -58,6 +58,14 @@ namespace UniqueWeaponsUnbound
                     return false;
             }
 
+            QualityCategory minQuality = UWU_Mod.Settings.minimumQuality;
+            if (minQuality > QualityCategory.Awful
+                && weapon.TryGetQuality(out QualityCategory quality)
+                && quality < minQuality)
+            {
+                return "UWU_RequiresMinimumQuality".Translate(minQuality.GetLabel());
+            }
+
             return true;
         }
 
