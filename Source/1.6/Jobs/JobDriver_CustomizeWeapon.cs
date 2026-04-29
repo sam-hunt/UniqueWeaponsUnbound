@@ -570,7 +570,14 @@ namespace UniqueWeaponsUnbound
             {
                 Thing carried = pawn.carryTracker.CarriedThing;
                 if (carried == null)
+                {
+                    // Carry tracker emptied between Goto and drop. Surface a
+                    // direct ingredient-loss bail rather than letting the
+                    // downstream precheck report a misleading shortfall.
+                    SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                    EndJobWith(JobCondition.Incompletable);
                     return;
+                }
 
                 // Track placed stacks via the placedAction callback rather than
                 // the out resultingThing parameter. This mirrors the vanilla bill
@@ -585,8 +592,18 @@ namespace UniqueWeaponsUnbound
                 };
 
                 IntVec3 cell = FindIngredientPlaceCell(carried);
-                if (!pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out _, placedAction))
-                    pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out _, placedAction);
+                if (pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out _, placedAction))
+                    return;
+                if (pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out _, placedAction))
+                    return;
+
+                // Both placements failed — the workbench area has no room.
+                // Bail with a descriptive reason, but try a final drop at the
+                // pawn's position so the carry tracker isn't left holding the
+                // ingredient into the next job.
+                SetBailMessage("UWU_BailIngredientPlacementFailed".Translate(WeaponLabel));
+                pawn.carryTracker.TryDropCarriedThing(pawn.Position, ThingPlaceMode.Near, out _);
+                EndJobWith(JobCondition.Incompletable);
             };
             dropIngredient.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return dropIngredient;
