@@ -569,16 +569,24 @@ namespace UniqueWeaponsUnbound
             dropIngredient.initAction = delegate
             {
                 Thing carried = pawn.carryTracker.CarriedThing;
-                if (carried != null)
-                {
-                    IntVec3 cell = FindIngredientPlaceCell(carried);
-                    Thing resultingThing;
-                    if (!pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out resultingThing))
-                        pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out resultingThing);
+                if (carried == null)
+                    return;
 
-                    if (resultingThing != null && !placedIngredients.Contains(resultingThing))
-                        placedIngredients.Add(resultingThing);
-                }
+                // Track placed stacks via the placedAction callback rather than
+                // the out resultingThing parameter. This mirrors the vanilla bill
+                // pattern (Toils_Haul.PlaceHauledThingInCell) and is robust to
+                // mods like Stack Gap that patch GenPlace.TryPlaceDirect and
+                // leave resultingThing null on their spawn-new-stack paths while
+                // still invoking the callback for every placed/absorbed stack.
+                Action<Thing, int> placedAction = delegate(Thing placed, int _)
+                {
+                    if (placed != null && !placedIngredients.Contains(placed))
+                        placedIngredients.Add(placed);
+                };
+
+                IntVec3 cell = FindIngredientPlaceCell(carried);
+                if (!pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out _, placedAction))
+                    pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out _, placedAction);
             };
             dropIngredient.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return dropIngredient;
