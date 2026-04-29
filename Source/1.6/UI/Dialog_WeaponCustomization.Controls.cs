@@ -97,9 +97,13 @@ namespace UniqueWeaponsUnbound
             }
             else if (Widgets.ButtonText(randomRect, "UWU_Randomize".Translate()))
             {
-                desiredName = GenerateWeaponName();
-                lastAutoName = desiredName;
-                nameLocked = false;
+                string regenerated = GenerateWeaponName();
+                if (regenerated != null)
+                {
+                    desiredName = regenerated;
+                    lastAutoName = desiredName;
+                    nameLocked = false;
+                }
             }
 
             Text.Anchor = TextAnchor.UpperLeft;

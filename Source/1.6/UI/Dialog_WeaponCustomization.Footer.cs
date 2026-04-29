@@ -167,7 +167,9 @@ namespace UniqueWeaponsUnbound
                         && string.IsNullOrEmpty(desiredName)
                         && desiredTraits.Count > 0)
                     {
-                        desiredName = GenerateWeaponName();
+                        string regenerated = GenerateWeaponName();
+                        if (regenerated != null)
+                            desiredName = regenerated;
                     }
 
                     // Build ordered operations list and spec — use net cost

@@ -4,27 +4,26 @@ using System.Reflection;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.Grammar;
 
 namespace UniqueWeaponsUnbound
 {
-    // Dialog layout (950x750):
+    // Dialog layout (traits tab) (950x750):
     //
     // +------------------------------------------------------------------+
     // |  Customize [Weapon Name]                                         |
     // +---------------------+--------------------------------------------+
-    // |                     |  Name  [___________________] [Random]      |
-    // |   [Weapon Icon]     |                                            |
-    // |                     |  [ Traits ][ Texture ][ Color * ]          |
-    // |   "Weapon Name"     |  ┌──────────────────────────────────┐     |
-    // |   "Will upgrade.."  |  │ ☑ Lightweight       ×4 steel     │     |
-    // |   Color: [#] Gold   |  │ ☐ Gold Inlay        ×50 gold     │     |
-    // |                     |  │   Conflicts with Silver Inlay    │     |
-    // |   Traits:           |  │ ☐ Charge Capacitor  ×3 comp     │     |
-    // |   • Lightweight  [x]|  │ ☐ Pulse Charger     ×3 comp     │     |
-    // |   • Gold Inlay   [x]|  │ ...                               │     |
-    // |                     |  └──────────────────────────────────┘     |
-    // | Cost: [steel]×4     |                                            |
+    // |                     |   [[ Traits ]] [ Texture ] [ ■ Color ]     |
+    // |  [Graphic preview]  |  ┌───────────────────────────────────────┐ |
+    // |                     |  | 🔎︎ [Search traits................][x] │ |
+    // |  [Weapon Name]      |  +---------------------------------------+ |
+    // |   x autoregen name  |  │ Lightweight                  ×4 steel │ │
+    // |                     │  │ Gold Inlay    [conflicts]    ×50 gold │ │
+    // |  Traits:            |  │ Charge Capacitor             ×3 comp  │ │
+    // |   Lightweight       |  │ Pulse Charger                ×3 comp  │ │
+    // |   Gold Inlay  [g]x8 │  | ...                                   │ |
+    // |                     |  +---------------------------------------+ |
+    // | Cost: [gold]x8      |  │ [x] Show negative traits              │ |
+    // | Refund: [steel]×4   |  └───────────────────────────────────────┘ |
     // +---------------------+--------------------------------------------+
     // |  [Cancel]                  [Reset]                  [Confirm]    |
     // +------------------------------------------------------------------+
@@ -344,8 +343,12 @@ namespace UniqueWeaponsUnbound
 
             if (!nameLocked && !isRelic && desiredTraits.Count > 0 && !IsRevertedToBase)
             {
-                desiredName = GenerateWeaponName();
-                lastAutoName = desiredName;
+                string regenerated = GenerateWeaponName();
+                if (regenerated != null)
+                {
+                    desiredName = regenerated;
+                    lastAutoName = desiredName;
+                }
             }
         }
 
@@ -535,46 +538,6 @@ namespace UniqueWeaponsUnbound
                 return random.SubGraphicsCount;
 
             return 1;
-        }
-
-        /// <summary>
-        /// Generates a random weapon name using vanilla's grammar system
-        /// (NameGenerator + RulePackDefOf.NamerUniqueWeapon), matching the same
-        /// code path used by CompUniqueWeapon.PostPostMake() for initial generation.
-        /// </summary>
-        private string GenerateWeaponName()
-        {
-            // Collect adjectives from all desired traits
-            var adjectives = new List<string>();
-            foreach (WeaponTraitDef trait in desiredTraits)
-            {
-                if (trait.traitAdjectives != null && trait.traitAdjectives.Count > 0)
-                    adjectives.AddRange(trait.traitAdjectives);
-            }
-
-            // Get weapon type label from CompProperties_UniqueWeapon.namerLabels
-            CompProperties_UniqueWeapon props = uniqueDef?.comps?
-                .OfType<CompProperties_UniqueWeapon>()
-                .FirstOrDefault();
-            string weaponType = (props?.namerLabels != null && props.namerLabels.Count > 0)
-                ? props.namerLabels.RandomElement()
-                : "UWU_WeaponTypeFallback".Translate();
-
-            string colorLabel = EffectiveColor?.label ?? "UWU_ColorFallback".Translate();
-
-            GrammarRequest request = default;
-            request.Includes.Add(RulePackDefOf.NamerUniqueWeapon);
-            request.Rules.Add(new Rule_String("weapon_type", weaponType));
-            request.Rules.Add(new Rule_String("color", colorLabel));
-            if (adjectives.Count > 0)
-                request.Rules.Add(new Rule_String("trait_adjective", adjectives.RandomElement()));
-
-            // Add the customizing pawn's name data for ANYPAWN_* grammar rules,
-            // enabling possessive name patterns like "Kira's Gold Rifle"
-            foreach (Rule rule in TaleData_Pawn.GenerateFrom(pawn).GetRules("ANYPAWN"))
-                request.Rules.Add(rule);
-
-            return NameGenerator.GenerateName(request, null, false, "r_weapon_name").StripTags();
         }
 
         /// <summary>
