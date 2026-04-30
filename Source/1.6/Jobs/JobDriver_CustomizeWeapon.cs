@@ -373,6 +373,14 @@ namespace UniqueWeaponsUnbound
                     return;
                 }
 
+                // Customization is a direct player order on a specific weapon.
+                // Clear any forbidden flag so the order isn't blocked by an
+                // old hauling hint, and so the weapon stays available to other
+                // pawns/AI after the job completes. No-op for non-spawned
+                // (equipped/inventory) weapons.
+                if (w.Spawned && w is ThingWithComps)
+                    w.SetForbidden(false, warnOnFail: false);
+
                 weapon = w;
 
                 if (pawn.equipment?.Primary == w)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using RimWorld;
 using Verse;
@@ -363,16 +364,18 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Determines whether a pawn can use the given thing as an ingredient.
-        /// Checks: spawned, not forbidden to the pawn (considers allowed area),
-        /// reservable by the pawn (not reserved by another pawn), and reachable
-        /// from the pawn's current position. This is the single source of truth
-        /// for ingredient accessibility — used by both the dialog and the job
-        /// driver, so a stack walled off from the pawn never counts toward
-        /// availability and never gets reserved.
+        /// Checks: spawned, not flagged forbidden by the player faction, not
+        /// forbidden to the pawn (allowed-area), reservable by the pawn, and
+        /// reachable. The faction-level forbidden check is explicit because
+        /// IsForbidden(pawn) short-circuits to false for drafted/slave/host-faction
+        /// pawns via CaresAboutForbidden, which would otherwise allow forbidden
+        /// stacks to be hauled. Customization is a direct player order, so the
+        /// player's red-X must always be respected regardless of pawn state.
         /// </summary>
         public static bool CanPawnUseIngredient(Thing thing, Pawn pawn)
         {
             return thing.Spawned
+                && !thing.IsForbidden(Faction.OfPlayer)
                 && !thing.IsForbidden(pawn)
                 && pawn.CanReserve(thing)
                 && pawn.CanReach(thing, PathEndMode.ClosestTouch, Danger.Deadly);
@@ -410,10 +413,16 @@ namespace UniqueWeaponsUnbound
             var queueA = new List<LocalTargetInfo>();
             var countQueue = new List<int>();
 
+            IntVec3 origin = pawn.Position;
             foreach (ThingDefCountClass cost in totalCost)
             {
                 int remaining = cost.count;
-                foreach (Thing stack in pawn.Map.listerThings.ThingsOfDef(cost.thingDef))
+                // Sort by squared horizontal distance from the pawn so closer
+                // stacks are reserved first. Without sorting, ListerThings'
+                // unspecified iteration order can send the pawn past nearby
+                // resources to a farther stack of the same def.
+                foreach (Thing stack in pawn.Map.listerThings.ThingsOfDef(cost.thingDef)
+                    .OrderBy(t => (t.Position - origin).LengthHorizontalSquared))
                 {
                     if (remaining <= 0)
                         break;
