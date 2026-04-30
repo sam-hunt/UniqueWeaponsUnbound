@@ -59,7 +59,7 @@ namespace UniqueWeaponsUnbound
             if (IgnoreAccuracyField != null)
                 IgnoreAccuracyField.SetValue(comp, null);
 
-            comp.Setup(false);
+            SetupAndPreserveCharges(comp, weapon);
         }
 
         public static void RemoveTrait(Thing weapon, WeaponTraitDef trait)
@@ -88,7 +88,67 @@ namespace UniqueWeaponsUnbound
             if (trait.abilityProps != null)
                 ResetEquippableAbilityState(weapon);
 
+            SetupAndPreserveCharges(comp, weapon);
+        }
+
+        /// <summary>
+        /// Public entry for the JobDriver's finalize toil. Behaviour-equivalent to
+        /// <c>CompUniqueWeapon.Setup(false)</c> but preserves the equipped ability's
+        /// remaining charges, since vanilla Setup unconditionally refills them via
+        /// <c>Notify_PropsChanged</c>. Needed for cosmetics-only customizations
+        /// (rename / recolour / texture) that never enter Add/RemoveTrait but still
+        /// hit the finalize Setup, which would otherwise hand the player a free
+        /// reload of an unchanged ability trait every time they confirmed the dialog.
+        /// </summary>
+        public static void RewireUniqueWeaponComps(Thing weapon)
+        {
+            CompUniqueWeapon comp = weapon.TryGetComp<CompUniqueWeapon>();
+            if (comp == null)
+                return;
+            SetupAndPreserveCharges(comp, weapon);
+        }
+
+        /// <summary>
+        /// Wrapper around <c>CompUniqueWeapon.Setup(false)</c> that preserves the
+        /// equipped ability's <c>RemainingCharges</c> across the call. Vanilla Setup
+        /// walks the trait list and, for every ability trait, calls
+        /// <c>CompEquippableAbilityReloadable.Notify_PropsChanged()</c>, which forces
+        /// <c>RemainingCharges = MaxCharges</c>. That's correct on PostPostMake and
+        /// save load, but it also fires on every customization op — turning every
+        /// dialog confirm into a free reload of any unchanged ability trait
+        /// (skipping the steel/chemfuel/bioferrite Reload job). We snapshot the
+        /// charges before, then restore them only if the same Ability instance
+        /// survived; a different instance means the ability trait was added or
+        /// swapped this op (player paid for the new trait), in which case fresh
+        /// max charges is the right outcome.
+        ///
+        /// No-op for cooldown-only abilities (e.g. EMPPulser): they leave
+        /// <c>maxCharges = 0</c>, so <c>UsesCharges</c> is false, the cooldown
+        /// lives on <c>Ability.cooldownEndTick</c> (which Notify_PropsChanged
+        /// doesn't touch), and the snapshot/restore round-trips zero.
+        /// </summary>
+        private static void SetupAndPreserveCharges(CompUniqueWeapon comp, Thing weapon)
+        {
+            CompEquippableAbilityReloadable abilityComp =
+                weapon.TryGetComp<CompEquippableAbilityReloadable>();
+
+            Ability priorAbility = null;
+            int priorCharges = 0;
+            if (abilityComp != null && EquippableAbilityField != null)
+            {
+                priorAbility = (Ability)EquippableAbilityField.GetValue(abilityComp);
+                if (priorAbility != null)
+                    priorCharges = priorAbility.RemainingCharges;
+            }
+
             comp.Setup(false);
+
+            if (priorAbility != null && abilityComp != null && EquippableAbilityField != null)
+            {
+                Ability currentAbility = (Ability)EquippableAbilityField.GetValue(abilityComp);
+                if (ReferenceEquals(currentAbility, priorAbility))
+                    abilityComp.RemainingCharges = priorCharges;
+            }
         }
 
         /// <summary>

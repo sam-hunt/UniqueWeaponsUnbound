@@ -666,11 +666,14 @@ namespace UniqueWeaponsUnbound
             Toil finalize = ToilMaker.MakeToil("MakeNewToils");
             finalize.initAction = delegate
             {
-                // Final Setup call for ability prop wiring
-                CompUniqueWeapon uniqueComp = weapon.TryGetComp<CompUniqueWeapon>();
-                uniqueComp?.Setup(false);
+                // Final Setup call for ability prop wiring. Routed through the
+                // utility so cosmetics-only customizations don't free-reload
+                // unchanged ability traits — vanilla Setup() forces
+                // RemainingCharges = MaxCharges on every ability trait it sees.
+                WeaponModificationUtility.RewireUniqueWeaponComps(weapon);
 
                 // Apply final color after Setup() to ensure it sticks
+                CompUniqueWeapon uniqueComp = weapon.TryGetComp<CompUniqueWeapon>();
                 if (spec.finalColor != null && uniqueComp != null)
                     WeaponModificationUtility.SetColor(weapon, spec.finalColor);
             };
