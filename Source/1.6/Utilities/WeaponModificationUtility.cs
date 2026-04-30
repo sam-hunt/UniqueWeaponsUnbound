@@ -26,6 +26,14 @@ namespace UniqueWeaponsUnbound
         internal static readonly FieldInfo IgnoreAccuracyField = typeof(CompUniqueWeapon)
             .GetField("ignoreAccuracyMaluses", BindingFlags.NonPublic | BindingFlags.Instance);
 
+        // CompEquippableAbility caches its constructed Ability in this private field
+        // and ScribeDeeps it across save/load. CompUniqueWeapon.Setup() never clears
+        // it, so removing an ability-granting trait leaves the equipping pawn with
+        // the old gizmo. We null it ourselves in RemoveTrait so the next access via
+        // the lazy AbilityForReading getter rebuilds it from the current Props.
+        internal static readonly FieldInfo EquippableAbilityField = typeof(CompEquippableAbility)
+            .GetField("ability", BindingFlags.NonPublic | BindingFlags.Instance);
+
         // Ideology DLC: Precept_Relic.generatedRelic (private Thing)
         // Resolved once at startup; null if Ideology is not installed.
         private static readonly FieldInfo GeneratedRelicField =
@@ -42,6 +50,15 @@ namespace UniqueWeaponsUnbound
             }
 
             comp.AddTrait(trait);
+
+            // Mirror RemoveTrait: invalidate the cached ignoreAccuracyMaluses so a
+            // newly-added accuracy-malus-immunity trait actually takes effect on the
+            // next shot. Vanilla Setup() never resets this cache, so without this
+            // the weapon's accuracy behaviour reflects the trait list at first read
+            // until the comp is recreated (def conversion or save/load).
+            if (IgnoreAccuracyField != null)
+                IgnoreAccuracyField.SetValue(comp, null);
+
             comp.Setup(false);
         }
 
@@ -60,7 +77,44 @@ namespace UniqueWeaponsUnbound
             if (IgnoreAccuracyField != null)
                 IgnoreAccuracyField.SetValue(comp, null);
 
+            // Vanilla CompUniqueWeapon.Setup() only assigns props for traits that
+            // have abilityProps; it never clears them when an ability-granting trait
+            // is removed, and never resets the cached Ability instance. Without this
+            // scrub, an equipped pawn keeps the removed trait's gizmo (e.g. the
+            // grenade launcher's launch+reload command) the next time the weapon is
+            // re-equipped — even if the trait was swapped for one with different
+            // abilityProps, because the lazy AbilityForReading getter only rebuilds
+            // when its cache is null.
+            if (trait.abilityProps != null)
+                ResetEquippableAbilityState(weapon);
+
             comp.Setup(false);
+        }
+
+        /// <summary>
+        /// Restores CompEquippableAbilityReloadable to its def-default state: drops
+        /// the cached Ability and points <c>props</c> back at the empty stub from
+        /// <c>weapon.def.comps</c>. A subsequent AddTrait → CompUniqueWeapon.Setup()
+        /// will re-assign <c>props</c> from the new trait's abilityProps and the
+        /// lazy getter will construct a fresh Ability from it.
+        /// </summary>
+        private static void ResetEquippableAbilityState(Thing weapon)
+        {
+            CompEquippableAbilityReloadable abilityComp =
+                weapon.TryGetComp<CompEquippableAbilityReloadable>();
+            if (abilityComp == null)
+                return;
+
+            EquippableAbilityField?.SetValue(abilityComp, null);
+
+            foreach (CompProperties cp in weapon.def.comps)
+            {
+                if (cp is CompProperties_EquippableAbilityReloadable defaultProps)
+                {
+                    abilityComp.props = defaultProps;
+                    break;
+                }
+            }
         }
 
         public static void SetName(Thing weapon, string name)
