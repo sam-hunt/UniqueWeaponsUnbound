@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UniqueWeaponsUnbound.HaulPlanning;
 using UnityEngine;
 using Verse;
 
@@ -181,7 +182,7 @@ namespace UniqueWeaponsUnbound
                     // check and this commit, so what the player saw is what they get.
                     Verse.AI.Job job = pawn.CurJob;
                     if (job == null
-                        || !WeaponModificationUtility.TryReserveIngredientsForJob(
+                        || !IngredientReservation.TryReserveIngredientsForJob(
                             pawn, job, spec.totalCost))
                     {
                         // Defensive — should be unreachable under forcePause. Leave the

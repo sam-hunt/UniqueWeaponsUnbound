@@ -1,4 +1,5 @@
 using RimWorld;
+using UniqueWeaponsUnbound.HaulPlanning;
 using Verse;
 
 namespace UniqueWeaponsUnbound
@@ -21,6 +22,7 @@ namespace UniqueWeaponsUnbound
         public bool useRecipeBaseCost = true;
         public float traitCostMultiplier = 1f;
         public float traitRefundRate = 0.5f;
+        public HaulPlannerKind haulPlannerKind = HaulPlannerKind.Sequential;
 
         public void ResetToDefaults()
         {
@@ -40,6 +42,7 @@ namespace UniqueWeaponsUnbound
             useRecipeBaseCost = true;
             traitCostMultiplier = 1f;
             traitRefundRate = 0.5f;
+            haulPlannerKind = HaulPlannerKind.Sequential;
         }
 
         public override void ExposeData()
@@ -61,6 +64,7 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref enableGroundCustomization, "enableGroundCustomization", true);
             Scribe_Values.Look(ref traitCostMultiplier, "traitCostMultiplier", 1f);
             Scribe_Values.Look(ref traitRefundRate, "traitRefundRate", 0.5f);
+            Scribe_Values.Look(ref haulPlannerKind, "haulPlannerKind", HaulPlannerKind.Sequential);
         }
     }
 }

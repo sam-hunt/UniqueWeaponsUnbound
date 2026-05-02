@@ -1,19 +1,17 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using RimWorld;
 using Verse;
-using Verse.AI;
-
-// Ideology types — only available when DLC is active, accessed via reflection
-// RimWorld.Precept_Relic : Precept_ThingStyle
-//   private Thing generatedRelic — the Thing instance that IS the relic
 
 namespace UniqueWeaponsUnbound
 {
     /// <summary>
-    /// Encapsulates all weapon mutation logic: trait addition/removal, name/color/texture
-    /// changes, def conversion (base↔unique), and resource consumption.
+    /// Mutates a weapon Thing in place: adds/removes traits (with their ability
+    /// wiring side-effects), sets cosmetic properties (name, color, texture),
+    /// and spawns refunded resources. Def conversion (base↔unique) lives in
+    /// <see cref="WeaponDefConversion"/>; ingredient gathering and reservation
+    /// for a customization job lives in
+    /// <see cref="HaulPlanning.IngredientReservation"/>.
     /// </summary>
     public static class WeaponModificationUtility
     {
@@ -34,12 +32,6 @@ namespace UniqueWeaponsUnbound
         // the lazy AbilityForReading getter rebuilds it from the current Props.
         internal static readonly FieldInfo EquippableAbilityField = typeof(CompEquippableAbility)
             .GetField("ability", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        // Ideology DLC: Precept_Relic.generatedRelic (private Thing)
-        // Resolved once at startup; null if Ideology is not installed.
-        private static readonly FieldInfo GeneratedRelicField =
-            GenTypes.GetTypeInAnyAssembly("RimWorld.Precept_Relic")
-                ?.GetField("generatedRelic", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static void AddTrait(Thing weapon, WeaponTraitDef trait)
         {
@@ -206,142 +198,6 @@ namespace UniqueWeaponsUnbound
         }
 
         /// <summary>
-        /// Creates a new weapon Thing from targetDef, copying quality and hitpoints
-        /// from oldWeapon. If targetDef has CompUniqueWeapon (base→unique conversion),
-        /// clears the auto-generated traits/name/color from PostPostMake().
-        /// Returns the new weapon. Does NOT destroy oldWeapon (caller's responsibility).
-        /// </summary>
-        public static Thing ConvertWeaponDef(Thing oldWeapon, ThingDef targetDef)
-        {
-            Thing newWeapon = ThingMaker.MakeThing(targetDef);
-
-            // Copy quality
-            if (oldWeapon.TryGetQuality(out QualityCategory quality))
-            {
-                CompQuality qualityComp = newWeapon.TryGetComp<CompQuality>();
-                qualityComp?.SetQuality(quality, ArtGenerationContext.Colony);
-            }
-
-            // Copy hitpoints as a percentage of max
-            if (oldWeapon.MaxHitPoints > 0 && newWeapon.MaxHitPoints > 0)
-            {
-                float hpPct = (float)oldWeapon.HitPoints / oldWeapon.MaxHitPoints;
-                newWeapon.HitPoints = (int)(newWeapon.MaxHitPoints * hpPct);
-                if (newWeapon.HitPoints < 1)
-                    newWeapon.HitPoints = 1;
-            }
-
-            // Copy texture index
-            newWeapon.overrideGraphicIndex = oldWeapon.overrideGraphicIndex;
-
-            // If converting to unique, clear auto-generated traits/name/color from PostPostMake()
-            CompUniqueWeapon uniqueComp = newWeapon.TryGetComp<CompUniqueWeapon>();
-            if (uniqueComp != null)
-            {
-                uniqueComp.TraitsListForReading.Clear();
-                if (CompNameField != null)
-                    CompNameField.SetValue(uniqueComp, null);
-                if (CompColorField != null)
-                    CompColorField.SetValue(uniqueComp, null);
-            }
-
-            return newWeapon;
-        }
-
-        /// <summary>
-        /// Transfers Ideology relic status from the old weapon to the new weapon.
-        /// Must be called BEFORE destroying the old weapon — clears the old weapon's
-        /// StyleSourcePrecept so that Thing.Destroy() does not fire Notify_ThingLost,
-        /// which would trigger RelicDestroyed events, mood debuffs, and permanently
-        /// orphan the relic precept.
-        ///
-        /// Updates both sides of the bidirectional reference:
-        ///   Thing.StyleSourcePrecept → Precept_Relic (via CompStyleable)
-        ///   Precept_Relic.generatedRelic → Thing (via reflection)
-        ///
-        /// No-op if Ideology is not active or the weapon is not a relic.
-        /// </summary>
-        public static void TransferRelicStatus(Thing oldWeapon, Thing newWeapon)
-        {
-            if (!ModsConfig.IdeologyActive)
-                return;
-
-            Precept_ThingStyle precept = oldWeapon.StyleSourcePrecept;
-            if (precept == null)
-                return;
-
-            // Clear from old weapon BEFORE it gets destroyed to prevent
-            // Precept_Relic.Notify_ThingLost from firing RelicDestroyed/RelicLost events.
-            oldWeapon.StyleSourcePrecept = null;
-
-            // Point the new weapon back at the precept.
-            newWeapon.StyleSourcePrecept = precept;
-
-            // Transfer the "ever seen by player" flag so the relic remains
-            // recognized as player-possessed.
-            if (oldWeapon is ThingWithComps oldTwc && newWeapon is ThingWithComps newTwc
-                && oldTwc.compStyleable != null && newTwc.compStyleable != null)
-            {
-                newTwc.compStyleable.everSeenByPlayer = oldTwc.compStyleable.everSeenByPlayer;
-            }
-
-            // Update the Precept_Relic's private generatedRelic field to point
-            // at the new weapon instance, keeping the precept→thing reference valid.
-            if (GeneratedRelicField != null && precept is Precept_Relic)
-            {
-                GeneratedRelicField.SetValue(precept, newWeapon);
-            }
-        }
-
-        /// <summary>
-        /// Consumes resources from stacks near a position (within radius cells).
-        /// Used by the work loop to consume from hauled stacks at the workbench.
-        /// Returns false if insufficient resources found nearby.
-        /// </summary>
-        public static bool ConsumeResourcesNear(
-            Map map, IntVec3 center, List<ThingDefCountClass> costs, int radius = 3)
-        {
-            if (costs == null || costs.Count == 0)
-                return true;
-
-            foreach (ThingDefCountClass cost in costs)
-            {
-                int remaining = cost.count;
-
-                foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, radius, true))
-                {
-                    if (!cell.InBounds(map) || remaining <= 0)
-                        continue;
-
-                    List<Thing> things = cell.GetThingList(map);
-                    for (int i = things.Count - 1; i >= 0 && remaining > 0; i--)
-                    {
-                        Thing stack = things[i];
-                        if (stack.def == cost.thingDef && stack.Spawned)
-                        {
-                            int take = UnityEngine.Mathf.Min(remaining, stack.stackCount);
-                            remaining -= take;
-
-                            if (take >= stack.stackCount)
-                                stack.Destroy();
-                            else
-                                stack.SplitOff(take).Destroy();
-                        }
-                    }
-                }
-
-                if (remaining > 0)
-                {
-                    Log.Warning($"[Unique Weapons Unbound] Could not consume all " +
-                        $"{cost.thingDef.LabelCap} near {center}: needed {cost.count}, short by {remaining}.");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Spawns resources near a position (e.g. the workbench).
         /// Used to refund resources when removing traits.
         /// </summary>
@@ -362,93 +218,5 @@ namespace UniqueWeaponsUnbound
             }
         }
 
-        /// <summary>
-        /// Determines whether a pawn can use the given thing as an ingredient.
-        /// Checks: spawned, not flagged forbidden by the player faction, not
-        /// forbidden to the pawn (allowed-area), reservable by the pawn, and
-        /// reachable. The faction-level forbidden check is explicit because
-        /// IsForbidden(pawn) short-circuits to false for drafted/slave/host-faction
-        /// pawns via CaresAboutForbidden, which would otherwise allow forbidden
-        /// stacks to be hauled. Customization is a direct player order, so the
-        /// player's red-X must always be respected regardless of pawn state.
-        /// </summary>
-        public static bool CanPawnUseIngredient(Thing thing, Pawn pawn)
-        {
-            return thing.Spawned
-                && !thing.IsForbidden(Faction.OfPlayer)
-                && !thing.IsForbidden(pawn)
-                && pawn.CanReserve(thing)
-                && pawn.CanReach(thing, PathEndMode.ClosestTouch, Danger.Deadly);
-        }
-
-        /// <summary>
-        /// Counts available units of a material on the map that the given pawn can access.
-        /// </summary>
-        public static int CountAvailable(Map map, ThingDef thingDef, Pawn pawn)
-        {
-            int count = 0;
-            foreach (Thing stack in map.listerThings.ThingsOfDef(thingDef))
-            {
-                if (CanPawnUseIngredient(stack, pawn))
-                    count += stack.stackCount;
-            }
-            return count;
-        }
-
-        /// <summary>
-        /// Searches the map for stacks matching <paramref name="totalCost"/>, reserves
-        /// each against <paramref name="job"/>, and populates job.targetQueueA / countQueue
-        /// for the haul phase. Atomic: if the demand can't be fully satisfied, releases
-        /// any reservations it just made and returns false without mutating the job's queues.
-        /// Designed to be callable from the customization dialog while forcePause is active,
-        /// so the reservations are locked in before any other pawn AI runs.
-        /// </summary>
-        public static bool TryReserveIngredientsForJob(
-            Pawn pawn, Job job, List<ThingDefCountClass> totalCost)
-        {
-            if (totalCost == null || totalCost.Count == 0)
-                return true;
-
-            var reserved = new List<Thing>();
-            var queueA = new List<LocalTargetInfo>();
-            var countQueue = new List<int>();
-
-            IntVec3 origin = pawn.Position;
-            foreach (ThingDefCountClass cost in totalCost)
-            {
-                int remaining = cost.count;
-                // Sort by squared horizontal distance from the pawn so closer
-                // stacks are reserved first. Without sorting, ListerThings'
-                // unspecified iteration order can send the pawn past nearby
-                // resources to a farther stack of the same def.
-                foreach (Thing stack in pawn.Map.listerThings.ThingsOfDef(cost.thingDef)
-                    .OrderBy(t => (t.Position - origin).LengthHorizontalSquared))
-                {
-                    if (remaining <= 0)
-                        break;
-                    if (!CanPawnUseIngredient(stack, pawn))
-                        continue;
-                    if (!pawn.Reserve(stack, job, 1, -1, null, errorOnFailed: false))
-                        continue;
-
-                    reserved.Add(stack);
-                    int toTake = UnityEngine.Mathf.Min(remaining, stack.stackCount);
-                    queueA.Add(stack);
-                    countQueue.Add(toTake);
-                    remaining -= toTake;
-                }
-
-                if (remaining > 0)
-                {
-                    foreach (Thing t in reserved)
-                        pawn.Map.reservationManager.Release(t, pawn, job);
-                    return false;
-                }
-            }
-
-            job.targetQueueA = queueA;
-            job.countQueue = countQueue;
-            return true;
-        }
     }
 }

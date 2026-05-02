@@ -91,6 +91,7 @@
   <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
   <UWU_SettingsTraitCosts>Trait costs</UWU_SettingsTraitCosts>
   <UWU_SettingsPrerequisites>Prerequisites</UWU_SettingsPrerequisites>
+  <UWU_SettingsHaulPlanner>Ingredient hauling</UWU_SettingsHaulPlanner>
   <UWU_SettingsMiscellaneous>Miscellaneous</UWU_SettingsMiscellaneous>
 
   <!-- Settings: Trait costs -->
@@ -131,5 +132,14 @@
   <UWU_EnforceSoleTraitDesc>Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization.</UWU_EnforceSoleTraitDesc>
   <UWU_EnableGroundCustomization>Enable ground weapon right-click menu</UWU_EnableGroundCustomization>
   <UWU_EnableGroundCustomizationDesc>Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button.</UWU_EnableGroundCustomizationDesc>
+
+  <!-- Settings: Haul planner -->
+  <UWU_HaulPlannerNotImplementedSuffix>(not yet implemented)</UWU_HaulPlannerNotImplementedSuffix>
+  <UWU_HaulPlannerSequential>Sequential (default)</UWU_HaulPlannerSequential>
+  <UWU_HaulPlannerSequentialDesc>Original behavior: pawns fetch one ingredient stack per trip, sorted by distance from the pawn. Reliable but ignores spare carrying capacity, which can produce many short trips for resource-heavy customizations.</UWU_HaulPlannerSequentialDesc>
+  <UWU_HaulPlannerSweep>Sweep + Held-Karp (experimental)</UWU_HaulPlannerSweep>
+  <UWU_HaulPlannerSweepDesc>Clusters nearby ingredient stacks by polar angle around the workbench, packs them into trips up to the pawn's carrying capacity, and sequences each trip optimally. Trades a small amount of planning time for many fewer trips on average.</UWU_HaulPlannerSweepDesc>
+  <UWU_HaulPlannerOptimal>Exhaustive (experimental)</UWU_HaulPlannerOptimal>
+  <UWU_HaulPlannerOptimalDesc>Performs an exhaustive search over sourcing and partitioning to find a near-optimal trip plan. Falls back to a clustered heuristic on very large inputs. Computationally heaviest but produces the best results when carrying capacity is the limiting factor.</UWU_HaulPlannerOptimalDesc>
 
 </LanguageData>

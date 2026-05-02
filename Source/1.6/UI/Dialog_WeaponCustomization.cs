@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using RimWorld;
+using UniqueWeaponsUnbound.HaulPlanning;
 using UnityEngine;
 using Verse;
 
@@ -361,7 +362,7 @@ namespace UniqueWeaponsUnbound
         {
             if (availableResources.TryGetValue(thingDef, out int count))
                 return count;
-            count = WeaponModificationUtility.CountAvailable(pawn.Map, thingDef, pawn);
+            count = IngredientReservation.CountAvailable(pawn.Map, thingDef, pawn);
             availableResources[thingDef] = count;
             return count;
         }

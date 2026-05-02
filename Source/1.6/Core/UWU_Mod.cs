@@ -1,5 +1,6 @@
 using RimWorld;
 using UnityEngine;
+using UniqueWeaponsUnbound.HaulPlanning;
 using Verse;
 
 namespace UniqueWeaponsUnbound
@@ -147,6 +148,31 @@ namespace UniqueWeaponsUnbound
             listing.Gap(24.0f);
 
             Text.Font = GameFont.Medium;
+            listing.Label("UWU_SettingsHaulPlanner".Translate());
+            Text.Font = GameFont.Small;
+            listing.Gap(6f);
+
+            DrawHaulPlannerOption(listing,
+                HaulPlannerKind.Sequential,
+                "UWU_HaulPlannerSequential".Translate(),
+                "UWU_HaulPlannerSequentialDesc".Translate(),
+                enabled: true);
+
+            DrawHaulPlannerOption(listing,
+                HaulPlannerKind.Sweep,
+                "UWU_HaulPlannerSweep".Translate(),
+                "UWU_HaulPlannerSweepDesc".Translate(),
+                enabled: false);
+
+            DrawHaulPlannerOption(listing,
+                HaulPlannerKind.Optimal,
+                "UWU_HaulPlannerOptimal".Translate(),
+                "UWU_HaulPlannerOptimalDesc".Translate(),
+                enabled: false);
+
+            listing.Gap(24.0f);
+
+            Text.Font = GameFont.Medium;
             listing.Label("UWU_SettingsMiscellaneous".Translate());
             Text.Font = GameFont.Small;
             listing.Gap(6f);
@@ -198,6 +224,46 @@ namespace UniqueWeaponsUnbound
             {
                 Settings.ResetToDefaults();
             }
+        }
+
+        /// <summary>
+        /// Renders one row of the haul-planner radio group. Disabled options
+        /// render greyed out, ignore clicks, and append a "(not yet implemented)"
+        /// suffix so the player can see the option exists but is unavailable.
+        /// Selecting an option flips Settings.haulPlannerKind to that value.
+        /// </summary>
+        private static void DrawHaulPlannerOption(
+            Listing_Standard listing,
+            HaulPlannerKind kind,
+            string label,
+            string tooltip,
+            bool enabled)
+        {
+            string displayLabel = enabled
+                ? label
+                : label + " " + "UWU_HaulPlannerNotImplementedSuffix".Translate();
+
+            bool active = Settings.haulPlannerKind == kind;
+
+            if (enabled)
+            {
+                if (listing.RadioButton(displayLabel, active, tabIn: 0f, tooltip: tooltip))
+                {
+                    Settings.haulPlannerKind = kind;
+                }
+            }
+            else
+            {
+                Color prevColor = GUI.color;
+                GUI.color = Color.gray;
+                // Force-render as inactive even if Settings somehow points
+                // here (e.g. via a save from a future build); the runtime
+                // factory falls back to Sequential for unrecognized values
+                // anyway, so showing it inactive here matches behavior.
+                listing.RadioButton(displayLabel, active: false, tabIn: 0f, tooltip: tooltip);
+                GUI.color = prevColor;
+            }
+            listing.Gap(8f);
         }
     }
 }

@@ -2,6 +2,8 @@
 
 ## Features
 
+- Better ingredient hauling plans
+- Early exit from reachability checks for resources required for traits if max found?
 - Mod setting to limit trait options to traits of weapons on the current map
 - Mod setting to disable trait customization
 - Dev mode mod settings page button to copy settings to clipboard
