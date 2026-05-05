@@ -154,19 +154,19 @@ namespace UniqueWeaponsUnbound
 
             DrawHaulPlannerOption(listing,
                 HaulPlannerKind.Sequential,
-                "UWU_HaulPlannerSequential".Translate(),
+                "UWU_HaulPlannerSequential".Translate() + "UWU_VanillaSuffix".Translate(),
                 "UWU_HaulPlannerSequentialDesc".Translate(),
                 enabled: true);
 
             DrawHaulPlannerOption(listing,
                 HaulPlannerKind.Sweep,
-                "UWU_HaulPlannerSweep".Translate(),
+                "UWU_HaulPlannerSweep".Translate() + "UWU_DefaultSuffix".Translate(),
                 "UWU_HaulPlannerSweepDesc".Translate(),
-                enabled: false);
+                enabled: true);
 
             DrawHaulPlannerOption(listing,
                 HaulPlannerKind.Optimal,
-                "UWU_HaulPlannerOptimal".Translate(),
+                "UWU_HaulPlannerOptimal".Translate() + "UWU_PlannedSuffix".Translate(),
                 "UWU_HaulPlannerOptimalDesc".Translate(),
                 enabled: false);
 
@@ -228,9 +228,9 @@ namespace UniqueWeaponsUnbound
 
         /// <summary>
         /// Renders one row of the haul-planner radio group. Disabled options
-        /// render greyed out, ignore clicks, and append a "(not yet implemented)"
-        /// suffix so the player can see the option exists but is unavailable.
-        /// Selecting an option flips Settings.haulPlannerKind to that value.
+        /// render darkened and ignore clicks. Selecting an enabled option
+        /// flips Settings.haulPlannerKind to that value. The label is passed
+        /// in fully composed (including any "(default)" / "(planned)" suffix).
         /// </summary>
         private static void DrawHaulPlannerOption(
             Listing_Standard listing,
@@ -239,15 +239,11 @@ namespace UniqueWeaponsUnbound
             string tooltip,
             bool enabled)
         {
-            string displayLabel = enabled
-                ? label
-                : label + " " + "UWU_HaulPlannerNotImplementedSuffix".Translate();
-
             bool active = Settings.haulPlannerKind == kind;
 
             if (enabled)
             {
-                if (listing.RadioButton(displayLabel, active, tabIn: 0f, tooltip: tooltip))
+                if (listing.RadioButton(label, active, tabIn: 0f, tooltip: tooltip))
                 {
                     Settings.haulPlannerKind = kind;
                 }
@@ -255,12 +251,19 @@ namespace UniqueWeaponsUnbound
             else
             {
                 Color prevColor = GUI.color;
-                GUI.color = Color.gray;
+                Color prevContent = GUI.contentColor;
+                // Compound the tint: GUI.color attenuates the whole control,
+                // GUI.contentColor specifically attenuates text/icon glyphs.
+                // Together they multiply (~0.4 * 0.5 = 0.2 effective), which
+                // reads as visibly darker than plain Color.gray would.
+                GUI.color = new Color(0.4f, 0.4f, 0.4f);
+                GUI.contentColor = new Color(0.5f, 0.5f, 0.5f);
                 // Force-render as inactive even if Settings somehow points
                 // here (e.g. via a save from a future build); the runtime
                 // factory falls back to Sequential for unrecognized values
                 // anyway, so showing it inactive here matches behavior.
-                listing.RadioButton(displayLabel, active: false, tabIn: 0f, tooltip: tooltip);
+                listing.RadioButton(label, active: false, tabIn: 0f, tooltip: tooltip);
+                GUI.contentColor = prevContent;
                 GUI.color = prevColor;
             }
             listing.Gap(8f);

@@ -9,20 +9,21 @@ namespace UniqueWeaponsUnbound.HaulPlanning
     {
         /// <summary>
         /// Original behavior: one stack picked up per trip, sorted by distance
-        /// from the pawn. Always available, default.
+        /// from the pawn. Always available; bedrock fallback for stub planners
+        /// or planners that fail to produce a satisfying plan.
         /// </summary>
         Sequential = 0,
 
         /// <summary>
         /// Polar-sweep clustering around the workbench, bin-packed into trips
-        /// up to encumbrance, with Held-Karp TSP within each trip. Experimental.
+        /// up to encumbrance, with Held-Karp TSP within each trip. Default.
         /// </summary>
         Sweep = 1,
 
         /// <summary>
         /// Exhaustive subset-DP partitioning with sourcing enumeration; falls
         /// back to k-means clustering + sweep for inputs above a tractability
-        /// threshold. Experimental.
+        /// threshold. Planned, not yet implemented.
         /// </summary>
         Optimal = 2,
     }

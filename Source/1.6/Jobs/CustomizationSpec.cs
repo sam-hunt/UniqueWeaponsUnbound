@@ -11,7 +11,7 @@ namespace UniqueWeaponsUnbound
         ApplyCosmetics,
     }
 
-    public class CustomizationOp
+    public class CustomizationOp : IExposable
     {
         public OpType type;
         public WeaponTraitDef trait;
@@ -28,13 +28,28 @@ namespace UniqueWeaponsUnbound
         // Only for ApplyCosmetics ops
         public string nameToApply;
         public int? textureIndexToApply;
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref type, "type");
+            Scribe_Defs.Look(ref trait, "trait");
+            Scribe_Collections.Look(ref cost, "cost", LookMode.Deep);
+            Scribe_Collections.Look(ref refund, "refund", LookMode.Deep);
+            Scribe_Defs.Look(ref colorToApply, "colorToApply");
+            Scribe_Values.Look(ref clearColor, "clearColor", false);
+            Scribe_Values.Look(ref nameToApply, "nameToApply", null);
+            Scribe_Values.Look(ref textureIndexToApply, "textureIndexToApply", null);
+        }
     }
 
     /// <summary>
-    /// Data transfer object between Dialog_WeaponCustomization and JobDriver_CustomizeWeapon.
-    /// Stored in a static registry keyed by pawn ID; retrieved (and removed) when the job starts.
+    /// Data transfer object between Dialog_WeaponCustomization and
+    /// JobDriver_CustomizeWeapon. The dialog writes this directly to the
+    /// driver's spec field on confirm via JobDriver_CustomizeWeapon.SetSpec,
+    /// so the (scribed) field carries it across save/reload taken in the
+    /// gap between the dialog's Close() and the consumeSpec toil.
     /// </summary>
-    public class CustomizationSpec
+    public class CustomizationSpec : IExposable
     {
         /// <summary>
         /// Ordered operations: removals → cosmetics → additions.
@@ -76,46 +91,14 @@ namespace UniqueWeaponsUnbound
         /// </summary>
         public int? finalTextureIndex;
 
-        private static readonly Dictionary<int, CustomizationSpec> pending =
-            new Dictionary<int, CustomizationSpec>();
-
-        public static void Store(Pawn pawn, CustomizationSpec spec)
+        public void ExposeData()
         {
-            pending[pawn.thingIDNumber] = spec;
-        }
-
-        /// <summary>
-        /// Returns and removes the pending spec for this pawn (one-shot consumption).
-        /// Returns null if no spec exists.
-        /// </summary>
-        public static CustomizationSpec Retrieve(Pawn pawn)
-        {
-            if (pending.TryGetValue(pawn.thingIDNumber, out CustomizationSpec spec))
-            {
-                pending.Remove(pawn.thingIDNumber);
-                return spec;
-            }
-            return null;
-        }
-
-        public static void Clear(Pawn pawn)
-        {
-            pending.Remove(pawn.thingIDNumber);
-        }
-
-        public static bool Has(Pawn pawn)
-        {
-            return pending.ContainsKey(pawn.thingIDNumber);
-        }
-
-        /// <summary>
-        /// Returns the pending spec without removing it. Used by TryMakePreToilReservations
-        /// for pre-flight checks (RimWorld calls this multiple times before the job starts).
-        /// </summary>
-        public static CustomizationSpec Peek(Pawn pawn)
-        {
-            pending.TryGetValue(pawn.thingIDNumber, out CustomizationSpec spec);
-            return spec;
+            Scribe_Collections.Look(ref operations, "operations", LookMode.Deep);
+            Scribe_Defs.Look(ref resultingDef, "resultingDef");
+            Scribe_Collections.Look(ref totalCost, "totalCost", LookMode.Deep);
+            Scribe_Collections.Look(ref totalRefund, "totalRefund", LookMode.Deep);
+            Scribe_Defs.Look(ref finalColor, "finalColor");
+            Scribe_Values.Look(ref finalTextureIndex, "finalTextureIndex", null);
         }
     }
 }

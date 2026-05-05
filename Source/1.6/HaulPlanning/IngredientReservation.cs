@@ -60,48 +60,49 @@ namespace UniqueWeaponsUnbound.HaulPlanning
             if (demand.Count == 0)
                 return true;
 
-            // Resolve planner from settings. Stub planners throw on Plan(),
-            // which is caught below and surfaced as a planning failure rather
-            // than a hard exception escaping into the dialog.
-            HaulPlannerKind kind = UWU_Mod.Settings.haulPlannerKind;
-
-            // Low-spare-capacity fallback: Sequential uses Toils_Haul.StartCarryThing,
-            // which loads the carry tracker — bound by Pawn_CarryTracker.MaxStackSpaceEver
-            // (StatDefOf.CarryingCapacity / VolumePerUnit, capped at stackLimit).
-            // That's a *volume* limit, not a mass limit; mass-encumbrance only
-            // affects walking speed afterward. Batched planners load into the
-            // pawn's inventory, which IS mass-bound via MassUtility checks.
-            //
-            // When spare mass capacity is low relative to demand, a batched plan
-            // can produce dramatically more trips than Sequential, because
-            // Sequential gets to over-carry via the carry tracker quirk while
-            // batched is forced to make many small inventory trips. Fall back
-            // to Sequential when the lower bound on batched trip count exceeds
-            // Sequential's lower bound (one trip per def).
-            //
-            // The "right" long-term fix is a hybrid: batched planners use the
-            // carry tracker for the first pickup of each trip and inventory for
-            // the rest. See SweepHaulPlanner / OptimalHaulPlanner spec comments.
-            if (kind != HaulPlannerKind.Sequential)
+            // The customization JobDriver owns the parallel destination/trip-
+            // boundary lists, populated below alongside job.targetQueueA. If
+            // the running driver isn't ours something is badly wrong upstream.
+            var driver = pawn.jobs?.curDriver as JobDriver_CustomizeWeapon;
+            if (driver == null)
             {
-                float spareCapacity = MassUtility.Capacity(pawn) - MassUtility.GearMass(pawn);
-                float totalDemandMass = 0f;
-                foreach (KeyValuePair<ThingDef, int> entry in demand)
-                    totalDemandMass += entry.Value * entry.Key.GetStatValueAbstract(StatDefOf.Mass);
-
-                bool overEncumbered = spareCapacity <= 0f;
-                bool batchedWouldLose = !overEncumbered
-                    && Mathf.CeilToInt(totalDemandMass / spareCapacity) > demand.Count;
-                if (overEncumbered || batchedWouldLose)
-                    kind = HaulPlannerKind.Sequential;
+                Log.Error("[Unique Weapons Unbound] No customize-weapon driver "
+                    + "active during ingredient reservation.");
+                return false;
             }
 
+            HaulPlannerKind kind = UWU_Mod.Settings.haulPlannerKind;
+            IntVec3 workbenchPos = job.GetTarget(TargetIndex.C).Cell;
+
+            HaulPlan plan = AttemptPlan(pawn, demand, workbenchPos, kind);
+
+            // Silent fallback to Sequential when the configured planner can't
+            // satisfy demand. Common cause: Sweep's pool cap (6 candidates
+            // per def) excludes stacks Sequential's no-cap pool would include.
+            // Sequential is also the bedrock fallback for stub planners
+            // (Optimal) that throw NotImplementedException — AttemptPlan
+            // returns null in that case and we retry here.
+            if (plan == null && kind != HaulPlannerKind.Sequential)
+                plan = AttemptPlan(pawn, demand, workbenchPos, HaulPlannerKind.Sequential);
+
+            if (plan == null || !plan.IsValid)
+                return false;
+
+            return CommitPlanAtomic(pawn, job, driver, plan);
+        }
+
+        /// <summary>
+        /// Builds the pool, request, and runs the configured planner. Returns
+        /// null on failure (planner returned null, or stub planner threw
+        /// NotImplementedException).
+        /// </summary>
+        private static HaulPlan AttemptPlan(
+            Pawn pawn, Dictionary<ThingDef, int> demand, IntVec3 workbenchPos, HaulPlannerKind kind)
+        {
             IHaulPlanner planner = HaulPlannerFactory.Get(kind);
 
             Dictionary<ThingDef, List<HaulCandidate>> pool = BuildHaulPool(
                 pawn, demand, planner.CandidatePoolMultiplier, planner.CandidatePoolCap);
-
-            IntVec3 workbenchPos = job.GetTarget(TargetIndex.C).Cell;
 
             var request = new HaulPlanRequest
             {
@@ -113,55 +114,76 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                 Pool = pool,
             };
 
-            HaulPlan plan;
             try
             {
-                plan = planner.Plan(request);
+                return planner.Plan(request);
             }
             catch (System.NotImplementedException)
             {
-                // Stub planner selected but not yet implemented. Fail planning
-                // cleanly so the dialog footer's catch-all surfaces the
-                // standard "couldn't reserve ingredients" path.
                 Log.Warning($"[Unique Weapons Unbound] Selected haul planner "
-                    + $"({kind}) is not implemented. "
-                    + $"Switch to Sequential in mod settings.");
-                return false;
+                    + $"({kind}) is not implemented; falling back to Sequential.");
+                return null;
             }
+        }
 
-            if (plan == null || !plan.IsValid)
-                return false;
-
-            // Reserve every chosen stack atomically. CanReserve was already
-            // checked when we built the pool, but under forcePause that's
-            // still the live state — Reserve should succeed. If it doesn't
-            // (defensive), release anything we held and bail.
-            var reserved = new List<Thing>();
+        /// <summary>
+        /// Reserves every unique Thing in the plan atomically and commits the
+        /// plan to the job's haul queues plus the driver's parallel destination
+        /// and trip-boundary lists. Same Thing may appear in multiple pickups
+        /// (split across CarryTracker + Inventory or across trips); we reserve
+        /// it once, and the driver re-reserves before subsequent pickups since
+        /// vanilla's Toils_Haul.StartCarryThing auto-releases when the per-
+        /// pickup count is satisfied.
+        /// </summary>
+        private static bool CommitPlanAtomic(
+            Pawn pawn, Job job, JobDriver_CustomizeWeapon driver, HaulPlan plan)
+        {
+            var reservedThings = new HashSet<Thing>();
             var queueA = new List<LocalTargetInfo>();
             var countQueue = new List<int>();
+            var destinations = new List<int>();
+            var lastInTripFlags = new List<bool>();
 
             foreach (HaulTrip trip in plan.Trips)
             {
-                if (trip?.Pickups == null)
+                if (trip?.Pickups == null || trip.Pickups.Count == 0)
                     continue;
-                foreach (HaulPickup pickup in trip.Pickups)
+
+                int lastValidIdx = -1;
+                for (int i = trip.Pickups.Count - 1; i >= 0; i--)
                 {
+                    HaulPickup p = trip.Pickups[i];
+                    if (p.Thing != null && p.Count > 0) { lastValidIdx = i; break; }
+                }
+                if (lastValidIdx < 0)
+                    continue;
+
+                for (int i = 0; i < trip.Pickups.Count; i++)
+                {
+                    HaulPickup pickup = trip.Pickups[i];
                     if (pickup.Thing == null || pickup.Count <= 0)
                         continue;
-                    if (!pawn.Reserve(pickup.Thing, job, 1, -1, null, errorOnFailed: false))
+
+                    if (reservedThings.Add(pickup.Thing))
                     {
-                        foreach (Thing t in reserved)
-                            pawn.Map.reservationManager.Release(t, pawn, job);
-                        return false;
+                        if (!pawn.Reserve(pickup.Thing, job, 1, -1, null, errorOnFailed: false))
+                        {
+                            foreach (Thing t in reservedThings)
+                                pawn.Map.reservationManager.Release(t, pawn, job);
+                            return false;
+                        }
                     }
-                    reserved.Add(pickup.Thing);
+
                     queueA.Add(pickup.Thing);
                     countQueue.Add(pickup.Count);
+                    destinations.Add((int)pickup.Destination);
+                    lastInTripFlags.Add(i == lastValidIdx);
                 }
             }
 
             job.targetQueueA = queueA;
             job.countQueue = countQueue;
+            driver.SetHaulPickupMetadata(plan.ExecutionStrategy, destinations, lastInTripFlags);
             return true;
         }
 

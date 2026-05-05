@@ -94,11 +94,16 @@
   <UWU_SettingsHaulPlanner>Ingredient hauling</UWU_SettingsHaulPlanner>
   <UWU_SettingsMiscellaneous>Miscellaneous</UWU_SettingsMiscellaneous>
 
+  <!-- Settings: Reusable label suffixes (each includes a leading space) -->
+  <UWU_DefaultSuffix> (default)</UWU_DefaultSuffix>
+  <UWU_RecommendedSuffix> (recommended)</UWU_RecommendedSuffix>
+  <UWU_VanillaSuffix> (vanilla)</UWU_VanillaSuffix>
+  <UWU_ExperimentalSuffix> (experimental)</UWU_ExperimentalSuffix>
+  <UWU_PlannedSuffix> (planned)</UWU_PlannedSuffix>
+
   <!-- Settings: Trait costs -->
   <UWU_TraitCostMultiplier>Trait cost multiplier: {0}%</UWU_TraitCostMultiplier>
   <UWU_TraitRefundRate>Trait refund rate: {0}%</UWU_TraitRefundRate>
-  <UWU_DefaultSuffix> (default)</UWU_DefaultSuffix>
-  <UWU_RecommendedSuffix> (recommended)</UWU_RecommendedSuffix>
   <UWU_RefundRateNoEffect>Trait refund rate has no effect while trait cost multiplier is 0%.</UWU_RefundRateNoEffect>
   <UWU_UseRecipeBaseCost>Derive base cost from crafting recipe</UWU_UseRecipeBaseCost>
   <UWU_UseRecipeBaseCostDesc>When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs.</UWU_UseRecipeBaseCostDesc>
@@ -134,12 +139,11 @@
   <UWU_EnableGroundCustomizationDesc>Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button.</UWU_EnableGroundCustomizationDesc>
 
   <!-- Settings: Haul planner -->
-  <UWU_HaulPlannerNotImplementedSuffix>(not yet implemented)</UWU_HaulPlannerNotImplementedSuffix>
-  <UWU_HaulPlannerSequential>Sequential (default)</UWU_HaulPlannerSequential>
-  <UWU_HaulPlannerSequentialDesc>Original behavior: pawns fetch one ingredient stack per trip, sorted by distance from the pawn. Reliable but ignores spare carrying capacity, which can produce many short trips for resource-heavy customizations.</UWU_HaulPlannerSequentialDesc>
-  <UWU_HaulPlannerSweep>Sweep + Held-Karp (experimental)</UWU_HaulPlannerSweep>
-  <UWU_HaulPlannerSweepDesc>Clusters nearby ingredient stacks by polar angle around the workbench, packs them into trips up to the pawn's carrying capacity, and sequences each trip optimally. Trades a small amount of planning time for many fewer trips on average.</UWU_HaulPlannerSweepDesc>
-  <UWU_HaulPlannerOptimal>Exhaustive (experimental)</UWU_HaulPlannerOptimal>
-  <UWU_HaulPlannerOptimalDesc>Performs an exhaustive search over sourcing and partitioning to find a near-optimal trip plan. Falls back to a clustered heuristic on very large inputs. Computationally heaviest but produces the best results when carrying capacity is the limiting factor.</UWU_HaulPlannerOptimalDesc>
+  <UWU_HaulPlannerSequential>Sequential</UWU_HaulPlannerSequential>
+  <UWU_HaulPlannerSequentialDesc>Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations.</UWU_HaulPlannerSequentialDesc>
+  <UWU_HaulPlannerSweep>Sweep + Held-Karp</UWU_HaulPlannerSweep>
+  <UWU_HaulPlannerSweepDesc>Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead.</UWU_HaulPlannerSweepDesc>
+  <UWU_HaulPlannerOptimal>Optimal</UWU_HaulPlannerOptimal>
+  <UWU_HaulPlannerOptimalDesc>Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but produces the shortest possible runs when ingredients are scattered or carrying capacity is tight.</UWU_HaulPlannerOptimalDesc>
 
 </LanguageData>

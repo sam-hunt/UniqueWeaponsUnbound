@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using UnityEngine;
+using UniqueWeaponsUnbound.HaulPlanning;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
@@ -27,6 +28,34 @@ namespace UniqueWeaponsUnbound
         // when the job ends with Incompletable. First-set wins so downstream cascade
         // failures don't overwrite the original cause.
         private string bailMessage;
+
+        // Selects which haul-phase toil chain MakeNewToils builds for this
+        // job. Set by IngredientReservation from the planner's HaulPlan and
+        // scribed so mid-haul saves resume on the same path. Defaults to
+        // VanillaCarryOnly so saves predating this field (and any plan that
+        // never set the strategy) take the bedrock vanilla-toil path.
+        private HaulPlanExecutionStrategy executionStrategy = HaulPlanExecutionStrategy.VanillaCarryOnly;
+
+        // Per-pickup metadata populated by IngredientReservation alongside
+        // job.targetQueueA / countQueue. Used only by the
+        // UwuCarryInventoryHybrid execution path; the VanillaCarryOnly path
+        // never reads these.
+        private List<int> pickupDestinations;
+        private List<bool> pickupLastInTrip;
+
+        // Trip-scoped state, populated as the loop consumes pickup metadata
+        // and consumed at trip end. Scribed: JobDriver.curToilIndex is scribed
+        // by base, so a mid-trip reload resumes between hybrid sync and pickup
+        // branch (or between pickup and trip-end unload) where these fields
+        // would otherwise default to CarryTracker / false and mis-route the
+        // next pickup or prematurely jump out of the trip.
+        private PickupDestination currentPickupDestination;
+        private bool currentPickupLastInTrip;
+        // (def, count) entries the pawn loaded into inventory during the
+        // current trip; consumed by the trip-end unload toil to drop exactly
+        // those amounts at the workbench (ignoring any pre-existing inventory
+        // stacks of the same def).
+        private List<ThingDefCountClass> currentTripInvLoad;
 
         private Building_WorkTable Workbench =>
             (Building_WorkTable)job.GetTarget(WorkbenchIndex).Thing;
@@ -69,6 +98,79 @@ namespace UniqueWeaponsUnbound
         {
             string traitLabel = trait?.LabelCap ?? "";
             SetBailMessage("UWU_IngredientShortfall".Translate(WeaponLabel, traitLabel));
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            // Haul-phase: strategy + parallel pickup metadata, per-pickup
+            // transient fields read by the hybrid pickup branch, trip-scoped
+            // inventory load consumed at trip end, and cross-trip placed
+            // ingredients consumed by the work loop.
+            Scribe_Values.Look(ref executionStrategy, "executionStrategy",
+                HaulPlanExecutionStrategy.VanillaCarryOnly);
+            Scribe_Collections.Look(ref pickupDestinations, "pickupDestinations", LookMode.Value);
+            Scribe_Collections.Look(ref pickupLastInTrip, "pickupLastInTrip", LookMode.Value);
+            Scribe_Values.Look(ref currentPickupDestination, "currentPickupDestination",
+                PickupDestination.CarryTracker);
+            Scribe_Values.Look(ref currentPickupLastInTrip, "currentPickupLastInTrip", false);
+            Scribe_Collections.Look(ref currentTripInvLoad, "currentTripInvLoad", LookMode.Deep);
+            Scribe_Collections.Look(ref placedIngredients, "placedIngredients", LookMode.Reference);
+
+            // Work-loop: spec/weapon/op-index/return-mode/refund-ledger.
+            // Spec is Deep because the dialog writes it directly to this
+            // field and there's no other source to recover it from. Weapon
+            // is by reference so def conversions (which spawn a new Thing
+            // and reassign the field) round-trip the post-conversion weapon,
+            // not the destroyed pre-conversion one. Bail message rides along
+            // so an end-of-toil save between EndJobWith and the finish action
+            // still surfaces.
+            Scribe_Deep.Look(ref spec, "spec");
+            Scribe_References.Look(ref weapon, "weapon");
+            Scribe_Values.Look(ref currentOpIndex, "currentOpIndex", 0);
+            Scribe_Values.Look(ref returnMode, "returnMode", WeaponReturnMode.LeaveOnWorkbench);
+            Scribe_Collections.Look(ref refundLedger, "refundLedger", LookMode.Def, LookMode.Value);
+            Scribe_Values.Look(ref bailMessage, "bailMessage", null);
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                if (placedIngredients == null)
+                    placedIngredients = new List<Thing>();
+                else
+                    // Reference scribing resolves to null for Things that
+                    // were destroyed/discarded between save and load.
+                    placedIngredients.RemoveAll(t => t == null);
+                if (refundLedger == null)
+                    refundLedger = new Dictionary<ThingDef, float>();
+            }
+        }
+
+        /// <summary>
+        /// Called by Dialog_WeaponCustomization at confirm time, while the
+        /// dialog's forcePause still holds the game still. Writes the spec to
+        /// the scribed field directly so a save/reload taken in the one-tick
+        /// gap between Close() and the consumeSpec toil round-trips a
+        /// confirmed customization correctly.
+        /// </summary>
+        public void SetSpec(CustomizationSpec s)
+        {
+            spec = s;
+        }
+
+        /// <summary>
+        /// Called by IngredientReservation after a plan is committed. Stores
+        /// the execution strategy so MakeNewToils builds the right haul chain,
+        /// plus per-pickup destination and trip-boundary flags in lockstep
+        /// with job.targetQueueA / countQueue (used by the hybrid path only).
+        /// </summary>
+        public void SetHaulPickupMetadata(
+            HaulPlanExecutionStrategy strategy,
+            List<int> destinations,
+            List<bool> lastInTripFlags)
+        {
+            executionStrategy = strategy;
+            pickupDestinations = destinations;
+            pickupLastInTrip = lastInTripFlags;
         }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
@@ -317,7 +419,11 @@ namespace UniqueWeaponsUnbound
             });
             AddFinishAction(delegate(JobCondition condition)
             {
-                CustomizationSpec.Clear(pawn);
+                // Drop any haul-phase inventory the pawn was still holding when
+                // the job ended — without this, ingredients picked up but not
+                // yet unloaded at the workbench would silently ride along into
+                // the pawn's next job.
+                DropPendingHaulInventory();
 
                 // Spawn any remaining refund surplus (credits not consumed by additions)
                 // Floor fractional amounts here — this is the only point where rounding occurs
@@ -486,8 +592,10 @@ namespace UniqueWeaponsUnbound
             waitForDialog.tickAction = delegate
             {
                 // forcePause prevents ticking while the dialog is open.
-                // Once it closes and the game unpauses, check the outcome.
-                if (CustomizationSpec.Peek(pawn) != null)
+                // Once it closes and the game unpauses, check the outcome
+                // via the spec field — Dialog_WeaponCustomization.Confirm
+                // sets it directly on this driver before Close().
+                if (spec != null)
                 {
                     ReadyForNextToil();
                 }
@@ -505,17 +613,17 @@ namespace UniqueWeaponsUnbound
             Toil consumeSpec = ToilMaker.MakeToil("MakeNewToils");
             consumeSpec.initAction = delegate
             {
-                spec = CustomizationSpec.Retrieve(pawn);
+                // Spec is set directly on this driver by the dialog at confirm
+                // time; this toil is the boundary between dialog phase and
+                // haul phase. Ingredients were reserved synchronously under
+                // forcePause, so job.targetQueueA / countQueue are already
+                // populated by the time this runs.
                 if (spec == null)
                 {
                     Log.Error("[Unique Weapons Unbound] Spec was null at job start.");
                     EndJobWith(JobCondition.Errored);
                     return;
                 }
-                // Ingredients were reserved synchronously when the player confirmed
-                // the dialog (under forcePause). job.targetQueueA / countQueue are
-                // already populated; this toil is just the boundary between dialog
-                // phase and haul phase.
             };
             consumeSpec.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return consumeSpec;
@@ -537,11 +645,13 @@ namespace UniqueWeaponsUnbound
             yield return Toils_Jump.JumpIf(startWorkLoop,
                 () => job.targetQueueA == null || job.targetQueueA.Count == 0);
 
-            Toil setHaulReport = ToilMaker.MakeToil("MakeNewToils");
+            Toil setHaulReport = ToilMaker.MakeToil("HaulSetReport");
             setHaulReport.initAction = delegate
             {
                 string label = weapon?.LabelShortCap ?? "UWU_WeaponFallback".Translate();
                 phaseReport = "UWU_GatheringMaterials".Translate(label);
+                if (currentTripInvLoad == null)
+                    currentTripInvLoad = new List<ThingDefCountClass>();
             };
             setHaulReport.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return setHaulReport;
@@ -549,74 +659,101 @@ namespace UniqueWeaponsUnbound
             Toil extract = Toils_JobTransforms.ExtractNextTargetFromQueue(IngredientIndex);
             yield return extract;
 
+            // === Strategy branch ===
+            // Two haul-phase toil chains live below: the bedrock vanilla
+            // path (matches pre-Sweep behavior exactly — Toils_Haul.StartCarryThing
+            // + the original drop toil + JumpIfHaveTargetInQueue) and the
+            // UWU hybrid path (carry-tracker + inventory routing with
+            // metadata sync). The vanilla path falls through from this jump;
+            // the hybrid path is reached when executionStrategy says so.
+            // Both paths converge at rejoinLoop below.
+            Toil hybridEntry = BuildHybridSyncMetadataToil();
+            yield return Toils_Jump.JumpIf(hybridEntry,
+                () => executionStrategy == HaulPlanExecutionStrategy.UwuCarryInventoryHybrid);
+
+            // === VanillaCarryOnly path ===
+            // Identical in shape to the pre-Sweep haul phase. No parallel-
+            // list reads, no destination branching, no inventory pickups —
+            // every Sequential plan rides this path exclusively.
+            Toil rejoinLoop = Toils_Jump.JumpIfHaveTargetInQueue(IngredientIndex, extract);
+
             yield return Toils_Goto.GotoThing(IngredientIndex, PathEndMode.ClosestTouch)
-                .FailOn(() =>
-                {
-                    Thing ing = job.GetTarget(IngredientIndex).Thing;
-                    if (ing == null || !ing.Spawned || ing.IsForbidden(pawn))
-                    {
-                        SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
-                        return true;
-                    }
-                    // Unreachable (e.g. a wall went up between pawn and stockpile).
-                    // Caught here so the job ends Incompletable with our message
-                    // rather than vanilla's silent Errored path from the pather.
-                    if (!pawn.CanReach(ing, PathEndMode.ClosestTouch, Danger.Deadly))
-                    {
-                        SetBailMessage("UWU_BailIngredientUnreachable".Translate(WeaponLabel));
-                        return true;
-                    }
-                    return false;
-                });
+                .FailOn(GotoIngredientFailCondition);
 
             yield return Toils_Haul.StartCarryThing(IngredientIndex, putRemainderInQueue: true);
 
             yield return Toils_Goto.GotoThing(WorkbenchIndex, PathEndMode.InteractionCell);
 
-            Toil dropIngredient = ToilMaker.MakeToil("MakeNewToils");
-            dropIngredient.initAction = delegate
+            yield return BuildVanillaDropToil();
+
+            // Skip past the hybrid path to the loop tail.
+            yield return Toils_Jump.JumpIf(rejoinLoop, () => true);
+
+            // === UwuCarryInventoryHybrid path ===
+            yield return hybridEntry;
+
+            // Vanilla's Toils_Haul.StartCarryThing auto-releases the stack
+            // reservation when curJob.count is fully satisfied but the stack
+            // has remainder on the map. Hybrid plans split a single Thing
+            // across multiple queue entries by design, so we re-acquire the
+            // reservation before each subsequent visit. Race with another
+            // pawn during walk-back is detected by the CanReserve check.
+            Toil reReserveIfNeeded = ToilMaker.MakeToil("HaulReReserve");
+            reReserveIfNeeded.initAction = delegate
             {
-                Thing carried = pawn.carryTracker.CarriedThing;
-                if (carried == null)
+                Thing t = job.GetTarget(IngredientIndex).Thing;
+                if (t == null || !t.Spawned)
+                    return;
+                if (pawn.Map.reservationManager.ReservedBy(t, pawn, job))
+                    return;
+                if (!pawn.CanReserve(t))
                 {
-                    // Carry tracker emptied between Goto and drop. Surface a
-                    // direct ingredient-loss bail rather than letting the
-                    // downstream precheck report a misleading shortfall.
                     SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
                     EndJobWith(JobCondition.Incompletable);
                     return;
                 }
-
-                // Track placed stacks via the placedAction callback rather than
-                // the out resultingThing parameter. This mirrors the vanilla bill
-                // pattern (Toils_Haul.PlaceHauledThingInCell) and is robust to
-                // mods like Stack Gap that patch GenPlace.TryPlaceDirect and
-                // leave resultingThing null on their spawn-new-stack paths while
-                // still invoking the callback for every placed/absorbed stack.
-                Action<Thing, int> placedAction = delegate(Thing placed, int _)
-                {
-                    if (placed != null && !placedIngredients.Contains(placed))
-                        placedIngredients.Add(placed);
-                };
-
-                IntVec3 cell = FindIngredientPlaceCell(carried);
-                if (pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out _, placedAction))
-                    return;
-                if (pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out _, placedAction))
-                    return;
-
-                // Both placements failed — the workbench area has no room.
-                // Bail with a descriptive reason, but try a final drop at the
-                // pawn's position so the carry tracker isn't left holding the
-                // ingredient into the next job.
-                SetBailMessage("UWU_BailIngredientPlacementFailed".Translate(WeaponLabel));
-                pawn.carryTracker.TryDropCarriedThing(pawn.Position, ThingPlaceMode.Near, out _);
-                EndJobWith(JobCondition.Incompletable);
+                pawn.Reserve(t, job, 1, -1, null, errorOnFailed: false);
             };
-            dropIngredient.defaultCompleteMode = ToilCompleteMode.Instant;
-            yield return dropIngredient;
+            reReserveIfNeeded.defaultCompleteMode = ToilCompleteMode.Instant;
+            yield return reReserveIfNeeded;
 
-            yield return Toils_Jump.JumpIfHaveTargetInQueue(IngredientIndex, extract);
+            yield return Toils_Goto.GotoThing(IngredientIndex, PathEndMode.ClosestTouch)
+                .FailOn(GotoIngredientFailCondition);
+
+            // Carry tracker holds at most one def at a time, so every CT
+            // pickup is by construction the trip's first (or only) pickup of
+            // that def; inventory pickups stack across defs in the same trip.
+            Toil pickupBranch = ToilMaker.MakeToil("HaulPickupBranch");
+            pickupBranch.initAction = delegate
+            {
+                if (currentPickupDestination == PickupDestination.Inventory)
+                    DoInventoryPickup();
+                else
+                    DoCarryTrackerPickup();
+            };
+            pickupBranch.defaultCompleteMode = ToilCompleteMode.Instant;
+            yield return pickupBranch;
+
+            // More pickups in this trip → loop back to extract without
+            // detouring to the workbench.
+            yield return Toils_Jump.JumpIf(extract, () => !currentPickupLastInTrip);
+
+            yield return Toils_Goto.GotoThing(WorkbenchIndex, PathEndMode.InteractionCell);
+
+            // Trip end: drop the carry tracker (if loaded) and unload the
+            // inventory (matched by def/count entries we recorded during the
+            // trip — pre-existing inventory items of the same def stay).
+            Toil unloadAtWorkbench = ToilMaker.MakeToil("HaulUnloadAtWorkbench");
+            unloadAtWorkbench.initAction = delegate
+            {
+                UnloadCarryTrackerAtBench();
+                UnloadInventoryAtBench();
+            };
+            unloadAtWorkbench.defaultCompleteMode = ToilCompleteMode.Instant;
+            yield return unloadAtWorkbench;
+
+            // === Rejoin ===
+            yield return rejoinLoop;
 
             // === WORK LOOP ===
             // Each operation is applied after its work tick completes, so each
@@ -709,6 +846,340 @@ namespace UniqueWeaponsUnbound
             };
             returnWeaponToil.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return returnWeaponToil;
+        }
+
+        /// <summary>
+        /// Shared FailOn predicate for the goto-ingredient toil in both haul
+        /// chains. Catches "ingredient gone forbidden / despawned / unreachable"
+        /// before the pather hits its own silent Errored path.
+        /// </summary>
+        private bool GotoIngredientFailCondition()
+        {
+            Thing ing = job.GetTarget(IngredientIndex).Thing;
+            if (ing == null || !ing.Spawned || ing.IsForbidden(pawn))
+            {
+                SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                return true;
+            }
+            if (!pawn.CanReach(ing, PathEndMode.ClosestTouch, Danger.Deadly))
+            {
+                SetBailMessage("UWU_BailIngredientUnreachable".Translate(WeaponLabel));
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// VanillaCarryOnly drop: drops the carry-tracker contents at a
+        /// workbench cell, falling back to a Near-mode placement if Direct
+        /// fails. Bails if the carry tracker is unexpectedly empty —
+        /// VanillaCarryOnly trips always pick up via the carry tracker, so
+        /// an empty CT at drop time means an ingredient was lost mid-trip.
+        /// </summary>
+        private Toil BuildVanillaDropToil()
+        {
+            Toil drop = ToilMaker.MakeToil("HaulVanillaDrop");
+            drop.initAction = delegate
+            {
+                Thing carried = pawn.carryTracker.CarriedThing;
+                if (carried == null)
+                {
+                    SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                    EndJobWith(JobCondition.Incompletable);
+                    return;
+                }
+                Action<Thing, int> placedAction = TrackAndReservePlaced;
+                IntVec3 cell = FindIngredientPlaceCell(carried);
+                if (pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out _, placedAction))
+                    return;
+                if (pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out _, placedAction))
+                    return;
+                SetBailMessage("UWU_BailIngredientPlacementFailed".Translate(WeaponLabel));
+                pawn.carryTracker.TryDropCarriedThing(pawn.Position, ThingPlaceMode.Near, out _);
+                EndJobWith(JobCondition.Incompletable);
+            };
+            drop.defaultCompleteMode = ToilCompleteMode.Instant;
+            return drop;
+        }
+
+        /// <summary>
+        /// First toil of the UwuCarryInventoryHybrid path: pops the front of
+        /// pickupDestinations and pickupLastInTrip into the per-pickup
+        /// transient fields in lockstep with the just-extracted queue entry.
+        /// </summary>
+        private Toil BuildHybridSyncMetadataToil()
+        {
+            Toil sync = ToilMaker.MakeToil("HaulSyncMetadata");
+            sync.initAction = delegate
+            {
+                if (pickupDestinations != null && pickupDestinations.Count > 0)
+                {
+                    currentPickupDestination = (PickupDestination)pickupDestinations[0];
+                    pickupDestinations.RemoveAt(0);
+                }
+                else
+                {
+                    currentPickupDestination = PickupDestination.CarryTracker;
+                }
+                if (pickupLastInTrip != null && pickupLastInTrip.Count > 0)
+                {
+                    currentPickupLastInTrip = pickupLastInTrip[0];
+                    pickupLastInTrip.RemoveAt(0);
+                }
+                else
+                {
+                    currentPickupLastInTrip = true;
+                }
+            };
+            sync.defaultCompleteMode = ToilCompleteMode.Instant;
+            return sync;
+        }
+
+        /// <summary>
+        /// CT-destination pickup. Loads the requested count from the targeted
+        /// stack into the pawn's carry tracker. The carry tracker is volume-
+        /// bound (Pawn_CarryTracker.MaxStackSpaceEver) and mass-free.
+        ///
+        /// When the requested count exceeds carry-tracker volume (typical for
+        /// SequentialHaulPlanner output, which doesn't volume-cap), we
+        /// replicate vanilla Toils_Haul.StartCarryThing's putRemainderInQueue
+        /// pattern: take what fits, re-insert the residual at the front of the
+        /// queue (with parallel metadata) as its own trip, and end the current
+        /// trip so the pawn drops at the bench before walking back for the
+        /// rest. The residual rides with destination=CarryTracker so the next
+        /// loop iteration handles it the same way; the source's reservation
+        /// stays intact since we never call vanilla's auto-release path.
+        /// </summary>
+        private void DoCarryTrackerPickup()
+        {
+            Thing thing = job.GetTarget(IngredientIndex).Thing;
+            if (thing == null || !thing.Spawned || thing.stackCount <= 0)
+            {
+                SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            int requested = job.count;
+            int volAvail = pawn.carryTracker.AvailableStackSpace(thing.def);
+            if (volAvail <= 0)
+            {
+                // CT is busy with a different def — would only happen if the
+                // planner emitted two CT pickups for one trip, which it
+                // doesn't (per-trip CT count is at most one). Defensive bail.
+                SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            int take = Mathf.Min(requested, thing.stackCount, volAvail);
+            if (take <= 0)
+            {
+                SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            int actualTaken = pawn.carryTracker.TryStartCarry(thing, take, reserve: true);
+            if (actualTaken <= 0)
+            {
+                SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            int residual = requested - actualTaken;
+            if (residual > 0)
+            {
+                if (job.targetQueueA == null) job.targetQueueA = new List<LocalTargetInfo>();
+                if (job.countQueue == null) job.countQueue = new List<int>();
+                if (pickupDestinations == null) pickupDestinations = new List<int>();
+                if (pickupLastInTrip == null) pickupLastInTrip = new List<bool>();
+                job.targetQueueA.Insert(0, thing);
+                job.countQueue.Insert(0, residual);
+                pickupDestinations.Insert(0, (int)PickupDestination.CarryTracker);
+                pickupLastInTrip.Insert(0, true);
+                currentPickupLastInTrip = true;
+            }
+        }
+
+        /// <summary>
+        /// Inventory-destination pickup. SplitOff the requested count from the
+        /// targeted stack and TryAdd into the pawn's inventory. Inventory has
+        /// no mass cap at the container level (mass is purely a movement-speed
+        /// stat), so TryAdd succeeds unless the def is incompatible — defensive
+        /// bail otherwise. Records the (def, count) for the trip-end unload to
+        /// drop exactly this much at the workbench, ignoring any pre-existing
+        /// inventory items of the same def.
+        /// </summary>
+        private void DoInventoryPickup()
+        {
+            Thing thing = job.GetTarget(IngredientIndex).Thing;
+            if (thing == null || !thing.Spawned || thing.stackCount <= 0)
+            {
+                SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            int requested = job.count;
+            if (thing.stackCount < requested)
+            {
+                SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            Thing splitOff = thing.SplitOff(requested);
+            if (splitOff == null)
+            {
+                SetBailMessage("UWU_BailIngredientLost".Translate(WeaponLabel));
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            if (!pawn.inventory.innerContainer.TryAdd(splitOff, canMergeWithExistingStacks: true))
+            {
+                if (splitOff != thing && !splitOff.Destroyed)
+                    thing.TryAbsorbStack(splitOff, respectStackLimit: false);
+                SetBailMessage("UWU_BailIngredientPlacementFailed".Translate(WeaponLabel));
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            if (currentTripInvLoad == null)
+                currentTripInvLoad = new List<ThingDefCountClass>();
+            currentTripInvLoad.Add(new ThingDefCountClass(thing.def, requested));
+        }
+
+        /// <summary>
+        /// Drops whatever the pawn is carrying in the carry tracker at the
+        /// workbench. No-op when the carry tracker is empty (inventory-only
+        /// trips). Tracks placed stacks via placedAction for later consumption
+        /// by ApplyOperation.
+        /// </summary>
+        private void UnloadCarryTrackerAtBench()
+        {
+            Thing carried = pawn.carryTracker.CarriedThing;
+            if (carried == null) return;
+
+            Action<Thing, int> placedAction = TrackAndReservePlaced;
+
+            IntVec3 cell = FindIngredientPlaceCell(carried);
+            if (pawn.carryTracker.TryDropCarriedThing(cell, ThingPlaceMode.Direct, out _, placedAction))
+                return;
+            if (pawn.carryTracker.TryDropCarriedThing(Workbench.Position, ThingPlaceMode.Near, out _, placedAction))
+                return;
+
+            // Workbench area has no room. Bail with a descriptive reason and
+            // a final fallback drop so the carry tracker doesn't carry the
+            // ingredient into the next job.
+            SetBailMessage("UWU_BailIngredientPlacementFailed".Translate(WeaponLabel));
+            pawn.carryTracker.TryDropCarriedThing(pawn.Position, ThingPlaceMode.Near, out _);
+            EndJobWith(JobCondition.Incompletable);
+        }
+
+        /// <summary>
+        /// Drops the (def, count) entries the pawn loaded into inventory
+        /// during the current trip at the workbench. Pre-existing inventory
+        /// items of the same def stay where they are — only the trip's
+        /// recorded loads are unloaded. Clears currentTripInvLoad on success.
+        /// </summary>
+        private void UnloadInventoryAtBench()
+        {
+            if (currentTripInvLoad == null || currentTripInvLoad.Count == 0)
+                return;
+
+            Action<Thing, int> placedAction = TrackAndReservePlaced;
+
+            foreach (ThingDefCountClass entry in currentTripInvLoad)
+            {
+                int remaining = entry.count;
+                for (int i = pawn.inventory.innerContainer.Count - 1; i >= 0 && remaining > 0; i--)
+                {
+                    Thing inv = pawn.inventory.innerContainer[i];
+                    if (inv.def != entry.thingDef) continue;
+
+                    int dropAmt = Mathf.Min(remaining, inv.stackCount);
+                    int stackBefore = inv.stackCount;
+                    IntVec3 cell = FindIngredientPlaceCell(inv);
+                    if (pawn.inventory.innerContainer.TryDrop(
+                        inv, cell, pawn.Map, ThingPlaceMode.Direct, dropAmt, out _, placedAction))
+                    {
+                        remaining -= dropAmt;
+                        continue;
+                    }
+
+                    // Direct mode may have partially absorbed our drop into
+                    // an existing workbench-cell stack before failing —
+                    // GenPlace.TryPlaceDirect calls TryAbsorbStack with
+                    // respectStackLimit=true, which absorbs up to the cell
+                    // stack's room then aborts when the cell is otherwise
+                    // full. Credit that partial work and resize the retry
+                    // before re-entering TryDrop, otherwise we'd request the
+                    // original count against a now-smaller inv stack and
+                    // trigger ThingOwner's "tried to drop X while only
+                    // having Y" error log.
+                    int absorbedDuringDirect = stackBefore - inv.stackCount;
+                    remaining -= absorbedDuringDirect;
+                    if (remaining <= 0) continue;
+
+                    int retryAmt = Mathf.Min(remaining, inv.stackCount);
+                    if (retryAmt <= 0) continue;
+                    if (pawn.inventory.innerContainer.TryDrop(
+                        inv, Workbench.Position, pawn.Map, ThingPlaceMode.Near, retryAmt, out _, placedAction))
+                    {
+                        remaining -= retryAmt;
+                        continue;
+                    }
+                    SetBailMessage("UWU_BailIngredientPlacementFailed".Translate(WeaponLabel));
+                    EndJobWith(JobCondition.Incompletable);
+                    return;
+                }
+            }
+            currentTripInvLoad.Clear();
+        }
+
+        /// <summary>
+        /// Drop callback shared by both unload paths. Adds the placed stack to
+        /// placedIngredients (deduped) so ApplyOperation can consume from it
+        /// later, and reserves it against this job so other haul AI doesn't
+        /// pick it back up between trips. Reservation is best-effort — if
+        /// CanReserve fails (e.g. another pawn already grabbed the cell stack
+        /// before the absorb completed), we let it ride; the existing
+        /// "ingredients lost" precheck will catch a real shortfall at op time.
+        /// </summary>
+        private void TrackAndReservePlaced(Thing placed, int _)
+        {
+            if (placed == null) return;
+            if (!placedIngredients.Contains(placed))
+                placedIngredients.Add(placed);
+            if (placed.Spawned
+                && !pawn.Map.reservationManager.ReservedBy(placed, pawn, job)
+                && pawn.CanReserve(placed))
+            {
+                pawn.Reserve(placed, job, 1, -1, null, errorOnFailed: false);
+            }
+        }
+
+        /// <summary>
+        /// Drops haul-phase inventory items the pawn is still holding when
+        /// the job ends (interrupted between pickup and workbench unload).
+        /// Without this, the pawn would silently carry the ingredients into
+        /// future jobs — confusing for the player and effectively a stockpile
+        /// leak from the world's perspective.
+        /// </summary>
+        private void DropPendingHaulInventory()
+        {
+            if (currentTripInvLoad == null || currentTripInvLoad.Count == 0) return;
+            if (pawn.Map == null || pawn.inventory == null) return;
+
+            foreach (ThingDefCountClass entry in currentTripInvLoad)
+            {
+                int remaining = entry.count;
+                for (int i = pawn.inventory.innerContainer.Count - 1; i >= 0 && remaining > 0; i--)
+                {
+                    Thing inv = pawn.inventory.innerContainer[i];
+                    if (inv.def != entry.thingDef) continue;
+                    int dropAmt = Mathf.Min(remaining, inv.stackCount);
+                    pawn.inventory.innerContainer.TryDrop(
+                        inv, pawn.Position, pawn.Map, ThingPlaceMode.Near, dropAmt, out _);
+                    remaining -= dropAmt;
+                }
+            }
+            currentTripInvLoad.Clear();
         }
 
         /// <summary>
@@ -879,6 +1350,9 @@ namespace UniqueWeaponsUnbound
             pawn.Reserve(newWeapon, job);
             pawn.Map.physicalInteractionReservationManager.Reserve(pawn, job, newWeapon);
             weapon = newWeapon;
+            // Keep the job target in sync with the live weapon: a save taken
+            // after a conversion must not scribe targetB as a destroyed ref.
+            job.SetTarget(WeaponIndex, newWeapon);
         }
     }
 }

@@ -193,9 +193,12 @@ namespace UniqueWeaponsUnbound
                         return;
                     }
 
-                    // The running job's wait-for-dialog toil detects the stored spec on
-                    // the next tick and advances straight to the haul phase.
-                    CustomizationSpec.Store(pawn, spec);
+                    // Set the spec directly on the driver field (not the static
+                    // pending-spec dict) so the field-scribe carries it across a
+                    // save/reload taken in the one-tick gap between Close() and
+                    // the consumeSpec toil — autosave landing in that gap would
+                    // otherwise orphan a confirmed customization.
+                    ((JobDriver_CustomizeWeapon)pawn.jobs.curDriver).SetSpec(spec);
                     Close();
                 }
             }

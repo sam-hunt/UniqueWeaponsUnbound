@@ -28,7 +28,11 @@ namespace UniqueWeaponsUnbound.HaulPlanning
         public HaulPlan Plan(HaulPlanRequest request)
         {
             if (request.Demand == null || request.Demand.Count == 0)
-                return new HaulPlan { Trips = new List<HaulTrip>() };
+                return new HaulPlan
+                {
+                    Trips = new List<HaulTrip>(),
+                    ExecutionStrategy = HaulPlanExecutionStrategy.VanillaCarryOnly,
+                };
 
             var trips = new List<HaulTrip>();
 
@@ -76,7 +80,11 @@ namespace UniqueWeaponsUnbound.HaulPlanning
                     return null;
             }
 
-            return new HaulPlan { Trips = trips };
+            return new HaulPlan
+            {
+                Trips = trips,
+                ExecutionStrategy = HaulPlanExecutionStrategy.VanillaCarryOnly,
+            };
         }
     }
 }

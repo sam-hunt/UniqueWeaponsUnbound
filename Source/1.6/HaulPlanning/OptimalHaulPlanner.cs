@@ -143,34 +143,34 @@ namespace UniqueWeaponsUnbound.HaulPlanning
 
     CARRY TRACKER VS INVENTORY
     --------------------------
-    See the corresponding section in SweepHaulPlanner.cs. The hybrid model
-    (first pickup of each trip via the carry tracker, remainder via inventory)
-    matters even more for this planner: because Optimal commits to producing
-    the strictly-best plan, ignoring the carry-tracker advantage that
-    Sequential gets is a guaranteed regression on low-capacity inputs.
+    The hybrid carry model is in place — see SweepHaulPlanner.cs for the
+    full description. HaulPickup carries a Destination field
+    (CarryTracker / Inventory) and JobDriver_CustomizeWeapon already routes
+    pickups accordingly (DoCarryTrackerPickup / DoInventoryPickup +
+    UnloadCarryTrackerAtBench / UnloadInventoryAtBench). Optimal must
+    populate Destination on each emitted pickup; otherwise the JobDriver
+    treats unset entries as CarryTracker (the legacy default), which is
+    correct only for one-stack-per-trip plans.
 
     To incorporate the hybrid into the exact path:
         - In the per-trip cost evaluator, designate one node per trip as the
-          "carry tracker pickup" (the one that consumes only volume capacity,
-          not mass capacity). Add a tiny per-trip search over which node to
-          designate — typically the heaviest pickup, since that's where the
-          carry tracker's mass-bypass produces the most savings.
-        - Capacity feasibility check becomes: sum of (mass of all but the
-          designated node) <= spare_capacity, AND (designated node count <=
-          carry tracker volume budget).
+          carry-tracker pickup (mass-bypass) — typically the heaviest pickup,
+          since that's where the bypass produces the most savings.
+        - Capacity feasibility check: sum of (mass of all Inventory pickups)
+          <= spare_capacity * 0.95, AND (CT pickup count <= carry tracker
+          volume budget per Pawn_CarryTracker.MaxStackSpaceEver).
+        - When the chosen CT pickup's count exceeds the volume budget, split:
+          ct_volume into a CarryTracker pickup, the remainder into an
+          Inventory pickup of the same Thing in the same trip.
         - The Held-Karp inner solver is unaffected; it still minimizes path
           length given the chosen set.
 
-    For the heuristic path, the hybrid is simpler: bin-pack as before, but
-    when closing a trip, identify the heaviest pickup and "promote" it from
-    inventory to carry tracker. This relaxes the mass budget by the promoted
-    pickup's mass, often allowing one more pickup to fit in the trip.
-
-    Implementing the hybrid requires coordinated changes in
-    JobDriver_CustomizeWeapon.MakeNewToils — the haul phase needs separate
-    toils for carry-tracker pickup, inventory pickup, carry-tracker drop,
-    and inventory unload. Plan that work alongside this planner's
-    implementation, not before.
+    For the heuristic path, follow Sweep's pre-promotion pattern: pick the
+    heaviest pending pickup and route it via CarryTracker before bin-packing
+    the rest into Inventory under the mass budget. Pre-promoting before
+    inventory packing avoids splitting a stack across trips when its count
+    exceeds the inventory budget but would have fit entirely under the
+    (much larger) carry-tracker volume budget.
 
     EDGE CASES & DEFENSIVE BEHAVIOR
     -------------------------------
