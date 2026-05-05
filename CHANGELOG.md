@@ -5,6 +5,23 @@ All notable changes to Unique Weapons Unbound will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-05-06
+
+### Added
+
+- Sweep + Held-Karp haul planner is now the default. Pawns batch ingredient pickups using both the carry tracker and inventory, dramatically cutting trips for resource-heavy customizations
+- Customize-weapon jobs now save and resume correctly mid-round (job state and spec are scribed)
+- New "Ingredient hauling" settings section to choose the planner. Sequential remains as a safe fallback
+- xUnit test project with Sequential and Sweep coverage
+
+### Fixed
+
+- Static-init scans and the runtime cost pipeline now isolate per-def errors, so a single malformed third-party def can no longer silently break the mod (float menu options going missing). Errors are logged with the originating mod for bug-report routing
+
+### Changed
+
+- Internal refactor: introduced a haul planner abstraction (`IHaulPlanner` plus DTOs), and split `WeaponModificationUtility` into focused helpers
+
 ## [1.0.4] - 2026-05-01
 
 ### Fixed
@@ -69,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.1.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.1.0
 [1.0.4]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.4
 [1.0.3]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.3
 [1.0.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.2
