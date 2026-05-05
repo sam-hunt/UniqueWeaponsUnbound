@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -190,8 +191,16 @@ namespace UniqueWeaponsUnbound
             availableWeaponColors = new List<ColorDef>();
             foreach (ColorDef colorDef in DefDatabase<ColorDef>.AllDefs)
             {
-                if (colorDef.colorType == ColorType.Weapon && colorDef.randomlyPickable)
-                    availableWeaponColors.Add(colorDef);
+                try
+                {
+                    if (colorDef.colorType == ColorType.Weapon && colorDef.randomlyPickable)
+                        availableWeaponColors.Add(colorDef);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped weapon color "
+                        + colorDef.SourceForLog() + " due to error: " + ex);
+                }
             }
             availableWeaponColors.SortByColor(c => c.color);
 
@@ -200,8 +209,16 @@ namespace UniqueWeaponsUnbound
                 availableIdeoColors = new List<ColorDef>();
                 foreach (ColorDef colorDef in DefDatabase<ColorDef>.AllDefs)
                 {
-                    if (colorDef.colorType == ColorType.Ideo || colorDef.colorType == ColorType.Misc)
-                        availableIdeoColors.Add(colorDef);
+                    try
+                    {
+                        if (colorDef.colorType == ColorType.Ideo || colorDef.colorType == ColorType.Misc)
+                            availableIdeoColors.Add(colorDef);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("[Unique Weapons Unbound] Skipped ideo color "
+                            + colorDef.SourceForLog() + " due to error: " + ex);
+                    }
                 }
                 availableIdeoColors.SortByColor(c => c.color);
             }
@@ -225,9 +242,17 @@ namespace UniqueWeaponsUnbound
             availableStructureColors = new List<ColorDef>();
             foreach (ColorDef colorDef in DefDatabase<ColorDef>.AllDefs)
             {
-                if (colorDef.colorType == ColorType.Structure
-                    && !excludedColors.Contains(colorDef.color))
-                    availableStructureColors.Add(colorDef);
+                try
+                {
+                    if (colorDef.colorType == ColorType.Structure
+                        && !excludedColors.Contains(colorDef.color))
+                        availableStructureColors.Add(colorDef);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped structure color "
+                        + colorDef.SourceForLog() + " due to error: " + ex);
+                }
             }
             availableStructureColors.SortByColor(c => c.color);
 

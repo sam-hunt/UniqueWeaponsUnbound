@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -207,8 +208,17 @@ namespace UniqueWeaponsUnbound
 
             foreach (TraitCostRuleDef ruleDef in cachedRules)
             {
-                if (ruleDef.Worker.Matches(labelWords, trait))
-                    ruleDef.Worker.Apply(costs, weapon, trait, isRemoval);
+                try
+                {
+                    if (ruleDef.Worker.Matches(labelWords, trait))
+                        ruleDef.Worker.Apply(costs, weapon, trait, isRemoval);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped cost rule "
+                        + ruleDef.SourceForLog() + " for trait "
+                        + trait.SourceForLog() + " due to error: " + ex);
+                }
             }
 
             costs.RemoveAll(c => c.count <= 0);

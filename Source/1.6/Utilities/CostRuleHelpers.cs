@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -43,20 +44,29 @@ namespace UniqueWeaponsUnbound
 
             foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
             {
-                if (def.IsStuff || IsInCategory(def, resourcesRaw))
-                    rawResources.Add(def);
+                try
+                {
+                    if (def.IsStuff || IsInCategory(def, resourcesRaw))
+                        rawResources.Add(def);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped raw-resource scan for "
+                        + def.SourceForLog() + " due to error: " + ex);
+                }
             }
 
             foreach (ThingDef def in rawResources)
             {
-                string label = def.label?.ToLowerInvariant();
-                if (!string.IsNullOrEmpty(label) && label.Length >= 3)
-                    materialsByLabel[label] = def;
-
-                string defName = def.defName?.ToLowerInvariant();
-                if (!string.IsNullOrEmpty(defName) && defName.Length >= 3
-                    && !materialsByLabel.ContainsKey(defName))
-                    materialsByLabel[defName] = def;
+                try
+                {
+                    RegisterMaterialLabels(def);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped material label cache for "
+                        + def.SourceForLog() + " due to error: " + ex);
+                }
             }
 
             HerbalMedicine = ThingDefOf.MedicineHerbal;
@@ -71,6 +81,18 @@ namespace UniqueWeaponsUnbound
             SteelSlagChunk = DefDatabase<ThingDef>.GetNamedSilentFail("ChunkSlagSteel");
             Thrumbofur = DefDatabase<ThingDef>.GetNamedSilentFail("Leather_Thrumbo");
             Silver = ThingDefOf.Silver;
+        }
+
+        private static void RegisterMaterialLabels(ThingDef def)
+        {
+            string label = def.label?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(label) && label.Length >= 3)
+                materialsByLabel[label] = def;
+
+            string defName = def.defName?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(defName) && defName.Length >= 3
+                && !materialsByLabel.ContainsKey(defName))
+                materialsByLabel[defName] = def;
         }
 
         /// <summary>

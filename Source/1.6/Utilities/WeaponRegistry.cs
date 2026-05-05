@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RimWorld;
 using Verse;
@@ -24,15 +25,28 @@ namespace UniqueWeaponsUnbound
 
             foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
             {
-                if (!def.HasComp(typeof(CompUniqueWeapon)))
-                    continue;
-
-                ThingDef baseDef = FindBaseWeapon(def);
-                if (baseDef != null)
+                try
                 {
-                    uniqueToBase[def] = baseDef;
-                    baseToUnique[baseDef] = def;
+                    RegisterUniqueWeaponDef(def);
                 }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped weapon registration for "
+                        + def.SourceForLog() + " due to error: " + ex);
+                }
+            }
+        }
+
+        private static void RegisterUniqueWeaponDef(ThingDef def)
+        {
+            if (!def.HasComp(typeof(CompUniqueWeapon)))
+                return;
+
+            ThingDef baseDef = FindBaseWeapon(def);
+            if (baseDef != null)
+            {
+                uniqueToBase[def] = baseDef;
+                baseToUnique[baseDef] = def;
             }
         }
 

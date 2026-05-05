@@ -357,38 +357,51 @@ namespace UniqueWeaponsUnbound
 
             foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
             {
-                if (def.modExtensions == null)
-                    continue;
-                if (smithyDefs.Contains(def) || machiningDefs.Contains(def) || fabricationDefs.Contains(def))
-                    continue;
-
-                foreach (DefModExtension ext in def.modExtensions)
+                try
                 {
-                    if (!extensionType.IsInstanceOfType(ext))
-                        continue;
-
-                    if (!(field.GetValue(ext) is List<ThingDef> inheritFrom))
-                        continue;
-
-                    // Classify at highest inherited tier
-                    HashSet<ThingDef> bestTier = null;
-                    foreach (ThingDef source in inheritFrom)
-                    {
-                        if (fabricationDefs.Contains(source))
-                        {
-                            bestTier = fabricationDefs;
-                            break;
-                        }
-                        if (machiningDefs.Contains(source))
-                            bestTier = machiningDefs;
-                        else if (smithyDefs.Contains(source) && bestTier == null)
-                            bestTier = smithyDefs;
-                    }
-
-                    if (bestTier != null)
-                        bestTier.Add(def);
-                    break;
+                    ClassifyVEFInheritedDef(def, extensionType, field);
                 }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped VEF tier classification for "
+                        + def.SourceForLog() + " due to error: " + ex);
+                }
+            }
+        }
+
+        private static void ClassifyVEFInheritedDef(ThingDef def, Type extensionType, FieldInfo field)
+        {
+            if (def.modExtensions == null)
+                return;
+            if (smithyDefs.Contains(def) || machiningDefs.Contains(def) || fabricationDefs.Contains(def))
+                return;
+
+            foreach (DefModExtension ext in def.modExtensions)
+            {
+                if (!extensionType.IsInstanceOfType(ext))
+                    continue;
+
+                if (!(field.GetValue(ext) is List<ThingDef> inheritFrom))
+                    continue;
+
+                // Classify at highest inherited tier
+                HashSet<ThingDef> bestTier = null;
+                foreach (ThingDef source in inheritFrom)
+                {
+                    if (fabricationDefs.Contains(source))
+                    {
+                        bestTier = fabricationDefs;
+                        break;
+                    }
+                    if (machiningDefs.Contains(source))
+                        bestTier = machiningDefs;
+                    else if (smithyDefs.Contains(source) && bestTier == null)
+                        bestTier = smithyDefs;
+                }
+
+                if (bestTier != null)
+                    bestTier.Add(def);
+                return;
             }
         }
 
@@ -401,20 +414,15 @@ namespace UniqueWeaponsUnbound
             weaponWorkbenchDefs = new HashSet<ThingDef>();
             foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs)
             {
-                if (!typeof(Building_WorkTable).IsAssignableFrom(def.thingClass))
-                    continue;
-
-                List<RecipeDef> recipes = def.AllRecipes;
-                if (recipes == null)
-                    continue;
-
-                foreach (RecipeDef recipe in recipes)
+                try
                 {
-                    if (recipe.ProducedThingDef != null && recipe.ProducedThingDef.IsWeapon)
-                    {
+                    if (DefHasWeaponRecipe(def))
                         weaponWorkbenchDefs.Add(def);
-                        break;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped workbench scan for "
+                        + def.SourceForLog() + " due to error: " + ex);
                 }
             }
 
@@ -423,6 +431,23 @@ namespace UniqueWeaponsUnbound
             weaponWorkbenchDefs.UnionWith(smithyDefs);
             weaponWorkbenchDefs.UnionWith(machiningDefs);
             weaponWorkbenchDefs.UnionWith(fabricationDefs);
+        }
+
+        private static bool DefHasWeaponRecipe(ThingDef def)
+        {
+            if (!typeof(Building_WorkTable).IsAssignableFrom(def.thingClass))
+                return false;
+
+            List<RecipeDef> recipes = def.AllRecipes;
+            if (recipes == null)
+                return false;
+
+            foreach (RecipeDef recipe in recipes)
+            {
+                if (recipe.ProducedThingDef != null && recipe.ProducedThingDef.IsWeapon)
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>
