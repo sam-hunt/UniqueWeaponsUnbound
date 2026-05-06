@@ -82,11 +82,17 @@ namespace UniqueWeaponsUnbound
         // Affordability state — recomputed each frame in DoWindowContents
         private HashSet<ThingDef> insufficientResources;
         private Dictionary<ThingDef, int> committedResources;
-        private Dictionary<ThingDef, int> availableResources;
         private List<ThingDefCountClass> currentNetCost;
         private List<ThingDefCountClass> currentSurplus;
         private List<ThingDefCountClass> currentTotalRefund;
         private Dictionary<ThingDef, int> surplusBalance;
+
+        // Available resource counts are stable for the dialog's lifetime:
+        // forcePause halts pawn AI and absorbInputAroundWindow blocks
+        // forbid/allowed-area edits, so stacks, reachability, and reservations
+        // can't change. Populated lazily on first access per def.
+        private readonly Dictionary<ThingDef, int> availableResources =
+            new Dictionary<ThingDef, int>();
 
         // Pipeline cost cache — scoped to this dialog instance.
         // Key: (trait, isRemoval). Populated lazily, freed on dialog close.
@@ -381,7 +387,9 @@ namespace UniqueWeaponsUnbound
         // --- Helpers ---
 
         /// <summary>
-        /// Returns the available count for a material on the map, with per-frame caching.
+        /// Returns the available count for a material on the map, cached for
+        /// the dialog's lifetime. See <see cref="availableResources"/> for why
+        /// the count is stable while the dialog is open.
         /// </summary>
         private int GetAvailableCount(ThingDef thingDef)
         {
@@ -627,7 +635,6 @@ namespace UniqueWeaponsUnbound
             }
 
             committedResources = new Dictionary<ThingDef, int>();
-            availableResources = new Dictionary<ThingDef, int>();
             insufficientResources = null;
             foreach (ThingDefCountClass cost in currentNetCost)
             {
