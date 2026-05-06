@@ -65,7 +65,7 @@ namespace UniqueWeaponsUnbound
             if (Settings.traitCostMultiplier == 1f)
                 costLabel += "UWU_DefaultSuffix".Translate();
             listing.Label(costLabel);
-            Settings.traitCostMultiplier = listing.Slider(Settings.traitCostMultiplier, 0f, 3f);
+            Settings.traitCostMultiplier = listing.Slider(Settings.traitCostMultiplier, 0f, 5f);
             Settings.traitCostMultiplier = Mathf.Round(Settings.traitCostMultiplier * 20f) / 20f;
 
             bool costsFree = Settings.traitCostMultiplier == 0f;
