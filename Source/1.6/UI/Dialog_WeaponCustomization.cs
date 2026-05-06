@@ -62,6 +62,11 @@ namespace UniqueWeaponsUnbound
         private readonly bool isRelic; // Ideology DLC: weapon is an ideoligion relic
         private readonly Ideo relicIdeo; // Ideology DLC: the ideoligion this relic belongs to
 
+        // Snapshot of player-discoverable trait sources at construction time.
+        // Only populated when the progression-mode setting is enabled; null otherwise.
+        // See <see cref="TraitProgressionPool"/> for the scan rules.
+        private readonly TraitProgressionPool progressionPool;
+
         // Desired state — mutated by user interaction
         private readonly List<WeaponTraitDef> desiredTraits;
         private string desiredName;
@@ -164,6 +169,13 @@ namespace UniqueWeaponsUnbound
 
             // Cache the full compatible trait list for this weapon type
             compatibleTraits = TraitValidationUtility.GetCompatibleTraits(uniqueDef);
+
+            // Progression mode: snapshot the player's currently-known trait pool so the
+            // RHS list can hide traits the player can't yet see and disable traits only
+            // available on hostile-held weapons. Snapshot is dialog-lifetime — see
+            // availableResources comment for why it can't change while we're open.
+            if (UWU_Mod.Settings.restrictTraitsToDiscovered)
+                progressionPool = TraitProgressionPool.Build();
 
             // Default to hiding negative traits unless the weapon already has one
             hideNegativeTraits = !originalTraits.Any(t => TraitCostUtility.IsNegativeTrait(t));

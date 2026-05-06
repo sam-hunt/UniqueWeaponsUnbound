@@ -20,6 +20,7 @@ namespace UniqueWeaponsUnbound
         public bool enableStructureColors = true;
         public bool enableGroundCustomization = true;
         public bool useRecipeBaseCost = true;
+        public bool restrictTraitsToDiscovered;
         public float traitCostMultiplier = 1f;
         public float traitRefundRate = 0.5f;
         public HaulPlannerKind haulPlannerKind = HaulPlannerKind.Sweep;
@@ -40,6 +41,7 @@ namespace UniqueWeaponsUnbound
             enableStructureColors = true;
             enableGroundCustomization = true;
             useRecipeBaseCost = true;
+            restrictTraitsToDiscovered = false;
             traitCostMultiplier = 1f;
             traitRefundRate = 0.5f;
             haulPlannerKind = HaulPlannerKind.Sweep;
@@ -65,6 +67,7 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref traitCostMultiplier, "traitCostMultiplier", 1f);
             Scribe_Values.Look(ref traitRefundRate, "traitRefundRate", 0.5f);
             Scribe_Values.Look(ref haulPlannerKind, "haulPlannerKind", HaulPlannerKind.Sweep);
+            Scribe_Values.Look(ref restrictTraitsToDiscovered, "restrictTraitsToDiscovered");
         }
     }
 }

@@ -35,22 +35,40 @@ namespace UniqueWeaponsUnbound
             }
             traitSearchWidget.noResultsMatched = visibleCount == 0 && traitSearchWidget.filter.Active;
 
-            float totalTraitHeight = visibleCount * (TraitRowHeight + TraitRowGap);
-
-            Rect traitListInnerRect = new Rect(0f, 0f,
-                traitListOuterRect.width - 16f, totalTraitHeight);
-
-            Widgets.BeginScrollView(traitListOuterRect, ref traitListScroll, traitListInnerRect);
-
-            float scrollY = 0f;
-            foreach (WeaponTraitDef trait in compatibleTraits)
+            if (visibleCount == 0)
             {
-                if (ShouldShowTrait(trait))
-                    DrawTraitRow(traitListInnerRect.x, ref scrollY,
-                        traitListInnerRect.width, trait);
+                // Empty list — explain which filter is responsible so the player can act on it.
+                // Mirrors the centered-gray-label pattern used by the disabled texture/color tabs.
+                string emptyMsg = GetEmptyTraitListMessage();
+                if (!string.IsNullOrEmpty(emptyMsg))
+                {
+                    Text.Anchor = TextAnchor.MiddleCenter;
+                    Color prevColor = GUI.color;
+                    GUI.color = Color.gray;
+                    Widgets.Label(traitListOuterRect, emptyMsg);
+                    GUI.color = prevColor;
+                    Text.Anchor = TextAnchor.UpperLeft;
+                }
             }
+            else
+            {
+                float totalTraitHeight = visibleCount * (TraitRowHeight + TraitRowGap);
 
-            Widgets.EndScrollView();
+                Rect traitListInnerRect = new Rect(0f, 0f,
+                    traitListOuterRect.width - 16f, totalTraitHeight);
+
+                Widgets.BeginScrollView(traitListOuterRect, ref traitListScroll, traitListInnerRect);
+
+                float scrollY = 0f;
+                foreach (WeaponTraitDef trait in compatibleTraits)
+                {
+                    if (ShouldShowTrait(trait))
+                        DrawTraitRow(traitListInnerRect.x, ref scrollY,
+                            traitListInnerRect.width, trait);
+                }
+
+                Widgets.EndScrollView();
+            }
             curY += traitListHeight;
 
             // Divider + toggle at the bottom
@@ -70,8 +88,65 @@ namespace UniqueWeaponsUnbound
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
+        /// <summary>
+        /// Returns a centered empty-state message attributing the empty list to whichever
+        /// filter is responsible (search > progression > hide-negative > fallback).
+        /// Search takes priority because it's an active user input; progression beats
+        /// hide-negative because it's the harder filter to discover and act on.
+        /// </summary>
+        private string GetEmptyTraitListMessage()
+        {
+            if (traitSearchWidget.filter.Active)
+                return "UWU_NoTraitsMatchSearch".Translate();
+
+            // Walk filters in dependency order to identify the responsible one.
+            // countAfterProgression: traits that pass progression alone (or are originals).
+            // countAfterAll: traits that also pass hide-negative.
+            int countAfterProgression = 0;
+            int countAfterAll = 0;
+            foreach (WeaponTraitDef trait in compatibleTraits)
+            {
+                bool isOriginalOrDesired =
+                    originalTraits.Contains(trait) || desiredTraits.Contains(trait);
+
+                bool passesProgression = progressionPool == null
+                    || progressionPool.IsVisible(trait)
+                    || isOriginalOrDesired;
+                if (!passesProgression)
+                    continue;
+                countAfterProgression++;
+
+                bool passesNegative = !hideNegativeTraits
+                    || !TraitCostUtility.IsNegativeTrait(trait)
+                    || isOriginalOrDesired;
+                if (!passesNegative)
+                    continue;
+                countAfterAll++;
+            }
+
+            if (progressionPool != null
+                && countAfterProgression == 0
+                && compatibleTraits.Count > 0)
+                return "UWU_NoTraitsDiscovered".Translate();
+
+            if (hideNegativeTraits && countAfterAll == 0 && countAfterProgression > 0)
+                return "UWU_NoTraitsAfterHideNegative".Translate();
+
+            return "UWU_NoTraitsAvailable".Translate();
+        }
+
         private bool ShouldShowTrait(WeaponTraitDef trait)
         {
+            // Progression filter: hide traits with no player-discoverable source.
+            // Traits already on this weapon stay visible regardless — otherwise the
+            // player couldn't see what they're removing. Hostile-only traits also
+            // stay visible (they render disabled with a rejection reason instead).
+            if (progressionPool != null
+                && !progressionPool.IsVisible(trait)
+                && !originalTraits.Contains(trait)
+                && !desiredTraits.Contains(trait))
+                return false;
+
             // Active search overrides hide-negative so explicit matches aren't filtered out
             if (traitSearchWidget.filter.Active)
                 return traitSearchWidget.filter.Matches(trait.label);
@@ -84,10 +159,29 @@ namespace UniqueWeaponsUnbound
             return desiredTraits.Contains(trait) || originalTraits.Contains(trait);
         }
 
+        /// <summary>
+        /// Returns a progression-mode rejection reason for the trait, or null when
+        /// the progression filter doesn't reject it. Stacks before the regular
+        /// validity rejection — a hostile-only trait is rejected even when it would
+        /// otherwise be addable.
+        /// </summary>
+        private string GetProgressionRejection(WeaponTraitDef trait)
+        {
+            if (progressionPool == null)
+                return null;
+            // Selected/original traits bypass progression — the player already has them.
+            if (desiredTraits.Contains(trait) || originalTraits.Contains(trait))
+                return null;
+            if (!progressionPool.HasNonHostileSource(trait))
+                return "UWU_OnlyOnHostiles".Translate();
+            return null;
+        }
+
         private void DrawTraitRow(float x, ref float curY, float width, WeaponTraitDef trait)
         {
             Rect rowRect = new Rect(x, curY, width, TraitRowHeight);
-            string rejection = TraitValidationUtility.GetRejectionReason(desiredTraits, trait);
+            string rejection = GetProgressionRejection(trait)
+                ?? TraitValidationUtility.GetRejectionReason(desiredTraits, trait);
             bool isSelected = desiredTraits.Contains(trait);
             bool isDisabled = rejection != null;
             bool isClickable = isSelected || !isDisabled;
@@ -104,11 +198,20 @@ namespace UniqueWeaponsUnbound
             if (isDisabled && !isSelected)
                 GUI.color = new Color(0.5f, 0.5f, 0.5f);
 
-            // Trait label
+            // Trait label — yellow when removing this trait from the weapon being
+            // customized would empty the player's pool of available sources for it.
+            // Save/restore tightly around the label so cost icons + rejection text
+            // keep their normal coloring.
+            bool isLastSource = progressionPool != null
+                && progressionPool.IsLastNonHostileSource(trait, originalTraits);
             Text.Anchor = TextAnchor.MiddleLeft;
             Rect labelRect = new Rect(rowRect.x + 4f, rowRect.y,
                 rowRect.width * 0.35f, rowRect.height);
+            Color preLabelColor = GUI.color;
+            if (isLastSource)
+                GUI.color = ColorLibrary.Yellow;
             Widgets.Label(labelRect, trait.LabelCap);
+            GUI.color = preLabelColor;
 
             // Cost icons (right-aligned) — shows the delta from toggling this row:
             // - Selected original: removal preview (refund green / neg cost hypothetical red)
@@ -165,12 +268,18 @@ namespace UniqueWeaponsUnbound
             GUI.color = prevColor;
             Text.Anchor = TextAnchor.UpperLeft;
 
-            // Tooltip with trait description and stat effects
+            // Tooltip with trait description and stat effects. The "last source"
+            // warning gets its own yellow tooltip box stacked alongside, mirroring
+            // the LHS chip behavior so the visual cue and the explanation share an
+            // identity even after the player removes the trait via this row.
             if (Mouse.IsOver(rowRect))
             {
                 string tooltip = BuildTraitTooltip(trait);
                 if (!string.IsNullOrEmpty(tooltip))
                     TooltipHandler.TipRegion(rowRect, tooltip);
+                if (isLastSource)
+                    TooltipHandler.TipRegion(rowRect,
+                        "<color=#ffff14>" + "UWU_LastTraitSourceWarning".Translate() + "</color>");
             }
 
             // Click to add or remove

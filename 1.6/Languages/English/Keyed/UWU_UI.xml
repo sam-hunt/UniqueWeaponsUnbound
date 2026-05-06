@@ -61,6 +61,12 @@
   <UWU_ConflictsWith>Conflicts with {0}</UWU_ConflictsWith>
   <UWU_CannotBeOnlyTrait>Cannot be the only trait</UWU_CannotBeOnlyTrait>
   <UWU_TraitCannotBeOnlyTrait>{0} cannot be the only trait</UWU_TraitCannotBeOnlyTrait>
+  <UWU_OnlyOnHostiles>Must disarm from hostile</UWU_OnlyOnHostiles>
+  <UWU_LastTraitSourceWarning>Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons.</UWU_LastTraitSourceWarning>
+  <UWU_NoTraitsMatchSearch>No traits match your search.</UWU_NoTraitsMatchSearch>
+  <UWU_NoTraitsDiscovered>No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization.</UWU_NoTraitsDiscovered>
+  <UWU_NoTraitsAfterHideNegative>All available traits for this weapon are negative. Disable "Hide negative traits" below to view them.</UWU_NoTraitsAfterHideNegative>
+  <UWU_NoTraitsAvailable>No traits are compatible with this weapon.</UWU_NoTraitsAvailable>
 
   <!-- Fallbacks -->
   <UWU_WeaponFallback>weapon</UWU_WeaponFallback>
@@ -89,6 +95,7 @@
 
   <!-- Settings: Section headers -->
   <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
+  <UWU_SettingsProgression>Progression</UWU_SettingsProgression>
   <UWU_SettingsTraitCosts>Trait costs</UWU_SettingsTraitCosts>
   <UWU_SettingsPrerequisites>Prerequisites</UWU_SettingsPrerequisites>
   <UWU_SettingsHaulPlanner>Ingredient hauling</UWU_SettingsHaulPlanner>
@@ -135,6 +142,8 @@
   <UWU_EnforceMaxTraitLimitDesc>Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply).</UWU_EnforceMaxTraitLimitDesc>
   <UWU_EnforceSoleTrait>Enforce sole-trait restrictions</UWU_EnforceSoleTrait>
   <UWU_EnforceSoleTraitDesc>Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization.</UWU_EnforceSoleTraitDesc>
+  <UWU_RestrictTraitsToDiscovered>Restrict available traits to discovered weapons</UWU_RestrictTraitsToDiscovered>
+  <UWU_RestrictTraitsToDiscoveredDesc>Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately.</UWU_RestrictTraitsToDiscoveredDesc>
   <UWU_EnableGroundCustomization>Enable ground weapon right-click menu</UWU_EnableGroundCustomization>
   <UWU_EnableGroundCustomizationDesc>Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button.</UWU_EnableGroundCustomizationDesc>
 

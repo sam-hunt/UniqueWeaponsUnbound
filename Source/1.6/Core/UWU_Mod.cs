@@ -37,6 +37,18 @@ namespace UniqueWeaponsUnbound
             listing.Gap();
 
             Text.Font = GameFont.Medium;
+            listing.Label("UWU_SettingsProgression".Translate());
+            Text.Font = GameFont.Small;
+            listing.Gap(12.0f);
+
+            listing.CheckboxLabeled(
+                "UWU_RestrictTraitsToDiscovered".Translate(),
+                ref Settings.restrictTraitsToDiscovered,
+                "UWU_RestrictTraitsToDiscoveredDesc".Translate());
+
+            listing.Gap(18.0f);
+
+            Text.Font = GameFont.Medium;
             listing.Label("UWU_SettingsTraitCosts".Translate());
             Text.Font = GameFont.Small;
             listing.Gap(12.0f);
