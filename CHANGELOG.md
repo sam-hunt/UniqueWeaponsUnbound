@@ -5,6 +5,14 @@ All notable changes to Unique Weapons Unbound will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-05-07
+
+### Added
+
+- New setting to restrict trait additions to discovered weapons' traits only
+- Trait cost multiplier slider now goes up to 500% (previously 300%)
+- Customization dialog now caches available ingredient counts for its lifetime, reducing per-frame work
+
 ## [1.1.0] - 2026-05-06
 
 ### Added
@@ -86,6 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.2.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.2.0
 [1.1.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.1.0
 [1.0.4]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.4
 [1.0.3]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.0.3
