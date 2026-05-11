@@ -14,6 +14,8 @@ namespace UniqueWeaponsUnbound
     ///   - Ground weapons on any loaded map, on tiles not currently fogged.
     ///   - Weapons equipped/inventoried/carried by spawned pawns on those maps.
     ///   - Weapons equipped/inventoried/carried by pawns in player-faction caravans.
+    ///   - Alpha Armoury weapon kits (when that mod is loaded) on the ground or in
+    ///     pawn inventory/carry trackers. Each kit stores one applicable trait.
     /// Weapons inside non-spawned ThingHolders (caskets, ancient containers) are
     /// excluded automatically because they don't appear in <see cref="ListerThings"/>.
     ///
@@ -117,19 +119,25 @@ namespace UniqueWeaponsUnbound
 
             FogGrid fog = map.fogGrid;
 
-            // Ground/loose unique weapons. ListerThings excludes things held in
-            // non-spawned ThingOwners (pawn equipment/inventory, casket contents),
-            // so this naturally implements the "not in unknown container" rule.
+            // Ground/loose unique weapons and Alpha Armoury kits. ListerThings excludes
+            // things held in non-spawned ThingOwners (pawn equipment/inventory, casket
+            // contents), so this naturally implements the "not in unknown container" rule.
             foreach (Thing t in map.listerThings.AllThings)
             {
                 if (t is Pawn)
                     continue;
-                if (!WeaponRegistry.IsUniqueWeapon(t.def))
+                bool isWeapon = WeaponRegistry.IsUniqueWeapon(t.def);
+                WeaponTraitDef kitTrait = null;
+                bool isKit = !isWeapon && AlphaArmouryIntegration.TryGetKitTrait(t, out kitTrait);
+                if (!isWeapon && !isKit)
                     continue;
                 IntVec3 pos = t.PositionHeld;
                 if (fog != null && fog.IsFogged(pos))
                     continue;
-                AddWeaponTraits(t, nonHostile);
+                if (isWeapon)
+                    AddWeaponTraits(t, nonHostile);
+                else
+                    AddTrait(kitTrait, nonHostile);
             }
 
             // Pawn-held weapons. A pawn standing in a fogged cell shouldn't reveal
@@ -163,12 +171,19 @@ namespace UniqueWeaponsUnbound
                 {
                     if (WeaponRegistry.IsUniqueWeapon(item.def))
                         AddWeaponTraits(item, bucket);
+                    else if (AlphaArmouryIntegration.TryGetKitTrait(item, out WeaponTraitDef kitTrait))
+                        AddTrait(kitTrait, bucket);
                 }
             }
 
             Thing carried = p.carryTracker?.CarriedThing;
-            if (carried != null && WeaponRegistry.IsUniqueWeapon(carried.def))
-                AddWeaponTraits(carried, bucket);
+            if (carried != null)
+            {
+                if (WeaponRegistry.IsUniqueWeapon(carried.def))
+                    AddWeaponTraits(carried, bucket);
+                else if (AlphaArmouryIntegration.TryGetKitTrait(carried, out WeaponTraitDef carriedKitTrait))
+                    AddTrait(carriedKitTrait, bucket);
+            }
         }
 
         private static void AddWeaponTraits(Thing weapon, Dictionary<WeaponTraitDef, int> dest)
@@ -178,15 +193,17 @@ namespace UniqueWeaponsUnbound
             if (traits == null)
                 return;
             for (int i = 0; i < traits.Count; i++)
-            {
-                WeaponTraitDef trait = traits[i];
-                if (trait == null)
-                    continue;
-                if (dest.TryGetValue(trait, out int n))
-                    dest[trait] = n + 1;
-                else
-                    dest[trait] = 1;
-            }
+                AddTrait(traits[i], dest);
+        }
+
+        private static void AddTrait(WeaponTraitDef trait, Dictionary<WeaponTraitDef, int> dest)
+        {
+            if (trait == null)
+                return;
+            if (dest.TryGetValue(trait, out int n))
+                dest[trait] = n + 1;
+            else
+                dest[trait] = 1;
         }
     }
 }
