@@ -173,6 +173,27 @@ namespace UniqueWeaponsUnbound
             pickupLastInTrip = lastInTripFlags;
         }
 
+        /// <summary>
+        /// Passively heal orphaned ability caches at the earliest hook the
+        /// JobDriver lifecycle exposes — fires once when the pawn starts the
+        /// job, before <c>SetupToils</c>. A player who notices a phantom gizmo
+        /// (e.g. LaunchSmokeShell carried over from a pre-fix base→unique
+        /// conversion in an older save) just has to initiate customization on
+        /// the affected weapon; the heal fires immediately, no need to wait
+        /// for the pawn to walk anywhere, open the dialog, or confirm changes.
+        /// Idempotent and a no-op when nothing's orphaned.
+        ///
+        /// The driver's <c>weapon</c> field isn't set until <c>acquireWeapon</c>
+        /// runs, so we pull from the job target directly. <c>HealOrphanedAbility</c>
+        /// null-checks and handles destroyed/non-unique weapons internally.
+        /// </summary>
+        public override void Notify_Starting()
+        {
+            base.Notify_Starting();
+            EquippableAbilityUtility.HealOrphaned(
+                job.GetTarget(WeaponIndex).Thing);
+        }
+
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
             if (!pawn.Reserve(Workbench, job, 1, -1, null, errorOnFailed))
@@ -815,7 +836,7 @@ namespace UniqueWeaponsUnbound
                 // utility so cosmetics-only customizations don't free-reload
                 // unchanged ability traits — vanilla Setup() forces
                 // RemainingCharges = MaxCharges on every ability trait it sees.
-                WeaponModificationUtility.RewireUniqueWeaponComps(weapon);
+                EquippableAbilityUtility.SyncToTraits(weapon);
 
                 // Apply final color after Setup() to ensure it sticks
                 CompUniqueWeapon uniqueComp = weapon.TryGetComp<CompUniqueWeapon>();

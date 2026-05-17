@@ -6,9 +6,10 @@ using Verse;
 namespace UniqueWeaponsUnbound
 {
     /// <summary>
-    /// Mutates a weapon Thing in place: adds/removes traits (with their ability
-    /// wiring side-effects), sets cosmetic properties (name, color, texture),
-    /// and spawns refunded resources. Def conversion (base↔unique) lives in
+    /// Mutates a weapon Thing in place: adds/removes traits (delegating
+    /// ability-comp wiring to <see cref="EquippableAbilityUtility"/>), sets
+    /// cosmetic properties (name, color, texture), and spawns refunded
+    /// resources. Def conversion (base↔unique) lives in
     /// <see cref="WeaponDefConversion"/>; ingredient gathering and reservation
     /// for a customization job lives in
     /// <see cref="HaulPlanning.IngredientReservation"/>.
@@ -24,14 +25,6 @@ namespace UniqueWeaponsUnbound
 
         internal static readonly FieldInfo IgnoreAccuracyField = typeof(CompUniqueWeapon)
             .GetField("ignoreAccuracyMaluses", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        // CompEquippableAbility caches its constructed Ability in this private field
-        // and ScribeDeeps it across save/load. CompUniqueWeapon.Setup() never clears
-        // it, so removing an ability-granting trait leaves the equipping pawn with
-        // the old gizmo. We null it ourselves in RemoveTrait so the next access via
-        // the lazy AbilityForReading getter rebuilds it from the current Props.
-        internal static readonly FieldInfo EquippableAbilityField = typeof(CompEquippableAbility)
-            .GetField("ability", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static void AddTrait(Thing weapon, WeaponTraitDef trait)
         {
@@ -52,7 +45,19 @@ namespace UniqueWeaponsUnbound
             if (IgnoreAccuracyField != null)
                 IgnoreAccuracyField.SetValue(comp, null);
 
-            SetupAndPreserveCharges(comp, weapon);
+            // Mirror RemoveTrait: if any earlier customization, auto-gen, or
+            // mod-side handling left a stale Ability cached on the equippable-
+            // ability comp, vanilla Setup() won't rebuild it — it only reassigns
+            // props, and the lazy AbilityForReading getter keeps returning the
+            // cached instance. Reset so the getter constructs a fresh Ability
+            // matching the new abilityProps. Two ability traits rarely coexist
+            // thanks to exclusionTags <li>Ability</li>, but the stale-cache state
+            // can still be reached via a partially-healed save or non-vanilla
+            // trait wiring.
+            if (trait.abilityProps != null)
+                EquippableAbilityUtility.ResetState(weapon);
+
+            EquippableAbilityUtility.SetupAndPreserveCharges(weapon, comp);
         }
 
         public static void RemoveTrait(Thing weapon, WeaponTraitDef trait)
@@ -79,95 +84,41 @@ namespace UniqueWeaponsUnbound
             // abilityProps, because the lazy AbilityForReading getter only rebuilds
             // when its cache is null.
             if (trait.abilityProps != null)
-                ResetEquippableAbilityState(weapon);
+                EquippableAbilityUtility.ResetState(weapon);
 
-            SetupAndPreserveCharges(comp, weapon);
+            EquippableAbilityUtility.SetupAndPreserveCharges(weapon, comp);
         }
 
         /// <summary>
-        /// Public entry for the JobDriver's finalize toil. Behaviour-equivalent to
-        /// <c>CompUniqueWeapon.Setup(false)</c> but preserves the equipped ability's
-        /// remaining charges, since vanilla Setup unconditionally refills them via
-        /// <c>Notify_PropsChanged</c>. Needed for cosmetics-only customizations
-        /// (rename / recolour / texture) that never enter Add/RemoveTrait but still
-        /// hit the finalize Setup, which would otherwise hand the player a free
-        /// reload of an unchanged ability trait every time they confirmed the dialog.
+        /// Scrubs the random state left behind by <c>CompUniqueWeapon.PostPostMake</c>
+        /// on a freshly minted unique weapon: the auto-rolled trait list, the
+        /// generated name and color, the lazy <c>ignoreAccuracyMaluses</c> cache,
+        /// and the equippable-ability comp's stale <c>props</c> + cached
+        /// <see cref="Ability"/> instance. Called by <see cref="WeaponDefConversion"/>
+        /// right after <c>ThingMaker.MakeThing</c> on a unique-weapon def so the
+        /// customization pipeline starts from a clean slate.
+        ///
+        /// Without the ability-comp scrub, an ability trait randomly rolled by
+        /// <c>InitializeTraits</c> (e.g. SmokeLauncher → LaunchSmokeShell) wires
+        /// up <c>CompEquippableAbilityReloadable.props</c> and lazily constructs
+        /// its <c>Ability</c>. Clearing the trait list afterwards doesn't undo
+        /// that wiring — vanilla <c>Setup()</c> only assigns props for traits
+        /// currently in the list, never clears them — and the cached Ability is
+        /// even deep-scribed across save/load, so the phantom gizmo persists.
+        ///
+        /// No-op on non-unique target defs (no CompUniqueWeapon).
         /// </summary>
-        public static void RewireUniqueWeaponComps(Thing weapon)
+        internal static void ClearAutoGeneratedUniqueState(Thing weapon)
         {
             CompUniqueWeapon comp = weapon.TryGetComp<CompUniqueWeapon>();
             if (comp == null)
                 return;
-            SetupAndPreserveCharges(comp, weapon);
-        }
 
-        /// <summary>
-        /// Wrapper around <c>CompUniqueWeapon.Setup(false)</c> that preserves the
-        /// equipped ability's <c>RemainingCharges</c> across the call. Vanilla Setup
-        /// walks the trait list and, for every ability trait, calls
-        /// <c>CompEquippableAbilityReloadable.Notify_PropsChanged()</c>, which forces
-        /// <c>RemainingCharges = MaxCharges</c>. That's correct on PostPostMake and
-        /// save load, but it also fires on every customization op — turning every
-        /// dialog confirm into a free reload of any unchanged ability trait
-        /// (skipping the steel/chemfuel/bioferrite Reload job). We snapshot the
-        /// charges before, then restore them only if the same Ability instance
-        /// survived; a different instance means the ability trait was added or
-        /// swapped this op (player paid for the new trait), in which case fresh
-        /// max charges is the right outcome.
-        ///
-        /// No-op for cooldown-only abilities (e.g. EMPPulser): they leave
-        /// <c>maxCharges = 0</c>, so <c>UsesCharges</c> is false, the cooldown
-        /// lives on <c>Ability.cooldownEndTick</c> (which Notify_PropsChanged
-        /// doesn't touch), and the snapshot/restore round-trips zero.
-        /// </summary>
-        private static void SetupAndPreserveCharges(CompUniqueWeapon comp, Thing weapon)
-        {
-            CompEquippableAbilityReloadable abilityComp =
-                weapon.TryGetComp<CompEquippableAbilityReloadable>();
-
-            Ability priorAbility = null;
-            int priorCharges = 0;
-            if (abilityComp != null && EquippableAbilityField != null)
-            {
-                priorAbility = (Ability)EquippableAbilityField.GetValue(abilityComp);
-                if (priorAbility != null)
-                    priorCharges = priorAbility.RemainingCharges;
-            }
-
-            comp.Setup(false);
-
-            if (priorAbility != null && abilityComp != null && EquippableAbilityField != null)
-            {
-                Ability currentAbility = (Ability)EquippableAbilityField.GetValue(abilityComp);
-                if (ReferenceEquals(currentAbility, priorAbility))
-                    abilityComp.RemainingCharges = priorCharges;
-            }
-        }
-
-        /// <summary>
-        /// Restores CompEquippableAbilityReloadable to its def-default state: drops
-        /// the cached Ability and points <c>props</c> back at the empty stub from
-        /// <c>weapon.def.comps</c>. A subsequent AddTrait → CompUniqueWeapon.Setup()
-        /// will re-assign <c>props</c> from the new trait's abilityProps and the
-        /// lazy getter will construct a fresh Ability from it.
-        /// </summary>
-        private static void ResetEquippableAbilityState(Thing weapon)
-        {
-            CompEquippableAbilityReloadable abilityComp =
-                weapon.TryGetComp<CompEquippableAbilityReloadable>();
-            if (abilityComp == null)
-                return;
-
-            EquippableAbilityField?.SetValue(abilityComp, null);
-
-            foreach (CompProperties cp in weapon.def.comps)
-            {
-                if (cp is CompProperties_EquippableAbilityReloadable defaultProps)
-                {
-                    abilityComp.props = defaultProps;
-                    break;
-                }
-            }
+            comp.TraitsListForReading.Clear();
+            CompNameField?.SetValue(comp, null);
+            CompColorField?.SetValue(comp, null);
+            IgnoreAccuracyField?.SetValue(comp, null);
+            EquippableAbilityUtility.ResetState(weapon);
         }
 
         public static void SetName(Thing weapon, string name)
