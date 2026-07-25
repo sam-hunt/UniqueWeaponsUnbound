@@ -24,6 +24,7 @@ namespace UniqueWeaponsUnbound
             {
                 WeaponModificationUtility.VerifyReflection();
                 EquippableAbilityUtility.VerifyReflection();
+                TraitEffectLinesIntegration.VerifyReflection();
             });
 
             // Force the optional-mod integrations to resolve now, so any API drift is

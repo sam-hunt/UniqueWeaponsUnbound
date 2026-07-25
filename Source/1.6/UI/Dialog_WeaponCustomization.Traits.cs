@@ -325,6 +325,11 @@ namespace UniqueWeaponsUnbound
 
             var effectLines = new List<string>();
 
+            // First, so a trait reads as what it does before what it costs — and because for a
+            // melee trait these are usually the ONLY real effects; the vanilla fields below are
+            // inert outside the projectile/bladelink paths. See TraitEffectLinesIntegration.
+            TraitEffectLinesIntegration.AppendEffectLines(trait, effectLines, "  ");
+
             if (trait.statOffsets != null)
             {
                 foreach (StatModifier mod in trait.statOffsets)
