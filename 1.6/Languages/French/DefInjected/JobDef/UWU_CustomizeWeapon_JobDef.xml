@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Vanilla fr reportStrings are subject-less third-person present indicative
+       WITH a terminal period (Core BuildSnowman = "construit un bonhomme de
+       neige.", ApplyTechprint = "met en application TargetB."). 179 of 196 Core
+       entries end in a period. This matches de and es in taking one, and differs
+       from ja and ko, which take none. -->
+  <!-- EN: customizing weapon. -->
+  <UWU_CustomizeWeapon.reportString>personnalise une arme.</UWU_CustomizeWeapon.reportString>
+
+</LanguageData>

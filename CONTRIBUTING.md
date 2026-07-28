@@ -18,7 +18,7 @@ welcome too.
 | Korean               | Machine-assisted | Opus 5                                  |
 | German               | Machine-assisted | Opus 5                                  |
 | Spanish              | Machine-assisted | Opus 5                                  |
-| French               | Planned          |                                         |
+| French               | Machine-assisted | Opus 5                                  |
 | Brazilian Portuguese | Planned          |                                         |
 | Japanese             | Machine-assisted | Fable 5                                 |
 

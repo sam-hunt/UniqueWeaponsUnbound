@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- "fabrication" comes from FabricationBench = "atelier de fabrication" and
+       AdvancedFabrication = "fabrication avancée", not from the Fabrication research
+       itself, which fr calls "assemblage de composant" — an unrecognizable stem for
+       this tier. Mod-decided; flagged for native review. -->
+  <!-- EN: unique fabrication -->
+  <UniqueFabrication.label>fabrication d'armes uniques</UniqueFabrication.label>
+  <!-- Tech level labels are TechLevel_Spacer = "spatial" and TechLevel_Ultra = "ultra". -->
+  <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
+  <UniqueFabrication.description>Vous permet d'améliorer et de personnaliser les armes spatiales et ultra sur un atelier de fabrication, en ajoutant ou en retirant des traits selon vos besoins.</UniqueFabrication.description>
+
+  <!-- EN: Upgrade and customize spacer weapons -->
+  <UniqueFabrication.customUnlockTexts.0>Améliorer et personnaliser les armes spatiales</UniqueFabrication.customUnlockTexts.0>
+  <!-- EN: Upgrade and customize ultratech weapons -->
+  <UniqueFabrication.customUnlockTexts.1>Améliorer et personnaliser les armes ultra</UniqueFabrication.customUnlockTexts.1>
+
+  <!-- Articled subject and subject_gerund, matching vanilla fr AdvancedFabrication
+       ("la fabrication de composants avancés"). See UniqueSmithing_ResearchProjectDef.xml
+       for why the article is load-bearing.
+       "à impulsion" for charge weapons follows Gun_ChargeRifle = "fusil à impulsion";
+       "à faisceau" follows BeamWeapons = "armes à faisceau". -->
+  <!-- EN:
+    <li>subject->unique fabrication</li>
+    <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+    <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+    <li>subject_gerund->fabricating unique weapons</li>
+  -->
+  <UniqueFabrication.generalRules.rulesStrings>
+    <li>subject->la fabrication d'armes uniques</li>
+    <li>subject_story->a décodé les secrets de la modification des traits des armes à impulsion et à faisceau</li>
+    <li>subject_story->a utilisé la nanotechnologie de fabrication pour altérer les composants des armes spatiales</li>
+    <li>subject_gerund->la fabrication d'armes uniques</li>
+  </UniqueFabrication.generalRules.rulesStrings>
+
+</LanguageData>

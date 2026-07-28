@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique machining -->
+  <UniqueMachining.label>usinage d'armes uniques</UniqueMachining.label>
+  <!-- The machining table is "établi d'assemblage" in fr even though the Machining
+       research is "usinage" — the building and the research diverge, and the
+       building's word ("assemblage") also turns up in the Fabrication research name.
+       Always look the specific def up rather than reusing a stem. -->
+  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>Vous permet d'améliorer et de personnaliser les armes de l'ère industrielle sur un établi d'assemblage, en ajoutant ou en retirant des traits selon vos besoins.</UniqueMachining.description>
+
+  <!-- EN: Upgrade and customize industrial unique weapons -->
+  <UniqueMachining.customUnlockTexts.0>Améliorer et personnaliser les armes uniques industrielles</UniqueMachining.customUnlockTexts.0>
+
+  <!-- Articled subject and subject_gerund, matching vanilla fr Machining ("l'usinage").
+       See UniqueSmithing_ResearchProjectDef.xml for why the article is load-bearing. -->
+  <!-- EN:
+    <li>subject->unique machining</li>
+    <li>subject_story->reverse-engineered unique weapon modifications using industrial tools</li>
+    <li>subject_story->perfected the art of applying weapon traits with precision machinery</li>
+    <li>subject_gerund->machining unique weapons</li>
+  -->
+  <UniqueMachining.generalRules.rulesStrings>
+    <li>subject->l'usinage d'armes uniques</li>
+    <li>subject_story->a percé les secrets des modifications d'armes uniques à l'aide d'outils industriels</li>
+    <li>subject_story->a perfectionné l'art d'appliquer des traits d'arme avec des machines de précision</li>
+    <li>subject_gerund->l'usinage d'armes uniques</li>
+  </UniqueMachining.generalRules.rulesStrings>
+
+</LanguageData>
