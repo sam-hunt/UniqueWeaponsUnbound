@@ -35,6 +35,19 @@ the source of truth; every other language derives from it.
   types (`JobDef`, `ResearchProjectDef`), **namespace-qualified for this mod's
   own def classes** (`UniqueWeaponsUnbound.TraitCostRuleDef`) — a bare custom
   name silently drops every translation in the folder.
+- **The type folder is load-bearing, not organizational** (decompile-verified,
+  `Verse.LoadedLanguage`): RimWorld enumerates only the top-level directories
+  under `DefInjected/` and resolves each directory *name* to the def type its
+  files target. An `.xml` placed directly in `DefInjected/` is never loaded,
+  and the checker likewise iterates only directories — a misplaced file fails
+  silently on both sides, so never flatten the tree. *Inside* a type folder
+  everything is free: file names are arbitrary and files are found recursively,
+  so one bundled file per type vs one-def-per-file is pure preference — this
+  repo bundles per type, since reviewers work in whole-language passes and
+  entries are found by their defName-prefixed keys, not by file. (The loader
+  even tolerates a pluralized folder name by retrying with the last character
+  stripped — `ThingDefs` → `ThingDef` — but the checker does not; use exact
+  type names.)
 - DefInjected keys are `DefName.field` paths (`UniqueSmithing.description`,
   `UniqueSmithing.customUnlockTexts.0`). Translate `label`, `description`,
   `reportString`, `customUnlockTexts`, `generalRules.rulesStrings` — the
