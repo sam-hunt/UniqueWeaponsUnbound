@@ -336,6 +336,105 @@ these KO stat labels are untranslated in vanilla); 아킴보 (akimbo — not an 
 trait); vanilla-behavior suffix (바닐라); progression header 진행; gizmo button
 지시 버튼; weapon def 무기 def (kept Latin, as JP and zh do).
 
+### Glossary — German (preseeded from PersonaWeaponsUnbound's 2026-07-28 generation; NOT yet generated here)
+
+Nothing German has been generated in this repo. The rows below were grounded
+against the de Core/Royalty/Ideology/Odyssey tars during PWU's run and are
+reusable as-is; the bench, charge-weapon and research-stem rows were ground for
+this file. Language folder is `German` (tar: `German (Deutsch).tar`).
+
+Style rules from the vanilla de data (mandatory):
+
+- **ASCII single quotes** for cited def labels and UI labels — vanilla writes
+  `Forschungsprojekt '{0}'`. Core+Royalty Keyed ship 140 single-quoted
+  placeholders and **zero** German `„…"`. Never use `„ "`, `» «`, or curly
+  quotes. Pawn names are not quoted.
+- **En dash `–`, never em dash `—`** (20 vs 0). The English source uses `—`, so
+  every dash needs converting; `<!-- EN: -->` comments keep the English verbatim.
+- Ellipsis is ASCII `...` (74 in Core Keyed, `…` zero).
+- Descriptions end with `.`; labels and buttons take none. Settings prose is
+  informal **du** with imperatives, never Sie.
+- `JobDef.reportString` is third-person **with** a terminal period (Core
+  `ApplyTechprint` = `wendet TargetB an.`) — unlike ja/ko, which take none. This
+  repo's `UWU_CustomizeWeapon_JobDef` should follow suit.
+- Research labels are lowercase noun phrases (Hightech-Fabrikation, Maschinenbau,
+  Schmieden) or verb-final phrases (Bier brauen, Maschinenpersona überreden).
+  This repo's three tiers build on those vanilla stems.
+
+**The RU glossary's anchor row does not transfer.** This file's Russian section
+exists largely for свойство-not-черта, because RU uses a different word for pawn
+traits. German has no split: Odyssey's `Stat_ThingUniqueWeaponTrait_Label`,
+Royalty's `Stat_Thing_PersonaWeaponTrait_Label` **and** Core's pawn-trait
+`<Traits>` are all **Merkmale**. Where context doesn't make the weapon clear, use
+vanilla's own `StatsReport_WeaponTraits` = **Waffenmerkmale**. Run the lookup
+anyway — just expect it to agree.
+
+**Case is the German landmine, not gender** (decompile-verified:
+`Verse.GrammarResolverSimple`, `LanguageWorker_German`, `LanguageWordInfo`).
+`"key".Translate(args)` reaches `GrammarResolverSimple`, not the rulepack
+resolver. Its `obj is string` branch *does* support `{0_gender ? m : f : n}`,
+`{0_definite}`, `{0_indefinite}`, `{0_plural}` on a plain string, resolving gender
+from the word itself via `WordInfo/Gender/{Male,Female,Neuter,Other}.txt` (~2450
+nouns in Core). But it implements **no `lookup` function**, so
+`{lookup: {0}; decline; N}` — the only route to the 2457-row `decline.txt` case
+forms — silently fails there, and de's article helpers are nominative-only. Gender
+is solvable; case is not.
+
+Two live instances in this repo, both plain-string injections (the only two
+`.Named()` calls here feed *vanilla* keys, so every UWU-owned key is affected):
+
+- `UWU_RequireRecipeResearchDesc` — "customizing a {0} would require {1}", with
+  `{0}` = `Gun_ChargeRifle.label` = **Impulsgewehr** (neuter, and present in the
+  Gender tables). The English indefinite article sits where German wants a
+  genitive ("die Anpassung eines Impulsgewehrs"), which `decline` cannot supply on
+  this path — restructure instead, e.g. `Beispiel: für '{0}' wäre '{1}'
+  erforderlich.`
+- `UWU_RelicIdeoColorTip` — "{0}'s ideoligion color". The literal `'s` is
+  rewritten at runtime by `LanguageWorker_German.PostProcessed` (trailing `'s` →
+  `s`, or a bare `'` after s/ß/z/x/ce). German wants a restructure anyway
+  (`Ideologiefarbe von {0}`), but never carry the `'s` across, and never write
+  `'{0}'s` — a closing ASCII single quote followed by lowercase `s` is silently
+  mangled. The checker cannot see this.
+
+Also note `LanguageWorker_German.PostProcessThingLabelForRelic` truncates a
+weapon label to its bare weapon noun via `EndsWith` against a hardcoded 26-noun
+list (Horn, Lanze, Pulser, Werfer, Axt, Flinte, Bogen, Revolver, Gewehr,
+Stoßzahn, Stab, Hammer, Schwert, Pistole, Dolch, Büchse, Kanone, Granaten,
+Granate, Keule, Säbel, Messer, Rapier, Klinge, Sense, Speer), falling back to the
+substring after the last space or hyphen. Relevant wherever this mod surfaces a
+relic name from a weapon label; note Waffe is *not* on the list.
+
+| English | Use | Never | Why |
+|---|---|---|---|
+| trait (weapon) | Merkmal / Merkmale (standalone: Waffenmerkmale) | Eigenschaft, Attribut | Odyssey `Stat_ThingUniqueWeaponTrait_Label`, `StatsReport_WeaponTraits` |
+| unique weapon | einzigartige Waffe | Unikat, besondere Waffe | Odyssey `UniqueWeapon` |
+| charge (weapons) | **Impuls-** root: Impulsgewehr, Impulslanze, Impulsschuss | Ladungs-, Lade- | Core `Gun_ChargeRifle`, `Gun_ChargeLance`, `Bullet_ChargeRifle` — exactly parallel to the RU энерг-/заряд- row |
+| fueled / electric smithy | Schmiede / elektr. Schmiede | Schmiedeofen, Esse | Core `FueledSmithy`, `ElectricSmithy` — vanilla abbreviates "elektr." |
+| machining table | **Werkbank** | Maschinentisch, Drehbank | Core `TableMachining` — landmine: de reuses the generic word Werkbank for this *specific* bench, so avoid Werkbank for a generic "workbench" in any string that also names this one |
+| fabrication bench | Fabrikationstisch | Fertigungstisch | Core `FabricationBench.label` |
+| smithing / machining / fabrication (research stems) | Schmieden / Maschinenbau / Fabrikation (advanced: Hightech-Fabrikation) | | Core `Smithing`, `Machining`, `Fabrication`, `AdvancedFabrication` |
+| advanced components | Hightech-Bauteile | fortschrittliche Komponenten | Core `ComponentSpacer.label`; plain components are Bauteile |
+| plasteel / uranium / gold / steel | Plastahl / Uran / Gold / Stahl | Plasteel | Core labels — Plastahl is translated |
+| quality / tiers | Qualität / übel·schlecht·normal·gut·exzellent·meisterlich·legendär | | Core `Quality`, `QualityCategory_*` |
+| "{0} quality or better" | `Qualität {0} oder besser` | | reshaped from Core `NormalQualityOrBetter` (pre-inflected, untemplatable) |
+| tech levels | neolithisch / mittelalterlich / industriell / Raumfahrt / Ultra / Archotech | Weltraum, Ultratech | Core `TechLevel_*`; "tech level" = Techstufe |
+| relic | Reliquie | Relikt | Ideology `Relic`, `RelicOf` (reliquary = Reliquienschrein) |
+| ideoligion / reform | Ideologie / Ideologie reformieren | Ideoligion | Ideology `IdeoligionOf`, `ReformIdeoligion` — de uses the plain word, no portmanteau |
+| colour / appearance | Farbe / Erscheinung | Aussehen | Core `Color`, `Appearance` |
+| Crafting (the skill) | Handwerk | Herstellung, Basteln | Core `Crafting.label` |
+| bill / recipe (both) | Auftrag | Rezept, Rechnung | Core `TabBills`, `AddBill`, every `Stat_Recipe_*_Desc` — de collapses the two |
+| Cancel / Reset / Confirm / Randomize | Abbrechen / Zurücksetzen / Bestätigen / Zufällig | | Core buttons |
+| Reset to defaults | Auf Standard zurücksetzen | | Core `ResetBinding`; `Default` = Standard |
+| None | Nichts | Keine | Core `None` |
+| colonist / research project | Kolonist / Forschungsprojekt | | Core `Colonist`, `NeedResearchBenchDesc` |
+| wielder | Träger | Anwender | Royalty weapon-trait descs |
+| techprint | Techplan / Techpläne | Techdruck, Blaupause | Core `TechprintLabel` |
+
+Unrelated to German but worth remembering during any generation here: this repo's
+`DefInjected/UniqueWeaponsUnbound.TraitCostRuleDef/` folder is namespace-qualified
+because the def class is the mod's own. A bare `TraitCostRuleDef` folder silently
+drops every entry in it.
+
 ### Cross-language lessons
 
 - Wrap injected `{0}` def labels in the language's quote marks (JP 「{0}」,
@@ -346,8 +445,32 @@ trait); vanilla-behavior suffix (바닐라); progression header 진행; gizmo bu
   to named entities (research, ideoligion, trait names) and terse
   stat/job-report templates take none.
 - Job-report register does **not** transfer between languages: vanilla zh
-  `reportString`s end in 。(研究中。), vanilla JP ones take no period. Check the
-  target language's own `DefInjected/JobDef` before writing any.
+  `reportString`s end in 。(研究中。), vanilla JP ones take no period, vanilla de
+  ones take a period (`wendet TargetB an.`). Check the target language's own
+  `DefInjected/JobDef` before writing any.
+- **Know which resolver your strings actually reach** (decompile-verified).
+  `"key".Translate(args)` goes to `Verse.GrammarResolverSimple`, *not* the full
+  rulepack `GrammarResolver`, and the two support different things. On a plain
+  `string` arg `GrammarResolverSimple` gives you `{N_gender ? … : … : …}`,
+  `{N_definite}`, `{N_indefinite}`, `{N_plural}` and the pronoun family — gender
+  is looked up from the word itself via `LanguageWordInfo`, so no `NamedArgument`
+  metadata is needed. It implements **no `lookup` function at all**, so
+  `{lookup: {0}; decline; N}` and every case form it would produce are
+  unavailable there. For inflecting languages that means gender is usually
+  solvable and **case is not**: restructure so nothing has to agree with the
+  injected label (drop the article, or move the head noun in front of the
+  placeholder). See the German glossary for worked rewrites.
+- **A gender lookup that misses defaults to masculine** (`ResolveGender`'s
+  `defaultGender`), and mod-coined nouns are never in the vanilla Gender tables —
+  so `{N_gender ? …}` on this mod's own weapon labels is a silent coin-flip, not
+  a fix. Reserve it for vanilla nouns in nominative slots.
+- **Check for a `LanguageWorker_<Language>` before generating** — it post-
+  processes every finished string and can impose requirements or rewrites the
+  vanilla data never reveals. German's rewrites a trailing `'s`, so a closing
+  ASCII single quote followed by lowercase `s` is mangled; Korean's resolves josa
+  markers. Decompile with
+  `ilspycmd "$RIMWORLD_PATH/RimWorldWin64_Data/Managed/Assembly-CSharp.dll" -t
+  "Verse.LanguageWorker_<Language>"`.
 - When an English string is reworded, refresh the EN comments in every
   language **in the same commit** — the checker reports the mismatch as STALE
   either way, but batching avoids churn.
