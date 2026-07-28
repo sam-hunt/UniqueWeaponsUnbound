@@ -119,17 +119,54 @@ Mod-decided terms pending native review: research trio ユニーク武器の鍛�
 ユニーク武器の精密加工 / ユニーク武器の組立製造; haul planner modes 順次 / 巡回 /
 徹底; net refund/cost 実質返却 / 実質コスト; haul plan 運搬計画.
 
+### Glossary — Simplified Chinese (preseeded from UniqueMeleeWeapons' generation, 2026-07; no zh translation in this repo yet)
+
+UMW's 2026-07 zh-Hans run grounded these against the vanilla zh data; UWU
+shares the domain, so they are preseeded here. RimWorld's language folder is
+`ChineseSimplified` (tar: `ChineseSimplified (简体中文).tar`) — the mod
+folder must match it exactly.
+
+Style rules from the vanilla zh data (mandatory):
+
+- Full-width punctuation in prose (，。、；：（）……); descriptions end with 。;
+  labels and buttons carry no trailing period. Placeholders, digits and units
+  stay ASCII. Vanilla labels use full-width parens: 锻造台（燃料）.
+- Quote cited names in prose with full-width curly quotes — vanilla writes
+  任务“{0}”. Terse stat and job-report templates take no quotes.
+- Vanilla zh files can contain untranslated English values — vanilla
+  incompleteness is not style guidance. Some vanilla zh files carry a BOM;
+  ours never do.
+
+| English | Use | Never | Why |
+|---|---|---|---|
+| trait (weapon) | 特性 (stats-entry title 武器特性) | — | Odyssey `WeaponTraits` / `StatsReport_WeaponTraits` |
+| unique weapon | 特化武器 | 独特武器 | Odyssey `UniqueWeapon` |
+| charge (weapons) | 电荷 root | 能量- / 充能- | Core `Gun_ChargeRifle`=电荷步枪, `ChargedShot` research=电荷弹 — zh keeps "charge" literal where RU switched to an energy root; never extrapolate |
+| fueled / electric smithy | 锻造台（燃料） / 锻造台（电力） | 铁匠铺 | Core building labels |
+| machining table | 机械加工台 | | Core `TableMachining`; `Machining` research=机械加工 |
+| fabrication bench | 精密装配台 | | Core `FabricationBench`; `Fabrication` research=精密装配 |
+| smithing (research) | 锻造 | | Core `Smithing` |
+| ideoligion | 文化 (also 文化形态) | 意识形态 | Ideology Keyed (`ButtonShowAllIdeoligions`, `IdeoligionOf`) — a plain word like JP 思想, no portmanteau |
+| relic | 圣物 | | Ideology `<Relic>` |
+| ultratech (attributive) | 极致科技 | 超科技 | `TechLevel_Ultra`=极致时代; `BodyPartsUltra`=极致科技 |
+| plasteel | 玻璃钢 | 塑钢 | Core `Plasteel` — counterintuitive, always check |
+| quality tiers | 极差/较差/一般/良好/极佳/大师级/传奇级 | | Core `QualityCategory_*` |
+
 ### Cross-language lessons
 
 - Wrap injected `{0}` def labels in the language's quote marks (JP 「{0}」,
-  RU «{0}») — injected labels never inflect, and quoting sidesteps case and
-  agreement problems.
+  RU «{0}», zh-Hans “{0}”) — injected labels never inflect, and quoting
+  sidesteps case and agreement problems.
 - When an English string is reworded, refresh the EN comments in every
   language **in the same commit** — the checker reports the mismatch as STALE
   either way, but batching avoids churn.
 - Coined vanilla terms (ideoligion) may be a portmanteau in one language
-  (RU идеолигия) and a plain word in another (JP 思想) — always check, never
-  extrapolate between languages.
+  (RU идеолигия) and a plain word in another (JP 思想, zh-Hans 文化) — always
+  check, never extrapolate between languages.
+- Mod-coined terms recur in def labels AND in Keyed settings prose that
+  restates them. When generation is chunked across files or subagents,
+  reconcile those terms across the whole language before committing (UMW's
+  zh-Hans run needed an alignment pass for its ability/hediff/trait names).
 
 ## Workflows
 
