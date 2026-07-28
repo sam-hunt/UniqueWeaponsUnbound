@@ -162,20 +162,36 @@ vanilla 傭兵団), 頭目 (warlord), 鍔 / クロスガード (quillons / cross
 鋲打ち (studded), 徹甲スパイク (armor spike), 先重心 (head-weighted), 素早い
 (quickdraw — vanilla's 早撃ちの is ranged-specific and wrong on melee).
 
-### Glossary — Simplified Chinese (preseeded from UniqueMeleeWeapons' generation, 2026-07; no zh translation in this repo yet)
+### Glossary — Simplified Chinese (machine-assisted generation, 2026-07; no native review yet)
 
-UMW's 2026-07 zh-Hans run grounded these against the vanilla zh data; UWU
-shares the domain, so they are preseeded here. RimWorld's language folder is
-`ChineseSimplified` (tar: `ChineseSimplified (简体中文).tar`) — the mod
-folder must match it exactly.
+Seeded from UniqueMeleeWeapons' 2026-07 zh-Hans run and extended by UWU's own
+pass. RimWorld's language folder is `ChineseSimplified` (tar:
+`ChineseSimplified (简体中文).tar`). Decompile-verified (`Verse.LoadedLanguage`):
+the ctor derives `legacyFolderName` by cutting at the `(`, and `AllDirectories`
+accepts either name, so a mod folder named `ChineseSimplified` loads — the same
+holds for `Japanese`.
 
 Style rules from the vanilla zh data (mandatory):
 
 - Full-width punctuation in prose (，。、；：（）……); descriptions end with 。;
   labels and buttons carry no trailing period. Placeholders, digits and units
   stay ASCII. Vanilla labels use full-width parens: 锻造台（燃料）.
-- Quote cited names in prose with full-width curly quotes — vanilla writes
-  任务“{0}”. Terse stat and job-report templates take no quotes.
+- **Two quote styles, both vanilla, split by what is being cited.** Injected
+  placeholders take full-width curly quotes (`“{0}”`, 32 vanilla hits vs 5 for
+  「」); literal UI, building and research names spelled out in prose take
+  corner brackets, matching vanilla research descriptions (解锁建造「精密装配台」,
+  研究「基础逆重科技」). Terse stat and job-report templates take no quotes at
+  all (`品质: {0}`, `搬运TargetA。`).
+- Only *named entities* get quotes. Common-noun labels stay bare, per vanilla
+  `Equip`=装备{0} and `NormalQualityOrBetter`=品质需要为一般及以上。 — so
+  research/ideoligion/trait names are quoted, weapon and material labels and
+  quality tiers are not.
+- Terse label templates use an **ASCII** `: ` separator (vanilla `QualityIs`=
+  品质: {0}, `EffectsAtLevel`=效果: ); full-width ：only inside prose.
+- Job report strings (`reportString` and anything returned from
+  `JobDriver.GetReport`) are verb-first phrases that **do** end in 。 — vanilla
+  writes 研究中。/ 清理TargetA。 This is the opposite of JP, which takes no
+  period; do not carry the JP rule across.
 - Vanilla zh files can contain untranslated English values — vanilla
   incompleteness is not style guidance. Some vanilla zh files carry a BOM;
   ours never do.
@@ -184,22 +200,55 @@ Style rules from the vanilla zh data (mandatory):
 |---|---|---|---|
 | trait (weapon) | 特性 (stats-entry title 武器特性) | — | Odyssey `WeaponTraits` / `StatsReport_WeaponTraits` |
 | unique weapon | 特化武器 | 独特武器 | Odyssey `UniqueWeapon` |
+| customize | 自定义 | 定制 | Core `CustomizeIdeoligion`=自定义文化; float-menu register matches `Equip`=装备{0} |
 | charge (weapons) | 电荷 root | 能量- / 充能- | Core `Gun_ChargeRifle`=电荷步枪, `ChargedShot` research=电荷弹 — zh keeps "charge" literal where RU switched to an energy root; never extrapolate |
+| beam (weapons) | 光束 | | Core/Odyssey `Beam`, `BeamBypassShields` |
 | fueled / electric smithy | 锻造台（燃料） / 锻造台（电力） | 铁匠铺 | Core building labels |
 | machining table | 机械加工台 | | Core `TableMachining`; `Machining` research=机械加工 |
 | fabrication bench | 精密装配台 | | Core `FabricationBench`; `Fabrication` research=精密装配 |
 | smithing (research) | 锻造 | | Core `Smithing` |
 | ideoligion | 文化 (also 文化形态) | 意识形态 | Ideology Keyed (`ButtonShowAllIdeoligions`, `IdeoligionOf`) — a plain word like JP 思想, no portmanteau |
-| relic | 圣物 | | Ideology `<Relic>` |
-| ultratech (attributive) | 极致科技 | 超科技 | `TechLevel_Ultra`=极致时代; `BodyPartsUltra`=极致科技 |
+| relic | 圣物 (relic of X = X的圣物) | | Ideology `<Relic>`, `RelicOf` |
+| tech levels | 石器时代/中世纪/工业时代/太空时代/极致时代/超凡时代 | | Core `TechLevel_*` |
+| ultratech / archotech (attributive) | 极致科技 / 超凡科技 | 超科技 | `BodyPartsUltra`=极致科技; 超凡科技 recurs throughout Anomaly/Ideology prose |
+| tech level (the gating concept) | 科技等级 | 科技水平 | Core `CantSendMilitaryAidInTime` uses 科技等级 for the mechanical sense |
 | plasteel | 玻璃钢 | 塑钢 | Core `Plasteel` — counterintuitive, always check |
+| wood / components / advanced components | 原木 / 零部件 / 高级零部件 | 木材, 元件 | Core `WoodLog`, `ComponentIndustrial`, `ComponentSpacer` |
+| chemfuel / herbal medicine / silver | 化合燃料 / 草药 / 白银 | 化学燃料 | Core labels — 化合, not 化学 |
+| bioferrite / thrumbofur / birdskin / steel slag chunk | 活铁 / 敲击兽皮 / 鸟皮 / 钢渣块 | 生物铁 | Anomaly `Bioferrite`; Core `Leather_Thrumbo`, `Leather_Bird`, `ChunkSlagSteel` |
 | quality tiers | 极差/较差/一般/良好/极佳/大师级/传奇级 | | Core `QualityCategory_*` |
+| burst speed / burst count / stopping power | 射速 / 连射次数 / 抑止能力 | | Core `BurstShotFireRate`, `BurstShotCount`, `StoppingPower` |
+| accuracy penalty / ignores | 精度惩罚 / 无视 | | Odyssey `AimAssistance.description` uses both verbatim |
+| inlay / grip / ornamental / lightweight | 镶嵌 / 握把 / 华丽 / 轻便 | | Odyssey `GoldInlay`, `CustomGrip`, `Ornamental`, `Lightweight` labels |
+| toxic / incendiary / EMP | 剧毒 / 燃烧 / EMP | 毒性 | Odyssey `ToxRounds`, `IncendiaryRounds`, `EMPRounds` |
+| flare | 照明弹 | 信号弹 | Anomaly `Apparel_DisruptorFlarePack` verb + chargeNoun |
+| scrap / mod / log / save | 废料 / 模组 / 日志 / 存档 | | Core `CubeMaterialScrap`, `ScenPart_Error`, `OpenLogOnWarnings`, `SaveGameDataFolder` |
+| caravan / quest / forbidden / cannot reach | 远行队 / 任务 / 已禁用 / 无法到达 | 商队 | Core `Caravan`, `Quest`, `ForbiddenLower`, `CannotReach` |
+| haul / carrying capacity / market value | 搬运 / 携带能力 / 市场价值 | | Core `Haul.label`, `CarryingCapacity`, `MarketValue` |
+| Cancel / Reset / Confirm / Randomize / Reset to defaults | 取消 / 重设 / 确定 / 随机 / 还原默认设置 | 重置为默认值 | Core Keyed buttons; 重置为默认值 is `ResetBinding`, keybinding-specific, while `RestoreToDefaultSettings`=还原默认设置 is the settings-page verb |
+| "requires X quality or better" | 品质需要为{0}及以上 | | Core `NormalQualityOrBetter`=品质需要为一般及以上。 |
+
+Mod-decided terms pending native review: research trio 特化武器锻造 / 特化武器机械加工 /
+特化武器精密装配 (vanilla research name prefixed with 特化武器); haul planner modes
+逐次 / 巡回 / 彻底; haul plan 搬运计划; net refund/cost 实际返还 / 实际成本
+(no vanilla term for "refund" exists at all); texture tab 贴图 (材质 is taken —
+it is `Stat_Stuff_Name`, i.e. *material*); vanilla-behavior suffix （原版）;
+"must disarm from hostile" 必须从敌人手中缴获 (vanilla only has `DisarmedTime`=解除武装);
+progression section header 进度; gizmo button 指令按钮; weapon def 武器def (kept
+Latin, as JP does).
 
 ### Cross-language lessons
 
 - Wrap injected `{0}` def labels in the language's quote marks (JP 「{0}」,
   RU «{0}», zh-Hans “{0}”) — injected labels never inflect, and quoting
-  sidesteps case and agreement problems.
+  sidesteps case and agreement problems. **But check how far vanilla actually
+  carries it**: the case/agreement motive doesn't exist in zh-Hans, and vanilla
+  zh leaves common-noun labels bare (`Equip`=装备{0}), so there quoting narrows
+  to named entities (research, ideoligion, trait names) and terse
+  stat/job-report templates take none.
+- Job-report register does **not** transfer between languages: vanilla zh
+  `reportString`s end in 。(研究中。), vanilla JP ones take no period. Check the
+  target language's own `DefInjected/JobDef` before writing any.
 - When an English string is reworded, refresh the EN comments in every
   language **in the same commit** — the checker reports the mismatch as STALE
   either way, but batching avoids churn.

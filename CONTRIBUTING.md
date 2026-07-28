@@ -13,14 +13,14 @@ welcome too.
 | Language             | Status           | Credit                                  |
 | -------------------- | ---------------- | --------------------------------------- |
 | English              | Source           | —                                       |
-| Simplified Chinese   | Planned          |                                         |
+| Simplified Chinese   | Machine-assisted | Opus 5                                  |
 | Russian              | Native           | [An-on-im](https://github.com/An-on-im) |
 | Korean               | Planned          |                                         |
 | German               | Planned          |                                         |
 | Spanish              | Planned          |                                         |
 | French               | Planned          |                                         |
 | Brazilian Portuguese | Planned          |                                         |
-| Japanese             | Machine-assisted |                                         |
+| Japanese             | Machine-assisted | Fable 5                                 |
 
 Statuses: **Source** (the authoritative English strings), **Machine-assisted**
 (generated with terminology grounded against the official RimWorld
