@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Float menu / Gizmo -->
+  <!-- EN: Customize {0} -->
+  <UWU_CustomizeWeapon>{0} anpassen</UWU_CustomizeWeapon>
+  <!-- EN: requires {0} -->
+  <UWU_RequiresResearch>benötigt '{0}'</UWU_RequiresResearch>
+  <!-- EN: requires {0} -->
+  <UWU_RequiresWorkbench>benötigt '{0}'</UWU_RequiresWorkbench>
+  <!-- EN: no suitable workbench -->
+  <UWU_NoSuitableWorkbench>keine geeignete Arbeitsstation</UWU_NoSuitableWorkbench>
+  <!-- EN: requires {0} quality or better -->
+  <UWU_RequiresMinimumQuality>benötigt Qualität {0} oder besser</UWU_RequiresMinimumQuality>
+  <!-- EN: Customize -->
+  <UWU_CustomizeGizmoLabel>Anpassen</UWU_CustomizeGizmoLabel>
+  <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
+  <UWU_CustomizeGizmoDesc>Selektiere einen Kolonisten, um diese Waffe an einer nahegelegenen Arbeitsstation anzupassen.</UWU_CustomizeGizmoDesc>
+
+  <!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
+  <!-- EN: no unique variant -->
+  <UWU_DevNoUniqueVariant>keine einzigartige Variante</UWU_DevNoUniqueVariant>
+  <!-- EN: base variant upgrades disabled -->
+  <UWU_DevDefConversionDisabled>Aufwertung der Basisvariante deaktiviert</UWU_DevDefConversionDisabled>
+  <!-- EN: {0} is beyond comprehension -->
+  <UWU_DevTechLevelBeyondComprehension>{0} übersteigt das Fassungsvermögen</UWU_DevTechLevelBeyondComprehension>
+
+  <!-- Dialog: Buttons -->
+  <!-- EN: Cancel -->
+  <UWU_Cancel>Abbrechen</UWU_Cancel>
+  <!-- EN: Reset -->
+  <UWU_Reset>Zurücksetzen</UWU_Reset>
+  <!-- EN: Confirm -->
+  <UWU_Confirm>Bestätigen</UWU_Confirm>
+  <!-- EN: Randomize -->
+  <UWU_Randomize>Zufällig</UWU_Randomize>
+  <!-- EN: Reset to defaults -->
+  <UWU_ResetToDefaults>Auf Standard zurücksetzen</UWU_ResetToDefaults>
+
+  <!-- Dialog: Tabs -->
+  <!-- EN: Traits -->
+  <UWU_TabTraits>Merkmale</UWU_TabTraits>
+  <!-- EN: Texture -->
+  <UWU_TabTexture>Textur</UWU_TabTexture>
+  <!-- EN: Color -->
+  <UWU_TabColor>Farbe</UWU_TabColor>
+
+  <!-- Dialog: Controls -->
+  <!-- EN: This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion. -->
+  <UWU_RelicNameTooltip>Diese Waffe ist eine Reliquie einer Ideologie. Ihr Name kann nur beim Erstellen oder Reformieren einer Ideologie geändert werden.</UWU_RelicNameTooltip>
+  <!-- EN: Select at least one trait first -->
+  <UWU_SelectTraitFirst>Wähle zuerst mindestens ein Merkmal aus</UWU_SelectTraitFirst>
+  <!-- EN: Auto-regenerate name when traits change -->
+  <UWU_AutoRegenName>Namen automatisch neu erzeugen, wenn sich Merkmale ändern</UWU_AutoRegenName>
+  <!-- EN: Hide negative traits -->
+  <UWU_HideNegativeTraits>Negative Merkmale ausblenden</UWU_HideNegativeTraits>
+
+  <!-- Dialog: Disabled-state messages -->
+  <!-- EN: Select traits to customize texture -->
+  <UWU_SelectTraitsForTexture>Wähle Merkmale aus, um die Textur anzupassen</UWU_SelectTraitsForTexture>
+  <!-- EN: Select traits to customize color -->
+  <UWU_SelectTraitsForColor>Wähle Merkmale aus, um die Farbe anzupassen</UWU_SelectTraitsForColor>
+  <!-- EN: Color determined by {0} -->
+  <UWU_ColorDeterminedBy>Farbe durch Merkmal '{0}' festgelegt</UWU_ColorDeterminedBy>
+
+  <!-- Dialog: Color sections -->
+  <!-- EN: Weapon colors -->
+  <UWU_WeaponColors>Waffenfarben</UWU_WeaponColors>
+  <!-- EN: Ideology colors -->
+  <UWU_IdeologyColors>Ideologiefarben</UWU_IdeologyColors>
+  <!-- EN: Structure colors -->
+  <UWU_StructureColors>Strukturfarben</UWU_StructureColors>
+
+  <!-- Dialog: Cost display -->
+  <!-- EN: Net refund:  -->
+  <UWU_NetRefund>Nettoerstattung: </UWU_NetRefund>
+  <!-- EN: None -->
+  <UWU_RefundNone>Nichts</UWU_RefundNone>
+  <!-- EN: Net cost:  -->
+  <UWU_NetCost>Nettokosten: </UWU_NetCost>
+  <!-- EN: Free -->
+  <UWU_CostFree>Kostenlos</UWU_CostFree>
+  <!-- EN: Missing resources -->
+  <UWU_MissingResources>Fehlende Ressourcen</UWU_MissingResources>
+  <!-- EN: Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position. -->
+  <UWU_NotEnoughMaterials>Die benötigten Materialien sind nicht ausreichend vorhanden, verboten, von einer anderen Person reserviert oder von der Position dieser Person nicht erreichbar.</UWU_NotEnoughMaterials>
+  <!-- EN: Could not customize {0}: no viable haul plan. -->
+  <UWU_CouldNotStartPlanInfeasible>{0} konnte nicht angepasst werden: kein durchführbarer Transportplan.</UWU_CouldNotStartPlanInfeasible>
+  <!-- EN: Could not customize {0}: failed to reserve {1} x{2}. -->
+  <UWU_CouldNotStartReservationConflict>{0} konnte nicht angepasst werden: {1} x{2} konnte nicht reserviert werden.</UWU_CouldNotStartReservationConflict>
+  <!-- EN: Could not customize {0}: failed to reserve {1} x{2} (held by {3}). -->
+  <UWU_CouldNotStartReservationConflictHeldBy>{0} konnte nicht angepasst werden: {1} x{2} konnte nicht reserviert werden (gehalten von {3}).</UWU_CouldNotStartReservationConflictHeldBy>
+  <!-- EN: Could not customize {0}: internal error. See log. -->
+  <UWU_CouldNotStartInternalError>{0} konnte nicht angepasst werden: interner Fehler. Siehe Log.</UWU_CouldNotStartInternalError>
+
+  <!-- Trait tooltips -->
+  <!-- EN: Effects: -->
+  <UWU_Effects>Effekte:</UWU_Effects>
+  <!-- EN: Damage type -->
+  <UWU_DamageType>Schadensart</UWU_DamageType>
+  <!-- EN: Extra damage -->
+  <UWU_ExtraDamage>Zusatzschaden</UWU_ExtraDamage>
+  <!-- EN: Burst speed -->
+  <UWU_BurstSpeed>Feuerrate</UWU_BurstSpeed>
+  <!-- EN: Burst count -->
+  <UWU_BurstCount>Schüsse pro Feuerstoß</UWU_BurstCount>
+  <!-- EN: Stopping power -->
+  <UWU_StoppingPower>Mannstoppwirkung</UWU_StoppingPower>
+  <!-- EN: Ignores accuracy penalties -->
+  <UWU_IgnoresAccuracyPenalties>Ignoriert Genauigkeitsverluste</UWU_IgnoresAccuracyPenalties>
+
+  <!-- Trait validation -->
+  <!-- EN: Already applied -->
+  <UWU_AlreadyApplied>Bereits vorhanden</UWU_AlreadyApplied>
+  <!-- EN: Maximum traits reached -->
+  <UWU_MaxTraitsReached>Maximale Anzahl an Merkmalen erreicht</UWU_MaxTraitsReached>
+  <!-- EN: Conflicts with {0} -->
+  <UWU_ConflictsWith>Kollidiert mit '{0}'</UWU_ConflictsWith>
+  <!-- EN: Cannot be the only trait -->
+  <UWU_CannotBeOnlyTrait>Kann nicht das einzige Merkmal sein</UWU_CannotBeOnlyTrait>
+  <!-- EN: {0} cannot be the only trait -->
+  <UWU_TraitCannotBeOnlyTrait>'{0}' kann nicht das einzige Merkmal sein</UWU_TraitCannotBeOnlyTrait>
+  <!-- EN: Must disarm from hostile -->
+  <UWU_OnlyOnHostiles>Muss Feinden abgenommen werden</UWU_OnlyOnHostiles>
+  <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
+  <UWU_LastTraitSourceWarning>Achtung: Dies ist die einzige Waffe in deinem Bestand mit diesem Merkmal. Wenn du es entfernst, verschwindet es auch aus dem Vorrat an Merkmalen, die du auf andere Waffen anwenden kannst.</UWU_LastTraitSourceWarning>
+  <!-- EN: No traits match your search. -->
+  <UWU_NoTraitsMatchSearch>Keine Merkmale entsprechen deiner Suche.</UWU_NoTraitsMatchSearch>
+  <!-- EN: No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization. -->
+  <UWU_NoTraitsDiscovered>Noch keine Merkmale verfügbar.\n\nBerge einzigartige Waffen über Quests oder Weltbeute,\num ihre Merkmale zur Anpassung freizuschalten.</UWU_NoTraitsDiscovered>
+  <!-- EN: All available traits for this weapon are negative. Disable "Hide negative traits" below to view them. -->
+  <UWU_NoTraitsAfterHideNegative>Alle für diese Waffe verfügbaren Merkmale sind negativ. Deaktiviere unten 'Negative Merkmale ausblenden', um sie anzuzeigen.</UWU_NoTraitsAfterHideNegative>
+  <!-- EN: No traits are compatible with this weapon. -->
+  <UWU_NoTraitsAvailable>Keine Merkmale sind mit dieser Waffe kompatibel.</UWU_NoTraitsAvailable>
+
+  <!-- Fallbacks -->
+  <!-- EN: weapon -->
+  <UWU_WeaponFallback>Waffe</UWU_WeaponFallback>
+  <!-- EN: Weapon -->
+  <UWU_WeaponTypeFallback>Waffe</UWU_WeaponTypeFallback>
+  <!-- EN: blue -->
+  <UWU_ColorFallback>blau</UWU_ColorFallback>
+
+  <!-- Jobs -->
+  <!-- EN: Customizing {0} -->
+  <UWU_CustomizingWeapon>passt {0} an.</UWU_CustomizingWeapon>
+  <!-- EN: Adding {0} to {1} -->
+  <UWU_AddingTrait>fügt {0} zu {1} hinzu.</UWU_AddingTrait>
+  <!-- EN: Removing {0} from {1} -->
+  <UWU_RemovingTrait>entfernt {0} von {1}.</UWU_RemovingTrait>
+  <!-- EN: Customizing appearance of {0} -->
+  <UWU_ApplyingCosmetics>passt Erscheinung von {0} an.</UWU_ApplyingCosmetics>
+  <!-- EN: Placing {0} on {1} -->
+  <UWU_PlacingWeapon>legt {0} auf {1} ab.</UWU_PlacingWeapon>
+  <!-- EN: Gathering materials for {0} -->
+  <UWU_GatheringMaterials>sammelt Materialien für {0}.</UWU_GatheringMaterials>
+  <!-- EN: Admiring work -->
+  <UWU_AdmiringWork>bewundert die Arbeit.</UWU_AdmiringWork>
+  <!-- EN: Not enough resources to customize this weapon. -->
+  <UWU_InsufficientResources>Nicht genügend Ressourcen, um diese Waffe anzupassen.</UWU_InsufficientResources>
+  <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
+  <UWU_IngredientShortfall>Anpassung von {0} unterbrochen: Zutaten gingen verloren, bevor {1} angewendet werden konnte.</UWU_IngredientShortfall>
+  <!-- EN: {0} customization interrupted: workbench is no longer available. -->
+  <UWU_BailWorkbenchUnavailable>Anpassung von {0} unterbrochen: Die Arbeitsstation ist nicht mehr verfügbar.</UWU_BailWorkbenchUnavailable>
+  <!-- EN: {0} customization interrupted: workbench became unreachable. -->
+  <UWU_BailWorkbenchUnreachable>Anpassung von {0} unterbrochen: Die Arbeitsstation ist nicht mehr erreichbar.</UWU_BailWorkbenchUnreachable>
+  <!-- EN: {0} customization interrupted: workbench has no power or fuel. -->
+  <UWU_BailWorkbenchInactive>Anpassung von {0} unterbrochen: Die Arbeitsstation hat keinen Strom oder Treibstoff.</UWU_BailWorkbenchInactive>
+  <!-- EN: {0} customization interrupted: weapon was lost. -->
+  <UWU_BailWeaponLost>Anpassung von {0} unterbrochen: Die Waffe ist verloren gegangen.</UWU_BailWeaponLost>
+  <!-- EN: {0} customization interrupted: weapon is no longer accessible. -->
+  <UWU_BailWeaponInaccessible>Anpassung von {0} unterbrochen: Die Waffe ist nicht mehr zugänglich.</UWU_BailWeaponInaccessible>
+  <!-- EN: {0} customization interrupted: an ingredient was lost while hauling. -->
+  <UWU_BailIngredientLost>Anpassung von {0} unterbrochen: Eine Zutat ging beim Transport verloren.</UWU_BailIngredientLost>
+  <!-- EN: {0} customization interrupted: a required ingredient became unreachable. -->
+  <UWU_BailIngredientUnreachable>Anpassung von {0} unterbrochen: Eine benötigte Zutat ist nicht mehr erreichbar.</UWU_BailIngredientUnreachable>
+  <!-- EN: {0} customization interrupted: no room near the workbench to place an ingredient. -->
+  <UWU_BailIngredientPlacementFailed>Anpassung von {0} unterbrochen: Kein Platz in der Nähe der Arbeitsstation, um eine Zutat abzulegen.</UWU_BailIngredientPlacementFailed>
+  <!-- EN: {0} customization interrupted: could not pick up the weapon. -->
+  <UWU_BailCarryStartFailed>Anpassung von {0} unterbrochen: Die Waffe konnte nicht aufgenommen werden.</UWU_BailCarryStartFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while adding {1}. -->
+  <UWU_BailOpAddTraitFailed>Anpassung von {0} unterbrochen: Beim Hinzufügen von {1} ist ein Fehler aufgetreten.</UWU_BailOpAddTraitFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while removing {1}. -->
+  <UWU_BailOpRemoveTraitFailed>Anpassung von {0} unterbrochen: Beim Entfernen von {1} ist ein Fehler aufgetreten.</UWU_BailOpRemoveTraitFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while applying cosmetic changes. -->
+  <UWU_BailOpCosmeticsFailed>Anpassung von {0} unterbrochen: Beim Anwenden der optischen Änderungen ist ein Fehler aufgetreten.</UWU_BailOpCosmeticsFailed>
+  <!-- EN: {0} customization failed unexpectedly. -->
+  <UWU_BailUnexpected>Anpassung von {0} ist unerwartet fehlgeschlagen.</UWU_BailUnexpected>
+  <!-- EN: {0} customization interrupted: the customization dialog could not be opened. See log. -->
+  <UWU_BailDialogOpenFailed>Anpassung von {0} unterbrochen: Das Anpassungsfenster konnte nicht geöffnet werden. Siehe Log.</UWU_BailDialogOpenFailed>
+  <!-- EN: {0} customization dialog errored and was closed. See log. -->
+  <UWU_DialogErrored>Im Anpassungsfenster für {0} ist ein Fehler aufgetreten, es wurde geschlossen. Siehe Log.</UWU_DialogErrored>
+  <!-- EN: {0} customized, but ability state could not be reconciled. See log. -->
+  <UWU_FinalizeAbilitySyncFailed>{0} wurde angepasst, aber der Fähigkeitsstatus konnte nicht abgeglichen werden. Siehe Log.</UWU_FinalizeAbilitySyncFailed>
+  <!-- EN: {0} customized, but the final color could not be applied. See log. -->
+  <UWU_FinalizeColorFailed>{0} wurde angepasst, aber die endgültige Farbe konnte nicht angewendet werden. Siehe Log.</UWU_FinalizeColorFailed>
+  <!-- EN: {0}'s ideoligion color. This weapon is a relic of the {1} ideoligion. -->
+  <UWU_RelicIdeoColorTip>Ideologiefarbe von {0}. Diese Waffe ist eine Reliquie der Ideologie {1}.</UWU_RelicIdeoColorTip>
+
+  <!-- Settings: Section headers -->
+  <!-- EN: Unique Weapons Unbound -->
+  <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
+  <!-- EN: Progression -->
+  <UWU_SettingsProgression>Fortschritt</UWU_SettingsProgression>
+  <!-- EN: Trait costs -->
+  <UWU_SettingsTraitCosts>Merkmalskosten</UWU_SettingsTraitCosts>
+  <!-- EN: Prerequisites -->
+  <UWU_SettingsPrerequisites>Voraussetzungen</UWU_SettingsPrerequisites>
+  <!-- EN: Ingredient hauling -->
+  <UWU_SettingsHaulPlanner>Zutatentransport</UWU_SettingsHaulPlanner>
+  <!-- EN: Miscellaneous -->
+  <UWU_SettingsMiscellaneous>Sonstiges</UWU_SettingsMiscellaneous>
+
+  <!-- Settings: Reusable label suffixes (each includes a leading space) -->
+  <!-- EN:  (default) -->
+  <UWU_DefaultSuffix> (Standard)</UWU_DefaultSuffix>
+  <!-- EN:  (recommended) -->
+  <UWU_RecommendedSuffix> (empfohlen)</UWU_RecommendedSuffix>
+  <!-- EN:  (vanilla) -->
+  <UWU_VanillaSuffix> (Grundspiel)</UWU_VanillaSuffix>
+  <!-- EN:  (experimental) -->
+  <UWU_ExperimentalSuffix> (experimentell)</UWU_ExperimentalSuffix>
+
+  <!-- Settings: Trait costs -->
+  <!-- EN: Trait cost multiplier: {0}% -->
+  <UWU_TraitCostMultiplier>Merkmalskosten-Multiplikator: {0}%</UWU_TraitCostMultiplier>
+  <!-- EN: Trait refund rate: {0}% -->
+  <UWU_TraitRefundRate>Erstattungsrate für Merkmale: {0}%</UWU_TraitRefundRate>
+  <!-- EN: Trait refund rate has no effect while trait cost multiplier is 0%. -->
+  <UWU_RefundRateNoEffect>Die Erstattungsrate für Merkmale hat keine Wirkung, solange der Merkmalskosten-Multiplikator bei 0% liegt.</UWU_RefundRateNoEffect>
+  <!-- EN: Derive base cost from crafting recipe -->
+  <UWU_UseRecipeBaseCost>Grundkosten aus dem Herstellungsauftrag ableiten</UWU_UseRecipeBaseCost>
+  <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
+  <UWU_UseRecipeBaseCostDesc>Ist dies aktiviert, werden die Grundmaterialkosten für das Hinzufügen von Merkmalen aus dem Herstellungsauftrag der Waffe abgeleitet. Ist es deaktiviert, werden stattdessen Pauschalkosten aus allgemeinen Ressourcen der jeweiligen Techstufe der Waffe verwendet. Eine Deaktivierung verhindert, dass billig herstellbare Waffen unangemessen niedrige Merkmalskosten haben, kann aber auch verhindern, dass besondere Waffen oder Waffen aus Mods thematisch passende Kosten erhalten.</UWU_UseRecipeBaseCostDesc>
+
+  <!-- Settings: Prerequisites -->
+  <!-- EN: Minimum weapon quality: {0} -->
+  <UWU_MinimumQuality>Mindestqualität der Waffe: {0}</UWU_MinimumQuality>
+  <!-- EN: Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation. -->
+  <UWU_MinimumQualityDesc>Beschränkt die Anpassung auf Waffen mindestens dieser Qualität. 'übel' bedeutet keine Beschränkung. Bei Waffen unterhalb des Minimums wird die Anpassungsoption weiterhin angezeigt, ist aber mit einer Erklärung deaktiviert.</UWU_MinimumQualityDesc>
+  <!-- EN: Require customization research -->
+  <UWU_RequireCustomizationResearch>Anpassungsforschung erforderlich</UWU_RequireCustomizationResearch>
+  <!-- {0} = unique smithing, {1} = unique machining, {2} = unique fabrication (research labels) -->
+  <!-- EN: Require the completion of the {0}, {1}, or {2} research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
+  <UWU_RequireCustomizationResearchDesc>Setzt den Abschluss der Forschungsprojekte '{0}', '{1}' oder '{2}' voraus, bevor Waffen der entsprechenden Techstufe angepasst werden können. Ist dies deaktiviert, werden diese Forschungsprojekte im Forschungsbaum ausgeblendet.</UWU_RequireCustomizationResearchDesc>
+  <!-- EN: Require weapon crafting research -->
+  <UWU_RequireRecipeResearch>Waffenherstellungsforschung erforderlich</UWU_RequireRecipeResearch>
+  <!-- {0} = ChargeRifle label, {1} = pulse-charged munitions (vanilla ChargedShot research label) -->
+  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a {0} would require {1}. -->
+  <UWU_RequireRecipeResearchDesc>Setzt den Abschluss jeder Forschung voraus, welche die Herstellung der Waffe ermöglicht. Beispiel: Für '{0}' wäre '{1}' erforderlich.</UWU_RequireRecipeResearchDesc>
+  <!-- EN: Require appropriate workbench -->
+  <UWU_RequireWorkbench>Passende Arbeitsstation erforderlich</UWU_RequireWorkbench>
+  <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
+  <UWU_RequireWorkbenchDesc>Setzt voraus, dass die Arbeitsstation zur Techstufe der Waffe passt. Ist dies deaktiviert, genügt jede Arbeitsstation, die Waffen herstellen kann, für die Anpassung aller Waffen.</UWU_RequireWorkbenchDesc>
+  <!-- EN: Allow customizing uncraftable weapons -->
+  <UWU_AllowUncraftable>Anpassung nicht herstellbarer Waffen erlauben</UWU_AllowUncraftable>
+  <!-- EN: Allow customization of weapons that have no crafting recipe. -->
+  <UWU_AllowUncraftableDesc>Erlaubt die Anpassung von Waffen, für die kein Herstellungsauftrag existiert.</UWU_AllowUncraftableDesc>
+  <!-- EN: Allow customizing ultratech-level weapons -->
+  <UWU_AllowUltratech>Anpassung von Waffen der Techstufe Ultra erlauben</UWU_AllowUltratech>
+  <!-- {0} = unique fabrication (research label) -->
+  <!-- EN: Allow customization of ultratech weapons, requiring {0} research. -->
+  <UWU_AllowUltratechDesc>Erlaubt die Anpassung von Ultratech-Waffen; erfordert die Forschung '{0}'.</UWU_AllowUltratechDesc>
+  <!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
+  <UWU_AllowUltratechImpliedDesc>Automatisch aktiviert, weil 'Anpassung von Waffen der Techstufe Archotech erlauben' eingeschaltet ist. Beide Stufen teilen dieselbe Forschungsvoraussetzung.</UWU_AllowUltratechImpliedDesc>
+  <!-- EN: Allow customizing archotech-level weapons -->
+  <UWU_AllowArchotech>Anpassung von Waffen der Techstufe Archotech erlauben</UWU_AllowArchotech>
+  <!-- {0} = unique fabrication (research label) -->
+  <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
+  <UWU_AllowArchotechDesc>Erlaubt die Anpassung von Archotech-Waffen; erfordert die Forschung '{0}'.</UWU_AllowArchotechDesc>
+
+  <!-- Settings: Miscellaneous -->
+  <!-- EN: Allow weapon def conversion -->
+  <UWU_AllowDefConversion>Umwandlung von Waffen-Defs erlauben</UWU_AllowDefConversion>
+  <!-- EN: Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon. -->
+  <UWU_AllowDefConversionDesc>Erlaubt Waffen, während der Anpassung zwischen ihrem Basis-Def und ihrem einzigartigen Def zu wechseln. Ist dies deaktiviert, können nur bereits einzigartige Waffen angepasst werden, und das Entfernen aller Merkmale belässt die Waffe als einzigartige Waffe ohne Merkmale, statt sie auf ihre Basiswaffe zurückzusetzen.</UWU_AllowDefConversionDesc>
+  <!-- EN: Enable Ideology color options -->
+  <UWU_EnableIdeoColors>Ideologie-Farboptionen aktivieren</UWU_EnableIdeoColors>
+  <!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. -->
+  <UWU_EnableIdeoColorsDesc>Zeigt die Farbpaletten von Ideologie und Sonstiges in der Farbauswahl der Waffenanpassung an.</UWU_EnableIdeoColorsDesc>
+  <!-- EN: Enable structure color options -->
+  <UWU_EnableStructureColors>Struktur-Farboptionen aktivieren</UWU_EnableStructureColors>
+  <!-- EN: Show structure color palette in the weapon customization color picker. -->
+  <UWU_EnableStructureColorsDesc>Zeigt die Farbpalette der Strukturen in der Farbauswahl der Waffenanpassung an.</UWU_EnableStructureColorsDesc>
+  <!-- EN: Enforce trait count limit -->
+  <UWU_EnforceMaxTraitLimit>Obergrenze für Merkmalsanzahl erzwingen</UWU_EnforceMaxTraitLimit>
+  <!-- EN: Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply). -->
+  <UWU_EnforceMaxTraitLimitDesc>Einzigartige Waffen entstehen im Grundspiel mit höchstens drei Merkmalen. Aktiviere dies, um dieselbe Grenze bei der Anpassung zu erzwingen. Deaktiviere es, um beliebig viele Merkmale zuzulassen (andere Regeln wie Kategorie- und Ausschlussbeschränkungen gelten weiterhin).</UWU_EnforceMaxTraitLimitDesc>
+  <!-- EN: Enforce sole-trait restrictions -->
+  <UWU_EnforceSoleTrait>Einschränkungen für Einzelmerkmale erzwingen</UWU_EnforceSoleTrait>
+  <!-- EN: Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization. -->
+  <UWU_EnforceSoleTraitDesc>Manche Merkmale können bei der Generierung im Grundspiel nicht das einzige Merkmal einer Waffe sein. Aktiviere dies, um dieselbe Einschränkung bei der Anpassung zu erzwingen.</UWU_EnforceSoleTraitDesc>
+  <!-- EN: Restrict available traits to discovered weapons -->
+  <UWU_RestrictTraitsToDiscovered>Verfügbare Merkmale auf entdeckte Waffen beschränken</UWU_RestrictTraitsToDiscovered>
+  <!-- EN: Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately. -->
+  <UWU_RestrictTraitsToDiscoveredDesc>Ein schlankes Fortschrittssystem. Ist dies aktiviert, bietet das Anpassungsfenster nur Merkmale an, die auf einzigartigen Waffen zu finden sind, welche der Kolonie derzeit sichtbar sind: auf einer geladenen Karte (nicht im Nebel, nicht versiegelt und nicht in feindlichem Besitz) oder in einer Karawane der Spielerfraktion. Es werden keine dauerhaften Daten in Speicherdateien angelegt; wird dies wieder ausgeschaltet, steht sofort die vollständige Merkmalsliste zur Verfügung.</UWU_RestrictTraitsToDiscoveredDesc>
+  <!-- EN: Enable ground weapon right-click menu -->
+  <UWU_EnableGroundCustomization>Rechtsklickmenü für Waffen am Boden aktivieren</UWU_EnableGroundCustomization>
+  <!-- EN: Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button. -->
+  <UWU_EnableGroundCustomizationDesc>Zeigt 'Anpassen'-Optionen beim Rechtsklick auf Waffen am Boden. Deaktiviere dies, um das Kontextmenü zu entschlacken, besonders bei Lager-Mods, die Gegenstände im selben Feld stapeln. Waffen können weiterhin angepasst werden, indem du sie selektierst und die Befehlsschaltfläche verwendest.</UWU_EnableGroundCustomizationDesc>
+
+  <!-- Settings: Haul planner -->
+  <!-- EN: Sequential -->
+  <UWU_HaulPlannerSequential>Sequenziell</UWU_HaulPlannerSequential>
+  <!-- EN: Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations. -->
+  <UWU_HaulPlannerSequentialDesc>Verhalten wie im Grundspiel. Personen tragen jeweils höchstens einen Zutatenstapel und greifen immer zuerst den nächstgelegenen. Einfach und vorhersehbar, bedeutet aber viele kurze Wege bei ressourcenintensiven Anpassungen.</UWU_HaulPlannerSequentialDesc>
+  <!-- EN: Sweep -->
+  <UWU_HaulPlannerSweep>Sammelnd</UWU_HaulPlannerSweep>
+  <!-- EN: Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead. -->
+  <UWU_HaulPlannerSweepDesc>Personen planen voraus und nutzen freien Platz im Inventar, um mehr auf einmal zu tragen; zudem wählen sie effizientere Wege zwischen den Aufnahmepunkten. Deutlich weniger Wege als bei 'Sequenziell', mit vernachlässigbarem Planungsaufwand.</UWU_HaulPlannerSweepDesc>
+  <!-- EN: Thorough -->
+  <UWU_HaulPlannerThorough>Gründlich</UWU_HaulPlannerThorough>
+  <!-- EN: Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze. -->
+  <UWU_HaulPlannerThoroughDesc>Wie 'Sammelnd', wägt aber zusätzlich ab, aus welchen Stapeln entnommen wird, wenn die Karte mehrere Kandidaten bietet, statt immer den nächstgelegenen zu nehmen. Langsamer in der Planung, findet aber meist die kürzesten Wege, wenn Zutaten verstreut liegen oder die Tragekapazität knapp ist. Fällt bei zu komplexen Transporten auf 'Sammelnd' zurück.</UWU_HaulPlannerThoroughDesc>
+
+</LanguageData>

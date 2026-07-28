@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique fabrication -->
+  <UniqueFabrication.label>Fabrikation einzigartiger Waffen</UniqueFabrication.label>
+  <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
+  <UniqueFabrication.description>Werte Waffen der Raumfahrt- und Ultratech-Stufe an einem Fabrikationstisch auf und passe sie an, indem du Merkmale nach Bedarf hinzufügst oder entfernst.</UniqueFabrication.description>
+
+  <!-- EN: Upgrade and customize spacer weapons -->
+  <UniqueFabrication.customUnlockTexts.0>Waffen der Raumfahrtstufe aufwerten und anpassen</UniqueFabrication.customUnlockTexts.0>
+  <!-- EN: Upgrade and customize ultratech weapons -->
+  <UniqueFabrication.customUnlockTexts.1>Waffen der Ultratech-Stufe aufwerten und anpassen</UniqueFabrication.customUnlockTexts.1>
+
+  <!-- German research subjects carry a case paradigm (see vanilla Smithing/Machining/
+       Fabrication). Head noun Fabrikation is feminine; the "für einzigartige Waffen"
+       tail is invariant, so only the article and noun inflect. -->
+  <!-- EN:
+    <li>subject->unique fabrication</li>
+    <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+    <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+    <li>subject_gerund->fabricating unique weapons</li>
+  -->
+  <UniqueFabrication.generalRules.rulesStrings>
+    <li>subject_story->die Geheimnisse der Umarbeitung von Merkmalen an Impuls- und Strahlenwaffen entschlüsselte</li>
+    <li>subject_story->mit Fabrikations-Nanotechnologie die Bauteile von Raumfahrtwaffen veränderte</li>
+    <li>subject_gerund->die Fabrikation einzigartiger Waffen</li>
+    <li>subject_gerund_with_of->der Fabrikation einzigartiger Waffen</li>
+    <li>subject_gerund_with_to->zur Fabrikation einzigartiger Waffen</li>
+    <li>subject_gerund_acc->die Fabrikation einzigartiger Waffen</li>
+    <li>subject_gerund_dat->der Fabrikation einzigartiger Waffen</li>
+    <!-- nominative indefinite zero article -->
+    <li>subject->Fabrikation für einzigartige Waffen</li>
+    <!-- gender nominative indefinite -->
+    <li>subject_gender_nom_indef->|F|Fabrikation für einzigartige Waffen</li>
+    <!-- of + genitive definite -->
+    <li>subject_with_of->der Fabrikation für einzigartige Waffen</li>
+    <!-- of + adj + genitive definite -->
+    <li>subject_with_of_and_adj->der |adj|en Fabrikation für einzigartige Waffen</li>
+    <!-- to + dative definite -->
+    <li>subject_with_to->zur Fabrikation für einzigartige Waffen</li>
+    <!-- to + adj + dative definite -->
+    <li>subject_with_to_and_adj->zur |adj|en Fabrikation für einzigartige Waffen</li>
+    <!-- the + dative definite -->
+    <li>subject_with_the_dat->der Fabrikation für einzigartige Waffen</li>
+    <!-- the + adj + dative definite -->
+    <li>subject_with_the_and_adj_dat->der |adj|en Fabrikation für einzigartige Waffen</li>
+    <!-- the + accusative definite -->
+    <li>subject_with_the_acc->die Fabrikation für einzigartige Waffen</li>
+    <!-- the + adj + accusative definite -->
+    <li>subject_with_the_and_adj_acc->die |adj|e Fabrikation für einzigartige Waffen</li>
+    <!-- dative indefinite zero article -->
+    <li>subject_dat_indef_zero->Fabrikation für einzigartige Waffen</li>
+    <!-- accusative indefinite zero article -->
+    <li>subject_acc_indef_zero->Fabrikation für einzigartige Waffen</li>
+  </UniqueFabrication.generalRules.rulesStrings>
+
+</LanguageData>

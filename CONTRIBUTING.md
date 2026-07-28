@@ -16,7 +16,7 @@ welcome too.
 | Simplified Chinese   | Machine-assisted | Opus 5                                  |
 | Russian              | Native           | [An-on-im](https://github.com/An-on-im) |
 | Korean               | Machine-assisted | Opus 5                                  |
-| German               | Planned          |                                         |
+| German               | Machine-assisted | Opus 5                                  |
 | Spanish              | Planned          |                                         |
 | French               | Planned          |                                         |
 | Brazilian Portuguese | Planned          |                                         |
