@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- The folder name is namespace-qualified because TraitCostRuleDef is this
+       mod's own def class; a bare "TraitCostRuleDef" folder would silently drop
+       every entry here.
+
+       Material terms below are all vanilla pt-BR labels, several of which are
+       counterintuitive and were checked individually: Plasteel = "plastiaço"
+       (not plastaço), Chemfuel = "combustível químico" (pt-BR is literal here,
+       where es coined "biocombustible" and de "Sprit"), MedicineHerbal =
+       "medicina natural" (not "ervas medicinais"), Leather_Bird = "pele de
+       pássaro", ChunkSlagSteel = "pedaço de escória de aço", EMP = "PEM".
+       "market value" is the StatDef sense, MarketValue.label = "valor de
+       mercado" - not the Keyed MarketValue = "Preço base". -->
+
+  <!-- ===== Pipeline foundation (always run) ===== -->
+
+  <!-- EN: base cost from tech level -->
+  <UWU_BaseCostFromTechLevel.label>custo base pelo nível de tecnologia</UWU_BaseCostFromTechLevel.label>
+  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components -->
+  <UWU_BaseCostFromTechLevel.description>Fornece um custo base alternativo derivado do nível de tecnologia da arma. Garante que todas as armas tenham um custo de personalização, mesmo sem uma receita fabricável. O nível neolítico usa madeira, o medieval usa aço, o industrial usa aço e componentes, e o espacial e acima usam plastiaço e componentes avançados.</UWU_BaseCostFromTechLevel.description>
+
+  <!-- EN: base cost from recipe -->
+  <UWU_BaseCostFromRecipe.label>custo base pela receita</UWU_BaseCostFromRecipe.label>
+  <!-- EN: Replaces the tech-level fallback with the weapon's actual crafting recipe costs, including both fixed ingredients and stuff costs. Only acts when the weapon has a craftable base definition. -->
+  <UWU_BaseCostFromRecipe.description>Substitui o custo alternativo pelo nível de tecnologia pelos custos reais da receita de fabricação da arma, incluindo tanto os ingredientes fixos quanto os custos de material. Só age quando a arma possui um def base fabricável.</UWU_BaseCostFromRecipe.description>
+
+  <!-- EN: quality multiplier -->
+  <UWU_QualityMultiplier.label>multiplicador de qualidade</UWU_QualityMultiplier.label>
+  <!-- EN: Scales costs based on weapon quality. Higher-quality weapons cost more to customize. Includes the base 50% cost fraction so each trait costs half the weapon's full recipe value before quality scaling. -->
+  <UWU_QualityMultiplier.description>Ajusta os custos conforme a qualidade da arma. Armas de qualidade mais alta custam mais para personalizar. Inclui a fração de custo base de 50%, de modo que cada característica custa metade do valor completo da receita da arma antes do ajuste por qualidade.</UWU_QualityMultiplier.description>
+
+  <!-- EN: negative trait material downgrade -->
+  <UWU_NegativeDowngrade.label>rebaixamento de materiais para característica negativa</UWU_NegativeDowngrade.label>
+  <!-- EN: Downgrades cost materials by one technology level for negative traits. Spacer components become industrial, plasteel becomes steel, steel becomes wood. Reflects that negative modifications use cruder, cheaper techniques. -->
+  <UWU_NegativeDowngrade.description>Rebaixa em um nível de tecnologia os materiais do custo das características negativas. Os componentes avançados viram componentes, o plastiaço vira aço e o aço vira madeira. Reflete o fato de que modificações negativas usam técnicas mais rudimentares e baratas.</UWU_NegativeDowngrade.description>
+
+  <!-- ===== Thematic rules (keyword-matched) ===== -->
+
+  <!-- EN: toxic component swap -->
+  <UWU_ToxSwap.label>troca de componentes para característica tóxica</UWU_ToxSwap.label>
+  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value. -->
+  <UWU_ToxSwap.description>Substitui os componentes por medicina natural (o triplo da quantidade de componentes), o que reflete as toxinas orgânicas necessárias. Se não houver componentes, converte 70% dos materiais base em medicina natural pelo valor de mercado.</UWU_ToxSwap.description>
+
+  <!-- EN: incendiary component swap -->
+  <UWU_IncendiarySwap.label>troca de componentes para característica incendiária</UWU_IncendiarySwap.label>
+  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value. -->
+  <UWU_IncendiarySwap.description>Substitui os componentes por combustível químico (dez vezes a quantidade de componentes), o que reflete o combustível volátil necessário. Se não houver componentes, converte 70% dos materiais base em combustível químico pelo valor de mercado.</UWU_IncendiarySwap.description>
+
+  <!-- pt-BR localizes the acronym: EMP.label = PEM, EMPRounds = "munição PEM". -->
+  <!-- EN: EMP value split -->
+  <UWU_EmpSplit.label>divisão de valor para PEM</UWU_EmpSplit.label>
+  <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
+  <UWU_EmpSplit.description>Remove os componentes avançados e depois converte 70% dos custos de materiais base em componentes pelo valor de mercado. Representa as peças eletrônicas necessárias para as modificações PEM.</UWU_EmpSplit.description>
+
+  <!-- EN: lightweight swap -->
+  <UWU_Lightweight.label>troca de materiais para leveza</UWU_Lightweight.label>
+  <!-- EN: Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows. -->
+  <UWU_Lightweight.description>Substitui 40% do custo em madeira por pele de pássaro. Representa a empenagem usada nas flechas.</UWU_Lightweight.description>
+
+  <!-- EN: flarestriker value split -->
+  <UWU_Flarestriker.label>divisão de valor para Flarestriker</UWU_Flarestriker.label>
+  <!-- EN: Converts 70% of base material costs into bioferrite by market value, reflecting the exotic fuel source needed for flare launchers. -->
+  <UWU_Flarestriker.description>Converte 70% dos custos de materiais base em bioferrita pelo valor de mercado, o que reflete a fonte de combustível exótica necessária para os lançadores de sinalizadores.</UWU_Flarestriker.description>
+
+  <!-- EN: heavy scrap flat cost -->
+  <UWU_HeavyScrap.label>custo fixo para sucata pesada</UWU_HeavyScrap.label>
+  <!-- The English em dash becomes a colon: vanilla pt-BR uses em and en dashes
+       0 and 4 times across the entire dataset. -->
+  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk. -->
+  <UWU_HeavyScrap.description>Substitui todos os custos por um único pedaço de escória de aço. Modificações à base de sucata são rudimentares e baratas: basta parafusar alguns restos.</UWU_HeavyScrap.description>
+
+  <!-- "de carga" follows Gun_ChargeRifle = "rifle de carga", Gun_ChargeLance =
+       "lança carga" and Bullet_ChargeRifle = "tiro de carga" - pt-BR keeps the
+       charge family literal and consistent, where fr scrambles it. "de feixe"
+       follows BeamWeapons = "Armas de Feixe". -->
+  <!-- EN: charge weapons (category-gated) -->
+  <UWU_ChargeCategoryGated.label>armas de carga (conforme a categoria)</UWU_ChargeCategoryGated.label>
+  <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
+  <UWU_ChargeCategoryGated.description>Converte todos os custos em componentes avançados pelo valor de mercado para as características de armas do tipo carga. Representa a tecnologia espacial exigida pelas modificações de carga e de feixe.</UWU_ChargeCategoryGated.description>
+
+  <!-- EN: charge weapons (unconditional) -->
+  <UWU_ChargeUnconditional.label>armas de carga (sem condição)</UWU_ChargeUnconditional.label>
+  <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
+  <UWU_ChargeUnconditional.description>Converte todos os custos em componentes avançados pelo valor de mercado para as características que envolvem tecnologia espacial avançada, independentemente da categoria da arma.</UWU_ChargeUnconditional.description>
+
+  <!-- EN: akimbo cost multiplier -->
+  <UWU_Akimbo.label>multiplicador de custo para Akimbo</UWU_Akimbo.label>
+  <!-- EN: Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost. -->
+  <UWU_Akimbo.description>Dobra todos os custos, pois Akimbo acrescenta uma segunda arma visível e dobra a taxa de disparo. Isso compensa a fração de custo base de 50% para que o total alcance o custo completo da receita.</UWU_Akimbo.description>
+
+  <!-- EN: grip component removal -->
+  <UWU_Grip.label>remoção de componentes para a empunhadura</UWU_Grip.label>
+  <!-- EN: Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts. -->
+  <UWU_Grip.description>Remove do custo os componentes e os componentes avançados. As modificações de empunhadura são simples ajustes mecânicos que não exigem peças complexas.</UWU_Grip.description>
+
+  <!-- EN: comfort material conversion -->
+  <UWU_Comfort.label>conversão de materiais para o conforto</UWU_Comfort.label>
+  <!-- EN: Converts half of all cost materials to thrumbofur by count, reflecting the luxurious padding and wrapping used for comfort modifications. -->
+  <UWU_Comfort.description>Converte em pele de trumbo metade dos materiais do custo, em quantidade, o que reflete o estofamento e os revestimentos luxuosos usados nas modificações de conforto.</UWU_Comfort.description>
+
+  <!-- EN: ornamental conversion -->
+  <UWU_Ornamental.label>conversão para o ornamental</UWU_Ornamental.label>
+  <!-- EN: Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering. -->
+  <UWU_Ornamental.description>Remove os componentes e depois converte em prata metade dos custos restantes, em quantidade. O trabalho ornamental é um artesanato decorativo, não engenharia técnica.</UWU_Ornamental.description>
+
+  <!-- ===== Late-running rules ===== -->
+
+  <!-- pt-BR has a real noun for inlay (GoldInlay = "incrustação de ouro"),
+       unlike de and fr which only have adjectives. -->
+  <!-- EN: inlay component removal -->
+  <UWU_Inlay.label>remoção de componentes para a incrustação</UWU_Inlay.label>
+  <!-- EN: Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts. -->
+  <UWU_Inlay.description>Remove do custo os componentes e os componentes avançados. As incrustações são modificações puramente estéticas que exigem apenas matérias-primas, não peças complexas.</UWU_Inlay.description>
+
+  <!-- ===== Fallback (always runs last) ===== -->
+
+  <!-- Cited words take ASCII double quotes, per vanilla pt-BR prose
+       ("Reformar caravana"). The quoted example reuses the Odyssey label
+       GoldInlay = "incrustação de ouro" and Gold.label = "ouro". -->
+  <!-- EN: material override fallback -->
+  <UWU_MaterialOverride.label>regra alternativa de substituição de material</UWU_MaterialOverride.label>
+  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>Detecta nomes de materiais no nome da característica (por exemplo, "ouro" em "incrustação de ouro") e substitui o custo em matérias-primas por esse material. Serve como regra geral para as características que não têm uma regra temática própria.</UWU_MaterialOverride.description>
+
+  <!-- EN: cost material pruning -->
+  <UWU_CostPrune.label>redução dos materiais do custo</UWU_CostPrune.label>
+  <!-- EN: Limits the cost to at most 3 material types to prevent UI overflow. When there are more than 3, the cheapest materials by unit price are trimmed first. -->
+  <UWU_CostPrune.description>Limita o custo a no máximo 3 tipos de material para evitar que a interface transborde. Quando há mais de 3, os materiais mais baratos por preço unitário são retirados primeiro.</UWU_CostPrune.description>
+
+</LanguageData>

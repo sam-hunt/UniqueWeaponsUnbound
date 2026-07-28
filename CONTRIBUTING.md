@@ -19,7 +19,7 @@ welcome too.
 | German               | Machine-assisted | Opus 5                                  |
 | Spanish              | Machine-assisted | Opus 5                                  |
 | French               | Machine-assisted | Opus 5                                  |
-| Brazilian Portuguese | Planned          |                                         |
+| Brazilian Portuguese | Machine-assisted | Opus 5                                  |
 | Japanese             | Machine-assisted | Fable 5                                 |
 
 Statuses: **Source** (the authoritative English strings), **Machine-assisted**

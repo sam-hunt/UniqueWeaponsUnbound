@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- "fabricação" is the Fabrication research label, and also FabricationBench
+       ("bancada de fabricação") and AdvancedFabrication ("fabricação avançada"),
+       so the whole tier agrees in pt-BR. Note it collides with Crafting.label,
+       the skill, which is also "fabricação" - disambiguate in prose where both
+       could be meant. -->
+  <!-- EN: unique fabrication -->
+  <UniqueFabrication.label>fabricação de armas únicas</UniqueFabrication.label>
+  <!-- Tech level labels are TechLevel_Spacer = "Espacial" and TechLevel_Ultra =
+       "Ultra"; the attributive prose form of ultratech is "ultratecnológico". -->
+  <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
+  <UniqueFabrication.description>Melhore e personalize armas espaciais e ultratecnológicas em uma bancada de fabricação, adicionando ou removendo características conforme suas necessidades.</UniqueFabrication.description>
+
+  <!-- EN: Upgrade and customize spacer weapons -->
+  <UniqueFabrication.customUnlockTexts.0>Melhore e personalize armas espaciais</UniqueFabrication.customUnlockTexts.0>
+  <!-- EN: Upgrade and customize ultratech weapons -->
+  <UniqueFabrication.customUnlockTexts.1>Melhore e personalize armas ultratecnológicas</UniqueFabrication.customUnlockTexts.1>
+
+  <!-- Bare, unarticled subject with a real gerund, matching vanilla pt-BR
+       AdvancedFabrication ("subject->fabricação de componentes avançados",
+       "subject_gerund->fabricando componentes avançados"). See
+       UniqueSmithing_ResearchProjectDef.xml for why pt-BR needs no paradigm here.
+       "de carga" for charge weapons follows Gun_ChargeRifle = "rifle de carga" and
+       ChargedShot = "munição de carga"; "de feixe" follows BeamWeapons = "Armas de
+       Feixe" and the DamageDef Beam.label = "feixe". -->
+  <!-- EN:
+    <li>subject->unique fabrication</li>
+    <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+    <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+    <li>subject_gerund->fabricating unique weapons</li>
+  -->
+  <UniqueFabrication.generalRules.rulesStrings>
+    <li>subject->fabricação de armas únicas</li>
+    <li>subject_story->decifrou os segredos da modificação de características de armas de carga e de feixe</li>
+    <li>subject_story->usou a nanotecnologia de fabricação para alterar componentes de armas espaciais</li>
+    <li>subject_gerund->fabricando armas únicas</li>
+  </UniqueFabrication.generalRules.rulesStrings>
+
+</LanguageData>

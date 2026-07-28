@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Research labels are lowercase in pt-BR (76 lowercase vs 1 Title Case across
+       Core's ResearchProjectDef folder). The stem is the ResearchProjectDef
+       Smithing = "metalurgia" - NOT the building (FueledSmithy = "forja
+       abastecida") and NOT the WorkTypeDef (Smithing.labelShort = "forja",
+       pawnLabel = "Ferreiro"). Three words in one family; check the def type. -->
+  <!-- EN: unique smithing -->
+  <UniqueSmithing.label>metalurgia de armas únicas</UniqueSmithing.label>
+  <!-- Vanilla pt-BR research descriptions are imperative ("Construa forjas para
+       criar armas de metal..."), so this follows suit. "forja" here is the
+       building word, per FueledSmithy/ElectricSmithy. -->
+  <!-- EN: Upgrade and customize neolithic and medieval weapons at a smithy, adding or removing traits to suit your needs. -->
+  <UniqueSmithing.description>Melhore e personalize armas neolíticas e medievais em uma forja, adicionando ou removendo características conforme suas necessidades.</UniqueSmithing.description>
+
+  <!-- EN: Customize neolithic weapons -->
+  <UniqueSmithing.customUnlockTexts.0>Personalizar armas neolíticas</UniqueSmithing.customUnlockTexts.0>
+  <!-- EN: Customize medieval weapons -->
+  <UniqueSmithing.customUnlockTexts.1>Personalizar armas medievais</UniqueSmithing.customUnlockTexts.1>
+
+  <!-- pt-BR is the only inflecting language checked so far that does NOT reshape
+       research generalRules: it keeps the English 2-symbol set verbatim, with no
+       article baked in and a real gerund (vanilla Smithing = "subject->metalurgia",
+       "subject_gerund->forjando"). Symbol census across Core's ResearchProjectDef
+       folder is subject 186 / subject_story 460 / subject_gerund 202 and nothing
+       else, so there is no paradigm to supply here - compare de (13-symbol case
+       paradigm), es (adds subject_def) and fr (bakes in the definite article).
+       Safe as well as faithful: the consumer, Core's
+       DefInjected/RulePackDef/RulePacks_Book_Descriptions.xml, is unimplemented in
+       pt-BR - all three of its entries are the literal string "TODO" - so there are
+       zero live [subject] references and no priority=-1 fallback anywhere.
+       subject_story is a subject-less third-person preterite clause, matching
+       vanilla pt-BR ("se assentou em um vilarejo medieval e dominou a fabricacao
+       simples com metais"). -->
+  <!-- EN:
+    <li>subject->unique smithing</li>
+    <li>subject_story->learned to modify unique weapons by studying their traits</li>
+    <li>subject_story->experimented with ancient weapon enhancements</li>
+    <li>subject_gerund->smithing unique weapons</li>
+  -->
+  <UniqueSmithing.generalRules.rulesStrings>
+    <li>subject->metalurgia de armas únicas</li>
+    <li>subject_story->aprendeu a modificar armas únicas estudando suas características</li>
+    <li>subject_story->fez experimentos com melhorias de armas antigas</li>
+    <li>subject_gerund->forjando armas únicas</li>
+  </UniqueSmithing.generalRules.rulesStrings>
+
+</LanguageData>

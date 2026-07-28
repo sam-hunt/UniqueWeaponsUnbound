@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Vanilla pt-BR reportStrings are subject-less gerunds (-ndo) WITH a
+       terminal period, and lowercase: 191 of 196 Core entries end in "." and
+       181 of 196 start lowercase (Core BuildSnowman = "construindo boneco de
+       neve.", ApplyTechprint = "aplicando TargetB."). This matches es exactly,
+       and de and fr in taking a period, but differs from ja and ko, which take
+       none. -->
+  <!-- EN: customizing weapon. -->
+  <UWU_CustomizeWeapon.reportString>personalizando uma arma.</UWU_CustomizeWeapon.reportString>
+
+</LanguageData>
