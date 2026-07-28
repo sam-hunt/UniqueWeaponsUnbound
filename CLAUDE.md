@@ -6,8 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Unique Weapons Unbound** is a RimWorld 1.6 mod that allows players to customize unique weapons. Requires the Harmony mod and the Odyssey DLC.
 
-**Key Technologies:** C# (.NET Framework 4.7.2), Harmony library, RimWorld modding API, XML definitions
-
 ## Build Commands
 
 ```bash
@@ -16,9 +14,6 @@ dotnet build UniqueWeaponsUnbound.sln -c Release
 
 # Build only the main project (also triggers the deploy)
 dotnet build Source/1.6/UniqueWeaponsUnbound.csproj
-
-# Clean build artifacts
-dotnet clean UniqueWeaponsUnbound.sln
 
 # Override RimWorld install path
 RIMWORLD_PATH="/path/to/RimWorld" dotnet build UniqueWeaponsUnbound.sln -c Release
@@ -47,25 +42,7 @@ xUnit suite under `Tests/1.6/` (a separate project, never shipped). Run with `./
 
 `Source/1.6/Core/ModInitializer.cs` - Static constructor with `[StaticConstructorOnStartup]` auto-patches via Harmony attribute discovery. Harmony ID: `shunter.uniqueweaponsunbound`.
 
-### Mod Structure
-
-```
-About/About.xml     # Mod metadata, dependencies, load order
-LoadFolders.xml     # Tells RimWorld to load root (/) and 1.6/
-
-Source/1.6/
-├── Core/           # ModInitializer (Harmony bootstrap)
-├── Properties/     # AssemblyInfo
-
-1.6/
-├── Assemblies/     # Build output (DLL) — gitignored
-├── Defs/           # XML definitions (ThingDefs, etc.)
-├── Patches/        # XML patches (XPath-based)
-```
-
 ### Key Patterns
-
-**Harmony Patching:** All patches use `[HarmonyPatch]` attributes for automatic discovery. Patches are organized by target class in subdirectories under `Source/1.6/`.
 
 **Namespace Convention:** Use `*Patches` suffix for patch namespaces to avoid RimWorld type conflicts.
 
@@ -86,42 +63,9 @@ other reflection checks) so a shape mismatch is reported during load, leaving dr
 dictionary lookup. Covered by `TraitEffectLinesIntegrationTests`, which guards our reader only; a
 rename on the *publisher's* side is invisible to it.
 
-**Settings Triple Invariant (`UWU_Settings.cs`):** Every settings field must appear in three places with matching defaults: (1) field declaration, (2) `ResetToDefaults()`, (3) `ExposeData()`'s `Scribe_Values.Look` default. Missing a spot fails silently — drops from save, skips reset, or drifts from declared default. All three lists are kept in the UI's display order (the section ordering from `UWU_Mod.DoSettingsWindowContents`) with section comments, so a diff across the three blocks lines up row-for-row. When adding/removing/renaming a setting, update all three and slot it into its UI section.
+**Logging:** Prefix mod-specific logs with the mod name — `Log.Message("[Unique Weapons Unbound] ...")`.
 
-## Debugging
+**Settings Triple Invariant:** see `Source/1.6/Core/CLAUDE.md`.
 
-1. **Enable RimWorld Dev Mode:** Settings → Dev Mode → Logging
-2. **Log locations:**
-   - **Windows:** `%USERPROFILE%\AppData\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\Player.log`
-   - **WSL:** `/mnt/c/Users/*/AppData/LocalLow/Ludeon Studios/RimWorld by Ludeon Studios/Player.log`
-   - **Linux (Steam):** `~/.config/unity3d/Ludeon Studios/RimWorld by Ludeon Studios/Player.log`
-3. **Logging:** Use `Log.Message("[Unique Weapons Unbound] ...")` for mod-specific logs
-4. **Inspect RimWorld API:** `monodis "/mnt/c/.../RimWorldWin64_Data/Managed/Assembly-CSharp.dll"`
+For reading `Player.log` or disassembling the RimWorld API, use the `rimworld-logs` skill.
 
-## Harmony Patch Examples
-
-**Postfix Pattern:**
-
-```csharp
-[HarmonyPatch(typeof(TargetClass), nameof(TargetClass.MethodName))]
-public static class TargetClass_MethodName_Postfix
-{
-    [HarmonyPostfix]
-    public static void Postfix(TargetClass __instance, ref ReturnType __result)
-    {
-        // __instance: object method was called on
-        // __result: return value (modifiable with ref)
-    }
-}
-```
-
-**Prefix Pattern (for skipping original):**
-
-```csharp
-[HarmonyPrefix]
-public static bool Prefix(ref ReturnType __result)
-{
-    __result = newValue;
-    return false; // Skip original method
-}
-```
