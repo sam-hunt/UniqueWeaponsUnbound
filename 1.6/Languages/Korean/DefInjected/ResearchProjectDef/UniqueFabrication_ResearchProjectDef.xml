@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique fabrication -->
+  <UniqueFabrication.label>고유 무기 정밀 조립</UniqueFabrication.label>
+  <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
+  <UniqueFabrication.description>조립 작업대에서 우주 시대와 미래 기술 무기를 개선하고 개조할 수 있습니다. 필요에 따라 특성을 추가하거나 제거할 수 있습니다.</UniqueFabrication.description>
+
+  <!-- EN: Upgrade and customize spacer weapons -->
+  <UniqueFabrication.customUnlockTexts.0>우주 시대 무기 개선 및 개조</UniqueFabrication.customUnlockTexts.0>
+  <!-- EN: Upgrade and customize ultratech weapons -->
+  <UniqueFabrication.customUnlockTexts.1>미래 기술 무기 개선 및 개조</UniqueFabrication.customUnlockTexts.1>
+
+  <!-- EN:
+    <li>subject->unique fabrication</li>
+    <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+    <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+    <li>subject_gerund->fabricating unique weapons</li>
+  -->
+  <UniqueFabrication.generalRules.rulesStrings>
+    <li>subject->고유 무기 정밀 조립</li>
+    <li>subject_story->펄스 충전 무기와 광선 무기의 특성을 개조하는 비밀을 밝혀냈습니다</li>
+    <li>subject_story->조립 나노기술로 우주 시대 무기의 부품을 개조했습니다</li>
+    <li>subject_gerund->고유 무기 정밀 조립</li>
+  </UniqueFabrication.generalRules.rulesStrings>
+
+</LanguageData>

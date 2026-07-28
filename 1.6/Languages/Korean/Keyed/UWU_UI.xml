@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Float menu / Gizmo -->
+  <!-- EN: Customize {0} -->
+  <UWU_CustomizeWeapon>{0} 개조</UWU_CustomizeWeapon>
+  <!-- EN: requires {0} -->
+  <UWU_RequiresResearch>{0} 연구 필요</UWU_RequiresResearch>
+  <!-- EN: requires {0} -->
+  <UWU_RequiresWorkbench>{0} 필요</UWU_RequiresWorkbench>
+  <!-- EN: no suitable workbench -->
+  <UWU_NoSuitableWorkbench>적합한 작업대 없음</UWU_NoSuitableWorkbench>
+  <!-- EN: requires {0} quality or better -->
+  <UWU_RequiresMinimumQuality>{0} 품질 이상 필요</UWU_RequiresMinimumQuality>
+  <!-- EN: Customize -->
+  <UWU_CustomizeGizmoLabel>개조</UWU_CustomizeGizmoLabel>
+  <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
+  <UWU_CustomizeGizmoDesc>정착민을 선택해 근처 작업대에서 이 무기를 개조합니다.</UWU_CustomizeGizmoDesc>
+
+  <!-- Dev-mode diagnostic reasons (surfaced when Prefs.DevMode is on, otherwise hidden) -->
+  <!-- EN: no unique variant -->
+  <UWU_DevNoUniqueVariant>고유 변형이 없음</UWU_DevNoUniqueVariant>
+  <!-- EN: base variant upgrades disabled -->
+  <UWU_DevDefConversionDisabled>기본형 업그레이드가 비활성화됨</UWU_DevDefConversionDisabled>
+  <!-- EN: {0} is beyond comprehension -->
+  <UWU_DevTechLevelBeyondComprehension>{0}(은)는 이해 범위를 넘어섬</UWU_DevTechLevelBeyondComprehension>
+
+  <!-- Dialog: Buttons -->
+  <!-- EN: Cancel -->
+  <UWU_Cancel>취소</UWU_Cancel>
+  <!-- EN: Reset -->
+  <UWU_Reset>초기화</UWU_Reset>
+  <!-- EN: Confirm -->
+  <UWU_Confirm>확인</UWU_Confirm>
+  <!-- EN: Randomize -->
+  <UWU_Randomize>섞기</UWU_Randomize>
+  <!-- EN: Reset to defaults -->
+  <UWU_ResetToDefaults>기본값 복원</UWU_ResetToDefaults>
+
+  <!-- Dialog: Tabs -->
+  <!-- EN: Traits -->
+  <UWU_TabTraits>특성</UWU_TabTraits>
+  <!-- EN: Texture -->
+  <UWU_TabTexture>외형</UWU_TabTexture>
+  <!-- EN: Color -->
+  <UWU_TabColor>색상</UWU_TabColor>
+
+  <!-- Dialog: Controls -->
+  <!-- EN: This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion. -->
+  <UWU_RelicNameTooltip>이 무기는 사상의 유물입니다. 이름은 사상을 만들거나 개혁할 때만 바꿀 수 있습니다.</UWU_RelicNameTooltip>
+  <!-- EN: Select at least one trait first -->
+  <UWU_SelectTraitFirst>먼저 특성을 하나 이상 선택하세요</UWU_SelectTraitFirst>
+  <!-- EN: Auto-regenerate name when traits change -->
+  <UWU_AutoRegenName>특성이 바뀌면 이름 자동 재생성</UWU_AutoRegenName>
+  <!-- EN: Hide negative traits -->
+  <UWU_HideNegativeTraits>부정적 특성 숨기기</UWU_HideNegativeTraits>
+
+  <!-- Dialog: Disabled-state messages -->
+  <!-- EN: Select traits to customize texture -->
+  <UWU_SelectTraitsForTexture>외형을 개조하려면 특성을 선택하세요</UWU_SelectTraitsForTexture>
+  <!-- EN: Select traits to customize color -->
+  <UWU_SelectTraitsForColor>색상을 개조하려면 특성을 선택하세요</UWU_SelectTraitsForColor>
+  <!-- EN: Color determined by {0} -->
+  <UWU_ColorDeterminedBy>{0}에 의해 색상이 결정됨</UWU_ColorDeterminedBy>
+
+  <!-- Dialog: Color sections -->
+  <!-- EN: Weapon colors -->
+  <UWU_WeaponColors>무기 색상</UWU_WeaponColors>
+  <!-- EN: Ideology colors -->
+  <UWU_IdeologyColors>사상 색상</UWU_IdeologyColors>
+  <!-- EN: Structure colors -->
+  <UWU_StructureColors>구조물 색상</UWU_StructureColors>
+
+  <!-- Dialog: Cost display -->
+  <!-- EN: Net refund: -->
+  <UWU_NetRefund>실질 반환: </UWU_NetRefund>
+  <!-- EN: None -->
+  <UWU_RefundNone>없음</UWU_RefundNone>
+  <!-- EN: Net cost: -->
+  <UWU_NetCost>실질 비용: </UWU_NetCost>
+  <!-- EN: Free -->
+  <UWU_CostFree>무료</UWU_CostFree>
+  <!-- EN: Missing resources -->
+  <UWU_MissingResources>자원 부족</UWU_MissingResources>
+  <!-- EN: Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position. -->
+  <UWU_NotEnoughMaterials>필요한 재료가 부족하거나, 사용이 금지됐거나, 다른 인물에게 예약됐거나, 이 인물의 위치에서 갈 수 없습니다.</UWU_NotEnoughMaterials>
+  <!-- EN: Could not customize {0}: no viable haul plan. -->
+  <UWU_CouldNotStartPlanInfeasible>{0}(을)를 개조할 수 없습니다: 실행 가능한 운반 계획이 없습니다.</UWU_CouldNotStartPlanInfeasible>
+  <!-- EN: Could not customize {0}: failed to reserve {1} x{2}. -->
+  <UWU_CouldNotStartReservationConflict>{0}(을)를 개조할 수 없습니다: {1} x{2} 예약에 실패했습니다.</UWU_CouldNotStartReservationConflict>
+  <!-- EN: Could not customize {0}: failed to reserve {1} x{2} (held by {3}). -->
+  <UWU_CouldNotStartReservationConflictHeldBy>{0}(을)를 개조할 수 없습니다: {1} x{2} 예약에 실패했습니다({3}(이)가 보유 중).</UWU_CouldNotStartReservationConflictHeldBy>
+  <!-- EN: Could not customize {0}: internal error. See log. -->
+  <UWU_CouldNotStartInternalError>{0}(을)를 개조할 수 없습니다: 내부 오류입니다. 기록을 확인하세요.</UWU_CouldNotStartInternalError>
+
+  <!-- Trait tooltips -->
+  <!-- EN: Effects: -->
+  <UWU_Effects>효과:</UWU_Effects>
+  <!-- EN: Damage type -->
+  <UWU_DamageType>피해 유형</UWU_DamageType>
+  <!-- EN: Extra damage -->
+  <UWU_ExtraDamage>추가 피해</UWU_ExtraDamage>
+  <!-- EN: Burst speed -->
+  <UWU_BurstSpeed>연사 속도</UWU_BurstSpeed>
+  <!-- EN: Burst count -->
+  <UWU_BurstCount>연사 횟수</UWU_BurstCount>
+  <!-- EN: Stopping power -->
+  <UWU_StoppingPower>저지력</UWU_StoppingPower>
+  <!-- EN: Ignores accuracy penalties -->
+  <UWU_IgnoresAccuracyPenalties>명중률 감소 무시</UWU_IgnoresAccuracyPenalties>
+
+  <!-- Trait validation -->
+  <!-- EN: Already applied -->
+  <UWU_AlreadyApplied>이미 적용됨</UWU_AlreadyApplied>
+  <!-- EN: Maximum traits reached -->
+  <UWU_MaxTraitsReached>특성 최대 개수 도달</UWU_MaxTraitsReached>
+  <!-- EN: Conflicts with {0} -->
+  <UWU_ConflictsWith>{0}(와)과 충돌</UWU_ConflictsWith>
+  <!-- EN: Cannot be the only trait -->
+  <UWU_CannotBeOnlyTrait>단독 특성이 될 수 없음</UWU_CannotBeOnlyTrait>
+  <!-- EN: {0} cannot be the only trait -->
+  <UWU_TraitCannotBeOnlyTrait>{0}(은)는 단독 특성이 될 수 없습니다</UWU_TraitCannotBeOnlyTrait>
+  <!-- EN: Must disarm from hostile -->
+  <UWU_OnlyOnHostiles>적에게서 무장 해제로 획득해야 함</UWU_OnlyOnHostiles>
+  <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
+  <UWU_LastTraitSourceWarning>경고: 이 특성을 가진 무기는 보유 중인 것 중 이것뿐입니다. 제거하면 다른 무기에 적용할 수 있는 특성 목록에서도 이 특성이 사라집니다.</UWU_LastTraitSourceWarning>
+  <!-- EN: No traits match your search. -->
+  <UWU_NoTraitsMatchSearch>검색과 일치하는 특성이 없습니다.</UWU_NoTraitsMatchSearch>
+  <!-- EN: No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization. -->
+  <UWU_NoTraitsDiscovered>아직 사용할 수 있는 특성이 없습니다.\n\n임무나 세계 전리품으로 고유 무기를 확보하면\n그 특성을 개조에 사용할 수 있게 됩니다.</UWU_NoTraitsDiscovered>
+  <!-- EN: All available traits for this weapon are negative. Disable "Hide negative traits" below to view them. -->
+  <UWU_NoTraitsAfterHideNegative>이 무기에 사용할 수 있는 특성이 모두 부정적입니다. 아래의 "부정적 특성 숨기기"를 해제하면 볼 수 있습니다.</UWU_NoTraitsAfterHideNegative>
+  <!-- EN: No traits are compatible with this weapon. -->
+  <UWU_NoTraitsAvailable>이 무기와 호환되는 특성이 없습니다.</UWU_NoTraitsAvailable>
+
+  <!-- Fallbacks -->
+  <!-- EN: weapon -->
+  <UWU_WeaponFallback>무기</UWU_WeaponFallback>
+  <!-- EN: Weapon -->
+  <UWU_WeaponTypeFallback>무기</UWU_WeaponTypeFallback>
+  <!-- EN: blue -->
+  <UWU_ColorFallback>파랑</UWU_ColorFallback>
+
+  <!-- Jobs -->
+  <!-- EN: Customizing {0} -->
+  <UWU_CustomizingWeapon>{0} 개조 중</UWU_CustomizingWeapon>
+  <!-- EN: Adding {0} to {1} -->
+  <UWU_AddingTrait>{1}에 {0} 추가 중</UWU_AddingTrait>
+  <!-- EN: Removing {0} from {1} -->
+  <UWU_RemovingTrait>{1}에서 {0} 제거 중</UWU_RemovingTrait>
+  <!-- EN: Customizing appearance of {0} -->
+  <UWU_ApplyingCosmetics>{0} 외형 개조 중</UWU_ApplyingCosmetics>
+  <!-- EN: Placing {0} on {1} -->
+  <UWU_PlacingWeapon>{1}에 {0} 놓는 중</UWU_PlacingWeapon>
+  <!-- EN: Gathering materials for {0} -->
+  <UWU_GatheringMaterials>{0}에 쓸 재료 모으는 중</UWU_GatheringMaterials>
+  <!-- EN: Admiring work -->
+  <UWU_AdmiringWork>작업물 감상 중</UWU_AdmiringWork>
+  <!-- EN: Not enough resources to customize this weapon. -->
+  <UWU_InsufficientResources>이 무기를 개조할 자원이 부족합니다.</UWU_InsufficientResources>
+  <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
+  <UWU_IngredientShortfall>{0} 개조가 중단됐습니다: {1}(을)를 적용하기 전에 재료를 잃었습니다.</UWU_IngredientShortfall>
+  <!-- EN: {0} customization interrupted: workbench is no longer available. -->
+  <UWU_BailWorkbenchUnavailable>{0} 개조가 중단됐습니다: 작업대를 더 이상 사용할 수 없습니다.</UWU_BailWorkbenchUnavailable>
+  <!-- EN: {0} customization interrupted: workbench became unreachable. -->
+  <UWU_BailWorkbenchUnreachable>{0} 개조가 중단됐습니다: 작업대에 갈 수 없게 됐습니다.</UWU_BailWorkbenchUnreachable>
+  <!-- EN: {0} customization interrupted: workbench has no power or fuel. -->
+  <UWU_BailWorkbenchInactive>{0} 개조가 중단됐습니다: 작업대에 전력이나 연료가 없습니다.</UWU_BailWorkbenchInactive>
+  <!-- EN: {0} customization interrupted: weapon was lost. -->
+  <UWU_BailWeaponLost>{0} 개조가 중단됐습니다: 무기를 잃었습니다.</UWU_BailWeaponLost>
+  <!-- EN: {0} customization interrupted: weapon is no longer accessible. -->
+  <UWU_BailWeaponInaccessible>{0} 개조가 중단됐습니다: 무기에 더 이상 접근할 수 없습니다.</UWU_BailWeaponInaccessible>
+  <!-- EN: {0} customization interrupted: an ingredient was lost while hauling. -->
+  <UWU_BailIngredientLost>{0} 개조가 중단됐습니다: 운반 중에 재료를 잃었습니다.</UWU_BailIngredientLost>
+  <!-- EN: {0} customization interrupted: a required ingredient became unreachable. -->
+  <UWU_BailIngredientUnreachable>{0} 개조가 중단됐습니다: 필요한 재료에 갈 수 없게 됐습니다.</UWU_BailIngredientUnreachable>
+  <!-- EN: {0} customization interrupted: no room near the workbench to place an ingredient. -->
+  <UWU_BailIngredientPlacementFailed>{0} 개조가 중단됐습니다: 작업대 근처에 재료를 놓을 공간이 없습니다.</UWU_BailIngredientPlacementFailed>
+  <!-- EN: {0} customization interrupted: could not pick up the weapon. -->
+  <UWU_BailCarryStartFailed>{0} 개조가 중단됐습니다: 무기를 집을 수 없었습니다.</UWU_BailCarryStartFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while adding {1}. -->
+  <UWU_BailOpAddTraitFailed>{0} 개조가 중단됐습니다: {1}(을)를 추가하는 중에 오류가 발생했습니다.</UWU_BailOpAddTraitFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while removing {1}. -->
+  <UWU_BailOpRemoveTraitFailed>{0} 개조가 중단됐습니다: {1}(을)를 제거하는 중에 오류가 발생했습니다.</UWU_BailOpRemoveTraitFailed>
+  <!-- EN: {0} customization interrupted: an error occurred while applying cosmetic changes. -->
+  <UWU_BailOpCosmeticsFailed>{0} 개조가 중단됐습니다: 외형 변경을 적용하는 중에 오류가 발생했습니다.</UWU_BailOpCosmeticsFailed>
+  <!-- EN: {0} customization failed unexpectedly. -->
+  <UWU_BailUnexpected>{0} 개조가 예기치 않게 실패했습니다.</UWU_BailUnexpected>
+  <!-- EN: {0} customization interrupted: the customization dialog could not be opened. See log. -->
+  <UWU_BailDialogOpenFailed>{0} 개조가 중단됐습니다: 개조 창을 열 수 없었습니다. 기록을 확인하세요.</UWU_BailDialogOpenFailed>
+  <!-- EN: {0} customization dialog errored and was closed. See log. -->
+  <UWU_DialogErrored>{0} 개조 창에 오류가 발생해 닫혔습니다. 기록을 확인하세요.</UWU_DialogErrored>
+  <!-- EN: {0} customized, but ability state could not be reconciled. See log. -->
+  <UWU_FinalizeAbilitySyncFailed>{0}(을)를 개조했지만 능력 상태를 조정할 수 없었습니다. 기록을 확인하세요.</UWU_FinalizeAbilitySyncFailed>
+  <!-- EN: {0} customized, but the final color could not be applied. See log. -->
+  <UWU_FinalizeColorFailed>{0}(을)를 개조했지만 최종 색상을 적용할 수 없었습니다. 기록을 확인하세요.</UWU_FinalizeColorFailed>
+  <!-- EN: {0}'s ideoligion color. This weapon is a relic of the {1} ideoligion. -->
+  <UWU_RelicIdeoColorTip>{0}의 사상 색상입니다. 이 무기는 {1} 사상의 유물입니다.</UWU_RelicIdeoColorTip>
+
+  <!-- Settings: Section headers -->
+  <!-- EN: Unique Weapons Unbound -->
+  <UWU_SettingsCategory>Unique Weapons Unbound</UWU_SettingsCategory>
+  <!-- EN: Progression -->
+  <UWU_SettingsProgression>진행</UWU_SettingsProgression>
+  <!-- EN: Trait costs -->
+  <UWU_SettingsTraitCosts>특성 비용</UWU_SettingsTraitCosts>
+  <!-- EN: Prerequisites -->
+  <UWU_SettingsPrerequisites>전제 조건</UWU_SettingsPrerequisites>
+  <!-- EN: Ingredient hauling -->
+  <UWU_SettingsHaulPlanner>재료 운반</UWU_SettingsHaulPlanner>
+  <!-- EN: Miscellaneous -->
+  <UWU_SettingsMiscellaneous>기타</UWU_SettingsMiscellaneous>
+
+  <!-- Settings: Reusable label suffixes (each includes a leading space) -->
+  <!-- EN: (default) -->
+  <UWU_DefaultSuffix> (기본값)</UWU_DefaultSuffix>
+  <!-- EN: (recommended) -->
+  <UWU_RecommendedSuffix> (권장)</UWU_RecommendedSuffix>
+  <!-- EN: (vanilla) -->
+  <UWU_VanillaSuffix> (바닐라)</UWU_VanillaSuffix>
+  <!-- EN: (experimental) -->
+  <UWU_ExperimentalSuffix> (실험적)</UWU_ExperimentalSuffix>
+
+  <!-- Settings: Trait costs -->
+  <!-- EN: Trait cost multiplier: {0}% -->
+  <UWU_TraitCostMultiplier>특성 비용 배수: {0}%</UWU_TraitCostMultiplier>
+  <!-- EN: Trait refund rate: {0}% -->
+  <UWU_TraitRefundRate>특성 반환율: {0}%</UWU_TraitRefundRate>
+  <!-- EN: Trait refund rate has no effect while trait cost multiplier is 0%. -->
+  <UWU_RefundRateNoEffect>특성 비용 배수가 0%인 동안에는 특성 반환율이 적용되지 않습니다.</UWU_RefundRateNoEffect>
+  <!-- EN: Derive base cost from crafting recipe -->
+  <UWU_UseRecipeBaseCost>제작 레시피에서 기본 비용 산출</UWU_UseRecipeBaseCost>
+  <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
+  <UWU_UseRecipeBaseCostDesc>활성화하면 특성 추가에 드는 기본 재료 비용을 무기의 제작 레시피에서 산출합니다. 비활성화하면 무기의 기술 수준에 해당하는 일반 자원을 기준으로 한 고정 비용을 대신 사용합니다. 비활성화하면 제작이 저렴한 무기의 특성 비용이 비합리적으로 낮아지는 것을 막을 수 있지만, 특수하거나 모드로 추가된 무기가 주제에 맞는 비용을 갖지 못할 수도 있습니다.</UWU_UseRecipeBaseCostDesc>
+
+  <!-- Settings: Prerequisites -->
+  <!-- EN: Minimum weapon quality: {0} -->
+  <UWU_MinimumQuality>최소 무기 품질: {0}</UWU_MinimumQuality>
+  <!-- EN: Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation. -->
+  <UWU_MinimumQualityDesc>이 품질 이상의 무기만 개조할 수 있도록 제한합니다. 끔찍으로 설정하면 제한이 없습니다. 최소 품질에 미치지 못하는 무기에도 개조 항목은 표시되지만, 설명과 함께 비활성화됩니다.</UWU_MinimumQualityDesc>
+  <!-- EN: Require customization research -->
+  <UWU_RequireCustomizationResearch>개조 연구 필요</UWU_RequireCustomizationResearch>
+  <!-- {0} = unique smithing, {1} = unique machining, {2} = unique fabrication (research labels) -->
+  <!-- EN: Require the completion of the {0}, {1}, or {2} research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
+  <UWU_RequireCustomizationResearchDesc>해당 기술 수준의 무기를 개조하기 전에 {0}, {1} 또는 {2} 연구를 완료하도록 요구합니다. 비활성화하면 이 연구들이 연구 트리에서 숨겨집니다.</UWU_RequireCustomizationResearchDesc>
+  <!-- EN: Require weapon crafting research -->
+  <UWU_RequireRecipeResearch>무기 제작 연구 필요</UWU_RequireRecipeResearch>
+  <!-- {0} = ChargeRifle label, {1} = pulse-charged munitions (vanilla ChargedShot research label) -->
+  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a {0} would require {1}. -->
+  <UWU_RequireRecipeResearchDesc>해당 무기를 제작할 수 있게 하는 연구를 모두 완료하도록 요구합니다. 예를 들어 {0}(을)를 개조하려면 {1} 연구가 필요합니다.</UWU_RequireRecipeResearchDesc>
+  <!-- EN: Require appropriate workbench -->
+  <UWU_RequireWorkbench>적절한 작업대 필요</UWU_RequireWorkbench>
+  <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
+  <UWU_RequireWorkbenchDesc>작업대가 무기의 기술 수준에 맞도록 요구합니다. 비활성화하면 무기를 제작할 수 있는 작업대라면 어떤 것이든 모든 무기를 개조할 수 있습니다.</UWU_RequireWorkbenchDesc>
+  <!-- EN: Allow customizing uncraftable weapons -->
+  <UWU_AllowUncraftable>제작할 수 없는 무기의 개조 허용</UWU_AllowUncraftable>
+  <!-- EN: Allow customization of weapons that have no crafting recipe. -->
+  <UWU_AllowUncraftableDesc>제작 레시피가 없는 무기의 개조를 허용합니다.</UWU_AllowUncraftableDesc>
+  <!-- EN: Allow customizing ultratech-level weapons -->
+  <UWU_AllowUltratech>미래 기술 수준 무기의 개조 허용</UWU_AllowUltratech>
+  <!-- {0} = unique fabrication (research label) -->
+  <!-- EN: Allow customization of ultratech weapons, requiring {0} research. -->
+  <UWU_AllowUltratechDesc>미래 기술 무기의 개조를 허용하며, {0} 연구를 요구합니다.</UWU_AllowUltratechDesc>
+  <!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
+  <UWU_AllowUltratechImpliedDesc>"초월 기술 수준 무기의 개조 허용"이 켜져 있어 자동으로 활성화됐습니다. 두 등급은 같은 연구 조건을 공유합니다.</UWU_AllowUltratechImpliedDesc>
+  <!-- EN: Allow customizing archotech-level weapons -->
+  <UWU_AllowArchotech>초월 기술 수준 무기의 개조 허용</UWU_AllowArchotech>
+  <!-- {0} = unique fabrication (research label) -->
+  <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
+  <UWU_AllowArchotechDesc>초월 기술 무기의 개조를 허용하며, {0} 연구를 요구합니다.</UWU_AllowArchotechDesc>
+
+  <!-- Settings: Miscellaneous -->
+  <!-- EN: Allow weapon def conversion -->
+  <UWU_AllowDefConversion>무기 def 전환 허용</UWU_AllowDefConversion>
+  <!-- EN: Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon. -->
+  <UWU_AllowDefConversionDesc>개조 중에 무기가 기본 def와 고유 def 사이를 전환할 수 있도록 허용합니다. 비활성화하면 이미 고유한 무기만 개조할 수 있고, 특성을 모두 제거해도 기본 무기로 되돌아가지 않고 특성이 없는 고유 무기로 남습니다.</UWU_AllowDefConversionDesc>
+  <!-- EN: Enable Ideology color options -->
+  <UWU_EnableIdeoColors>사상 색상 옵션 활성화</UWU_EnableIdeoColors>
+  <!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. -->
+  <UWU_EnableIdeoColorsDesc>무기 개조 색상 선택기에 사상 색상과 기타 색상 팔레트를 표시합니다.</UWU_EnableIdeoColorsDesc>
+  <!-- EN: Enable structure color options -->
+  <UWU_EnableStructureColors>구조물 색상 옵션 활성화</UWU_EnableStructureColors>
+  <!-- EN: Show structure color palette in the weapon customization color picker. -->
+  <UWU_EnableStructureColorsDesc>무기 개조 색상 선택기에 구조물 색상 팔레트를 표시합니다.</UWU_EnableStructureColorsDesc>
+  <!-- EN: Enforce trait count limit -->
+  <UWU_EnforceMaxTraitLimit>특성 개수 제한 적용</UWU_EnforceMaxTraitLimit>
+  <!-- EN: Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply). -->
+  <UWU_EnforceMaxTraitLimitDesc>바닐라 고유 무기는 특성을 최대 세 개까지만 가지고 생성됩니다. 이 항목을 활성화하면 개조에도 같은 제한을 적용합니다. 비활성화하면 특성 개수에 제한이 없습니다(분류나 배제 제한 등 다른 규칙은 그대로 적용됩니다).</UWU_EnforceMaxTraitLimitDesc>
+  <!-- EN: Enforce sole-trait restrictions -->
+  <UWU_EnforceSoleTrait>단독 특성 제한 적용</UWU_EnforceSoleTrait>
+  <!-- EN: Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization. -->
+  <UWU_EnforceSoleTraitDesc>일부 특성은 바닐라 생성 과정에서 무기의 단독 특성이 될 수 없습니다. 이 항목을 활성화하면 개조에도 같은 제한을 적용합니다.</UWU_EnforceSoleTraitDesc>
+  <!-- EN: Restrict available traits to discovered weapons -->
+  <UWU_RestrictTraitsToDiscovered>발견한 무기의 특성으로 제한</UWU_RestrictTraitsToDiscovered>
+  <!-- EN: Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately. -->
+  <UWU_RestrictTraitsToDiscoveredDesc>가벼운 진행 시스템입니다. 활성화하면 개조 창에 현재 정착지가 확인할 수 있는 고유 무기의 특성만 표시됩니다. 불러온 지도에 있거나(안개에 덮이지 않고, 밀봉되지 않고, 적이 소지하지 않은 상태) 플레이어 세력의 상단에 있는 무기가 대상입니다. 저장 파일에 지속되는 정보는 추가되지 않으며, 이 항목을 끄면 전체 특성 목록이 즉시 복원됩니다.</UWU_RestrictTraitsToDiscoveredDesc>
+  <!-- EN: Enable ground weapon right-click menu -->
+  <UWU_EnableGroundCustomization>바닥에 있는 무기의 우클릭 메뉴 활성화</UWU_EnableGroundCustomization>
+  <!-- EN: Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button. -->
+  <UWU_EnableGroundCustomizationDesc>바닥에 있는 무기를 우클릭할 때 "개조" 항목을 표시합니다. 특히 같은 칸에 물품을 쌓는 저장 모드를 사용할 때 메뉴가 복잡해지는 것을 줄이려면 비활성화하세요. 비활성화해도 무기를 선택한 뒤 지시 버튼으로 개조할 수 있습니다.</UWU_EnableGroundCustomizationDesc>
+
+  <!-- Settings: Haul planner -->
+  <!-- EN: Sequential -->
+  <UWU_HaulPlannerSequential>순차</UWU_HaulPlannerSequential>
+  <!-- EN: Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations. -->
+  <UWU_HaulPlannerSequentialDesc>바닐라 방식입니다. 인물이 한 번에 재료 한 무더기까지만 운반하며, 항상 가장 가까운 것을 먼저 집습니다. 단순하고 예측하기 쉽지만, 자원을 많이 쓰는 개조에서는 짧은 이동을 여러 번 반복합니다.</UWU_HaulPlannerSequentialDesc>
+  <!-- EN: Sweep -->
+  <UWU_HaulPlannerSweep>순회</UWU_HaulPlannerSweep>
+  <!-- EN: Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead. -->
+  <UWU_HaulPlannerSweepDesc>인물이 미리 계획을 세워 남은 소지 공간을 활용해 한 번에 더 많이 운반하고, 수거 지점 사이의 경로도 더 효율적으로 정합니다. 순차보다 이동 횟수가 훨씬 적고, 계획에 드는 부담은 무시할 수 있을 정도입니다.</UWU_HaulPlannerSweepDesc>
+  <!-- EN: Thorough -->
+  <UWU_HaulPlannerThorough>철저</UWU_HaulPlannerThorough>
+  <!-- EN: Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze. -->
+  <UWU_HaulPlannerThoroughDesc>순회와 비슷하지만, 지도에 후보가 여러 개 있을 때 항상 가장 가까운 것을 집는 대신 어느 무더기에서 가져올지도 함께 검토합니다. 계획은 더 느리지만, 재료가 흩어져 있거나 운반 수량이 부족할 때 보통 가장 짧은 경로를 찾아냅니다. 완전히 분석하기에 너무 복잡한 운반은 순회 방식으로 처리합니다.</UWU_HaulPlannerThoroughDesc>
+
+</LanguageData>

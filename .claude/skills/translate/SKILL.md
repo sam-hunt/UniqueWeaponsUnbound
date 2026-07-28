@@ -237,6 +237,105 @@ it is `Stat_Stuff_Name`, i.e. *material*); vanilla-behavior suffix （原版）;
 progression section header 进度; gizmo button 指令按钮; weapon def 武器def (kept
 Latin, as JP does).
 
+### Glossary — Korean (machine-assisted generation, 2026-07; no native review yet)
+
+RimWorld's language folder is `Korean` (tar: `Korean (한국어).tar`).
+
+**Josa auto-resolution is load-bearing — this is Korean's whole game.**
+Decompile-verified (`Verse.LanguageWorker_Korean`): `PostProcessed` runs
+`ReplaceJosa` *after* placeholder substitution, so a particle written as a paired
+token is rewritten to agree with whatever label actually got injected. Never
+hardcode an inflecting particle after a `{0}`.
+
+- The **only** recognized tokens are `(이)가 (와)과 (을)를 (은)는 (아)야 (이)어
+  (으)로 (이)`. Spelling is exact: the paren holds the post-**consonant** form for
+  every token **except `(와)과`**, where it holds the post-**vowel** form. `(과)와`
+  does not match the regex and renders literally as garbage.
+- Only these five distinctions inflect: 은/는, 이/가, 을/를, 와/과, 으로/로.
+  `에`, `에서`, `의` are invariant — write them bare after a placeholder.
+- `FindLastChar` deliberately skips a preceding `"`, `'` or `)` to reach the real
+  final character, so `"{0}"(을)를` resolves correctly. Curly `“ ”` and corner
+  `「 」` are **not** skipped — a josa after one silently fails to resolve and the
+  raw `(은)는` shows on screen. Vanilla never places a josa after a curly quote.
+- Latin-script tails are treated as having a final consonant only for
+  `b c k l m n p q t`, so `Odyssey` → `y` → vowel-form particle.
+- **That same list has no digits, so a josa resolving off a number is always
+  wrong.** `AlphabetEndPattern` is consulted for any non-Korean char, so a digit
+  yields the vowel-form particle unconditionally — correct for 2/4/5/9
+  (이·사·오·구) but wrong for 1(일) 3(삼) 6(육) 7(칠) 8(팔) 0(영), whose readings
+  carry batchim. **Phrase around it** rather than marking it: this mod's
+  `UWU_CouldNotStartReservationConflict` says `{1} x{2} 예약에 실패했습니다`, not
+  `x{2}(을)를 예약하지 못했습니다`. Highest-risk spot for a settings-heavy mod
+  where counts and costs are injected constantly. A bare *invariant* particle
+  after a number is fine (`0으로 설정하면`) — the author knows the digit, and no
+  marker means the worker never touches it.
+- Consequence: Korean needs **no defensive quoting** of injected labels at all —
+  josa solves what quoting solves elsewhere. Vanilla quotes with ASCII `"` (24
+  hits) and reserves it for zone/bill/setting names, matching `Equip`={0} 착용
+  leaving plain labels bare.
+
+Style rules from the vanilla KO data (mandatory):
+
+- ASCII punctuation only — full-width `、` and `。` are **0 hits**. Use `.` and `,`.
+- Descriptions/tooltips: polite 합니다/입니다, ending `.`; labels and buttons take
+  no trailing period.
+- Job report strings (`reportString`): `~ 중`, **no** period (`Research`=연구 중,
+  `BuildSnowman`=눈사람 만드는 중). Same as JP, opposite of zh-Hans.
+- Research `generalRules` `subject_story`: polite past **했습니다** — *not* the
+  plain 했다 that JP uses for the same field. Check per language, never carry over.
+
+| English | Use | Never | Why |
+|---|---|---|---|
+| trait (weapon) | 특성 (stats title 무기 특성) | 개성 | Odyssey `WeaponTraits`; 개성 is Royalty's *persona*-weapon word (`Stat_Thing_PersonaWeaponTrait_Label`) |
+| unique weapon | 고유 무기 | | Odyssey `UniqueWeapon` |
+| customize | 개조 | 사용자 지정 | 개조 is the physical-modification sense (Core 신체 개조, 개조된); 사용자 지정 is the software-UI sense and wrong for a workbench operation |
+| tech level (the concept) | 기술 수준 | 기술 등급 | `CantSendMilitaryAidInTime`; 기술 등급 means **skill** level (`BestSkillInfoLevel`=기술 등급 {0}) — the trap is the mirror image of zh-Hans, which went the other way |
+| tech levels | 원시 / 중세 / 산업 / 우주 / 미래 / 초월 | | `TechLevel_*` — note ultratech=**미래**, archotech=**초월**, so neither transliterates |
+| quality tiers | 끔찍/빈약/평범/상급/완벽/걸작/전설적 | | `QualityCategory_*` |
+| "X quality or better" | {0} 품질 이상 | | `NormalQualityOrBetter`=평범 품질 이상 |
+| fueled / electric smithy | 단조 작업대 / 전기 단조 작업대 | 대장간 | Core building labels |
+| machining table | 기계 작업대 | | Core `TableMachining` (research `Machining`=기계 가공) |
+| fabrication bench | 조립 작업대 | | Core `FabricationBench` (research `Fabrication`=정밀 조립) |
+| smithing (research) | 단조 | | Core `Smithing` |
+| pulse-charged munitions (ChargedShot) | 충전 탄환 | | Core research label; the charge *concept* is 펄스 충전 (`ChargeCapacitor.description`) |
+| beam (weapons) | 광선 무기 | 빔 | Core `Beam` research |
+| ideoligion / relic | 사상 / 유물 (relic of X = X의 유물) | 이념 | Ideology `ReformIdeoligion`, `Relic`, `RelicOf` — a plain word, no portmanteau |
+| plasteel / steel / wood | 플라스틸 / 강철 / 목재 | | Core labels |
+| components / advanced components | 부품 / 고급 부품 | | `ComponentIndustrial`, `ComponentSpacer` |
+| chemfuel / herbal medicine / silver | 화학연료 / 생약 / 은 | 약초 | Core labels |
+| bioferrite / thrumbofur / birdskin / steel slag chunk | 생체강 / 트럼보 모피 / 새 가죽 / 고철 덩어리 | | Anomaly `Bioferrite`; Core `Leather_Thrumbo`, `Leather_Bird`, `ChunkSlagSteel` |
+| jade (inlay) | 옥 상감 | 비취옥 상감 | `JadeInlay`=옥 상감 even though `Jade.label`=비취옥 |
+| inlay / grip / ornamental / lightweight / cumbersome / ugly | 상감 / 손잡이 / 장식용 / 경량 / 불편 / 난잡한 외형 | | Odyssey trait labels |
+| tox / incendiary / EMP rounds | 독성 탄환 / 소이탄 / 펄스 탄환 | | Odyssey `ToxRounds`, `IncendiaryRounds`, `EMPRounds` |
+| flare | 조명탄 | | Anomaly `Apparel_DisruptorFlarePack` |
+| ignores accuracy penalties | 명중률 감소 무시 | | `AimAssistance.description` — reuse verbatim |
+| Traders will pay more / less for it. | 상인들이 더 높은 값을 쳐줍니다. / 상인들은 더 적은 돈을 쳐줍니다. | | `GoldInlay` / `Ugly` descs — reuse verbatim |
+| market value / carrying capacity / haul | 시장 가치 / 운반 수량 / 운반 | | Core `MarketValue`, `CarryingCapacity`, `Haul.label` |
+| reserved by / forbidden / cannot reach | 예약됨 / 상호작용 금지됨 / 갈 수 없음 | | `IsReservedBy`, `ForbiddenLower`, `CannotReach` |
+| Structure (architect category) | 구조물 | 구조 | `Structure.label`=구조물; bare 구조 is the Keyed tab string |
+| Cancel / Reset / Confirm / Randomize / Reset to defaults | 취소 / 초기화 / 확인 / 섞기 / 기본값 복원 | 기본값으로 재설정 | Core Keyed; `ResetBinding`=기본값으로 재설정 is keybinding-specific, `RestoreToDefaultSettings`=기본값 복원 is the settings verb |
+| Prerequisites / Default / colonist / log | 전제 조건 / 기본값 / 정착민 / 기록 | | Core Keyed, `OpenLogOnWarnings` |
+| melee weapon names | 장검 / 창 / 철퇴 / 단검 / 검(gladius) / 도끼 / 전투망치 / 단분자검 / 플라즈마검 / 제우스망치 | | `MeleeWeapon_*` — mostly native words, not katakana-style transliterations |
+| mechanite(s) | 기계입자 | 나노머신, 메카나이트 | Core, 36/36 occurrences (근섬유질 기계입자, 부활 기계입자) across 7 files. 나노머신 renders the *different* English word "nanomachines" (Royalty glands); Royalty's monosword desc paraphrases to 나노 기술 and is not a term source. Grounding on Royalty+Biotech alone misses this — it shipped as a bug in PWU and was corrected 2026-07-28 |
+| point (of a weapon) | 칼끝 (spear: 끝) | 첨단 | `MeleeWeapon_LongSword.tools.point.label`; 첨단 means "cutting-edge" in every vanilla ko occurrence (첨단 기술, 최첨단 금속 검), so it reads as tech level, not geometry. 최첨단 for "ultratech" in prose is correct and unrelated |
+| edge (of a weapon) | 칼날 | | `MeleeWeapon_LongSword.tools.edge.label` |
+| cut / stab (**DamageDef** label) | 잘림 / 찔림 | 베임 for cut | Core DamageDefs. The **HediffDef** labels differ: `Cut`=베임, `Stab`=찔림, `Stab.labelNoun`=찔린 상처. Point each def at the right one |
+| toxic \<damage\> (DamageDef label) | `찔림 (독성)` shape | | Core `ScratchToxic`=찢김 (독성), `ToxicBite`=물림 (독성) |
+
+The Odyssey trait ports (`Lightweight`, `Cumbersome`, `Ornamental`, `Ugly`,
+`GoldInlay`, `JadeInlay`) all have official KO labels, adjectives and
+descriptions matching our English; copy them rather than retranslating.
+
+Mod-decided terms pending native review: 개조 (customize) and the research trio
+고유 무기 단조 / 고유 무기 기계 가공 / 고유 무기 정밀 조립 (vanilla research name
+prefixed with 고유 무기); haul planner modes 순차 / 순회 / 철저; haul plan 운반 계획;
+net refund/cost 실질 반환 / 실질 비용 (Korean vanilla has **no** word for refund at
+all — 환급 and 환불 are both 0 hits); texture tab 외형 (질감 and 텍스처 are both
+rare in vanilla); 연사 속도 / 연사 횟수 / 저지력 (burst speed/count, stopping power —
+these KO stat labels are untranslated in vanilla); 아킴보 (akimbo — not an Odyssey
+trait); vanilla-behavior suffix (바닐라); progression header 진행; gizmo button
+지시 버튼; weapon def 무기 def (kept Latin, as JP and zh do).
+
 ### Cross-language lessons
 
 - Wrap injected `{0}` def labels in the language's quote marks (JP 「{0}」,
@@ -259,6 +358,16 @@ Latin, as JP does).
   restates them. When generation is chunked across files or subagents,
   reconcile those terms across the whole language before committing (UMW's
   zh-Hans run needed an alignment pass for its ability/hediff/trait names).
+- **Check for a `LanguageWorker_<Language>` before writing anything.** Some
+  languages solve agreement at runtime instead of in the string, which changes
+  what correct authoring even looks like — Korean's worker rewrites paired josa
+  tokens (`{0}(을)를`) after substitution, so quoting to dodge inflection is
+  unnecessary there and hardcoding a particle is an outright bug. Decompile the
+  worker rather than inferring the convention from grep counts alone.
+- A defensive habit that is right in one language can be actively harmful in
+  another: corner brackets are correct in JP, but in KO they break josa
+  resolution because the worker only skips `"`, `'` and `)` when looking back
+  for the preceding character.
 
 ## Workflows
 
