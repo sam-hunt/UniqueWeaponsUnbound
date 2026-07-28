@@ -283,6 +283,22 @@ Style rules from the vanilla KO data (mandatory):
   `BuildSnowman`=눈사람 만드는 중). Same as JP, opposite of zh-Hans.
 - Research `generalRules` `subject_story`: polite past **했습니다** — *not* the
   plain 했다 that JP uses for the same field. Check per language, never carry over.
+- Register splits by def type, so don't pick one voice for a whole language:
+  `ThoughtDef` stage descriptions are casual first-person (`-어`, `-지`, `-거야`;
+  vanilla `이제 거의 깼어.`), battle-log `rulesStrings` end in the nominalized
+  `-함.`/`-임.` (`Combat_Dodge`: `… [implement](을)를 [skillAdvMaybe] 피함.`), and
+  everything else is polite `-습니다.`.
+- **KO drops `[RECIPIENT_possessive]`, unlike JP.** The Japanese section above
+  records that JP *keeps* it; do not carry that across. Vanilla ko's combat
+  rulePacks contain 12 textual occurrences, all inside `<!-- EN: -->` comments
+  and **none** in Korean values, because Korean omits possessive pronouns. A ko
+  battle-log pack should drop the symbol rather than render 그의.
+- Name grammar: KO **uses spaces** where JP and zh concatenate. The ko
+  `NamerUniqueWeapon` composes `[weapon_adjective] [weapon_noun]`, drops English
+  "The", and links with `의` (`[badass_concept]의 [weapon_type]`). So ko trait
+  adjectives may be attributive verb forms (가벼운, 저주받은) *or* bare noun
+  modifiers (황금, 신속, 특제) — JP's "must end in の/な/い" rule must not be
+  ported. Materials compose bare: `[stuff_adjective] [weapon_noun]` → 강철 장검.
 
 | English | Use | Never | Why |
 |---|---|---|---|
