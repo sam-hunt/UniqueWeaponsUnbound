@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Vanilla es reportStrings are subject-less gerunds WITH a terminal period
+       (Core BuildSnowman = "construyendo un muñeco de nieve."). -->
+  <!-- EN: customizing weapon. -->
+  <UWU_CustomizeWeapon.reportString>personalizando arma.</UWU_CustomizeWeapon.reportString>
+
+</LanguageData>

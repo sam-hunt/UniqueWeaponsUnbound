@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique fabrication -->
+  <UniqueFabrication.label>fabricación de armas únicas</UniqueFabrication.label>
+  <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
+  <UniqueFabrication.description>Mejora y personaliza armas de la era espacial y ultratecnológicas en una mesa de ensamblaje, añadiendo o quitando rasgos según tus necesidades.</UniqueFabrication.description>
+
+  <!-- EN: Upgrade and customize spacer weapons -->
+  <UniqueFabrication.customUnlockTexts.0>Mejorar y personalizar armas de la era espacial</UniqueFabrication.customUnlockTexts.0>
+  <!-- EN: Upgrade and customize ultratech weapons -->
+  <UniqueFabrication.customUnlockTexts.1>Mejorar y personalizar armas ultratecnológicas</UniqueFabrication.customUnlockTexts.1>
+
+  <!-- subject_def is an es-only symbol (see UniqueSmithing). Head noun "fabricación" is
+       feminine, hence "de la". subject_gerund is an infinitive, as in vanilla es. -->
+  <!-- EN:
+    <li>subject->unique fabrication</li>
+    <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+    <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+    <li>subject_gerund->fabricating unique weapons</li>
+  -->
+  <UniqueFabrication.generalRules.rulesStrings>
+    <li>subject->fabricación de armas únicas</li>
+    <li>subject_def->de la fabricación de armas únicas</li>
+    <li>subject_story->descifró los secretos de la modificación de los rasgos de las armas de pulsos y de rayos</li>
+    <li>subject_story->empleó nanotecnología de ensamblaje para alterar los componentes de las armas de la era espacial</li>
+    <li>subject_gerund->fabricar armas únicas</li>
+  </UniqueFabrication.generalRules.rulesStrings>
+
+</LanguageData>

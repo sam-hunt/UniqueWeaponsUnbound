@@ -529,29 +529,206 @@ Unrelated to German but worth remembering during any generation here: this repo'
 because the def class is the mod's own. A bare `TraitCostRuleDef` folder silently
 drops every entry in it.
 
+### Glossary — Spanish (machine-assisted generation, 2026-07-29; no native review yet)
+
+**Castellano, not Latin American.** RimWorld ships two: `Spanish
+(Español(Castellano)).tar` and `SpanishLatin (Español(Latinoamérica)).tar`. This mod
+targets the former, folder name **`Spanish`**. Decompile-verified
+(`Verse.LoadedLanguage` ctor): `legacyFolderName` is
+`folderName.Substring(0, IndexOf("(") - 1).Trim()`, so the nested-paren name still
+cuts to `Spanish` and a mod folder of that name loads. Core, Odyssey, Royalty,
+Ideology, Anomaly and Biotech were all consulted. If SpanishLatin is ever added it
+is a **separate** language needing its own grounding pass — do not assume these rows
+transfer (its `WordInfo/Gender` even ships an extra `Other.txt`).
+
+`LanguageWorker_Spanish` exists but is **benign**: it only overrides
+`WithIndefiniteArticle`/`WithDefiniteArticle` (nominative un/una/unos/unas,
+el/la/los/las), `OrdinalNumber` and `Pluralize`. There is **no `PostProcessed`
+override**, so unlike German (trailing `'s` rewrite) and Korean (josa resolution)
+nothing rewrites finished strings — no authoring landmine, and no runtime agreement
+help either.
+
+**Spanish is the mirror image of German's problem: gender, not case.** Spanish has
+no case, so nothing here needs `decline.txt`. But adjectives and participles must
+agree in gender with the noun, and `GrammarResolverSimple` (what `.Translate(args)`
+reaches) resolves gender from `WordInfo/Gender/{Male,Female,Neuter}.txt` — which
+covers vanilla nouns only, defaulting to masculine on a miss. So the German lesson
+applies verbatim with "gender" swapped for "case": **restructure so nothing agrees
+with the injected label.** Worked examples in this repo:
+
+- The `{0} customization interrupted: ...` family would need `{0} personalizada/o`.
+  Fixed by leading with the head noun: **`Personalización de {0} interrumpida: ...`**
+  — `Personalización` is invariably feminine, so the participle is safe regardless of
+  what weapon label lands in `{0}`. Same trick for `UWU_Finalize*`
+  (`Personalización de {0} completada, pero ...`).
+- `UWU_RelicIdeoColorTip`'s English `{0}'s` genitive becomes **`Color de ideoligión
+  de {0}.`** Never carry an English `'s` across (and es has no worker rewriting it).
+
+Style rules from the vanilla es data (mandatory):
+
+- **ASCII double quotes** for cited def/UI labels — vanilla writes `el botón
+  "ordenar mods"`, `el botón "i"`. 36 double-quoted placeholders vs 11
+  single-quoted in Core+Odyssey Keyed, and **zero** `« »`, `„ "` or curly `" "`.
+- **No em dash and no en dash.** `—` and `–` are 3 and 2 hits across the *entire*
+  es dataset, i.e. effectively unused. The English source uses `—` freely, so every
+  one needs restructuring into a colon, comma or new sentence (`... crude and cheap
+  — just bolt on some junk` → `... son toscas y baratas: basta con ...`). Keep the
+  dash verbatim inside `<!-- EN: -->` comments.
+- Ellipsis is ASCII `...` (75 in Core Keyed; `…` is 0).
+- Opening `¿` and `¡` are used properly (60 each) — required on any question or
+  exclamation.
+- Descriptions and prose end with `.`; labels, buttons and section headers take none.
+- Settings prose is **informal tú** with imperatives, decisively: `Puedes` 40 /
+  `Puede usted` 0, `Haz` 22 / `Haga` 0, `Selecciona` 19 / `Seleccione` 0,
+  `Ten en cuenta` 5 / `Tenga en cuenta` 0. Never usted.
+- `JobDef.reportString` is a **subject-less gerund WITH a terminal period**
+  (`construyendo un muñeco de nieve.`, `desarmando TargetA.`; 180 of 196 Core
+  entries end in `.`). Matches zh-Hans in taking a period, opposite of ja/ko, and
+  differs from de's third-person form — check per language, as always.
+- Research labels are **lowercase** noun phrases (herrería, maquinado, fabricación,
+  fabricación avanzada, armería, municiones de pulsos, armas de rayos). Def
+  `label`s generally are too.
+- **Castellano spelling of "cost" is `coste`**, not `costo` (29 vs 1; Core `Cost` =
+  coste). `costes`/`costos` are both 0, so pluralize as `costes` by rule.
+
+| English | Use | Never | Why |
+|---|---|---|---|
+| trait (weapon) | rasgo / rasgos (standalone: Rasgos del arma) | característica | Odyssey `WeaponTraits` = Rasgos, `Stat_ThingUniqueWeaponTrait_Label` = Rasgos, `StatsReport_WeaponTraits` = Rasgos del arma. **es splits like ja/ko do**: `Stat_Thing_PersonaWeaponTrait_Label` = *Características* is the Royalty **persona**-weapon word and belongs to PWU, not here. Core's pawn-trait `<Traits>` is also Rasgos, so es shares the pawn word (like de/ja, unlike ru) |
+| unique weapon | arma única | arma exclusiva | Odyssey `UniqueWeapon` = Arma única |
+| customize | personalizar / personalización | adaptar, configurar | Core `CustomizeIdeoligion` = Personalizar ideoligión; float menu follows `Equip` = Equipar {0}, i.e. infinitive + **bare** label |
+| charge (weapons) | **carga(s)** root: fusil de cargas, lanza de cargas | impulso-, energía- | Core `Gun_ChargeRifle` = fusil de cargas, `Gun_ChargeLance` = lanza de cargas, `Bullet_ChargeRifle` = disparo de cargas. es keeps "charge" literal like zh-Hans, where de switched to Impuls- and ru to энерг- — never extrapolate between languages |
+| pulse-charged munitions (ChargedShot) | municiones de pulsos | | Core research label |
+| beam (weapons) | armas de rayos | | Core `BeamWeapons` research, `Gun_BeamRepeater` = repetidor de rayos. **But the DamageDef `Beam.label` = láser** — point each def at the right one |
+| fueled / electric smithy | forja de leña / forja eléctrica | herrería, fragua | Core building labels. `Smithing` **research** is herrería, so the building and the research diverge |
+| machining table | mesa de maquinado | mesa de mecanizado | Core `TableMachining` (research `Machining` = maquinado). Note `AncientTableMachining` = mesa de **mecanizado** — the ancient ruin variant only; don't generalize from it |
+| fabrication bench | mesa de ensamblaje | mesa de fabricación | Core `FabricationBench.label`. Vanilla is inconsistent — its own *blueprint* label says mesa de fabricación and `Fabrication.description` says mesas de ensamblado — but the thing label is authoritative |
+| workbench (**generic**) | mesa de trabajo | banco de trabajo, estación de trabajo | 28 hits vs 11 vs 5. No collision risk here, unlike de's Werkbank landmine, because every specific es bench is named forja / mesa de maquinado / mesa de ensamblaje |
+| smithing / machining / fabrication (research stems) | herrería / maquinado / fabricación (advanced: fabricación avanzada) | | Core research labels |
+| Smithing (the **skill**/WorkType) | Forja | herrería | `WorkTypeDef Smithing` = Forja while `ResearchProjectDef Smithing` = herrería — same defName, two defs, two words. Check the def type |
+| tech level (the concept) | nivel tecnológico | nivel de tecnología | Core `TechLevelTooLow` (7 hits, 0 for the alternative) |
+| tech levels (the **enum labels**) | neolítico / medieval / industrial / era espacial / ultra / **arqueoteca** | espacial, ultratech, arquitec- | Core `TechLevel_*`. archotech = **arqueoteca**, ultratech = plain **ultra** — neither transliterates, and `arquitecto` (architect) is an unrelated near-miss |
+| ultratech / archotech (**attributive, in prose**) | ultratecnológico / arqueotecnológico (nouns: ultratecnología / arqueotecnología) | | attested in vanilla prose; the "never ultratech" ban applies to the `TechLevel_*` enum labels only |
+| quality tiers | horrible / mediocre / normal / bueno / excelente / obra maestra / legendaria | pobre, malo | Core `QualityCategory_*`. Vanilla's own genders are inconsistent (bueno m, legendaria f) — reproduce them as-is; they are injected labels and never agree |
+| "{0} quality or better" | `requiere calidad {0} o mejor` | | reshaped from Core `NormalQualityOrBetter` = calidad normal o mejor (pre-inflected, untemplatable) |
+| plasteel | **plastiacero** | plastaero, plasacero | Core `Plasteel` — counterintuitive, always check |
+| chemfuel | **biocombustible** | químicombustible, combustible químico | Core `Chemfuel` — counterintuitive, like de's Sprit |
+| steel / wood / gold / silver / uranium / jade | acero / madera / oro / plata / uranio / jade | | Core labels |
+| components / advanced components | componentes / componentes avanzados | piezas | `ComponentIndustrial` (plural label), `ComponentSpacer` |
+| herbal medicine | hierbas medicinales | medicina herbal | Core `MedicineHerbal` |
+| bioferrite / thrumbofur / birdskin / steel slag chunk | bioferrita / piel de trumbo / pellejo de pájaro / escombro metálico | trumbofur, cuero de ave | Anomaly `Bioferrite`; Core `Leather_Thrumbo`, `Leather_Bird`, `ChunkSlagSteel` |
+| burst speed / burst count / stopping power | Cadencia de tiro / Tiros por ráfaga / Potencia de parada | | Core `BurstShotFireRate`, `BurstShotCount`, `StoppingPower` |
+| market value | **Precio base** | valor de mercado | Core `MarketValue` — a real trap; the literal translation is wrong |
+| armor penetration / damage | Penetración de blindaje / Daño | | Core `ArmorPenetration`, `Damage` |
+| ignores accuracy penalties | ignora las penalizaciones de precisión | | Odyssey `AimAssistance.description` — reuse verbatim |
+| Traders will pay more / less for it. | Los comerciantes pagarán más por ella. / Los comerciantes pagarán menos por ella. | | Odyssey `GoldInlay` / `Ugly` descs — reuse verbatim (feminine `ella`, agreeing with *arma*) |
+| inlay / grip / ornamental / lightweight / cumbersome / ugly | incrustación / empuñadura / ornamental / ligero / torpe / feo | | Odyssey trait labels. **es has a real noun for inlay** (incrustación de oro / de jade), unlike de which only has adjectives |
+| tox / incendiary / EMP rounds | balas tóxicas / balas incendiarias / balas PEM | balas EMP | Odyssey `ToxRounds`, `IncendiaryRounds`, `EMPRounds` |
+| EMP (the acronym) | **PEM** | EMP | `EMP.label` = PEM — es localizes the acronym itself. High-frequency trap |
+| cut / stab (**DamageDef** label) | corte / apuñalamiento | herida, corte profundo | Core DamageDefs; the `labelNoun`s are `un corte` / `una puñalada`, a different field |
+| stun / toxic buildup / flare | aturdir (state: aturdido) / acumulación tóxica / bengala | | Core `Stun`, `ToxicBuildup`; Anomaly `DisruptorFlare` = bengala disruptora |
+| relic | reliquia (relic of X = Reliquia de X) | reliquia sagrada | Ideology `Relic`, `RelicOf` |
+| ideoligion | **ideoligión** | ideología | Ideology `IdeoligionOf`, `ReformIdeoligion` = Reformar ideoligión. **es coins the portmanteau**, like ru идеолигия — unlike de/ja/zh/ko which all use a plain word |
+| haul / carrying capacity | transporte / capacidad de carga | acarrear | Core `Haul.label` = transporte |
+| **disarm** | quitarle el arma a … | **desarmar** | **Landmine:** in vanilla es `desarmar` means *deconstruct/dismantle* — `Deconstruct.label` = desarmar estructuras, `ButcherCorpseMechanoid.label` = desarmar mecanoide. `DisarmedTime` = Desarmado is the only weapon sense. Phrase with `quitar` (well attested: Quitar de la caravana) |
+| forbidden / cannot reach / reserved by | prohibido / no puede alcanzar / reservado para | | Core `ForbiddenLower`, `CannotReach`, `IsReservedBy` = {0} está reservado para {1} |
+| hostile / enemy / colonist | Hostil / enemigo / colono | | Core `Hostile`, `Enemy`, `Colonist` |
+| Structure (architect category) | **estructuras** | estructura | `Structure.label` is plural, exactly as in German |
+| ingredients / quality / effects / prerequisites | Ingredientes / Calidad / Efectos / Prerrequisitos | | Core Keyed |
+| Cancel / Confirm / Randomize / Reset | Cancelar / Confirmar / Aleatorizar / Restablecer | | Core buttons |
+| Reset to defaults | **Restablecer valores por defecto** | Restablecer, Restablecer teclas | **es collapses harder than de did**: plain `Reset` **and** `RestoreToDefaultSettings` are *both* Restablecer, and `ResetBinding` = Restablecer **teclas** is keybinding-specific. No vanilla string disambiguates, so compose from `Default` = Por defecto |
+| None / (none) / Free | Ninguno / (nada) / Gratis | Nada, Sin coste | Core `None`, `NoneBrackets`, `CommandCallRoyalAidFreeOption` |
+| Default / Warning / log / Progress | Por defecto / Advertencia / registro / Progreso | | Core `Default`, `Warning`, `OpenLogOnWarnings` (= Abrir registro …), `Progress` |
+| Miscellaneous | Varios | Misceláneo | 15 hits vs 0 |
+| float menu / right-click / button / select | menú contextual / hacer clic derecho / botón / seleccionar | menú flotante | Core `AddBillSimpleMeal.text` uses all of these |
+| appearance / colour | Apariencia / Color | | Core `Appearance`, `Color` |
+| ability / cooldown / quest / caravan | Habilidades / Enfriamiento / Misión / Caravana | | Core Keyed |
+| techprint | tecnoplano | tecnoimpresión | Core `TechprintLabel` |
+| wielder | portador | usuario, empuñador | 62 hits across weapon-trait descs |
+| research tree | árbol de investigaciones | árbol de investigación | Core `ResearchScreen` = Ver árbol de investigaciones (note the plural) |
+| sealed / fogged | sellado / en la niebla | | Odyssey `AncientSealedCrate` = caja sellada; niebla for map fog |
+| scrap | chatarra | desechos | vanilla namer rules (planeta chatarra, señor de la chatarra) |
+
+**es research `generalRules` define a symbol English never does: `subject_def`.**
+All 90 vanilla es research entries carry it — the "of the X" form with article,
+gendered to the head noun: `subject->herrería` / `subject_def->de la herrería`,
+`maquinado` / `del maquinado`, `mesas de ensamblado…` / `de los bancos de
+ensamblado…`. This is the es analogue of German's 13-symbol case paradigm, and
+exactly why the cross-language lesson below says to diff the target language's
+entry for the *same def* before translating.
+
+Two further es-specific facts about that field:
+
+- **`subject_gerund` is an INFINITIVE in es, not a gerund** — vanilla writes
+  `forjar`, `maquinar`, `construir equipos de maquinado`, `desarrollar proyectos de
+  alta tecnología`. Never `forjando`.
+- `subject_story` is a subject-less **third-person preterite** clause (`se estableció
+  en una aldea medieval y dominó …`, `construyó en secreto un arsenal …`), which
+  happens to match the English shape — unlike de (verb-final), ko (polite 했습니다)
+  or ja (plain した).
+
+`subject_def` currently has **no consumer**: the only rulepack referencing the
+`subject` family is `Core/.../RulePacks_Book_Descriptions.xml`, whose es translation
+is still entirely untranslated English and contains no `[subject_def]`, and there is
+no `priority=-1` fallback for it anywhere. Supplying it is therefore zero-risk today
+(extra symbols are legal, list injections replace the whole list, and the checker
+skips list-valued entries) and correct if that rulepack is ever translated — so
+UWU's three research defs ship it, matching vanilla es rather than being the only
+defs missing it.
+
+Mod-decided terms pending native review: the research trio **herrería / maquinado /
+fabricación de armas únicas** (vanilla lowercase stem + "de armas únicas"), with
+`subject_def` forms de la / del / de la respectively; haul planner modes
+**Secuencial / Barrido / Exhaustivo**; haul plan **plan de transporte** and section
+header **Transporte de ingredientes**; net refund/cost **Reembolso neto / Coste
+neto** (vanilla es has **no** word for refund at all — `reembolso` and `devolución`
+are both 0 hits, matching de/ko/zh); texture tab **Textura** (Material is taken —
+it is `Stat_Stuff_Name`); vanilla-behavior suffix **(juego base)** and the matching
+prose "en el juego base" (`juego base` is 0 hits in vanilla, but `vanilla` is 1, so
+neither is established); progression header **Progreso**; gizmo button **botón de
+orden**; "must disarm from hostile" **Hay que quitarle el arma a un hostil** (see
+the `desarmar` landmine above); **Flarestriker** and **Akimbo** kept in Latin script
+(neither is a vanilla trait); flare launcher **lanzabengalas**; weapon def **def del
+arma** (kept Latin, as ja, zh, ko and de do).
+
 ### Cross-language lessons
 
 - Wrap injected `{0}` def labels in the language's quote marks (JP 「{0}」,
-  RU «{0}», zh-Hans “{0}”) — injected labels never inflect, and quoting
-  sidesteps case and agreement problems. **But check how far vanilla actually
-  carries it**: the case/agreement motive doesn't exist in zh-Hans, and vanilla
-  zh leaves common-noun labels bare (`Equip`=装备{0}), so there quoting narrows
-  to named entities (research, ideoligion, trait names) and terse
-  stat/job-report templates take none.
+  RU «{0}», zh-Hans “{0}”, de and es ASCII `'{0}'` / `"{0}"`) — injected labels
+  never inflect, and quoting sidesteps case and agreement problems. **But check how
+  far vanilla actually carries it, and which mark it uses**: the case/agreement
+  motive doesn't exist in zh-Hans, and vanilla zh leaves common-noun labels bare
+  (`Equip`=装备{0}), so there quoting narrows to named entities (research,
+  ideoligion, trait names) and terse stat/job-report templates take none. The mark
+  itself is per-language and not guessable from the language's prose conventions —
+  de uses ASCII `'`, es ASCII `"`, and **neither uses the typographic quotes that
+  Spanish and German writing normally prefer** (`« »` and `„ "` are 0 hits in both).
+  Count vanilla's quoted placeholders rather than assuming.
 - Job-report register does **not** transfer between languages: vanilla zh
-  `reportString`s end in 。(研究中。), vanilla JP ones take no period, vanilla de
-  ones take a period (`wendet TargetB an.`). Check the target language's own
-  `DefInjected/JobDef` before writing any.
+  `reportString`s end in 。(研究中。), vanilla JP and KO ones take no period,
+  vanilla de and es ones take a period (`wendet TargetB an.`, `construyendo un
+  muñeco de nieve.`). The *form* varies independently of the period — de is
+  third-person, es and zh are gerund/verb-first, ja and ko are continuative — so
+  check both axes in the target language's own `DefInjected/JobDef` before writing
+  any.
 - **A language may add rulepack symbols the English def never defines.** Before
   translating any `generalRules.rulesStrings`, diff the target language's vanilla
   entry for the *same def* against the English one — don't assume the `<li>` list
-  is a 1:1 translation. German expands 2 research symbols into 13 case forms
-  (see its section); other inflecting languages may do the same. List injections
-  replace the whole list, so extra symbols are legal, and the checker skips
-  placeholder/staleness checks on list-valued entries, so it will neither help nor
-  hinder. Look for `priority=-1` fallbacks in the consuming rulepack to judge
-  whether omitting them is safe — and check what each fallback actually produces,
-  since de's gender fallback silently defaults to neuter.
+  is a 1:1 translation. German expands 2 research symbols into 13 case forms and
+  Spanish adds a 3rd symbol (`subject_def`, the gendered "of the X" form) to all 90
+  of its research entries — see both sections. **This has now happened in every
+  inflecting language checked, so treat it as the default expectation, not an
+  oddity.** List injections replace the whole list, so extra symbols are legal, and
+  the checker skips placeholder/staleness checks on list-valued entries, so it will
+  neither help nor hinder. Look for `priority=-1` fallbacks in the consuming
+  rulepack to judge whether omitting them is safe — and check what each fallback
+  actually produces, since de's gender fallback silently defaults to neuter. A
+  symbol with **no** consumer is still worth supplying (es's `subject_def` has none
+  today, because vanilla es never translated the book-descriptions rulepack that
+  would use it): it costs nothing and matches vanilla if that ever changes.
+- **Per-field register does not transfer, even within one field name.** es
+  `subject_gerund` is an *infinitive* (`forjar`), not a gerund; `subject_story` is
+  polite past in ko, plain past in ja, verb-final in de, and third-person preterite
+  in es. Read the target language's own entry for the same def every time.
 - **Know which resolver your strings actually reach** (decompile-verified).
   `"key".Translate(args)` goes to `Verse.GrammarResolverSimple`, *not* the full
   rulepack `GrammarResolver`, and the two support different things. On a plain
@@ -564,6 +741,12 @@ drops every entry in it.
   solvable and **case is not**: restructure so nothing has to agree with the
   injected label (drop the article, or move the head noun in front of the
   placeholder). See the German glossary for worked rewrites.
+- **The same restructure fixes gender agreement too, so reach for it first.**
+  Spanish has no case at all, yet needs the identical treatment because adjectives
+  and participles must agree in gender: `{0} personalizada` is unfixable, while
+  leading with an invariant head noun (`Personalización de {0} completada`) is
+  always safe. Whatever the inflection axis, the reliable move is to put a noun you
+  control in front of the placeholder rather than to reach for a resolver feature.
 - **A gender lookup that misses defaults to masculine** (`ResolveGender`'s
   `defaultGender`), and mod-coined nouns are never in the vanilla Gender tables —
   so `{N_gender ? …}` on this mod's own weapon labels is a silent coin-flip, not
@@ -574,13 +757,22 @@ drops every entry in it.
   ASCII single quote followed by lowercase `s` is mangled; Korean's resolves josa
   markers. Decompile with
   `ilspycmd "$RIMWORLD_PATH/RimWorldWin64_Data/Managed/Assembly-CSharp.dll" -t
-  "Verse.LanguageWorker_<Language>"`.
+  "Verse.LanguageWorker_<Language>"`. **A worker existing does not mean it
+  constrains you** — Spanish's overrides only article helpers, `OrdinalNumber` and
+  `Pluralize`, with no `PostProcessed`, so it imposes nothing. What matters is
+  whether `PostProcessed` is overridden; check that specifically rather than
+  assuming from the class's existence either way.
 - When an English string is reworded, refresh the EN comments in every
   language **in the same commit** — the checker reports the mismatch as STALE
   either way, but batching avoids churn.
 - Coined vanilla terms (ideoligion) may be a portmanteau in one language
-  (RU идеолигия) and a plain word in another (JP 思想, zh-Hans 文化) — always
-  check, never extrapolate between languages.
+  (RU идеолигия, es ideoligión) and a plain word in another (JP 思想, zh-Hans 文化,
+  KO 사상, de Ideologie) — always check, never extrapolate between languages. The
+  split does not follow language families: es coins one where its fellow Romance-
+  adjacent de does not.
+- **Localized acronyms are an easy miss.** es renders EMP as **PEM**
+  (`EMP.label`=PEM, `EMPRounds`=balas PEM) while ja, zh, ko and de all keep EMP.
+  Look up every acronym as a term in its own right rather than passing it through.
 - Mod-coined terms recur in def labels AND in Keyed settings prose that
   restates them. When generation is chunked across files or subagents,
   reconcile those terms across the whole language before committing (UMW's

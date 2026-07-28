@@ -17,7 +17,7 @@ welcome too.
 | Russian              | Native           | [An-on-im](https://github.com/An-on-im) |
 | Korean               | Machine-assisted | Opus 5                                  |
 | German               | Machine-assisted | Opus 5                                  |
-| Spanish              | Planned          |                                         |
+| Spanish              | Machine-assisted | Opus 5                                  |
 | French               | Planned          |                                         |
 | Brazilian Portuguese | Planned          |                                         |
 | Japanese             | Machine-assisted | Fable 5                                 |

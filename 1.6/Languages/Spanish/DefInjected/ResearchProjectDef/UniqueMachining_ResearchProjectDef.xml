@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique machining -->
+  <UniqueMachining.label>maquinado de armas únicas</UniqueMachining.label>
+  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>Mejora y personaliza armas de la era industrial en una mesa de maquinado, añadiendo o quitando rasgos según tus necesidades.</UniqueMachining.description>
+
+  <!-- EN: Upgrade and customize industrial unique weapons -->
+  <UniqueMachining.customUnlockTexts.0>Mejorar y personalizar armas únicas industriales</UniqueMachining.customUnlockTexts.0>
+
+  <!-- subject_def is an es-only symbol (see UniqueSmithing). Head noun "maquinado" is
+       masculine, hence "del". subject_gerund is an infinitive, as in vanilla es. -->
+  <!-- EN:
+    <li>subject->unique machining</li>
+    <li>subject_story->reverse-engineered unique weapon modifications using industrial tools</li>
+    <li>subject_story->perfected the art of applying weapon traits with precision machinery</li>
+    <li>subject_gerund->machining unique weapons</li>
+  -->
+  <UniqueMachining.generalRules.rulesStrings>
+    <li>subject->maquinado de armas únicas</li>
+    <li>subject_def->del maquinado de armas únicas</li>
+    <li>subject_story->reconstruyó las modificaciones de armas únicas con herramientas industriales</li>
+    <li>subject_story->perfeccionó el arte de aplicar rasgos a las armas con maquinaria de precisión</li>
+    <li>subject_gerund->maquinar armas únicas</li>
+  </UniqueMachining.generalRules.rulesStrings>
+
+</LanguageData>
