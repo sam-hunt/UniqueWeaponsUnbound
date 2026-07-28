@@ -96,28 +96,71 @@ Add rows here whenever a native review lands corrections.
 
 ### Glossary — Japanese (machine-assisted generation, 2026-07; no native review yet)
 
+RimWorld's language folder is `Japanese` (tar: `Japanese (日本語).tar`).
+
 Style rules discovered from the vanilla JP data (mandatory):
 
 - Vanilla JP uses ASCII punctuation: `,` and `.` — never `、` or `。`.
 - Descriptions/tooltips: polite です/ます form ending `.`; labels/buttons no period.
 - Job report strings: continuous form 〜している / 〜中, no subject, no period.
-- Quote injected def labels and cross-referenced UI labels with 「」.
+- Thought (`ThoughtDef` stage) descriptions are plain first-person, no です/ます.
+- Quote injected def labels and cross-referenced UI labels with 「」. Suffixes
+  and parentheticals take no leading space and use ASCII parens.
+- `traitAdjectives` are **attributive** forms ending in の / な / い / a verb
+  (Odyssey ships 探知の, 正確な, 灼熱の). The JP namer concatenates with no
+  space, so a bare noun reads broken.
+- Name grammar: no spaces around [symbols]; "The X of Y" → `[Y]の[X]`; vanilla
+  keeps `[RECIPIENT_possessive]` (unlike zh, which drops it).
+- `stuffProps.stuffAdjective` is `〜製` (鉄製, プラスチール製, 木製, ヒスイ製),
+  so `[stuff_adjective]の[noun]` composes cleanly — supply the の in our rules,
+  matching vanilla's の-terminated trait adjectives.
+- Battle-log entries end in plain past tense and JP `[skillAdv]` values are
+  adverbials (巧みに, ゆっくりと), so `[skillAdvMaybe]` slots before the verb.
+- `deathMessage` keeps vanilla's space after the pawn token: `{0}は 斬られて…`.
+- DLC names stay in Latin script (Odyssey, Royalty), as does MOD.
 
 | English | Use | Never | Why |
 |---|---|---|---|
-| trait (weapon) | 特性 | — | vanilla `WeaponTraits`=特性; unlike Russian, JP shares the pawn-trait word |
-| unique weapon | ユニークな武器 | | vanilla `UniqueWeapon` |
+| trait (weapon) | 特性 (stats-entry title 武器の特性) | 特性・特徴 | `WeaponTraits`=特性, and JP shares the pawn-trait word (unlike Russian). But the DLC domains still diverge: 特性・特徴 is Royalty's *persona*-weapon word (`Stat_Thing_PersonaWeaponTrait_Label`), so it belongs to PWU, not here |
+| unique weapon | ユニークな武器 | | vanilla `UniqueWeapon`, Odyssey `*_Unique` labels |
 | Pulse-charged munitions (ChargedShot research) | チャージライフル | パルス弾 | JP names the research after the rifle; disambiguate as 「チャージライフル」の研究 |
 | fueled / electric smithy | 工作台 / 電動工作台 | 鍛冶場 | vanilla building labels |
 | machining table | 精密工作機械 | | vanilla building label (also the Machining research name) |
 | fabrication bench | コンポーネント工作台 | | vanilla building label |
 | ultratech | 最先端の技術力 (noun) / 最先端技術級 (attributive) | ウルトラテック | vanilla `TechLevel_Ultra` |
 | ideoligion | 思想 | イデオリギオン | JP does not coin a portmanteau; relic = レリック |
-| Cancel / Confirm / Randomize / Reset | キャンセル / 了承 / ランダム / リセット | | vanilla Keyed buttons |
+| Cancel / Confirm / Randomize / Reset / Reset to defaults | キャンセル / 了承 / ランダム / リセット / デフォルトに戻す | | vanilla Keyed buttons |
+| monosword / plasmasword / zeushammer | モノソード / プラズマソード / ゼウスハンマー | | Royalty weapon labels |
+| longsword / spear / mace / knife / gladius / axe / warhammer | ロングソード / スピア / メイス / ナイフ / グラディウス / 戦斧 / ウォーハンマー | | Core/Odyssey/Royalty labels (mostly katakana, not 長剣/槍) |
+| plasteel / jade / wood (stuff adjectives) | プラスチール製 / ヒスイ製 / 木製 | 塑鋼, 翡翠 | Core `stuffProps.stuffAdjective` |
+| mechanite / mechanoid | メカナイト / メカノイド | | Royalty, Odyssey descs |
+| wielder / bearer | 使用者 / 持ち主 | | Odyssey `EMPPulser` desc |
+| stun / EMP / stagger | スタン / EMP / よろめき | | `StunnedByEMP`, `StaggerDurationFactor` |
+| armor penetration / bleed rate / move speed | アーマー貫通力 / 出血量 / 移動速度 | | Core Keyed + StatDefs |
+| cut / stab (DamageDef) | 斬る / 刺す | 切創, 刺し傷 (those are the *hediff* labels) | Core DamageDefs vs HediffDefs differ |
+| toxic buildup | 毒物が蓄積 | | Core `ToxicBuildup` |
+| item stash / bandit camp / ancient mercenaries / sealed crate | 埋蔵品 / 盗賊の野営地 / 古代の傭兵 / 密封されたクレート | | Core sites, Odyssey quest + `AncientSealedCrate` |
+| humanlike / ability / quest / cooldown / cells | 人型 / 能力 / クエスト / クールダウン / セル | | Core Keyed |
+| quality tiers | 壊れかけ/低品質/標準品/良品/秀品/名品/幻の一品 | | Core `QualityCategory_*` |
+| Traders will pay more/less for it. | 貿易商は高値で/低い価格でこれを買い取ります. | | Odyssey `GoldInlay`/`Ugly` descs — reuse verbatim |
+
+The six Odyssey trait ports (`Lightweight`, `Cumbersome`, `Ornamental`,
+`Ugly`, `GoldInlay`, `JadeInlay`) have official JP labels, adjectives and — for
+four of them — descriptions that match our English word for word; copy them
+rather than retranslating.
 
 Mod-decided terms pending native review: research trio ユニーク武器の鍛冶 /
 ユニーク武器の精密加工 / ユニーク武器の組立製造; haul planner modes 順次 / 巡回 /
 徹底; net refund/cost 実質返却 / 実質コスト; haul plan 運搬計画.
+
+From UniqueMeleeWeapons' 2026-07 JP pass, also pending native review: 受け流し
+(parry, register-matched to `TextMote_Dodge` 回避), 戦士団 (warband, parallel to
+vanilla 傭兵団), 頭目 (warlord), 鍔 / クロスガード (quillons / crossguard),
+地響き (earthshake), 鼓舞の叫び (rallying cry), 士気高揚 (rallied), 由緒ある
+(storied), 杭打ちヘッド (piledriver), アヘン塗布 (opiated), 琺瑯 (enameled),
+無反発 (dead-blow, from the real tool term 無反発ハンマー), 稜付き (flanged),
+鋲打ち (studded), 徹甲スパイク (armor spike), 先重心 (head-weighted), 素早い
+(quickdraw — vanilla's 早撃ちの is ranged-specific and wrong on melee).
 
 ### Glossary — Simplified Chinese (preseeded from UniqueMeleeWeapons' generation, 2026-07; no zh translation in this repo yet)
 
