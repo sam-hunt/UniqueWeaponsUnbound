@@ -328,27 +328,40 @@ namespace UniqueWeaponsUnbound
             // First, so a trait reads as what it does before what it costs — and because for a
             // melee trait these are usually the ONLY real effects; the vanilla fields below are
             // inert outside the projectile/bladelink paths. See TraitEffectLinesIntegration.
-            TraitEffectLinesIntegration.AppendEffectLines(trait, effectLines, "  ");
+            bool publisherDescribedTrait =
+                TraitEffectLinesIntegration.AppendEffectLines(trait, effectLines, "  ");
 
+            // finalized: false on every stat row below. A trait's modifiers are RAW, pre-curve
+            // deltas, so they have to render in the stat's unfinalized style — which is what vanilla
+            // CompUniqueWeapon does everywhere it prints them (SpecialDisplayStats and its own trait
+            // tooltip both pass finalized: false). StatDef.ValueToString defaults to finalized: true
+            // and formats with toStringStyle instead, which turned MeleeHitChance's raw -1 into a
+            // nonsense "-100%" — reading as "never hits" — where its toStringStyleUnfinalized of
+            // FloatOne gives the honest "-1.0". That stat ships finalizeEquippedStatOffset=false
+            // precisely because the offset feeds the skill curve raw.
             if (trait.statOffsets != null)
             {
                 foreach (StatModifier mod in trait.statOffsets)
-                    effectLines.Add("  " + mod.stat.LabelCap + ": "
-                        + mod.stat.ValueToString(mod.value, ToStringNumberSense.Offset));
+                    effectLines.Add("  " + mod.stat.LabelCap + ": " + mod.stat.Worker.ValueToString(
+                        mod.value, finalized: false, ToStringNumberSense.Offset));
             }
 
             if (trait.statFactors != null)
             {
                 foreach (StatModifier mod in trait.statFactors)
-                    effectLines.Add("  " + mod.stat.LabelCap + ": "
-                        + mod.stat.ValueToString(mod.value, ToStringNumberSense.Factor));
+                    effectLines.Add("  " + mod.stat.LabelCap + ": " + mod.stat.Worker.ValueToString(
+                        mod.value, finalized: false, ToStringNumberSense.Factor));
             }
 
-            if (trait.equippedStatOffsets != null)
+            // Vanilla reads equippedStatOffsets only on bladelink weapons, so a publisher that routes
+            // it to the wielder itself (Unique Melee Weapons patches StatWorker to do exactly that)
+            // has already stated the effect in its own lines above, and stated it better — marked as
+            // wielder-side. Printing it again here double-reported the same number.
+            if (trait.equippedStatOffsets != null && !publisherDescribedTrait)
             {
                 foreach (StatModifier mod in trait.equippedStatOffsets)
-                    effectLines.Add("  " + mod.stat.LabelCap + ": "
-                        + mod.stat.ValueToString(mod.value, ToStringNumberSense.Offset));
+                    effectLines.Add("  " + mod.stat.LabelCap + ": " + mod.stat.Worker.ValueToString(
+                        mod.value, finalized: false, ToStringNumberSense.Offset));
             }
 
             if (trait.damageDefOverride != null)

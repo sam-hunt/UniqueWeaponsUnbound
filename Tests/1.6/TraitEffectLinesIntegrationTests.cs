@@ -97,6 +97,29 @@ namespace UniqueWeaponsUnbound.Tests
             Assert.Equal(new[] { "  Cut damage x90%" }, effectLines);
         }
 
+        // The return value drives tooltip de-duplication: the caller drops its own vanilla
+        // equippedStatOffsets rows when a publisher already described the trait. "Produced a line" is
+        // the contract, not "attached an extension" — an extension carrying nothing printable must
+        // report false, or the caller would suppress a row and replace it with silence.
+        [Fact]
+        public void AppendEffectLines_ReportsWhetherALineWasProduced()
+        {
+            var effectLines = new List<string>();
+
+            Assert.True(TraitEffectLinesIntegration.AppendEffectLines(
+                TraitWith(new TraitEffectLinesExtension { lines = { "Cut damage x90%" } }),
+                effectLines, "  "));
+
+            Assert.False(TraitEffectLinesIntegration.AppendEffectLines(
+                TraitWith(new TraitEffectLinesExtension { lines = { "", null } }), effectLines, "  "));
+
+            Assert.False(TraitEffectLinesIntegration.AppendEffectLines(
+                TraitWith(new UnrelatedExtension()), effectLines, "  "));
+
+            Assert.False(TraitEffectLinesIntegration.AppendEffectLines(
+                new WeaponTraitDef { defName = "TestTrait" }, effectLines, "  "));
+        }
+
         [Fact]
         public void ExtensionWithDifferentName_IsIgnored()
         {

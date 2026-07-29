@@ -100,12 +100,18 @@ namespace UniqueWeaponsUnbound
 
         // Appends every published effect line for trait, indented to match the caller's other rows.
         // No-op when no publisher has annotated this trait, which is the common case.
-        internal static void AppendEffectLines(WeaponTraitDef trait, List<string> effectLines, string indent)
+        //
+        // Returns whether a line was actually added, which the caller uses to suppress its own
+        // vanilla-field rows that a publisher's lines already cover. The signal is "produced a line",
+        // not "attached an extension", deliberately: a publisher whose lines are all empty has stated
+        // nothing, so suppressing on its behalf would drop information rather than de-duplicate it.
+        internal static bool AppendEffectLines(WeaponTraitDef trait, List<string> effectLines, string indent)
         {
             List<DefModExtension> extensions = trait?.modExtensions;
             if (extensions == null || !Available)
-                return;
+                return false;
 
+            bool appended = false;
             for (int i = 0; i < extensions.Count; i++)
             {
                 DefModExtension extension = extensions[i];
@@ -118,9 +124,13 @@ namespace UniqueWeaponsUnbound
                 foreach (string line in lines)
                 {
                     if (!string.IsNullOrEmpty(line))
+                    {
                         effectLines.Add(indent + line);
+                        appended = true;
+                    }
                 }
             }
+            return appended;
         }
     }
 }
