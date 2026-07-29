@@ -25,25 +25,103 @@
 
   <!-- ===== Thematic rules (keyword-matched) ===== -->
 
+  <!-- labelKeywords are not display text: the cost pipeline matches these tokens
+       against a trait's label words and its defName words. Every list below keeps
+       all English entries verbatim (they match the language-invariant defName
+       tokens) and appends German ones, which only help a trait mod that ships
+       German labels.
+       German fuses nouns and adjectives into solid compounds, so a German token
+       can only ever fire as the COMPLETE label word: matching is exact-token on
+       spaces and hyphens, so 'gift' never matches 'Giftmunition'. Every German
+       entry below is a whole label word, never a stem.
+       Deliberately not injected:
+       - UWU_HeavyScrap: requireAllKeywords demands every entry appear in the same
+         label, so appending German tokens would make the rule match nothing at
+         all. It suits German badly regardless: idiomatic German fuses the concept
+         into one word (Schwerschrott) and can never present 'heavy' and 'scrap' as
+         two separate tokens.
+       - UWU_Flarestriker: no German trait label exists for it; the only official
+         vocabulary is the Anomaly apparel item Disruptorfackeln.
+       - UWU_Akimbo: no official or UMW German rendering exists.
+       'emp' needs no German companion: Ludeon hyphenates every EMP compound
+       (EMP-Munition, EMP-Kanone, EMP-Pulser), and hyphens do split. -->
+
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>Bauteiltausch für Giftmunition</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value. -->
-  <UWU_ToxSwap.description>Ersetzt Bauteile durch Kräutermedizin (dreifache Anzahl der Bauteile), was die benötigten organischen Giftstoffe widerspiegelt. Sind keine Bauteile vorhanden, werden 70% der Grundmaterialien nach Marktwert in Kräutermedizin umgewandelt.</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>Ersetzt Bauteile durch Kräutermedizin (dreifache Anzahl der Bauteile), was die benötigten organischen Giftstoffe widerspiegelt. Bei Waffen, deren Kosten keine Bauteile enthalten, wird stattdessen Kräutermedizin passend zur Herstellungskomplexität der Waffe hinzugefügt.</UWU_ToxSwap.description>
+  <!-- Odyssey ToxRounds/ToxPellets/ParalyticArrows labels; UMW Envenomed/Opiated. -->
+  <!-- EN: tox, toxic, paralytic, acid-injector, venom, envenomed, poisoned, opiated, sedative -->
+  <UWU_ToxSwap.labelKeywords>
+    <li>tox</li>
+    <li>toxic</li>
+    <li>paralytic</li>
+    <li>acid-injector</li>
+    <li>venom</li>
+    <li>envenomed</li>
+    <li>poisoned</li>
+    <li>opiated</li>
+    <li>sedative</li>
+    <li>giftmunition</li>
+    <li>giftschrot</li>
+    <li>lähmpfeile</li>
+    <li>vergiftet</li>
+    <li>opiatbeschichtet</li>
+  </UWU_ToxSwap.labelKeywords>
 
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>Bauteiltausch für Brandmunition</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value. -->
-  <UWU_IncendiarySwap.description>Ersetzt Bauteile durch Sprit (zehnfache Anzahl der Bauteile), was den benötigten leicht entzündlichen Treibstoff widerspiegelt. Sind keine Bauteile vorhanden, werden 70% der Grundmaterialien nach Marktwert in Sprit umgewandelt.</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>Ersetzt Bauteile durch Sprit (zehnfache Anzahl der Bauteile), was den benötigten leicht entzündlichen Treibstoff widerspiegelt. Hightech-Bauteile gelten hier als Bauteile. Bei Waffen, deren Kosten keine Bauteile enthalten, wird stattdessen Sprit passend zur Herstellungskomplexität der Waffe hinzugefügt.</UWU_IncendiarySwap.description>
+  <!-- Odyssey IncendiaryRounds/IncendiaryLauncher/IncendiaryPellets labels. -->
+  <!-- EN: incendiary, blast, blasts, pitch-soaked, detonation, chemburster, flaming, searing, burning, ember -->
+  <UWU_IncendiarySwap.labelKeywords>
+    <li>incendiary</li>
+    <li>blast</li>
+    <li>blasts</li>
+    <li>pitch-soaked</li>
+    <li>detonation</li>
+    <li>chemburster</li>
+    <li>flaming</li>
+    <li>searing</li>
+    <li>burning</li>
+    <li>ember</li>
+    <li>brandmunition</li>
+    <li>brandwerfer</li>
+    <li>brandschrot</li>
+  </UWU_IncendiarySwap.labelKeywords>
 
   <!-- EN: EMP value split -->
   <UWU_EmpSplit.label>EMP-Wertaufteilung</UWU_EmpSplit.label>
   <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
   <UWU_EmpSplit.description>Entfernt Hightech-Bauteile und wandelt anschließend 70% der Grundmaterialkosten nach Marktwert in Bauteile um. Das steht für die Elektronik, die EMP-Umarbeitungen benötigen.</UWU_EmpSplit.description>
+  <!-- 'zeuskopf' from UMW ZeusHeaded: the bare word Zeus never appears as its own
+       token in German, since the label fuses. -->
+  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <UWU_EmpSplit.labelKeywords>
+    <li>emp</li>
+    <li>flux</li>
+    <li>voltaic</li>
+    <li>sonic</li>
+    <li>zeus</li>
+    <li>shock</li>
+    <li>arc</li>
+    <li>thunder</li>
+    <li>zeuskopf</li>
+  </UWU_EmpSplit.labelKeywords>
 
   <!-- EN: lightweight swap -->
   <UWU_Lightweight.label>Leichtbau-Tausch</UWU_Lightweight.label>
-  <!-- EN: Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows. -->
-  <UWU_Lightweight.description>Ersetzt 40% der Holzkosten durch Vogelleder. Das steht für die Federn an den Pfeilenden.</UWU_Lightweight.description>
+  <!-- EN: Replaces 40% of wood costs with birdskin, representing the featherwork used to lighten wooden weapons. Weapons with no wood in their costs are unaffected. -->
+  <UWU_Lightweight.description>Ersetzt 40% der Holzkosten durch Vogelleder. Das steht für die Federarbeit, mit der hölzerne Waffen leichter gemacht werden. Waffen ohne Holz in ihren Kosten bleiben unverändert.</UWU_Lightweight.description>
+  <!-- Odyssey Lightweight = 'leicht', LightweightArrows = 'leichte Pfeile'. -->
+  <!-- EN: lightweight, whisper -->
+  <UWU_Lightweight.labelKeywords>
+    <li>lightweight</li>
+    <li>whisper</li>
+    <li>leicht</li>
+    <li>leichte</li>
+  </UWU_Lightweight.labelKeywords>
 
   <!-- EN: flarestriker value split -->
   <UWU_Flarestriker.label>Flarestriker-Wertaufteilung</UWU_Flarestriker.label>
@@ -59,31 +137,152 @@
   <UWU_ChargeCategoryGated.label>Impulswaffen (kategoriegebunden)</UWU_ChargeCategoryGated.label>
   <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
   <UWU_ChargeCategoryGated.description>Wandelt bei Merkmalen von Impulswaffen alle Kosten nach Marktwert in Hightech-Bauteile um. Das steht für die Raumfahrttechnologie, die Impuls- und Strahlenumarbeitungen erfordern.</UWU_ChargeCategoryGated.description>
+  <!-- Odyssey PulseCharger/ChargeCapacitor/FrequencyAmplifier labels. A bare
+       'impuls' would match none of them, so the whole compounds go in. -->
+  <!-- EN: charge, charger, frequency, tesla -->
+  <UWU_ChargeCategoryGated.labelKeywords>
+    <li>charge</li>
+    <li>charger</li>
+    <li>frequency</li>
+    <li>tesla</li>
+    <li>impulsgeladen</li>
+    <li>impulskondensator</li>
+    <li>frequenzverstärker</li>
+  </UWU_ChargeCategoryGated.labelKeywords>
 
   <!-- EN: charge weapons (unconditional) -->
   <UWU_ChargeUnconditional.label>Impulswaffen (bedingungslos)</UWU_ChargeUnconditional.label>
   <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
   <UWU_ChargeUnconditional.description>Wandelt bei Merkmalen, die hochentwickelte Raumfahrttechnologie einsetzen, alle Kosten nach Marktwert in Hightech-Bauteile um – unabhängig von der Waffenkategorie.</UWU_ChargeUnconditional.description>
+  <!-- UMW Monomolecular/PlasmaCored labels. 'Plasmaschwert' is a weapon name, not
+       a trait label, so it stays out. -->
+  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma -->
+  <UWU_ChargeUnconditional.labelKeywords>
+    <li>crypto</li>
+    <li>cryo</li>
+    <li>capacitor</li>
+    <li>ultracoils</li>
+    <li>thump</li>
+    <li>rail</li>
+    <li>mono</li>
+    <li>monomolecular</li>
+    <li>plasma</li>
+    <li>monomolekular</li>
+    <li>plasmaumhüllt</li>
+  </UWU_ChargeUnconditional.labelKeywords>
 
   <!-- EN: akimbo cost multiplier -->
   <UWU_Akimbo.label>Akimbo-Kostenmultiplikator</UWU_Akimbo.label>
   <!-- EN: Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost. -->
   <UWU_Akimbo.description>Verdoppelt alle Kosten, weil Akimbo eine zweite dargestellte Waffe hinzufügt und die Feuerrate verdoppelt. Das hebt den Grundanteil von 50% der Kosten auf, sodass die Summe den vollen Auftragskosten entspricht.</UWU_Akimbo.description>
 
+  <!-- EN: oversized cost multiplier -->
+  <UWU_Oversized.label>Kostenmultiplikator für Übergröße</UWU_Oversized.label>
+  <!-- EN: Increases all costs by half. An oversized weapon is simply more weapon, and modifying it takes more material. -->
+  <UWU_Oversized.description>Erhöht alle Kosten um die Hälfte. Eine übergroße Waffe ist einfach mehr Waffe, und ihre Umarbeitung verbraucht mehr Material.</UWU_Oversized.description>
+  <!-- 'übergroß' is Odyssey's own word for the concept (OversizedRounds
+       traitAdjective); 'übergroße' is the attributive form a label would carry.
+       'schwer'/'schwere' stays out: Odyssey's OversizedRounds label is 'schwere
+       Munition', which would also drag in UMW's 'kopfschwer' vocabulary. -->
+  <!-- EN: oversized -->
+  <UWU_Oversized.labelKeywords>
+    <li>oversized</li>
+    <li>übergroß</li>
+    <li>übergroße</li>
+  </UWU_Oversized.labelKeywords>
+
   <!-- EN: grip component removal -->
   <UWU_Grip.label>Bauteilentfernung bei Griffen</UWU_Grip.label>
   <!-- EN: Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts. -->
   <UWU_Grip.description>Entfernt Bauteile und Hightech-Bauteile aus den Kosten. Umarbeitungen am Griff sind einfache mechanische Anpassungen, die keine komplexen Teile benötigen.</UWU_Grip.description>
+  <!-- Odyssey CustomGrip = 'Spezialgriff'; 'griff' is every gun's tools.grip label
+       and matches a label that is the bare word. -->
+  <!-- EN: grip -->
+  <UWU_Grip.labelKeywords>
+    <li>grip</li>
+    <li>griff</li>
+    <li>spezialgriff</li>
+  </UWU_Grip.labelKeywords>
 
   <!-- EN: comfort material conversion -->
   <UWU_Comfort.label>Materialumwandlung für Komfort</UWU_Comfort.label>
   <!-- EN: Converts half of all cost materials to thrumbofur by count, reflecting the luxurious padding and wrapping used for comfort modifications. -->
   <UWU_Comfort.description>Wandelt die Hälfte aller Kostenmaterialien nach Anzahl in Thrumbofell um, was die luxuriöse Polsterung und Umwicklung von Komfort-Umarbeitungen widerspiegelt.</UWU_Comfort.description>
+  <!-- StatDef Comfort = 'Komfort'. -->
+  <!-- EN: comfort -->
+  <UWU_Comfort.labelKeywords>
+    <li>comfort</li>
+    <li>komfort</li>
+  </UWU_Comfort.labelKeywords>
 
   <!-- EN: ornamental conversion -->
   <UWU_Ornamental.label>Umwandlung für Verzierungen</UWU_Ornamental.label>
   <!-- EN: Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering. -->
   <UWU_Ornamental.description>Entfernt Bauteile und wandelt anschließend die Hälfte der restlichen Kosten nach Anzahl in Silber um. Verzierungen sind dekoratives Handwerk, keine technische Ingenieursarbeit.</UWU_Ornamental.description>
+  <!-- Odyssey Ornamental = 'verziert', UMW Enameled = 'emailliert', and Core's own
+       physical_adjective 'filigran'. JadeInlay's 'jadeverziert' is one fused token
+       and correctly does not match 'verziert'. -->
+  <!-- EN: ornamental, engraved, filigree, gilded, enameled, etched -->
+  <UWU_Ornamental.labelKeywords>
+    <li>ornamental</li>
+    <li>engraved</li>
+    <li>filigree</li>
+    <li>gilded</li>
+    <li>enameled</li>
+    <li>etched</li>
+    <li>verziert</li>
+    <li>emailliert</li>
+    <li>filigran</li>
+    <li>filigrane</li>
+  </UWU_Ornamental.labelKeywords>
+
+  <!-- EN: metal fittings swap -->
+  <UWU_MetalFittings.label>Materialtausch für Metallbeschläge</UWU_MetalFittings.label>
+  <!-- EN: Swaps 40% of the weapon's material for the metal its fittings are made of: steel for weapons of industrial tech level and below, plasteel for spacer and above. Serrations, spikes, studs and weights are metal parts fixed onto the base weapon. -->
+  <UWU_MetalFittings.description>Tauscht 40% des Materials der Waffe gegen das Metall ihrer Beschläge: Stahl bei industrieller Techstufe und darunter, Plastahl bei Raumfahrt und höher. Zahnungen, Dornen, Nieten und Gewichte sind Metallteile, die an der Grundwaffe angebracht werden.</UWU_MetalFittings.description>
+  <!-- The ten UMW melee-fitting labels, each a complete compound. -->
+  <!-- EN: serrated, razored, honed, keen, barbed, studded, spike, spiked, flanged, quilloned, toothed, jagged, weighted, counterweight, counterweighted, needle -->
+  <UWU_MetalFittings.labelKeywords>
+    <li>serrated</li>
+    <li>razored</li>
+    <li>honed</li>
+    <li>keen</li>
+    <li>barbed</li>
+    <li>studded</li>
+    <li>spike</li>
+    <li>spiked</li>
+    <li>flanged</li>
+    <li>quilloned</li>
+    <li>toothed</li>
+    <li>jagged</li>
+    <li>weighted</li>
+    <li>counterweight</li>
+    <li>counterweighted</li>
+    <li>needle</li>
+    <li>panzerdorn</li>
+    <li>widerhaken</li>
+    <li>gegengewicht</li>
+    <li>gerippt</li>
+    <li>kopfschwer</li>
+    <li>nadelspitze</li>
+    <li>parierstangen</li>
+    <li>rasierscharf</li>
+    <li>gezahnt</li>
+    <li>genietet</li>
+  </UWU_MetalFittings.labelKeywords>
+
+  <!-- EN: blood hemogen surcharge -->
+  <UWU_Blood.label>Hämogenzuschlag für Blutmerkmale</UWU_Blood.label>
+  <!-- EN: Adds 10 hemogen packs on top of the computed cost for blood-themed traits. The hemogen is consumed for good: removing the trait refunds none of it. Without Biotech this rule does nothing. -->
+  <UWU_Blood.description>Fügt bei blutbezogenen Merkmalen 10 Hämogenbeutel zu den berechneten Kosten hinzu. Das Hämogen wird endgültig verbraucht: Beim Entfernen des Merkmals wird davon nichts zurückerstattet. Ohne Biotech hat diese Regel keine Wirkung.</UWU_Blood.description>
+  <!-- UMW BloodStained = 'blutbefleckt'. 'hemovoric' has no German rendering
+       anywhere, so none is invented. -->
+  <!-- EN: blood, hemovoric -->
+  <UWU_Blood.labelKeywords>
+    <li>blood</li>
+    <li>hemovoric</li>
+    <li>blutbefleckt</li>
+  </UWU_Blood.labelKeywords>
 
   <!-- ===== Late-running rules ===== -->
 
@@ -91,13 +290,20 @@
   <UWU_Inlay.label>Bauteilentfernung bei Einlegearbeiten</UWU_Inlay.label>
   <!-- EN: Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts. -->
   <UWU_Inlay.description>Entfernt Bauteile und Hightech-Bauteile aus den Kosten. Einlegearbeiten sind rein optische Umarbeitungen, die nur Rohstoffe und keine komplexen Teile benötigen.</UWU_Inlay.description>
+  <!-- Odyssey renders both inlays as resulting-state adjectives, not as a noun. -->
+  <!-- EN: inlay -->
+  <UWU_Inlay.labelKeywords>
+    <li>inlay</li>
+    <li>vergoldet</li>
+    <li>jadeverziert</li>
+  </UWU_Inlay.labelKeywords>
 
   <!-- ===== Fallback (always runs last) ===== -->
 
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>Ersatzregel für Materialüberschreibung</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>Erkennt Materialnamen in der Merkmalsbezeichnung (z.B. 'gold' in 'Gold Inlay') und ersetzt die Rohstoffkosten durch dieses Material. Fängt alle Merkmale auf, für die es keine eigene thematische Regel gibt.</UWU_MaterialOverride.description>
+  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>Erkennt Materialnamen in der Merkmalsbezeichnung (z.B. 'gold' in 'Gold Inlay') und ersetzt die Rohstoffkosten durch denselben Marktwert dieses Materials. Fängt alle Merkmale auf, für die es keine eigene thematische Regel gibt.</UWU_MaterialOverride.description>
 
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>Kürzung der Kostenmaterialien</UWU_CostPrune.label>

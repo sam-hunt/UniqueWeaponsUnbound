@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <!-- 1.6\Defs\TraitCostRuleDefs\TraitCostRules.xml -->
+
+  <!-- labelKeywords is not display text: the cost pipeline matches these tokens
+       against weapon-trait labels and defName tokens. Every injection below is a
+       whole-list replacement that keeps all English entries verbatim and in order
+       (defName tokens are always Latin, so the English list is the language-
+       invariant backbone) and appends the Russian surface forms that actually
+       appear in trait-label position. Matching is exact-token and lowercase,
+       splitting only on spaces and hyphens - no stemming - so the forms are taken
+       from shipped labels rather than derived.
+
+       Sources for the Russian forms: vanilla Odyssey/Core WeaponTraitDef labels and
+       Unique Melee Weapons' Russian trait labels. Where a ё-spelling is the shipped
+       form, the е-spelling is shipped alongside it: Odyssey writes "облегченное" and
+       UMW writes "облегчённое" for the same concept, so exact-token matching needs
+       both, and Ludeon's own files are inconsistent about ё/е generally.
+
+       Single-word melee trait labels render as neuter singular adjectives in -ое
+       (зазубренное, декоративное), agreeing with the implicit "оружие", so no
+       masculine/feminine/plural variants are needed for those. Multi-word labels
+       inflect against their own noun and are carried in the observed form.
+
+       Rules with no safe Russian token keep the English list by default and get no
+       injection here: UWU_Flarestriker, UWU_HeavyScrap, UWU_Akimbo and
+       UWU_Oversized (see the note on that rule below). -->
+
   <!-- EN: base cost from tech level -->
   <UWU_BaseCostFromTechLevel.label>базовая стоимость зависит от технологического уровня</UWU_BaseCostFromTechLevel.label>
   <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components -->
@@ -19,20 +44,99 @@
   <UWU_NegativeDowngrade.description>Понижает материалы стоимости на один технологический уровень для негативных свойств. Компоненты космической эпохи становятся индустриальными, пласталь становится сталью, сталь становится деревом. Отражает тот факт, что негативные модификации используют более грубые и дешёвые методы.</UWU_NegativeDowngrade.description>
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>замена на токсичные компоненты</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value. -->
-  <UWU_ToxSwap.description>Заменяет компоненты на лекарственные травы (в 3-кратном количестве), что отражает потребность в органических токсинах. Если компонентов нет, конвертирует 70% базовых материалов в лекарственные травы по рыночной стоимости.</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>Заменяет компоненты на лекарственные травы (в 3-кратном количестве), что отражает потребность в органических токсинах. Если в стоимости оружия нет компонентов, вместо этого добавляются лекарственные травы в количестве, зависящем от сложности изготовления оружия.</UWU_ToxSwap.description>
+
+  <!-- отравленное = UMW_Envenomed, опиатное = UMW_Opiated ("опиатное остриё"),
+       парализующие = ParalyticArrows, токсичные = ToxRounds/ToxPellets. токсичное is
+       the neuter-singular projection of the melee convention (no shipped label uses
+       it yet). Excluded: остриё, which is shared by "игольчатое остриё" (metal
+       fittings) and "опиатное остриё" and would double-tag one of them; and
+       патроны/пули, generic ammo tails carried by nearly every ranged trait. -->
+  <!-- EN: tox, toxic, paralytic, acid-injector, venom, envenomed, poisoned, opiated, sedative -->
+  <UWU_ToxSwap.labelKeywords>
+    <li>tox</li>
+    <li>toxic</li>
+    <li>paralytic</li>
+    <li>acid-injector</li>
+    <li>venom</li>
+    <li>envenomed</li>
+    <li>poisoned</li>
+    <li>opiated</li>
+    <li>sedative</li>
+    <li>отравленное</li>
+    <li>опиатное</li>
+    <li>парализующие</li>
+    <li>токсичные</li>
+    <li>токсичное</li>
+  </UWU_ToxSwap.labelKeywords>
+
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>замена на зажигательные компоненты</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value. -->
-  <UWU_IncendiarySwap.description>Заменяет компоненты на химтопливо (в 10-кратном количестве), отражая потребность в летучем топливе. Если компонентов нет, конвертирует 70% базовых материалов в химтопливо по рыночной стоимости.</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>Заменяет компоненты на химическое топливо (в 10-кратном количестве), отражая потребность в летучем топливе. Продвинутые компоненты здесь считаются компонентами. Если в стоимости оружия нет компонентов, вместо этого добавляется химическое топливо в количестве, зависящем от сложности изготовления оружия.</UWU_IncendiarySwap.description>
+
+  <!-- зажигательные = IncendiaryRounds/IncendiaryPellets; зажигательное is the
+       neuter-singular projection. The remaining English keywords (blast, detonation,
+       chemburster, pitch-soaked, flaming, searing, burning, ember) belong to traits
+       from other mods with no Russian translation to ground them, so they stay
+       English-only and keep matching by defName. -->
+  <!-- EN: incendiary, blast, blasts, pitch-soaked, detonation, chemburster, flaming, searing, burning, ember -->
+  <UWU_IncendiarySwap.labelKeywords>
+    <li>incendiary</li>
+    <li>blast</li>
+    <li>blasts</li>
+    <li>pitch-soaked</li>
+    <li>detonation</li>
+    <li>chemburster</li>
+    <li>flaming</li>
+    <li>searing</li>
+    <li>burning</li>
+    <li>ember</li>
+    <li>зажигательные</li>
+    <li>зажигательное</li>
+  </UWU_IncendiarySwap.labelKeywords>
+
   <!-- EN: EMP value split -->
   <UWU_EmpSplit.label>разделение стоимости ЭМИ</UWU_EmpSplit.label>
   <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
   <UWU_EmpSplit.description>Убирает компоненты космической эпохи, затем конвертирует 70% стоимости базовых материалов в компоненты индустриальной эпохи по рыночной стоимости, отражая потребность в электронных деталях для модификаций ЭМИ.</UWU_EmpSplit.description>
+
+  <!-- эми comes from the hyphenated vanilla labels ЭМИ-патроны / ЭМИ-пушка /
+       ЭМИ-импульсер, which split on the hyphen. электробоёк = UMW_ZeusHeaded, with
+       its е-spelling alongside. flux/voltaic/sonic/shock/arc/thunder have no Russian
+       ground and stay English-only. -->
+  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <UWU_EmpSplit.labelKeywords>
+    <li>emp</li>
+    <li>flux</li>
+    <li>voltaic</li>
+    <li>sonic</li>
+    <li>zeus</li>
+    <li>shock</li>
+    <li>arc</li>
+    <li>thunder</li>
+    <li>эми</li>
+    <li>электробоёк</li>
+    <li>электробоек</li>
+  </UWU_EmpSplit.labelKeywords>
+
   <!-- EN: lightweight swap -->
   <UWU_Lightweight.label>замена на облегчённые материалы</UWU_Lightweight.label>
-  <!-- EN: Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows. -->
-  <UWU_Lightweight.description>Заменяет 40% стоимости древесины на птичью шкуру, что отражает использование перьевых оперений на стрелах.</UWU_Lightweight.description>
+  <!-- EN: Replaces 40% of wood costs with birdskin, representing the featherwork used to lighten wooden weapons. Weapons with no wood in their costs are unaffected. -->
+  <UWU_Lightweight.description>Заменяет 40% стоимости древесины на кожу птицы, что отражает использование перьев для облегчения деревянного оружия. Оружие, в стоимости которого нет древесины, не затрагивается.</UWU_Lightweight.description>
+
+  <!-- Both spellings are required: Odyssey's Lightweight.label is "облегченное"
+       (plain е) while UMW's is "облегчённое" (ё). Under exact-token matching these
+       are different strings, so shipping only one silently drops the other trait. -->
+  <!-- EN: lightweight, whisper -->
+  <UWU_Lightweight.labelKeywords>
+    <li>lightweight</li>
+    <li>whisper</li>
+    <li>облегченное</li>
+    <li>облегчённое</li>
+  </UWU_Lightweight.labelKeywords>
+
   <!-- EN: flarestriker value split -->
   <UWU_Flarestriker.label>разделение стоимости сигнальной ракетницы</UWU_Flarestriker.label>
   <!-- EN: Converts 70% of base material costs into bioferrite by market value, reflecting the exotic fuel source needed for flare launchers. -->
@@ -45,34 +149,190 @@
   <UWU_ChargeCategoryGated.label>энергетическое оружие (с ограничением по категории)</UWU_ChargeCategoryGated.label>
   <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
   <UWU_ChargeCategoryGated.description>Конвертирует все затраты в продвинутые компоненты по рыночной стоимости для свойств оружия энергетического типа, отражая потребность в космических технологиях для модификаций импульсного и лучевого оружия.</UWU_ChargeCategoryGated.description>
+
+  <!-- зарядовый = ChargeCapacitor ("зарядовый конденсатор"), заряд = PulseCharger
+       ("импульсный заряд"), частоты = FrequencyAmplifier ("усилитель частоты").
+       заряд is a generic Russian word for a charge or a round; it is acceptable here
+       only because this rule is gated to the Pistol / PulseCharge / BeamWeapon
+       categories. If that gate is ever removed, re-review this token. -->
+  <!-- EN: charge, charger, frequency, tesla -->
+  <UWU_ChargeCategoryGated.labelKeywords>
+    <li>charge</li>
+    <li>charger</li>
+    <li>frequency</li>
+    <li>tesla</li>
+    <li>зарядовый</li>
+    <li>заряд</li>
+    <li>частоты</li>
+  </UWU_ChargeCategoryGated.labelKeywords>
+
   <!-- EN: charge weapons (unconditional) -->
   <UWU_ChargeUnconditional.label>энергетическое оружие (без ограничений)</UWU_ChargeUnconditional.label>
   <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
   <UWU_ChargeUnconditional.description>Конвертирует все затраты в продвинутые компоненты по рыночной стоимости для свойств, связанных с передовыми космическими технологиями, независимо от категории оружия.</UWU_ChargeUnconditional.description>
+
+  <!-- конденсатор = ChargeCapacitor, мономолекулярное = UMW_Monomolecular,
+       плазменный = UMW_PlasmaCored ("плазменный сердечник"). These mirror the
+       English capacitor / monomolecular / plasma entries, which are already
+       unconditional. crypto/cryo/ultracoils/thump/rail have no Russian ground. -->
+  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma -->
+  <UWU_ChargeUnconditional.labelKeywords>
+    <li>crypto</li>
+    <li>cryo</li>
+    <li>capacitor</li>
+    <li>ultracoils</li>
+    <li>thump</li>
+    <li>rail</li>
+    <li>mono</li>
+    <li>monomolecular</li>
+    <li>plasma</li>
+    <li>конденсатор</li>
+    <li>мономолекулярное</li>
+    <li>плазменный</li>
+  </UWU_ChargeUnconditional.labelKeywords>
+
   <!-- EN: akimbo cost multiplier -->
   <UWU_Akimbo.label>множитель стоимости для двуручного боя</UWU_Akimbo.label>
   <!-- EN: Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost. -->
   <UWU_Akimbo.description>Удваивает все затраты, чтобы отразить, что двуручный бой добавляет второе отображаемое оружие и удваивает скорострельность. Это компенсирует базовую долю стоимости в 50%, доводя общую стоимость до полной стоимости рецепта.</UWU_Akimbo.description>
+
+  <!-- No labelKeywords injection: there is no Russian ground for "oversized". Vanilla
+       OversizedRounds.label is "тяжелые патроны" ("heavy rounds"), a different
+       concept, so reusing its adjective would ground this rule in the wrong trait.
+       The English list applies by default and still matches by defName token. -->
+  <!-- EN: oversized cost multiplier -->
+  <UWU_Oversized.label>множитель стоимости для увеличенного оружия</UWU_Oversized.label>
+  <!-- EN: Increases all costs by half. An oversized weapon is simply more weapon, and modifying it takes more material. -->
+  <UWU_Oversized.description>Увеличивает все затраты в полтора раза. Увеличенное оружие — это просто больше оружия, и на его модификацию уходит больше материалов.</UWU_Oversized.description>
+
   <!-- EN: grip component removal -->
   <UWU_Grip.label>удаление компонентов для рукоятки</UWU_Grip.label>
   <!-- EN: Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts. -->
   <UWU_Grip.description>Убирает из стоимости компоненты индустриальной и космической эпох. Модификации рукоятки — это простые механические изменения, не требующие сложных деталей.</UWU_Grip.description>
+
+  <!-- рукоятка = CustomGrip ("индивидуальная рукоятка"). It is a common word and
+       unique in the current trait corpus, but a future decorative-handle trait would
+       false-positive here. -->
+  <!-- EN: grip -->
+  <UWU_Grip.labelKeywords>
+    <li>grip</li>
+    <li>рукоятка</li>
+  </UWU_Grip.labelKeywords>
+
   <!-- EN: comfort material conversion -->
   <UWU_Comfort.label>конвертация материалов для комфорта</UWU_Comfort.label>
   <!-- EN: Converts half of all cost materials to thrumbofur by count, reflecting the luxurious padding and wrapping used for comfort modifications. -->
   <UWU_Comfort.description>Конвертирует половину всех материалов в шкуру трумбо по количеству, отражая роскошные накладки и обмотки, используемые для модификаций комфорта.</UWU_Comfort.description>
+
+  <!-- комфорт is the vanilla Comfort StatDef label; no shipped weapon trait uses it
+       as a label, so this is weakly grounded, and комфортное is the neuter-singular
+       projection for a trait that renders it as an adjective. -->
+  <!-- EN: comfort -->
+  <UWU_Comfort.labelKeywords>
+    <li>comfort</li>
+    <li>комфорт</li>
+    <li>комфортное</li>
+  </UWU_Comfort.labelKeywords>
+
   <!-- EN: ornamental conversion -->
   <UWU_Ornamental.label>конвертация для декоративных украшений</UWU_Ornamental.label>
   <!-- EN: Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering. -->
   <UWU_Ornamental.description>Убирает компоненты, затем конвертирует половину оставшихся затрат в серебро по количеству. Декоративные работы — это ремесленное мастерство, а не техническое конструирование.</UWU_Ornamental.description>
+
+  <!-- декоративное = Odyssey Ornamental.label (UMW reuses it), эмалированное =
+       UMW_Enameled. engraved/filigree/gilded/etched have no Russian ground. -->
+  <!-- EN: ornamental, engraved, filigree, gilded, enameled, etched -->
+  <UWU_Ornamental.labelKeywords>
+    <li>ornamental</li>
+    <li>engraved</li>
+    <li>filigree</li>
+    <li>gilded</li>
+    <li>enameled</li>
+    <li>etched</li>
+    <li>декоративное</li>
+    <li>эмалированное</li>
+  </UWU_Ornamental.labelKeywords>
+
+  <!-- EN: metal fittings swap -->
+  <UWU_MetalFittings.label>замена на металлические детали</UWU_MetalFittings.label>
+  <!-- EN: Swaps 40% of the weapon's material for the metal its fittings are made of: steel for weapons of industrial tech level and below, plasteel for spacer and above. Serrations, spikes, studs and weights are metal parts fixed onto the base weapon. -->
+  <UWU_MetalFittings.description>Заменяет 40% материала оружия на металл, из которого сделаны его детали: сталь для оружия индустриального технологического уровня и ниже, пласталь для космического и выше. Зубцы, шипы, заклёпки и противовесы — это металлические детали, закреплённые на самом оружии.</UWU_MetalFittings.description>
+
+  <!-- All from UMW's Russian trait labels: зубчатое = Serrated, бритвенная/заточка =
+       Razored ("бритвенная заточка"), зазубренное = Barbed, шипованное = Studded,
+       шип = ArmorSpike ("бронебойный шип"), ребристое = Flanged, крестовиной =
+       Quilloned ("с крестовиной"), утяжелённое = HeadWeighted, противовесом =
+       Counterweighted ("с противовесом"), игольчатое = NeedlePoint ("игольчатое
+       остриё"). The two "с ..." labels are carried in the observed instrumental
+       form, with the nominative alongside for a trait that uses the bare noun; ё
+       tokens ship with their е-spelling too.
+       Excluded: бронебойный, which vanilla also uses for "бронебойные патроны", an
+       unrelated ballistic trait; and остриё, shared with the opiated trait (see
+       UWU_ToxSwap above). honed/keen/toothed/jagged appear only as traitAdjectives
+       in Russian, never as a label, so they stay English-only. -->
+  <!-- EN: serrated, razored, honed, keen, barbed, studded, spike, spiked, flanged, quilloned, toothed, jagged, weighted, counterweight, counterweighted, needle -->
+  <UWU_MetalFittings.labelKeywords>
+    <li>serrated</li>
+    <li>razored</li>
+    <li>honed</li>
+    <li>keen</li>
+    <li>barbed</li>
+    <li>studded</li>
+    <li>spike</li>
+    <li>spiked</li>
+    <li>flanged</li>
+    <li>quilloned</li>
+    <li>toothed</li>
+    <li>jagged</li>
+    <li>weighted</li>
+    <li>counterweight</li>
+    <li>counterweighted</li>
+    <li>needle</li>
+    <li>зубчатое</li>
+    <li>бритвенная</li>
+    <li>заточка</li>
+    <li>зазубренное</li>
+    <li>шипованное</li>
+    <li>шип</li>
+    <li>ребристое</li>
+    <li>крестовиной</li>
+    <li>крестовина</li>
+    <li>утяжелённое</li>
+    <li>утяжеленное</li>
+    <li>противовесом</li>
+    <li>противовес</li>
+    <li>игольчатое</li>
+  </UWU_MetalFittings.labelKeywords>
+
+  <!-- EN: blood hemogen surcharge -->
+  <UWU_Blood.label>надбавка гемогеном за кровавые свойства</UWU_Blood.label>
+  <!-- EN: Adds 10 hemogen packs on top of the computed cost for blood-themed traits. The hemogen is consumed for good: removing the trait refunds none of it. Without Biotech this rule does nothing. -->
+  <UWU_Blood.description>Добавляет 10 гемоген-пакетов к рассчитанной стоимости для свойств с кровавой тематикой. Гемоген расходуется безвозвратно: при удалении свойства он не возвращается. Без Biotech это правило ничего не делает.</UWU_Blood.description>
+
+  <!-- окровавленное = UMW_BloodStained. hemovoric has no Russian ground. -->
+  <!-- EN: blood, hemovoric -->
+  <UWU_Blood.labelKeywords>
+    <li>blood</li>
+    <li>hemovoric</li>
+    <li>окровавленное</li>
+  </UWU_Blood.labelKeywords>
+
   <!-- EN: inlay component removal -->
   <UWU_Inlay.label>удаление компонентов для инкрустации</UWU_Inlay.label>
   <!-- EN: Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts. -->
   <UWU_Inlay.description>Убирает из стоимости компоненты индустриальной и космической эпох. Инкрустация — это чисто косметическая модификация, требующая только сырья, а не сложных деталей.</UWU_Inlay.description>
+
+  <!-- инкрустация = GoldInlay/JadeInlay ("золотая/нефритовая инкрустация"). -->
+  <!-- EN: inlay -->
+  <UWU_Inlay.labelKeywords>
+    <li>inlay</li>
+    <li>инкрустация</li>
+  </UWU_Inlay.labelKeywords>
+
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>замена материала (резервная)</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>Обнаруживает названия материалов в названии свойства (например, «золото» в «Золотая инкрустация») и заменяет затраты ресурсов на этот материал. Служит универсальным решением для свойств без специального тематического правила.</UWU_MaterialOverride.description>
+  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>Обнаруживает названия материалов в названии свойства (например, «золото» в «Золотая инкрустация») и заменяет затраты ресурсов на равную по рыночной стоимости долю этого материала. Служит универсальным решением для свойств без специального тематического правила.</UWU_MaterialOverride.description>
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>сокращение типов материалов</UWU_CostPrune.label>
   <!-- EN: Limits the cost to at most 3 material types to prevent UI overflow. When there are more than 3, the cheapest materials by unit price are trimmed first. -->

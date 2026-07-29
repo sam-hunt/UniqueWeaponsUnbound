@@ -62,6 +62,43 @@ the source of truth; every other language derives from it.
   injected — injected values are lowercase def labels; phrase around them
   accordingly.
 
+## `labelKeywords` (TraitCostRuleDef) — keep English, append localized
+
+`TraitCostRuleDef.labelKeywords` is not display text: the cost pipeline matches
+these tokens against weapon-trait labels (and defName tokens) to pick thematic
+cost rules. It is `[TranslationCanChangeCount]`, so a language may replace the
+whole list with a different entry count. Convention, mandatory for every
+language pass:
+
+- **Keep every English keyword, append localized ones.** English entries keep
+  matching defName tokens — the language-invariant backbone — and localized
+  entries catch localized trait labels. Never drop an English entry.
+- Matching is exact-token: lowercase, split on spaces and hyphens only, no
+  stemming. Carry the exact inflected surface forms that appear in trait-label
+  position (gender/number variants where the language declines them). A label
+  with no spaces or hyphens (typical zh/ja) is a single token that only a
+  whole-label keyword can match — most zh/ja matching rides on defName tokens
+  instead, so only add zh/ja keywords that can genuinely match (Latin tokens
+  vanilla space-delimits, or short canonical whole-label forms). Korean labels
+  split on spaces, so Korean word tokens work normally.
+- Ground localized keywords in official vanilla terminology (the tars), same
+  as any other term; UMW's shipped trait-label translations are a useful
+  secondary corpus. Flag ungroundable inventions for native review.
+- Inject as whole-list replacements
+  (`<UWU_ToxSwap.labelKeywords><li>…</li>…</UWU_ToxSwap.labelKeywords>`) in
+  `DefInjected/UniqueWeaponsUnbound.TraitCostRuleDef/`, with the usual
+  `<!-- EN: … -->` comment carrying the English list.
+- **Never inject `labelKeywords` for a `requireAllKeywords` rule**
+  (`UWU_HeavyScrap`): `TraitCostRuleWorker.Matches` requires *every* entry in
+  the list, so a whole-list replacement that appends localized tokens becomes
+  unsatisfiable — no label carries the English words *and* their translations
+  at once — and silently kills the English/defName match too. Label and
+  description entries for such rules are unaffected and fine.
+- Watch cross-language homographs both ways: a *new English* keyword can be a
+  common word in your language (fr `arc` = bow) and a localized keyword can
+  collide with unrelated English/defName tokens. Flag risky tokens rather than
+  silently shipping them.
+
 ## Terminology grounding (do not skip)
 
 Every game term must match the official localization, not a plausible

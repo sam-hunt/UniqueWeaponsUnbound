@@ -25,30 +25,103 @@
 
   <!-- ===== Thematic rules (keyword-matched) ===== -->
 
+  <!-- labelKeywords, whole-list injections: every English keyword is kept
+       verbatim (those are what match the language-invariant defName tokens) and
+       Korean tokens are appended. Korean labels DO use spaces, so unlike
+       zh-Hans and Japanese these are real word tokens that match inside a
+       longer label, and every one below is a word from a trait label shipped by
+       Unique Melee Weapons or vanilla Odyssey (plus 조명탄 from Anomaly's
+       DisruptorFlare and 아킴보, this mod's own transliteration).
+       Deliberately omitted: 펄스, because Korean uses it for BOTH EMP
+       (EMPRounds / EMPPulser / EMPLauncher) and pulse-charge (ChargeCapacitor /
+       PulseCharger) - adding it anywhere would cross-fire the EMP and charge
+       rules against each other; 도포 (coating), 끝 (tip), 박음 (embedding),
+       날개 (wing), 관통, 선단 and 진동, all generic stems that would fire on
+       unrelated traits; 편안 for UWU_Comfort (extrapolated from the Comfort
+       StatDef, no confirmed trait wording); and 대구경 for UWU_Oversized
+       (vanilla's OversizedRounds is ammo framing, not an oversized weapon).
+       UWU_HeavyScrap gets no injection even though Korean COULD supply
+       "무거운 고철" as two tokens: it sets requireAllKeywords, so appending
+       anything would demand all entries at once and break the English
+       heavy+scrap pair. -->
+
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>독성 부품 교체</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value. -->
-  <UWU_ToxSwap.description>필요한 유기 독소를 반영해 부품을 생약(부품 개수의 3배)으로 교체합니다. 부품이 없으면 기본 재료의 70%를 시장 가치 기준으로 생약으로 변환합니다.</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>필요한 유기 독소를 반영해 부품을 생약(부품 개수의 3배)으로 교체합니다. 비용에 부품이 없는 무기는 대신 무기의 제작 복잡도에 비례한 생약을 추가합니다.</UWU_ToxSwap.description>
+  <!-- EN: tox, toxic, paralytic, acid-injector, venom, envenomed, poisoned, opiated, sedative -->
+  <UWU_ToxSwap.labelKeywords>
+    <li>tox</li>
+    <li>toxic</li>
+    <li>paralytic</li>
+    <li>acid-injector</li>
+    <li>venom</li>
+    <li>envenomed</li>
+    <li>poisoned</li>
+    <li>opiated</li>
+    <li>sedative</li>
+    <li>독</li>
+    <li>독성</li>
+    <li>아편</li>
+  </UWU_ToxSwap.labelKeywords>
 
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>소이 부품 교체</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value. -->
-  <UWU_IncendiarySwap.description>필요한 휘발성 연료를 반영해 부품을 화학연료(부품 개수의 10배)로 교체합니다. 부품이 없으면 기본 재료의 70%를 시장 가치 기준으로 화학연료로 변환합니다.</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>필요한 휘발성 연료를 반영해 부품을 화학연료(부품 개수의 10배)로 교체합니다. 여기서는 고급 부품도 부품으로 취급합니다. 비용에 부품이 없는 무기는 대신 무기의 제작 복잡도에 비례한 화학연료를 추가합니다.</UWU_IncendiarySwap.description>
+  <!-- EN: incendiary, blast, blasts, pitch-soaked, detonation, chemburster, flaming, searing, burning, ember -->
+  <UWU_IncendiarySwap.labelKeywords>
+    <li>incendiary</li>
+    <li>blast</li>
+    <li>blasts</li>
+    <li>pitch-soaked</li>
+    <li>detonation</li>
+    <li>chemburster</li>
+    <li>flaming</li>
+    <li>searing</li>
+    <li>burning</li>
+    <li>ember</li>
+    <li>소이탄</li>
+  </UWU_IncendiarySwap.labelKeywords>
 
   <!-- EN: EMP value split -->
   <UWU_EmpSplit.label>EMP 가치 분할</UWU_EmpSplit.label>
   <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
   <UWU_EmpSplit.description>고급 부품을 제거한 뒤, 기본 재료 비용의 70%를 시장 가치 기준으로 부품으로 변환합니다. EMP 개조에 필요한 전자 부품을 나타냅니다.</UWU_EmpSplit.description>
+  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <UWU_EmpSplit.labelKeywords>
+    <li>emp</li>
+    <li>flux</li>
+    <li>voltaic</li>
+    <li>sonic</li>
+    <li>zeus</li>
+    <li>shock</li>
+    <li>arc</li>
+    <li>thunder</li>
+    <li>제우스</li>
+  </UWU_EmpSplit.labelKeywords>
 
   <!-- EN: lightweight swap -->
   <UWU_Lightweight.label>경량 교체</UWU_Lightweight.label>
-  <!-- EN: Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows. -->
-  <UWU_Lightweight.description>목재 비용의 40%를 새 가죽으로 교체합니다. 화살에 쓰이는 깃을 나타냅니다.</UWU_Lightweight.description>
+  <!-- EN: Replaces 40% of wood costs with birdskin, representing the featherwork used to lighten wooden weapons. Weapons with no wood in their costs are unaffected. -->
+  <UWU_Lightweight.description>목재 비용의 40%를 새 가죽으로 교체합니다. 목재 무기를 가볍게 만드는 데 쓰이는 깃털 세공을 나타냅니다. 비용에 목재가 없는 무기는 영향을 받지 않습니다.</UWU_Lightweight.description>
+  <!-- EN: lightweight, whisper -->
+  <UWU_Lightweight.labelKeywords>
+    <li>lightweight</li>
+    <li>whisper</li>
+    <li>경량</li>
+  </UWU_Lightweight.labelKeywords>
 
   <!-- EN: flarestriker value split -->
   <UWU_Flarestriker.label>플레어스트라이커 가치 분할</UWU_Flarestriker.label>
   <!-- EN: Converts 70% of base material costs into bioferrite by market value, reflecting the exotic fuel source needed for flare launchers. -->
   <UWU_Flarestriker.description>기본 재료 비용의 70%를 시장 가치 기준으로 생체강으로 변환합니다. 조명탄 발사기에 필요한 특이한 연료원을 반영합니다.</UWU_Flarestriker.description>
+  <!-- EN: flare, flarestriker -->
+  <UWU_Flarestriker.labelKeywords>
+    <li>flare</li>
+    <li>flarestriker</li>
+    <li>조명탄</li>
+  </UWU_Flarestriker.labelKeywords>
 
   <!-- EN: heavy scrap flat cost -->
   <UWU_HeavyScrap.label>고철 고정 비용</UWU_HeavyScrap.label>
@@ -59,21 +132,59 @@
   <UWU_ChargeCategoryGated.label>충전 무기(분류 제한)</UWU_ChargeCategoryGated.label>
   <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
   <UWU_ChargeCategoryGated.description>충전 계열 무기 특성에 대해 모든 비용을 시장 가치 기준으로 고급 부품으로 변환합니다. 펄스와 광선 개조에 필요한 우주 시대 기술을 나타냅니다.</UWU_ChargeCategoryGated.description>
+  <!-- EN: charge, charger, frequency, tesla -->
+  <UWU_ChargeCategoryGated.labelKeywords>
+    <li>charge</li>
+    <li>charger</li>
+    <li>frequency</li>
+    <li>tesla</li>
+    <li>충전기</li>
+    <li>증폭기</li>
+  </UWU_ChargeCategoryGated.labelKeywords>
 
   <!-- EN: charge weapons (unconditional) -->
   <UWU_ChargeUnconditional.label>충전 무기(무조건)</UWU_ChargeUnconditional.label>
   <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
   <UWU_ChargeUnconditional.description>고도의 우주 시대 기술이 관련된 특성에 대해 무기 분류와 상관없이 모든 비용을 시장 가치 기준으로 고급 부품으로 변환합니다.</UWU_ChargeUnconditional.description>
+  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma -->
+  <UWU_ChargeUnconditional.labelKeywords>
+    <li>crypto</li>
+    <li>cryo</li>
+    <li>capacitor</li>
+    <li>ultracoils</li>
+    <li>thump</li>
+    <li>rail</li>
+    <li>mono</li>
+    <li>monomolecular</li>
+    <li>plasma</li>
+    <li>플라즈마</li>
+    <li>단분자</li>
+  </UWU_ChargeUnconditional.labelKeywords>
 
   <!-- EN: akimbo cost multiplier -->
   <UWU_Akimbo.label>아킴보 비용 배수</UWU_Akimbo.label>
   <!-- EN: Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost. -->
   <UWU_Akimbo.description>아킴보가 두 번째 무기를 추가로 표시하고 발사 속도를 두 배로 만드는 점을 반영해 모든 비용을 두 배로 늘립니다. 이로써 기본 50% 비용 비율이 상쇄되어 총액이 레시피 전액이 됩니다.</UWU_Akimbo.description>
+  <!-- EN: akimbo -->
+  <UWU_Akimbo.labelKeywords>
+    <li>akimbo</li>
+    <li>아킴보</li>
+  </UWU_Akimbo.labelKeywords>
+
+  <!-- EN: oversized cost multiplier -->
+  <UWU_Oversized.label>초대형 비용 배수</UWU_Oversized.label>
+  <!-- EN: Increases all costs by half. An oversized weapon is simply more weapon, and modifying it takes more material. -->
+  <UWU_Oversized.description>모든 비용을 1.5배로 늘립니다. 초대형 무기는 그저 무기가 더 클 뿐이므로, 개조하는 데 재료가 더 많이 듭니다.</UWU_Oversized.description>
 
   <!-- EN: grip component removal -->
   <UWU_Grip.label>손잡이 부품 제거</UWU_Grip.label>
   <!-- EN: Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts. -->
   <UWU_Grip.description>비용에서 부품과 고급 부품을 제거합니다. 손잡이 개조는 복잡한 부품이 필요하지 않은 단순한 기계적 조정입니다.</UWU_Grip.description>
+  <!-- EN: grip -->
+  <UWU_Grip.labelKeywords>
+    <li>grip</li>
+    <li>손잡이</li>
+  </UWU_Grip.labelKeywords>
 
   <!-- EN: comfort material conversion -->
   <UWU_Comfort.label>편안함 재료 변환</UWU_Comfort.label>
@@ -84,6 +195,63 @@
   <UWU_Ornamental.label>장식용 변환</UWU_Ornamental.label>
   <!-- EN: Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering. -->
   <UWU_Ornamental.description>부품을 제거한 뒤, 남은 비용의 절반을 개수 기준으로 은으로 변환합니다. 장식 작업은 기술 공학이 아니라 장식을 위한 세공입니다.</UWU_Ornamental.description>
+  <!-- EN: ornamental, engraved, filigree, gilded, enameled, etched -->
+  <UWU_Ornamental.labelKeywords>
+    <li>ornamental</li>
+    <li>engraved</li>
+    <li>filigree</li>
+    <li>gilded</li>
+    <li>enameled</li>
+    <li>etched</li>
+    <li>장식용</li>
+    <li>법랑</li>
+  </UWU_Ornamental.labelKeywords>
+
+  <!-- EN: metal fittings swap -->
+  <UWU_MetalFittings.label>금속 부속물 교체</UWU_MetalFittings.label>
+  <!-- EN: Swaps 40% of the weapon's material for the metal its fittings are made of: steel for weapons of industrial tech level and below, plasteel for spacer and above. Serrations, spikes, studs and weights are metal parts fixed onto the base weapon. -->
+  <UWU_MetalFittings.description>무기 소재의 40%를 그 금속 부속물에 쓰이는 금속으로 교체합니다. 산업 시대 이하 기술 수준의 무기는 강철, 우주 시대 이상은 플라스틸을 사용합니다. 톱니, 스파이크, 징, 균형추는 기본 무기에 부착하는 금속 부속물입니다.</UWU_MetalFittings.description>
+  <!-- EN: serrated, razored, honed, keen, barbed, studded, spike, spiked, flanged, quilloned, toothed, jagged, weighted, counterweight, counterweighted, needle -->
+  <UWU_MetalFittings.labelKeywords>
+    <li>serrated</li>
+    <li>razored</li>
+    <li>honed</li>
+    <li>keen</li>
+    <li>barbed</li>
+    <li>studded</li>
+    <li>spike</li>
+    <li>spiked</li>
+    <li>flanged</li>
+    <li>quilloned</li>
+    <li>toothed</li>
+    <li>jagged</li>
+    <li>weighted</li>
+    <li>counterweight</li>
+    <li>counterweighted</li>
+    <li>needle</li>
+    <li>스파이크</li>
+    <li>미늘</li>
+    <li>균형추</li>
+    <li>돌기</li>
+    <li>편중</li>
+    <li>바늘</li>
+    <li>날받이</li>
+    <li>면도날</li>
+    <li>톱니</li>
+    <li>징</li>
+  </UWU_MetalFittings.labelKeywords>
+
+  <!-- EN: blood hemogen surcharge -->
+  <UWU_Blood.label>혈액팩 추가 비용</UWU_Blood.label>
+  <!-- EN: Adds 10 hemogen packs on top of the computed cost for blood-themed traits. The hemogen is consumed for good: removing the trait refunds none of it. Without Biotech this rule does nothing. -->
+  <UWU_Blood.description>혈액을 주제로 한 특성에 대해 산출된 비용에 더해 혈액팩 10개를 추가합니다. 이 혈액정수는 완전히 소모되어, 특성을 제거해도 전혀 반환되지 않습니다. Biotech가 없으면 이 규칙은 아무 일도 하지 않습니다.</UWU_Blood.description>
+  <!-- EN: blood, hemovoric -->
+  <UWU_Blood.labelKeywords>
+    <li>blood</li>
+    <li>hemovoric</li>
+    <li>혈흔</li>
+    <li>흡혈</li>
+  </UWU_Blood.labelKeywords>
 
   <!-- ===== Late-running rules ===== -->
 
@@ -91,13 +259,18 @@
   <UWU_Inlay.label>상감 부품 제거</UWU_Inlay.label>
   <!-- EN: Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts. -->
   <UWU_Inlay.description>비용에서 부품과 고급 부품을 제거합니다. 상감은 복잡한 부품 없이 원자재만 필요한 순수하게 겉모습을 바꾸는 개조입니다.</UWU_Inlay.description>
+  <!-- EN: inlay -->
+  <UWU_Inlay.labelKeywords>
+    <li>inlay</li>
+    <li>상감</li>
+  </UWU_Inlay.labelKeywords>
 
   <!-- ===== Fallback (always runs last) ===== -->
 
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>재료 대체 예비 규칙</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>특성 이름에 포함된 재료 이름(예: "Gold Inlay"의 "gold")을 감지해 원자재 비용을 그 재료로 대체합니다. 전용 주제 규칙이 없는 특성을 모두 받아내는 역할을 합니다.</UWU_MaterialOverride.description>
+  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>특성 이름에 포함된 재료 이름(예: "Gold Inlay"의 "gold")을 감지해 원자재 비용을 같은 시장 가치만큼의 그 재료로 대체합니다. 전용 주제 규칙이 없는 특성을 모두 받아내는 역할을 합니다.</UWU_MaterialOverride.description>
 
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>비용 재료 정리</UWU_CostPrune.label>

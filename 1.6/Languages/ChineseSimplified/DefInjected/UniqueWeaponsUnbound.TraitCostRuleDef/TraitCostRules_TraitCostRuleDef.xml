@@ -25,30 +25,101 @@
 
   <!-- ===== Thematic rules (keyword-matched) ===== -->
 
+  <!-- labelKeywords, whole-list injections: every English keyword is kept
+       verbatim (those are what match the language-invariant defName tokens) and
+       confirmed zh-Hans trait labels are appended. A zh-Hans label carries no
+       ASCII space or hyphen, so it is a single token and a keyword can only
+       match a trait whose ENTIRE label equals it; every token below is an exact
+       label shipped by Unique Melee Weapons or vanilla Odyssey.
+       Deliberately omitted: 握把 and 镶嵌 (bare roots that match nothing -
+       CustomGrip's label is 定制握把 and the inlays are 黄金镶嵌 / 翡翠镶嵌),
+       宙斯 / 单分子剑 / 等离子剑 (weapon-name roots, no trait uses them alone),
+       舒适 (extrapolated from the Comfort StatDef, no confirmed trait wording),
+       and 重型弹 for UWU_Oversized (vanilla's OversizedRounds is ammo framing,
+       not an oversized weapon). 头重 and 配重 ARE shipped despite being short,
+       generic engineering words, per the scouting judgment that a misapplied
+       stuff swap is low-stakes. UWU_HeavyScrap gets no injection at all: it
+       sets requireAllKeywords, so appending anything would demand all entries
+       at once and break the English heavy+scrap pair, and zh-Hans could never
+       supply two space-delimited tokens anyway. -->
+
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>剧毒零部件替换</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value. -->
-  <UWU_ToxSwap.description>将零部件替换为草药（数量为零部件的3倍），以体现所需的有机毒素。若成本中没有零部件，则按市场价值将70%的基础材料转换为草药。</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>将零部件替换为草药（数量为零部件的3倍），以体现所需的有机毒素。若武器的成本中不含零部件，则改为按武器的制作复杂度追加相应数量的草药。</UWU_ToxSwap.description>
+  <!-- EN: tox, toxic, paralytic, acid-injector, venom, envenomed, poisoned, opiated, sedative -->
+  <UWU_ToxSwap.labelKeywords>
+    <li>tox</li>
+    <li>toxic</li>
+    <li>paralytic</li>
+    <li>acid-injector</li>
+    <li>venom</li>
+    <li>envenomed</li>
+    <li>poisoned</li>
+    <li>opiated</li>
+    <li>sedative</li>
+    <li>淬毒</li>
+    <li>阿片涂层</li>
+    <li>剧毒弹</li>
+  </UWU_ToxSwap.labelKeywords>
 
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>燃烧零部件替换</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value. -->
-  <UWU_IncendiarySwap.description>将零部件替换为化合燃料（数量为零部件的10倍），以体现所需的易挥发燃料。若成本中没有零部件，则按市场价值将70%的基础材料转换为化合燃料。</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>将零部件替换为化合燃料（数量为零部件的10倍），以体现所需的易挥发燃料。此处高级零部件同样算作零部件。若武器的成本中不含零部件，则改为按武器的制作复杂度追加相应数量的化合燃料。</UWU_IncendiarySwap.description>
+  <!-- EN: incendiary, blast, blasts, pitch-soaked, detonation, chemburster, flaming, searing, burning, ember -->
+  <UWU_IncendiarySwap.labelKeywords>
+    <li>incendiary</li>
+    <li>blast</li>
+    <li>blasts</li>
+    <li>pitch-soaked</li>
+    <li>detonation</li>
+    <li>chemburster</li>
+    <li>flaming</li>
+    <li>searing</li>
+    <li>burning</li>
+    <li>ember</li>
+    <li>燃烧弹</li>
+  </UWU_IncendiarySwap.labelKeywords>
 
   <!-- EN: EMP value split -->
   <UWU_EmpSplit.label>EMP价值拆分</UWU_EmpSplit.label>
   <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
   <UWU_EmpSplit.description>先移除高级零部件，再按市场价值将70%的基础材料成本转换为零部件，代表EMP改造所需的电子元件。</UWU_EmpSplit.description>
+  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <UWU_EmpSplit.labelKeywords>
+    <li>emp</li>
+    <li>flux</li>
+    <li>voltaic</li>
+    <li>sonic</li>
+    <li>zeus</li>
+    <li>shock</li>
+    <li>arc</li>
+    <li>thunder</li>
+    <li>宙斯锤头</li>
+  </UWU_EmpSplit.labelKeywords>
 
   <!-- EN: lightweight swap -->
   <UWU_Lightweight.label>轻便替换</UWU_Lightweight.label>
-  <!-- EN: Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows. -->
-  <UWU_Lightweight.description>将40%的原木成本替换为鸟皮，代表箭羽所用的材料。</UWU_Lightweight.description>
+  <!-- EN: Replaces 40% of wood costs with birdskin, representing the featherwork used to lighten wooden weapons. Weapons with no wood in their costs are unaffected. -->
+  <UWU_Lightweight.description>将40%的原木成本替换为鸟皮，代表为木制武器减重所用的羽毛工艺。成本中不含原木的武器不受影响。</UWU_Lightweight.description>
+  <!-- EN: lightweight, whisper -->
+  <UWU_Lightweight.labelKeywords>
+    <li>lightweight</li>
+    <li>whisper</li>
+    <li>轻便</li>
+  </UWU_Lightweight.labelKeywords>
 
   <!-- EN: flarestriker value split -->
   <UWU_Flarestriker.label>照明弹价值拆分</UWU_Flarestriker.label>
   <!-- EN: Converts 70% of base material costs into bioferrite by market value, reflecting the exotic fuel source needed for flare launchers. -->
   <UWU_Flarestriker.description>按市场价值将70%的基础材料成本转换为活铁，以体现照明弹发射器所需的特殊燃料来源。</UWU_Flarestriker.description>
+  <!-- EN: flare, flarestriker -->
+  <UWU_Flarestriker.labelKeywords>
+    <li>flare</li>
+    <li>flarestriker</li>
+    <li>照明弹</li>
+  </UWU_Flarestriker.labelKeywords>
 
   <!-- EN: heavy scrap flat cost -->
   <UWU_HeavyScrap.label>重型废料固定成本</UWU_HeavyScrap.label>
@@ -64,11 +135,30 @@
   <UWU_ChargeUnconditional.label>电荷武器（无条件）</UWU_ChargeUnconditional.label>
   <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
   <UWU_ChargeUnconditional.description>对于涉及高等太空时代技术的特性，无论武器属于哪个类别，都按市场价值将全部成本转换为高级零部件。</UWU_ChargeUnconditional.description>
+  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma -->
+  <UWU_ChargeUnconditional.labelKeywords>
+    <li>crypto</li>
+    <li>cryo</li>
+    <li>capacitor</li>
+    <li>ultracoils</li>
+    <li>thump</li>
+    <li>rail</li>
+    <li>mono</li>
+    <li>monomolecular</li>
+    <li>plasma</li>
+    <li>单分子刃</li>
+    <li>等离子内芯</li>
+  </UWU_ChargeUnconditional.labelKeywords>
 
   <!-- EN: akimbo cost multiplier -->
   <UWU_Akimbo.label>双持成本倍率</UWU_Akimbo.label>
   <!-- EN: Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost. -->
   <UWU_Akimbo.description>将全部成本翻倍，以体现双持会额外绘制第二把武器并使射速翻倍。这会抵消50%的基础成本比例，使总额达到完整的配方成本。</UWU_Akimbo.description>
+
+  <!-- EN: oversized cost multiplier -->
+  <UWU_Oversized.label>超大型成本倍率</UWU_Oversized.label>
+  <!-- EN: Increases all costs by half. An oversized weapon is simply more weapon, and modifying it takes more material. -->
+  <UWU_Oversized.description>将全部成本提高一半。超大型武器无非是分量更足的武器，改造它自然需要更多材料。</UWU_Oversized.description>
 
   <!-- EN: grip component removal -->
   <UWU_Grip.label>握把零部件移除</UWU_Grip.label>
@@ -84,6 +174,62 @@
   <UWU_Ornamental.label>华丽转换</UWU_Ornamental.label>
   <!-- EN: Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering. -->
   <UWU_Ornamental.description>先移除零部件，再按数量将剩余成本的一半转换为白银。华丽的工艺属于装饰性的手艺，而非技术性的工程。</UWU_Ornamental.description>
+  <!-- EN: ornamental, engraved, filigree, gilded, enameled, etched -->
+  <UWU_Ornamental.labelKeywords>
+    <li>ornamental</li>
+    <li>engraved</li>
+    <li>filigree</li>
+    <li>gilded</li>
+    <li>enameled</li>
+    <li>etched</li>
+    <li>华丽</li>
+    <li>珐琅釉</li>
+  </UWU_Ornamental.labelKeywords>
+
+  <!-- EN: metal fittings swap -->
+  <UWU_MetalFittings.label>金属部件替换</UWU_MetalFittings.label>
+  <!-- EN: Swaps 40% of the weapon's material for the metal its fittings are made of: steel for weapons of industrial tech level and below, plasteel for spacer and above. Serrations, spikes, studs and weights are metal parts fixed onto the base weapon. -->
+  <UWU_MetalFittings.description>将武器材料的40%替换为其金属部件所用的金属：工业时代及以下科技等级的武器使用钢铁，太空时代及以上使用玻璃钢。锯齿、尖刺、嵌钉与配重都是固定在基础武器上的金属部件。</UWU_MetalFittings.description>
+  <!-- EN: serrated, razored, honed, keen, barbed, studded, spike, spiked, flanged, quilloned, toothed, jagged, weighted, counterweight, counterweighted, needle -->
+  <UWU_MetalFittings.labelKeywords>
+    <li>serrated</li>
+    <li>razored</li>
+    <li>honed</li>
+    <li>keen</li>
+    <li>barbed</li>
+    <li>studded</li>
+    <li>spike</li>
+    <li>spiked</li>
+    <li>flanged</li>
+    <li>quilloned</li>
+    <li>toothed</li>
+    <li>jagged</li>
+    <li>weighted</li>
+    <li>counterweight</li>
+    <li>counterweighted</li>
+    <li>needle</li>
+    <li>穿甲尖刺</li>
+    <li>倒刺</li>
+    <li>配重</li>
+    <li>棱脊锤头</li>
+    <li>头重</li>
+    <li>针尖</li>
+    <li>十字剑格</li>
+    <li>剃刀刃</li>
+    <li>锯齿刃</li>
+    <li>嵌钉锤头</li>
+  </UWU_MetalFittings.labelKeywords>
+
+  <!-- EN: blood hemogen surcharge -->
+  <UWU_Blood.label>血原包附加成本</UWU_Blood.label>
+  <!-- EN: Adds 10 hemogen packs on top of the computed cost for blood-themed traits. The hemogen is consumed for good: removing the trait refunds none of it. Without Biotech this rule does nothing. -->
+  <UWU_Blood.description>为血液主题的特性，在计算出的成本之外追加10个血原包。血原质会被彻底消耗掉：移除该特性不会返还其中任何一个。没有Biotech时，此规则不起任何作用。</UWU_Blood.description>
+  <!-- EN: blood, hemovoric -->
+  <UWU_Blood.labelKeywords>
+    <li>blood</li>
+    <li>hemovoric</li>
+    <li>染血</li>
+  </UWU_Blood.labelKeywords>
 
   <!-- ===== Late-running rules ===== -->
 
@@ -91,13 +237,19 @@
   <UWU_Inlay.label>镶嵌零部件移除</UWU_Inlay.label>
   <!-- EN: Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts. -->
   <UWU_Inlay.description>从成本中移除零部件与高级零部件。镶嵌是纯外观的改造，只需要原材料，不需要复杂的元件。</UWU_Inlay.description>
+  <!-- EN: inlay -->
+  <UWU_Inlay.labelKeywords>
+    <li>inlay</li>
+    <li>黄金镶嵌</li>
+    <li>翡翠镶嵌</li>
+  </UWU_Inlay.labelKeywords>
 
   <!-- ===== Fallback (always runs last) ===== -->
 
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>材料覆盖备用规则</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>检测特性名称中的材料名（例如“黄金镶嵌”中的“黄金”），并将原材料成本替换为该材料。作为没有专属主题规则的特性的兜底手段。</UWU_MaterialOverride.description>
+  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>检测特性名称中的材料名（例如“黄金镶嵌”中的“黄金”），并按相同的市场价值将原材料成本替换为该材料。作为没有专属主题规则的特性的兜底手段。</UWU_MaterialOverride.description>
 
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>成本材料精简</UWU_CostPrune.label>

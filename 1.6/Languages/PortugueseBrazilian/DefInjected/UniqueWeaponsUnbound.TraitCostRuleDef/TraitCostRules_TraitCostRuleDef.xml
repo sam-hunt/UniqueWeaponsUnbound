@@ -10,9 +10,30 @@
        (not plastaço), Chemfuel = "combustível químico" (pt-BR is literal here,
        where es coined "biocombustible" and de "Sprit"), MedicineHerbal =
        "medicina natural" (not "ervas medicinais"), Leather_Bird = "pele de
-       pássaro", ChunkSlagSteel = "pedaço de escória de aço", EMP = "PEM".
-       "market value" is the StatDef sense, MarketValue.label = "valor de
-       mercado" - not the Keyed MarketValue = "Preço base". -->
+       pássaro", ChunkSlagSteel = "pedaço de escória de aço", EMP = "PEM",
+       HemogenPack = "pacote de hemogênio". "market value" is the StatDef sense,
+       MarketValue.label = "valor de mercado" - not the Keyed MarketValue =
+       "Preço base". -->
+
+  <!-- labelKeywords is not display text: the cost pipeline matches these tokens
+       against weapon-trait labels and defName tokens. Every injection below is a
+       whole-list replacement that keeps all English entries verbatim and in order
+       (defName tokens are always Latin, so the English list is the language-
+       invariant backbone) and appends the pt-BR surface forms that actually appear
+       in trait-label position. Matching is exact-token and lowercase, splitting
+       only on spaces and hyphens - no stemming - so both gender and number forms
+       are carried where the label inflects.
+
+       Sources for the pt-BR forms: vanilla Odyssey/Core WeaponTraitDef labels and
+       Unique Melee Weapons' pt-BR trait labels, which are noun phrases naming the
+       physical feature ("espigão perfurante", "gavilões") rather than bare
+       adjectives.
+
+       Rules with no safe pt-BR token keep the English list by default and get no
+       injection: UWU_Flarestriker, UWU_HeavyScrap, UWU_Akimbo, UWU_Oversized (see
+       the note there) and UWU_ChargeUnconditional, whose pt-BR labels are the
+       English cognates already in the shipped list ("capacitor de carga",
+       "monomolecular", "núcleo de plasma"). -->
 
   <!-- ===== Pipeline foundation (always run) ===== -->
 
@@ -40,13 +61,68 @@
 
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>troca de componentes para característica tóxica</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value. -->
-  <UWU_ToxSwap.description>Substitui os componentes por medicina natural (o triplo da quantidade de componentes), o que reflete as toxinas orgânicas necessárias. Se não houver componentes, converte 70% dos materiais base em medicina natural pelo valor de mercado.</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>Substitui os componentes por medicina natural (o triplo da quantidade de componentes), o que reflete as toxinas orgânicas necessárias. As armas cujos custos não têm componentes recebem, em vez disso, medicina natural na proporção da complexidade de fabricação da arma.</UWU_ToxSwap.description>
+
+  <!-- envenenada = UMW_Envenomed ("ponta envenenada"), opiácea = UMW_Opiated
+       ("ponta opiácea"), tóxica = ToxRounds and tóxicos = ToxPellets, paralisantes =
+       ParalyticArrows. The remaining gender/number forms are projections of those,
+       needed because matching is exact-token; -ante adjectives do not inflect for
+       gender, so paralisante/paralisantes is the whole pair.
+       Excluded: ponta, shared by "ponta de agulha" (metal fittings) and "ponta
+       opiácea", which would double-tag one of them; and munição/projéteis, generic
+       ammo tails carried by nearly every ranged trait. venom / acid-injector /
+       sedative have no pt-BR label ground ("veneno" appears only in a description). -->
+  <!-- EN: tox, toxic, paralytic, acid-injector, venom, envenomed, poisoned, opiated, sedative -->
+  <UWU_ToxSwap.labelKeywords>
+    <li>tox</li>
+    <li>toxic</li>
+    <li>paralytic</li>
+    <li>acid-injector</li>
+    <li>venom</li>
+    <li>envenomed</li>
+    <li>poisoned</li>
+    <li>opiated</li>
+    <li>sedative</li>
+    <li>envenenada</li>
+    <li>envenenado</li>
+    <li>opiácea</li>
+    <li>opiáceo</li>
+    <li>tóxica</li>
+    <li>tóxicas</li>
+    <li>tóxico</li>
+    <li>tóxicos</li>
+    <li>paralisante</li>
+    <li>paralisantes</li>
+  </UWU_ToxSwap.labelKeywords>
 
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>troca de componentes para característica incendiária</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value. -->
-  <UWU_IncendiarySwap.description>Substitui os componentes por combustível químico (dez vezes a quantidade de componentes), o que reflete o combustível volátil necessário. Se não houver componentes, converte 70% dos materiais base em combustível químico pelo valor de mercado.</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>Substitui os componentes por combustível químico (dez vezes a quantidade de componentes), o que reflete o combustível volátil necessário. Os componentes avançados contam como componentes aqui. As armas cujos custos não têm componentes recebem, em vez disso, combustível químico na proporção da complexidade de fabricação da arma.</UWU_IncendiarySwap.description>
+
+  <!-- incendiária = IncendiaryRounds, incendiários = IncendiaryPellets; the other
+       two forms are projections. The remaining English keywords (blast, detonation,
+       chemburster, pitch-soaked, flaming, searing, burning, ember) belong to traits
+       from other mods with no pt-BR translation to ground them, so they stay
+       English-only and keep matching by defName. -->
+  <!-- EN: incendiary, blast, blasts, pitch-soaked, detonation, chemburster, flaming, searing, burning, ember -->
+  <UWU_IncendiarySwap.labelKeywords>
+    <li>incendiary</li>
+    <li>blast</li>
+    <li>blasts</li>
+    <li>pitch-soaked</li>
+    <li>detonation</li>
+    <li>chemburster</li>
+    <li>flaming</li>
+    <li>searing</li>
+    <li>burning</li>
+    <li>ember</li>
+    <li>incendiária</li>
+    <li>incendiárias</li>
+    <li>incendiário</li>
+    <li>incendiários</li>
+  </UWU_IncendiarySwap.labelKeywords>
 
   <!-- pt-BR localizes the acronym: EMP.label = PEM, EMPRounds = "munição PEM". -->
   <!-- EN: EMP value split -->
@@ -54,10 +130,40 @@
   <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
   <UWU_EmpSplit.description>Remove os componentes avançados e depois converte 70% dos custos de materiais base em componentes pelo valor de mercado. Representa as peças eletrônicas necessárias para as modificações PEM.</UWU_EmpSplit.description>
 
+  <!-- pem covers every vanilla EMP trait, since pt-BR never writes "emp": EMPRounds
+       = "munição PEM", EMPLauncher = "canhão PEM", EMPPulser = "pulsador PEM". zeus
+       is already an English entry and matches UMW_ZeusHeaded ("cabeça de zeus")
+       as-is. Excluded: cabeça, which four different melee labels share ("cabeça de
+       sino", "cabeça sem rebote", "cabeça pesada", "cabeça de zeus"), two of them
+       traits that must stay unmatched. -->
+  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <UWU_EmpSplit.labelKeywords>
+    <li>emp</li>
+    <li>flux</li>
+    <li>voltaic</li>
+    <li>sonic</li>
+    <li>zeus</li>
+    <li>shock</li>
+    <li>arc</li>
+    <li>thunder</li>
+    <li>pem</li>
+  </UWU_EmpSplit.labelKeywords>
+
   <!-- EN: lightweight swap -->
   <UWU_Lightweight.label>troca de materiais para leveza</UWU_Lightweight.label>
-  <!-- EN: Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows. -->
-  <UWU_Lightweight.description>Substitui 40% do custo em madeira por pele de pássaro. Representa a empenagem usada nas flechas.</UWU_Lightweight.description>
+  <!-- EN: Replaces 40% of wood costs with birdskin, representing the featherwork used to lighten wooden weapons. Weapons with no wood in their costs are unaffected. -->
+  <UWU_Lightweight.description>Substitui 40% do custo em madeira por pele de pássaro, representando o trabalho em penas usado para deixar mais leves as armas de madeira. As armas sem madeira nos custos não são afetadas.</UWU_Lightweight.description>
+
+  <!-- leve = Odyssey Lightweight.label, reused verbatim by UMW. Unlike Russian there
+       is no variant spelling to double up. It is a very common word, but the rule
+       only touches wood costs, so an unintended match no-ops on anything that is not
+       a wooden weapon. -->
+  <!-- EN: lightweight, whisper -->
+  <UWU_Lightweight.labelKeywords>
+    <li>lightweight</li>
+    <li>whisper</li>
+    <li>leve</li>
+  </UWU_Lightweight.labelKeywords>
 
   <!-- EN: flarestriker value split -->
   <UWU_Flarestriker.label>divisão de valor para Flarestriker</UWU_Flarestriker.label>
@@ -80,6 +186,23 @@
   <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
   <UWU_ChargeCategoryGated.description>Converte todos os custos em componentes avançados pelo valor de mercado para as características de armas do tipo carga. Representa a tecnologia espacial exigida pelas modificações de carga e de feixe.</UWU_ChargeCategoryGated.description>
 
+  <!-- carga = ChargeCapacitor ("capacitor de carga"), carregador = PulseCharger
+       ("carregador de pulso"), frequência = FrequencyAmplifier ("amplificador de
+       frequência"). carregador is a homograph: it is also pt-BR for a magazine, and
+       ExtendedMagazine.label is "carregador estendido". That trait is category
+       BurstFire, outside this rule's Pistol / PulseCharge / BeamWeapon gate, so it
+       stays unmatched - but if the gate is ever removed, this token must go with it. -->
+  <!-- EN: charge, charger, frequency, tesla -->
+  <UWU_ChargeCategoryGated.labelKeywords>
+    <li>charge</li>
+    <li>charger</li>
+    <li>frequency</li>
+    <li>tesla</li>
+    <li>carga</li>
+    <li>carregador</li>
+    <li>frequência</li>
+  </UWU_ChargeCategoryGated.labelKeywords>
+
   <!-- EN: charge weapons (unconditional) -->
   <UWU_ChargeUnconditional.label>armas de carga (sem condição)</UWU_ChargeUnconditional.label>
   <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
@@ -90,20 +213,132 @@
   <!-- EN: Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost. -->
   <UWU_Akimbo.description>Dobra todos os custos, pois Akimbo acrescenta uma segunda arma visível e dobra a taxa de disparo. Isso compensa a fração de custo base de 50% para que o total alcance o custo completo da receita.</UWU_Akimbo.description>
 
+  <!-- superdimensionada follows Odyssey's own OversizedRounds.traitAdjectives, the
+       only place vanilla pt-BR renders "oversized". No labelKeywords injection: that
+       trait's label is "munição pesada" ("heavy ammunition"), a different concept, so
+       reusing its adjective would ground this rule in the wrong trait. The English
+       list applies by default and still matches by defName token. -->
+  <!-- EN: oversized cost multiplier -->
+  <UWU_Oversized.label>multiplicador de custo para arma superdimensionada</UWU_Oversized.label>
+  <!-- EN: Increases all costs by half. An oversized weapon is simply more weapon, and modifying it takes more material. -->
+  <UWU_Oversized.description>Aumenta todos os custos pela metade. Uma arma superdimensionada é simplesmente mais arma, e modificá-la consome mais material.</UWU_Oversized.description>
+
   <!-- EN: grip component removal -->
   <UWU_Grip.label>remoção de componentes para a empunhadura</UWU_Grip.label>
   <!-- EN: Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts. -->
   <UWU_Grip.description>Remove do custo os componentes e os componentes avançados. As modificações de empunhadura são simples ajustes mecânicos que não exigem peças complexas.</UWU_Grip.description>
+
+  <!-- empunhadura = CustomGrip ("empunhadura personalizada"). -->
+  <!-- EN: grip -->
+  <UWU_Grip.labelKeywords>
+    <li>grip</li>
+    <li>empunhadura</li>
+  </UWU_Grip.labelKeywords>
 
   <!-- EN: comfort material conversion -->
   <UWU_Comfort.label>conversão de materiais para o conforto</UWU_Comfort.label>
   <!-- EN: Converts half of all cost materials to thrumbofur by count, reflecting the luxurious padding and wrapping used for comfort modifications. -->
   <UWU_Comfort.description>Converte em pele de trumbo metade dos materiais do custo, em quantidade, o que reflete o estofamento e os revestimentos luxuosos usados nas modificações de conforto.</UWU_Comfort.description>
 
+  <!-- conforto is the vanilla Comfort StatDef label; no shipped weapon trait uses it
+       as a label, so this is weakly grounded, and confortável covers a trait that
+       renders it as an adjective. -->
+  <!-- EN: comfort -->
+  <UWU_Comfort.labelKeywords>
+    <li>comfort</li>
+    <li>conforto</li>
+    <li>confortável</li>
+  </UWU_Comfort.labelKeywords>
+
   <!-- EN: ornamental conversion -->
   <UWU_Ornamental.label>conversão para o ornamental</UWU_Ornamental.label>
   <!-- EN: Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering. -->
   <UWU_Ornamental.description>Remove os componentes e depois converte em prata metade dos custos restantes, em quantidade. O trabalho ornamental é um artesanato decorativo, não engenharia técnica.</UWU_Ornamental.description>
+
+  <!-- ornamental is already an English entry and is also the pt-BR label verbatim
+       (Odyssey Ornamental.label), so only esmalte is added, from UMW_Enameled
+       ("esmalte vítreo") - pt-BR chose a noun phrase rather than the cognate
+       "esmaltado", which appears nowhere. Excluded: vítreo, a generic "glassy" that
+       would pull in any glazed or coated trait. engraved/filigree/gilded/etched have
+       no pt-BR ground. -->
+  <!-- EN: ornamental, engraved, filigree, gilded, enameled, etched -->
+  <UWU_Ornamental.labelKeywords>
+    <li>ornamental</li>
+    <li>engraved</li>
+    <li>filigree</li>
+    <li>gilded</li>
+    <li>enameled</li>
+    <li>etched</li>
+    <li>esmalte</li>
+  </UWU_Ornamental.labelKeywords>
+
+  <!-- EN: metal fittings swap -->
+  <UWU_MetalFittings.label>troca de material por peças metálicas</UWU_MetalFittings.label>
+  <!-- EN: Swaps 40% of the weapon's material for the metal its fittings are made of: steel for weapons of industrial tech level and below, plasteel for spacer and above. Serrations, spikes, studs and weights are metal parts fixed onto the base weapon. -->
+  <UWU_MetalFittings.description>Troca 40% do material da arma pelo metal de que são feitas as suas peças: aço para armas de nível de tecnologia industrial e abaixo, plastiaço para as de nível espacial e acima. Dentes de serra, espigões, cravos e contrapesos são peças metálicas fixadas na arma base.</UWU_MetalFittings.description>
+
+  <!-- All from UMW's pt-BR trait labels: dentes/serra = Serrated ("dentes de serra"),
+       lâmina/navalha = Razored ("lâmina de navalha"), farpas = Barbed, cravos =
+       Studded, espigão = ArmorSpike ("espigão perfurante"), aletas = Flanged,
+       gavilões = Quilloned, contrapeso = Counterweighted, agulha = NeedlePoint
+       ("ponta de agulha").
+       Excluded: perfurante, which vanilla also uses for "munição perfurante", an
+       unrelated ballistic trait; ponta, shared with the opiated trait; and cabeça,
+       shared by four melee labels including two that must stay unmatched.
+       Also no token for "weighted": HeadWeighted's pt-BR label is "cabeça pesada",
+       built entirely from homographs (cabeça above, and pesada = OversizedRounds'
+       "munição pesada"), and this rule ORs its keywords, so unlike UWU_HeavyScrap it
+       cannot AND them together. Verified harmless in practice: UMW_HeadWeighted still
+       matches on the defName token "weighted", so only a trait with both a
+       "cabeça pesada"-style label and a non-English defName would slip through.
+       honed/keen/toothed/jagged appear
+       only as traitAdjectives in pt-BR, never as a label, so they stay English-only. -->
+  <!-- EN: serrated, razored, honed, keen, barbed, studded, spike, spiked, flanged, quilloned, toothed, jagged, weighted, counterweight, counterweighted, needle -->
+  <UWU_MetalFittings.labelKeywords>
+    <li>serrated</li>
+    <li>razored</li>
+    <li>honed</li>
+    <li>keen</li>
+    <li>barbed</li>
+    <li>studded</li>
+    <li>spike</li>
+    <li>spiked</li>
+    <li>flanged</li>
+    <li>quilloned</li>
+    <li>toothed</li>
+    <li>jagged</li>
+    <li>weighted</li>
+    <li>counterweight</li>
+    <li>counterweighted</li>
+    <li>needle</li>
+    <li>dentes</li>
+    <li>serra</li>
+    <li>lâmina</li>
+    <li>navalha</li>
+    <li>farpas</li>
+    <li>cravos</li>
+    <li>espigão</li>
+    <li>aletas</li>
+    <li>gavilões</li>
+    <li>contrapeso</li>
+    <li>agulha</li>
+  </UWU_MetalFittings.labelKeywords>
+
+  <!-- EN: blood hemogen surcharge -->
+  <UWU_Blood.label>acréscimo de hemogênio para característica de sangue</UWU_Blood.label>
+  <!-- EN: Adds 10 hemogen packs on top of the computed cost for blood-themed traits. The hemogen is consumed for good: removing the trait refunds none of it. Without Biotech this rule does nothing. -->
+  <UWU_Blood.description>Adiciona 10 pacotes de hemogênio ao custo já calculado das características com tema de sangue. O hemogênio é consumido de forma definitiva: remover a característica não devolve nada dele. Sem o Biotech, esta regra não faz nada.</UWU_Blood.description>
+
+  <!-- sangue = UMW_BloodStained ("manchas de sangue"), and the direct counterpart of
+       the English blood entry. Excluded: manchas ("stains"), generic enough that an
+       unrelated stained or spotted trait would collect a 10-pack hemogen surcharge;
+       sangue alone already catches the label. hemovoric has no pt-BR ground. -->
+  <!-- EN: blood, hemovoric -->
+  <UWU_Blood.labelKeywords>
+    <li>blood</li>
+    <li>hemovoric</li>
+    <li>sangue</li>
+  </UWU_Blood.labelKeywords>
 
   <!-- ===== Late-running rules ===== -->
 
@@ -114,6 +349,13 @@
   <!-- EN: Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts. -->
   <UWU_Inlay.description>Remove do custo os componentes e os componentes avançados. As incrustações são modificações puramente estéticas que exigem apenas matérias-primas, não peças complexas.</UWU_Inlay.description>
 
+  <!-- incrustação = GoldInlay/JadeInlay ("incrustação de ouro/jade"). -->
+  <!-- EN: inlay -->
+  <UWU_Inlay.labelKeywords>
+    <li>inlay</li>
+    <li>incrustação</li>
+  </UWU_Inlay.labelKeywords>
+
   <!-- ===== Fallback (always runs last) ===== -->
 
   <!-- Cited words take ASCII double quotes, per vanilla pt-BR prose
@@ -121,8 +363,8 @@
        GoldInlay = "incrustação de ouro" and Gold.label = "ouro". -->
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>regra alternativa de substituição de material</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>Detecta nomes de materiais no nome da característica (por exemplo, "ouro" em "incrustação de ouro") e substitui o custo em matérias-primas por esse material. Serve como regra geral para as características que não têm uma regra temática própria.</UWU_MaterialOverride.description>
+  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>Detecta nomes de materiais no nome da característica (por exemplo, "ouro" em "incrustação de ouro") e substitui o custo em matérias-primas por um valor de mercado equivalente desse material. Serve como regra geral para as características que não têm uma regra temática própria.</UWU_MaterialOverride.description>
 
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>redução dos materiais do custo</UWU_CostPrune.label>

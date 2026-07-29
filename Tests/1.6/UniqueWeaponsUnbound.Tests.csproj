@@ -82,6 +82,13 @@
     <None Include="..\..\1.6\Defs\TraitCostRuleDefs\TraitCostRules.xml"
           Link="TraitCostRules.xml"
           CopyToOutputDirectory="PreserveNewest" />
+    <!-- The labelKeywords whole-list injections, for the localization coverage
+         tests. Linked under Languages\ mirroring the repo layout (%(RecursiveDir)
+         is the <lang>\DefInjected\... tail), so a test asks for a language by
+         name and a newly translated language needs no csproj edit. -->
+    <None Include="..\..\1.6\Languages\**\DefInjected\UniqueWeaponsUnbound.TraitCostRuleDef\TraitCostRules_TraitCostRuleDef.xml"
+          Link="Languages\%(RecursiveDir)TraitCostRules_TraitCostRuleDef.xml"
+          CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- Copy RimWorld runtime assemblies into the test output so the test
