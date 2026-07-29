@@ -40,7 +40,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_ToxSwap</defName>
     <label>toxic component swap</label>
-    <description>Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. If no components are present, converts 70% of base materials to herbal medicine by market value.</description>
+    <description>Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity.</description>
     <workerClass>UniqueWeaponsUnbound.ToxSwapWorker</workerClass>
     <priority>1000</priority>
     <labelKeywords>
@@ -48,13 +48,18 @@
       <li>toxic</li>
       <li>paralytic</li>
       <li>acid-injector</li>
+      <li>venom</li>
+      <li>envenomed</li>
+      <li>poisoned</li>
+      <li>opiated</li>
+      <li>sedative</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_IncendiarySwap</defName>
     <label>incendiary component swap</label>
-    <description>Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. If no components are present, converts 70% of base materials to chemfuel by market value.</description>
+    <description>Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity.</description>
     <workerClass>UniqueWeaponsUnbound.IncendiarySwapWorker</workerClass>
     <priority>1100</priority>
     <labelKeywords>
@@ -64,6 +69,10 @@
       <li>pitch-soaked</li>
       <li>detonation</li>
       <li>chemburster</li>
+      <li>flaming</li>
+      <li>searing</li>
+      <li>burning</li>
+      <li>ember</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
@@ -78,22 +87,26 @@
       <li>flux</li>
       <li>voltaic</li>
       <li>sonic</li>
+      <li>zeus</li>
+      <li>shock</li>
+      <li>arc</li>
+      <li>thunder</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_Lightweight</defName>
     <label>lightweight swap</label>
-    <description>Replaces 40% of wood costs with birdskin, representing the feather tails used on arrows.</description>
+    <description>Replaces 40% of wood costs with birdskin, representing the featherwork used to lighten wooden weapons. Weapons with no wood in their costs are unaffected.</description>
     <workerClass>UniqueWeaponsUnbound.PartialSwapWorker</workerClass>
     <priority>1300</priority>
+    <!-- Deliberately not category-gated: the swap only touches wood costs, so it
+         already no-ops on everything that isn't a wooden weapon, and the old Bow
+         gate matched the trait's category, which modded melee traits never carry -->
     <labelKeywords>
       <li>lightweight</li>
       <li>whisper</li>
     </labelKeywords>
-    <weaponCategories>
-      <li>Bow</li>
-    </weaponCategories>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
   <!-- VEW/Anomaly maybe? -->
@@ -155,13 +168,14 @@
       <li>ultracoils</li>
       <li>thump</li>
       <li>rail</li>
+      <li>mono</li>
+      <li>monomolecular</li>
+      <li>plasma</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
   <!-- VEW/AA -->
   <UniqueWeaponsUnbound.TraitCostRuleDef>
-    <!-- TODO: Split "oversized" into its own rule — Alpha Armoury's Oversized trait (Mass x2,
-         melee damage x1.5, not dual-wield) matches this keyword today and gets wrongly doubled -->
     <defName>UWU_Akimbo</defName>
     <label>akimbo cost multiplier</label>
     <description>Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost.</description>
@@ -169,6 +183,20 @@
     <priority>1800</priority>
     <labelKeywords>
       <li>akimbo</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <!-- Split out of UWU_Akimbo: an oversized weapon is more material, not a second
+       weapon, so it takes 1.5x where akimbo takes 2x (e.g. Alpha Armoury's
+       Oversized is Mass x2 / melee damage x1.5) -->
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_Oversized</defName>
+    <label>oversized cost multiplier</label>
+    <description>Increases all costs by half. An oversized weapon is simply more weapon, and modifying it takes more material.</description>
+    <workerClass>UniqueWeaponsUnbound.CostFactorWorker</workerClass>
+    <priority>1850</priority>
+    <costFactor>1.5</costFactor>
+    <labelKeywords>
       <li>oversized</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
@@ -205,7 +233,62 @@
     <priority>2100</priority>
     <labelKeywords>
       <li>ornamental</li>
+      <li>engraved</li>
+      <li>filigree</li>
+      <li>gilded</li>
+      <li>enameled</li>
+      <li>etched</li>
     </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_MetalFittings</defName>
+    <label>metal fittings swap</label>
+    <description>Swaps 40% of the weapon's material for the metal its fittings are made of: steel for weapons of industrial tech level and below, plasteel for spacer and above. Serrations, spikes, studs and weights are metal parts fixed onto the base weapon.</description>
+    <workerClass>UniqueWeaponsUnbound.StuffFittingsSwapWorker</workerClass>
+    <priority>2050</priority>
+    <labelKeywords>
+      <li>serrated</li>
+      <li>razored</li>
+      <li>honed</li>
+      <li>keen</li>
+      <li>barbed</li>
+      <li>studded</li>
+      <li>spike</li>
+      <li>spiked</li>
+      <li>flanged</li>
+      <li>quilloned</li>
+      <li>toothed</li>
+      <li>jagged</li>
+      <li>weighted</li>
+      <li>counterweight</li>
+      <li>counterweighted</li>
+      <li>needle</li>
+    </labelKeywords>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
+  <!-- Additive surcharge, so it runs after the conversion rules: nothing may
+       convert the packs away. Inert without Biotech (HemogenPack resolves via
+       SilentFail), so blood traits price plain there — intended. The def itself
+       is deliberately not MayRequire-gated: eight languages ship DefInjected
+       entries for it, which must always find the def -->
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_Blood</defName>
+    <label>blood hemogen surcharge</label>
+    <description>Adds 10 hemogen packs on top of the computed cost for blood-themed traits. The hemogen is consumed for good: removing the trait refunds none of it. Without Biotech this rule does nothing.</description>
+    <workerClass>UniqueWeaponsUnbound.AddIngredientsWorker</workerClass>
+    <priority>2200</priority>
+    <refundable>false</refundable>
+    <labelKeywords>
+      <li>blood</li>
+      <li>hemovoric</li>
+    </labelKeywords>
+    <addIngredients>
+      <li>
+        <thingDef>HemogenPack</thingDef>
+        <count>10</count>
+      </li>
+    </addIngredients>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
   <!-- Alpha Armoury (packageId sarg.alphaarmoury, NOT "Armory") — premises verified 2026-07-29
@@ -216,10 +299,6 @@
        SignalChip (Biotech, MV 1000) drops from the player-summoned Diabolus — the boss that wields the
        hellsphere cannon. Resolve via GetNamedSilentFail with an advanced-components fallback so a
        non-Biotech "hellsphere" trait from another mod still prices sensibly -->
-  <!-- TODO: blood rule adds 10x HemogenPack (unrefundable), MayRequire Biotech ONLY — repurposed from
-       the hemovoric rule (owner, 2026-07-29) into a generic thematic rule: keywords blood/hemovoric
-       cover AA's hemovoric, UMW's blood-stained (hyphen-splits to "blood"), and any mod's
-       blood-flavored trait -->
   <!-- TODO: skip rule adds advanced components (unrefundable), MayRequire Alpha Armoury.
        AA's skip traits are NOT Royalty-gated. Psytrainer surcharge considered and cut (owner,
        2026-07-29) — see research doc Rejected approaches; do not re-propose -->
@@ -229,8 +308,8 @@
   <!-- TODO: chainsaw rule adds 50x Chemfuel (unrefundable), MayRequire Alpha Armoury -->
   <!-- TODO: satiating rule adds 5x MealLavish (unrefundable), MayRequire Alpha Armoury -->
   <!-- TODO: bayonet rule removes components, MayRequire Alpha Armoury -->
-  <!-- TODO: undersized rule 0.65x costs, MayRequire Alpha Armoury. Note: AA's sibling "oversized" trait
-       already collides with UWU_Akimbo's keyword today — see that rule's TODO -->
+  <!-- TODO: undersized rule 0.65x costs, MayRequire Alpha Armoury. AA's sibling "oversized" trait
+       is now correctly priced by UWU_Oversized (1.5x) -->
   <!-- TODO: healing/lifesteal rule 10x medicine based on tech level (unrefundable), MayRequire Alpha Armoury -->
   <!-- TODO: firefoam rule adds 3x Shell_Firefoam (unrefundable), MayRequire Alpha Armoury.
        DECIDED 2026-07-29: shells, not the ability's chemfuel reload — trait costs price the physical
@@ -255,7 +334,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_MaterialOverride</defName>
     <label>material override fallback</label>
-    <description>Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with that material. Acts as a catch-all for traits without a specific thematic rule.</description>
+    <description>Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule.</description>
     <workerClass>UniqueWeaponsUnbound.MaterialOverrideWorker</workerClass>
     <priority>9000</priority>
   </UniqueWeaponsUnbound.TraitCostRuleDef>

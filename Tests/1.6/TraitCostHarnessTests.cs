@@ -96,9 +96,12 @@ namespace UniqueWeaponsUnbound.Tests
             Assert.Contains(rules, r => r.defName == "UWU_CostPrune");
             Assert.Contains(rules, r => r.defName == "UWU_ToxSwap");
 
+            // Phase 2 dropped the Bow gate: the swap only touches wood costs, so
+            // it already no-ops on non-wood weapons, and the gate matched the
+            // trait's category, which modded melee traits never carry.
             TraitCostRuleDef lightweight = rules.Find(r => r.defName == "UWU_Lightweight");
             Assert.NotNull(lightweight);
-            Assert.Same(TraitCostTestHarness.Category("Bow"), lightweight.weaponCategories[0]);
+            Assert.Null(lightweight.weaponCategories);
         }
     }
 }
