@@ -33,6 +33,14 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
+        // Called once per rule at startup, after all defs are loaded and the
+        // material caches are built. Workers that turn def-specified defNames
+        // into ThingDefs resolve them here, so Apply stays a plain lookup and
+        // nothing is logged per call.
+        public virtual void OnStartup()
+        {
+        }
+
         // Applies this rule's cost transformation. Called only when Matches()
         // returns true. isRemoval indicates whether costs are being calculated
         // for trait removal (true) or addition (false). Most workers ignore

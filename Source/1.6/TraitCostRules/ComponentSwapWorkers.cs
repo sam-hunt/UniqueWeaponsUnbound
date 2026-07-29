@@ -5,18 +5,17 @@ using Verse;
 namespace UniqueWeaponsUnbound
 {
     // Base class for workers that replace components with a thematic material,
-    // falling back to a value-based split of base materials when no components
-    // exist.
+    // falling back to a complexity-derived count of that material when the
+    // weapon's costs carry no components at all.
     public abstract class ComponentSwapOrSplitWorker : TraitCostRuleWorker
     {
         protected abstract ThingDef Replacement { get; }
         protected abstract int ComponentMultiplier { get; }
-        protected virtual float SplitFraction => 0.7f;
 
         public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             CostRuleHelpers.ApplyComponentSwapOrSplit(
-                costs, Replacement, ComponentMultiplier, SplitFraction);
+                costs, weapon, Replacement, ComponentMultiplier);
         }
     }
 
@@ -29,8 +28,8 @@ namespace UniqueWeaponsUnbound
     }
 
     // Replaces components with chemfuel (10x count) for incendiary/blast
-    // traits. Folds spacer components into industrial before swapping so all
-    // components are captured in a single pass.
+    // traits. Folds spacer components into industrial before swapping so a cost
+    // list carrying both kinds is captured in a single pass.
     public class IncendiarySwapWorker : ComponentSwapOrSplitWorker
     {
         protected override ThingDef Replacement => CostRuleHelpers.Chemfuel;

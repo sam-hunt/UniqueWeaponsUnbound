@@ -41,15 +41,35 @@ namespace UniqueWeaponsUnbound
             try
             {
                 CostRuleHelpers.Initialize();
-
-                cachedRules = DefDatabase<TraitCostRuleDef>.AllDefs
-                    .OrderBy(d => d.priority)
-                    .ToList();
+                SetRules(DefDatabase<TraitCostRuleDef>.AllDefs);
             }
             catch (Exception ex)
             {
                 if (report == null) throw;
                 report.RecordFailure(nameof(TraitCostUtility), ex);
+            }
+        }
+
+        // Sorts the given rules into pipeline order and lets each worker resolve
+        // whatever its def names by string, so the pipeline never does lookups
+        // (or logging) per call. Production always passes the DefDatabase's
+        // rules; internal so the headless test suite can install a rule set
+        // without a loaded DefDatabase.
+        internal static void SetRules(IEnumerable<TraitCostRuleDef> rules)
+        {
+            cachedRules = rules.OrderBy(d => d.priority).ToList();
+
+            foreach (TraitCostRuleDef ruleDef in cachedRules)
+            {
+                try
+                {
+                    ruleDef.Worker.OnStartup();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("[Unique Weapons Unbound] Skipped startup resolution for cost rule "
+                        + ruleDef.SourceForLog() + " due to error: " + ex);
+                }
             }
         }
 
@@ -205,7 +225,10 @@ namespace UniqueWeaponsUnbound
             Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
             var costs = new List<ThingDefCountClass>();
+            // defName tokens join the label words so rules keep matching when the
+            // label is localized away from the English keywords.
             HashSet<string> labelWords = CostRuleHelpers.SplitLabelWords(trait.label);
+            labelWords.UnionWith(CostRuleHelpers.SplitDefNameWords(trait.defName));
 
             foreach (TraitCostRuleDef ruleDef in cachedRules)
             {
