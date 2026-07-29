@@ -2,7 +2,6 @@
 
 ## Features
 
-- Mark [multiplayer](https://steamcommunity.com/sharedfiles/filedetails/?id=2606448745) incompatibility
 - Mod option for gating customization on colony crafting skill recipe +2 or 12
 - Blood-soaked trait rule requiring hemogen if biotech and UMW are installed?
 - Monomolecular, plasma, zeus rules for UMW
