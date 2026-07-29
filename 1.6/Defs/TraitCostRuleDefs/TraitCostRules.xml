@@ -160,7 +160,8 @@
 
   <!-- VEW/AA -->
   <UniqueWeaponsUnbound.TraitCostRuleDef>
-    <!-- TODO: Rename since oversized -->
+    <!-- TODO: Split "oversized" into its own rule — Alpha Armoury's Oversized trait (Mass x2,
+         melee damage x1.5, not dual-wield) matches this keyword today and gets wrongly doubled -->
     <defName>UWU_Akimbo</defName>
     <label>akimbo cost multiplier</label>
     <description>Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost.</description>
@@ -207,18 +208,34 @@
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
-  <!-- TODO: hellsphere rule adds 1x signal chip, MayRequire Alpha Armory, Biotech -->
-  <!-- TODO: hemovoric rule adds 10x hemogen pack, MayRequire Alpha Armory, Biotech -->
-  <!-- TODO: skip rule adds 1x skip psytrainer, MayRequire Alpha Armory, Royalty -->
-  <!-- TODO: invisibility rule adds 1x invisibility psytrainer, MayRequire Alpha Armory, Royalty -->
-  <!-- TODO: adrenal rule adds 5x go-juice, MayRequire Alpha Armory -->
-  <!-- TODO: chainsaw rule adds 50x chemfuel, MayRequire Alpha Armory -->
-  <!-- TODO: satiating rule adds 3x lavish meal, MayRequire Alpha Armory -->
-  <!-- TODO: bayonet rule removes components, MayRequire Alpha Armory -->
-  <!-- TODO: undersized rule 0.6x costs, MayRequire Alpha Armory -->
-  <!-- TODO: healing/lifesteal rule 10x medicine based on tech level, MayRequire Alpha Armory -->
-  <!-- TODO: firefoam rule adds 3x firefoarm shell, MayRequire Alpha Armory -->
-  <!-- TODO: deadlife rule adds 3x deadlife shell, MayRequire Alpha Armory, Anomaly -->
+  <!-- Alpha Armoury (packageId sarg.alphaarmoury, NOT "Armory") — premises verified 2026-07-29
+       against the local workshop copy; see Docs/Research/MELEE_TRAIT_COST_PIPELINE.md, V5.
+       All 89 AA traits are ranged-only. Needs a new additive worker (AddIngredientsWorker);
+       "unrefundable" = worker skips its surcharge on the isRemoval pipeline. -->
+  <!-- TODO: hellsphere rule adds 1x SignalChip (always refundable), MayRequire Alpha Armoury, Biotech.
+       SignalChip (Biotech, MV 1000) drops from the player-summoned Diabolus — the boss that wields the
+       hellsphere cannon. Resolve via GetNamedSilentFail with an advanced-components fallback so a
+       non-Biotech "hellsphere" trait from another mod still prices sensibly -->
+  <!-- TODO: blood rule adds 10x HemogenPack (unrefundable), MayRequire Biotech ONLY — repurposed from
+       the hemovoric rule (owner, 2026-07-29) into a generic thematic rule: keywords blood/hemovoric
+       cover AA's hemovoric, UMW's blood-stained (hyphen-splits to "blood"), and any mod's
+       blood-flavored trait -->
+  <!-- TODO: skip rule adds advanced components (unrefundable), MayRequire Alpha Armoury.
+       AA's skip traits are NOT Royalty-gated. Psytrainer surcharge considered and cut (owner,
+       2026-07-29) — see research doc Rejected approaches; do not re-propose -->
+  <!-- TODO: invisibility rule adds advanced components (unrefundable), MayRequire Alpha Armoury, Royalty.
+       Same psytrainer cut as skip -->
+  <!-- TODO: adrenal rule adds 5x GoJuice (unrefundable), MayRequire Alpha Armoury -->
+  <!-- TODO: chainsaw rule adds 50x Chemfuel (unrefundable), MayRequire Alpha Armoury -->
+  <!-- TODO: satiating rule adds 5x MealLavish (unrefundable), MayRequire Alpha Armoury -->
+  <!-- TODO: bayonet rule removes components, MayRequire Alpha Armoury -->
+  <!-- TODO: undersized rule 0.65x costs, MayRequire Alpha Armoury. Note: AA's sibling "oversized" trait
+       already collides with UWU_Akimbo's keyword today — see that rule's TODO -->
+  <!-- TODO: healing/lifesteal rule 10x medicine based on tech level (unrefundable), MayRequire Alpha Armoury -->
+  <!-- TODO: firefoam rule adds 3x Shell_Firefoam (unrefundable), MayRequire Alpha Armoury.
+       DECIDED 2026-07-29: shells, not the ability's chemfuel reload — trait costs price the physical
+       launcher fitting, not ammo consumption -->
+  <!-- TODO: deadlife rule adds 3x Shell_Deadlife (unrefundable), MayRequire Alpha Armoury, Anomaly -->
 
   <!-- ===== Late-running rules ===== -->
 
