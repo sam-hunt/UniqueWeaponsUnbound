@@ -63,6 +63,17 @@ other reflection checks) so a shape mismatch is reported during load, leaving dr
 dictionary lookup. Covered by `TraitEffectLinesIntegrationTests`, which guards our reader only; a
 rename on the *publisher's* side is invisible to it.
 
+A publisher can also make an "inert" field live via its own patch, in which case both sides would
+describe it: Unique Melee Weapons routes `equippedStatOffsets` to the wielder, so `BuildTraitTooltip`
+prints that list **only when the publisher produced no lines** for the trait, letting the publisher's
+own wielder-marked line stand alone. `statOffsets`/`statFactors` need no such guard, since vanilla
+already displays those and publishers leave them to it.
+
+**Trait stat rows render unfinalized.** Every `StatModifier` on a trait is a raw, pre-curve delta, so
+print it with `stat.Worker.ValueToString(value, finalized: false, sense)` — what vanilla
+`CompUniqueWeapon` does. `StatDef.ValueToString` defaults to `finalized: true` and applies
+`toStringStyle`, which renders `MeleeHitChance`'s raw `-1` as `-100%` instead of `-1.0`.
+
 **Logging:** Prefix mod-specific logs with the mod name — `Log.Message("[Unique Weapons Unbound] ...")`.
 
 **Settings Triple Invariant:** see `Source/1.6/Core/CLAUDE.md`.
