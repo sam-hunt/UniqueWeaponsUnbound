@@ -4,7 +4,13 @@
 `Docs/Specs/PHASE1_PIPELINE_CAPABILITIES.md` (C# capabilities),
 `PHASE2_VOCABULARY_LOCALIZATION.md` (generic XML + translations, ships with
 Phase 1 in update ①), `PHASE3_ALPHA_ARMOURY_TUNING.md` (update ②). Nothing
-implemented yet. Explored 2026-07-29 (Opus); findings re-verified first-hand and
+implemented yet. _Post-implementation addendum (2026-07-30): Phases 1–2 are
+committed; owner review found top-tier traits underpriced on low-complexity
+melee weapons — `PHASE2_1_TRAIT_POWER_PRICING.md` specs a commonality-based
+rarity multiplier (with the corpus survey grounding it), a spacer-conversion
+complexity floor, and the zeus→ultratech keyword move. It also records two
+newly rejected signals: trait MV (re-affirmed empirically) and
+`abilityProps`-based surcharges._ Explored 2026-07-29 (Opus); findings re-verified first-hand and
 extended 2026-07-29 (Fable) — see the **Verification addendum** below, which
 supersedes the draft where they conflict.
 
