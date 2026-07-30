@@ -2,8 +2,8 @@
 
 **Status:** spec'd 2026-07-30 from owner review of Phases 1–2; **ratified in
 full by the owner the same day** — the three flagged decisions (see "Ratified
-decisions" at the end) plus a full-spec review. Ready to implement; nothing
-implemented yet.
+decisions" at the end) plus a full-spec review. **Implemented 2026-07-30**
+(items 1–2, 3, 4 as three commits; suite green at 324, checker 0/0).
 **Depends on:** Phase 1 (complexity helper, by-value conversions), Phase 2
 (keyword lists + 8-language injections). **Feeds:** rides Steam update ① with
 Phases 1–2; Phase 3 tunes AA on top of it.

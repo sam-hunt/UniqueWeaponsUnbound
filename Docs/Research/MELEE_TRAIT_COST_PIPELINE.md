@@ -10,7 +10,9 @@ melee weapons — `PHASE2_1_TRAIT_POWER_PRICING.md` specs a commonality-based
 rarity multiplier (with the corpus survey grounding it), a spacer-conversion
 complexity floor, and the zeus→ultratech keyword move. It also records two
 newly rejected signals: trait MV (re-affirmed empirically) and
-`abilityProps`-based surcharges._ Explored 2026-07-29 (Opus); findings re-verified first-hand and
+`abilityProps`-based surcharges. Phase 2.1 is now implemented and committed
+(same day): the priority chain gains `UWU_RarityMultiplier` at 250, and
+`ApplyConvertAllToSpacer` takes the weapon for its complexity floor._ Explored 2026-07-29 (Opus); findings re-verified first-hand and
 extended 2026-07-29 (Fable) — see the **Verification addendum** below, which
 supersedes the draft where they conflict.
 
