@@ -9,7 +9,12 @@ namespace UniqueWeaponsUnbound
     // multiplier.
     public class QualityMultiplierWorker : TraitCostRuleWorker
     {
-        private const float CostFraction = 0.5f;
+        // The pipeline's base cost fraction: one trait costs half the weapon's
+        // full recipe before quality scaling. Public because the spacer
+        // conversion's complexity floor rides the same fraction
+        // (CostRuleHelpers.ApplyConvertAllToSpacer) and the 0.5 must be written
+        // exactly once.
+        public const float CostFraction = 0.5f;
 
         private static readonly Dictionary<QualityCategory, float> QualityMultipliers =
             new Dictionary<QualityCategory, float>

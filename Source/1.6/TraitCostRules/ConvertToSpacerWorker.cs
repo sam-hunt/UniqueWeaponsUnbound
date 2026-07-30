@@ -10,7 +10,7 @@ namespace UniqueWeaponsUnbound
     {
         public override void Apply(List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait, bool isRemoval)
         {
-            CostRuleHelpers.ApplyConvertAllToSpacer(costs, weapon);
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, weapon, trait);
         }
     }
 }

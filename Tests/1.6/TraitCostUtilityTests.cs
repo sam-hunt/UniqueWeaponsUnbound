@@ -7,7 +7,8 @@ namespace UniqueWeaponsUnbound.Tests
 {
     // Tests for TraitCostUtility.IsNegativeTrait, which drives the inverted
     // cost/refund logic (cheap to add, costs to remove) for undesirable traits,
-    // and for Phase 2.1's rarity multiplier, which the same predicate exempts.
+    // for Phase 2.1's rarity multiplier, which the same predicate exempts, and
+    // for Phase 2.2's quality- and rarity-scaled spacer complexity floor.
     //
     // The rarity sections run the whole shipped rule chain, so every expectation
     // is derived in a comment from the harness's vanilla market values and
@@ -145,6 +146,18 @@ namespace UniqueWeaponsUnbound.Tests
                 quality, stuff);
         }
 
+        // A short medieval axe: costStuffCount 50, WorkToMake 7000. The luxury
+        // case — a cheap, quick recipe carried in an expensive stuff, where the
+        // by-value path outruns the floor.
+        private static Thing Axe(ThingDef stuff, QualityCategory quality)
+        {
+            return TraitCostTestHarness.MakeWeaponWithQuality(
+                TraitCostTestHarness.MakeWeaponDef(
+                    "TestMeleeWeapon_Axe", TechLevel.Medieval, workToMake: 7000f,
+                    costStuffCount: 50),
+                quality, stuff);
+        }
+
         // Vanilla Gun_ChargeRifle: Plasteel 50 + ComponentSpacer 2, work 45000.
         private static Thing ChargeRifle()
         {
@@ -174,20 +187,23 @@ namespace UniqueWeaponsUnbound.Tests
         }
 
         [Fact]
-        public void Reference_MonomolecularOnAMasterworkSteelWarhammerBillsThreeSpacerComponents()
+        public void Reference_MonomolecularOnAMasterworkSteelWarhammerBillsSixSpacerComponents()
         {
             // Steel 150 -> x0.5 cost fraction x 2.0 masterwork = 1.0 -> Steel 150
             // -> rarity 2x -> Steel 300. UWU_ChargeUnconditional ("mono") converts
-            // by value: 300 x 1.9 = 570, / 200 = 2.85 -> 3. The complexity floor
-            // agrees rather than deciding it here: 18000 / 6000 = 3.
+            // by value: 300 x 1.9 = 570, / 200 = 2.85 -> 3. Phase 2.2's floor
+            // decides it instead: complexity 18000 / 6000 = 3, so
+            // max(ceil(3), ceil(3 x 0.5 x 2.0 masterwork x 2 rarity) = 6) = 6.
             //
-            // Before Phase 2.1: 150 x 1.9 = 285 / 200 -> 2.
+            // Before Phase 2.2: 3, the by-value figure — the def-only floor was
+            // also 3 and both multipliers were erased. Before Phase 2.1:
+            // 150 x 1.9 = 285 / 200 -> 2.
             List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(
                 Warhammer(TraitCostTestHarness.Steel, QualityCategory.Masterwork),
                 Monomolecular());
 
             Assert.Single(costs);
-            Assert.Equal(3, TraitCostTestHarness.CountOf(
+            Assert.Equal(6, TraitCostTestHarness.CountOf(
                 costs, TraitCostTestHarness.ComponentSpacer));
         }
 
@@ -195,8 +211,9 @@ namespace UniqueWeaponsUnbound.Tests
         public void Reference_MonomolecularOnAMasterworkPlasteelLongswordBillsNineSpacerComponents()
         {
             // Plasteel 100 -> x1.0 (masterwork) -> 100 -> rarity 2x -> 200.
-            // 200 x 9 = 1800 of value, / 200 = 9 exactly. Floor 3, so by-value
-            // wins.
+            // 200 x 9 = 1800 of value, / 200 = 9 exactly. Phase 2.2's floor is
+            // max(ceil(3), ceil(3 x 0.5 x 2.0 x 2) = 6) = 6, so by-value still
+            // wins and the outcome is unchanged — the floor is a floor, not a cap.
             //
             // Before Phase 2.1: 100 x 9 = 900 / 200 = 4.5 -> 5.
             List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(
@@ -212,9 +229,11 @@ namespace UniqueWeaponsUnbound.Tests
         public void Reference_MonomolecularOnANormalKnifeStillBillsOneSpacerComponent()
         {
             // Steel 30 -> x0.5 -> Steel 15 -> rarity 2x -> Steel 30 = 57 of
-            // value, / 200 -> 1. Floor: 1800 / 6000 = 0.3 -> 1. Both paths land
-            // on the same single component, which is the point of the row: the
-            // cheapest melee weapon in the game does not get more expensive.
+            // value, / 200 -> 1. Floor: complexity 1800 / 6000 = 0.3, so
+            // max(ceil(0.3) = 1, ceil(0.3 x 0.5 x 1.0 normal x 2 rarity) = 1) = 1
+            // — Phase 2.2's scaling cannot lift a floor this shallow. Both paths
+            // land on the same single component, which is the point of the row:
+            // the cheapest melee weapon in the game does not get more expensive.
             List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(
                 Knife(TraitCostTestHarness.Steel, QualityCategory.Normal),
                 Monomolecular());
@@ -234,21 +253,23 @@ namespace UniqueWeaponsUnbound.Tests
         }
 
         [Fact]
-        public void Reference_ZeusHeadedOnAMasterworkSteelWarhammerBillsThreeSpacerComponents()
+        public void Reference_ZeusHeadedOnAMasterworkSteelWarhammerBillsSixSpacerComponents()
         {
             // Steel 150 -> x0.5 cost fraction x 2.0 masterwork = 1.0 -> Steel 150
             // -> rarity 2x -> Steel 300. UWU_ChargeUnconditional ("zeus") converts
-            // by value: 300 x 1.9 = 570, / 200 = 2.85 -> 3. The complexity floor
-            // agrees rather than deciding it here: 18000 / 6000 = 3.
+            // by value: 300 x 1.9 = 570, / 200 = 2.85 -> 3. Phase 2.2's floor
+            // decides it instead: complexity 18000 / 6000 = 3, so
+            // max(ceil(3), ceil(3 x 0.5 x 2.0 masterwork x 2 rarity) = 6) = 6.
             //
-            // Before Phase 2.1's item 3 keyword move: UWU_EmpSplit billed ~7
-            // ComponentIndustrial + 45 steel (the 70% EMP value split).
+            // Before Phase 2.2: 3. Before Phase 2.1's item 3 keyword move:
+            // UWU_EmpSplit billed ~7 ComponentIndustrial + 45 steel (the 70% EMP
+            // value split).
             List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(
                 Warhammer(TraitCostTestHarness.Steel, QualityCategory.Masterwork),
                 ZeusHeaded());
 
             Assert.Single(costs);
-            Assert.Equal(3, TraitCostTestHarness.CountOf(
+            Assert.Equal(6, TraitCostTestHarness.CountOf(
                 costs, TraitCostTestHarness.ComponentSpacer));
         }
 
@@ -364,6 +385,125 @@ namespace UniqueWeaponsUnbound.Tests
             Assert.Single(costs);
             Assert.Equal(1, TraitCostTestHarness.CountOf(
                 costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        // ===== Phase 2.2: the floor rides the same multipliers ================
+
+        [Fact]
+        public void SpacerFloor_TheStrongerWeaponNowCostsMore()
+        {
+            // The motivating defect. A legendary steel longsword is the better
+            // weapon, yet before Phase 2.2 it billed 3 advanced components to a
+            // good plasteel longsword's 6, because the def-only floor bound on the
+            // steel one and erased both multipliers.
+            //
+            // Legendary steel: Steel 100 -> x0.5 x 2.5 legendary = 1.25 ->
+            // ceil(125) = 125 -> rarity 2x -> 250 = 250 x 1.9 = 475 of value,
+            // / 200 = 2.375 -> 3 by value. Floor: complexity 18000 / 6000 = 3, so
+            // max(ceil(3), ceil(3 x 0.5 x 2.5 x 2) = ceil(7.5) = 8) = 8. The floor
+            // wins -> 8.
+            //
+            // Good plasteel: Plasteel 100 -> x0.5 x 1.25 good = 0.625 ->
+            // ceil(62.5) = 63 -> rarity 2x -> 126 = 126 x 9 = 1134 of value,
+            // / 200 = 5.67 -> 6 by value. Floor: max(ceil(3),
+            // ceil(3 x 0.5 x 1.25 x 2) = ceil(3.75) = 4) = 4, so by-value wins -> 6.
+            List<ThingDefCountClass> legendarySteel = TraitCostUtility.GetAdditionCost(
+                Longsword(TraitCostTestHarness.Steel, QualityCategory.Legendary),
+                Monomolecular());
+            List<ThingDefCountClass> goodPlasteel = TraitCostUtility.GetAdditionCost(
+                Longsword(TraitCostTestHarness.Plasteel, QualityCategory.Good),
+                Monomolecular());
+
+            Assert.Equal(8, TraitCostTestHarness.CountOf(
+                legendarySteel, TraitCostTestHarness.ComponentSpacer));
+            Assert.Equal(6, TraitCostTestHarness.CountOf(
+                goodPlasteel, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Theory]
+        [InlineData(QualityCategory.Normal, 3)]
+        [InlineData(QualityCategory.Good, 4)]
+        [InlineData(QualityCategory.Excellent, 5)]
+        [InlineData(QualityCategory.Masterwork, 6)]
+        [InlineData(QualityCategory.Legendary, 8)]
+        public void SpacerFloor_QualityLadderIsMonotonicOnAFloorBoundWeapon(
+            QualityCategory quality, int expected)
+        {
+            // A steel longsword is floor-bound at every quality: the by-value
+            // figure never exceeds 3 (masterwork is the richest, Steel 100 -> x1.0
+            // -> 100 -> rarity 2x -> 200 = 380 of value, / 200 -> 2), so the floor
+            // decides every row. Before Phase 2.2 all five read 3.
+            //
+            // Excellent in full: complexity 18000 / 6000 = 3, floor =
+            // max(ceil(3), ceil(3 x 0.5 x 1.5 excellent x 2 rarity) = ceil(4.5)
+            // = 5) = 5. The pattern is ceil(3 x quality) clamped up to 3, so the
+            // rows are ceil(3.0)=3, ceil(3.75)=4, ceil(4.5)=5, ceil(6.0)=6,
+            // ceil(7.5)=8 for the 1.0 / 1.25 / 1.5 / 2.0 / 2.5 multipliers.
+            List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(
+                Longsword(TraitCostTestHarness.Steel, quality), Monomolecular());
+
+            Assert.Single(costs);
+            Assert.Equal(expected, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Theory]
+        [InlineData(QualityCategory.Normal)]
+        [InlineData(QualityCategory.Awful)]
+        public void SpacerFloor_ClampNeverDiscountsBelowTheUnscaledFloor(QualityCategory quality)
+        {
+            // The outer max is what keeps Phase 2.2 floor-only. A commonality-1
+            // trait takes no rarity, and the cost fraction alone would halve the
+            // floor: normal, complexity 3, scaled term ceil(3 x 0.5 x 1.0 x 1) =
+            // ceil(1.5) = 2; awful, ceil(3 x 0.5 x 0.7 x 1) = ceil(1.05) = 2. Both
+            // clamp back up to the unscaled ceil(3) = 3, the Phase 2.1 figure.
+            //
+            // By value neither comes close: normal Steel 100 -> x0.5 -> 50 = 95 of
+            // value, / 200 -> 1; awful ceil(100 x 0.35) = 35 = 66.5, / 200 -> 1.
+            //
+            // "cryo blade" hits UWU_ChargeUnconditional's "cryo" keyword, which is
+            // ungated — "charge" itself lives in UWU_ChargeCategoryGated and would
+            // need a matching weaponCategory on the trait.
+            List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(
+                Longsword(TraitCostTestHarness.Steel, quality),
+                TraitCostTestHarness.MakeTrait("VWE_CryoBlade", "cryo blade", commonality: 1f));
+
+            Assert.Single(costs);
+            Assert.Equal(3, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
+        public void Reference_MonomolecularOnALegendaryGoldAxeStillBillsSevenSpacerComponents()
+        {
+            // By-value still wins where the stuff is the expensive part. Gold 50
+            // -> x0.5 x 2.5 legendary = 1.25 -> ceil(62.5) = 63 -> rarity 2x ->
+            // 126 = 126 x 10 = 1260 of value, / 200 = 6.3 -> 7. Floor: complexity
+            // 7000 / 6000 = 1.1667, so max(ceil(1.1667) = 2,
+            // ceil(1.1667 x 0.5 x 2.5 x 2) = ceil(2.9167) = 3) = 3 — well under
+            // the by-value figure, so the gold surcharge is untouched by Phase 2.2.
+            List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(
+                Axe(TraitCostTestHarness.Gold, QualityCategory.Legendary), Monomolecular());
+
+            Assert.Single(costs);
+            Assert.Equal(7, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
+        public void Refund_ScaledFloorRefundsHalfTheFlooredBill()
+        {
+            // The floor lives inside RunPipeline, so the removal path sees the
+            // same 6 the addition path bills on the masterwork steel warhammer,
+            // and the refund is floor(6 x RefundRate 0.5) = 3. Before Phase 2.2
+            // the addition was 3 and the refund 1.
+            List<ThingDefCountClass> refund = TraitCostUtility.GetRemovalCost(
+                Warhammer(TraitCostTestHarness.Steel, QualityCategory.Masterwork),
+                Monomolecular());
+
+            Assert.Single(refund);
+            Assert.Equal(3, TraitCostTestHarness.CountOf(
+                refund, TraitCostTestHarness.ComponentSpacer));
         }
 
         // ===== Ordering properties (spec item 1) ==============================

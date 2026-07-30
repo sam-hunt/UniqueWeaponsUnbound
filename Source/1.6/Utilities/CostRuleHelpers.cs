@@ -298,7 +298,16 @@ namespace UniqueWeaponsUnbound
         // weapons out of the floor's way — charge rifles (ComponentSpacer in
         // their recipe) and industrial guns (ComponentIndustrial) price purely
         // by value, exactly as they did before the floor existed.
-        public static void ApplyConvertAllToSpacer(List<ThingDefCountClass> costs, Thing weapon)
+        //
+        // The floor rides the same multipliers as the bill it floors — the cost
+        // fraction, quality (priority 200) and rarity (priority 250) — because
+        // on cheap-stuff melee it always binds, and a floor computed from the
+        // def alone would erase all three: a legendary steel longsword would
+        // price exactly like an awful one. The outer max against the unscaled
+        // complexity keeps it floor-only, so the multipliers can never discount
+        // below what the floor billed before.
+        public static void ApplyConvertAllToSpacer(
+            List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
         {
             if (ComponentSpacer == null || ComponentSpacer.BaseMarketValue <= 0f)
                 return;
@@ -326,7 +335,16 @@ namespace UniqueWeaponsUnbound
             int totalCount = existingSpacerCount
                 + Mathf.CeilToInt(totalValue / ComponentSpacer.BaseMarketValue);
             if (!hasComponents)
-                totalCount = Mathf.Max(totalCount, Mathf.CeilToInt(GetWeaponComplexity(weapon)));
+            {
+                float complexity = GetWeaponComplexity(weapon);
+                int floor = Mathf.Max(
+                    Mathf.CeilToInt(complexity),
+                    Mathf.CeilToInt(complexity
+                        * QualityMultiplierWorker.CostFraction
+                        * QualityMultiplierWorker.GetQualityMultiplier(weapon)
+                        * RarityMultiplierWorker.GetRarityMultiplier(trait)));
+                totalCount = Mathf.Max(totalCount, floor);
+            }
 
             if (totalCount > 0)
                 costs.Add(new ThingDefCountClass(ComponentSpacer, totalCount));

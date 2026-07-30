@@ -526,6 +526,20 @@ namespace UniqueWeaponsUnbound.Tests
 
         // ---- Phase 2.1 item 2: the spacer conversion's complexity floor -------
 
+        // Phase 2.2 gave the floor a rarity term, so the conversion now needs a
+        // trait. These cases measure the floor itself, so they pass a common one:
+        // commonality defaults to 0, which RarityMultiplierWorker prices as
+        // common (1x), and the harness's quality-less weapons take the 1x quality
+        // multiplier. With both terms inert the scaled term collapses to
+        // ceil(complexity x 0.5), which the outer max clamps straight back up to
+        // the unscaled ceil(complexity) — the figures below are the Phase 2.1
+        // ones unchanged. The scaled floor's own coverage lives in
+        // TraitCostUtilityTests, where quality and commonality vary.
+        private static WeaponTraitDef CommonTrait()
+        {
+            return TraitCostTestHarness.MakeTrait("TestFloorTrait");
+        }
+
         [Fact]
         public void ConvertAllToSpacer_ComponentlessBillTakesTheComplexityFloor()
         {
@@ -538,7 +552,7 @@ namespace UniqueWeaponsUnbound.Tests
             List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
                 (TraitCostTestHarness.WoodLog, 75));
 
-            CostRuleHelpers.ApplyConvertAllToSpacer(costs, warhammer);
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, warhammer, CommonTrait());
 
             Assert.Single(costs);
             Assert.Equal(3, TraitCostTestHarness.CountOf(
@@ -556,7 +570,7 @@ namespace UniqueWeaponsUnbound.Tests
             List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
                 (TraitCostTestHarness.Plasteel, 200));
 
-            CostRuleHelpers.ApplyConvertAllToSpacer(costs, warhammer);
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, warhammer, CommonTrait());
 
             Assert.Equal(9, TraitCostTestHarness.CountOf(
                 costs, TraitCostTestHarness.ComponentSpacer));
@@ -574,7 +588,7 @@ namespace UniqueWeaponsUnbound.Tests
             List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
                 (TraitCostTestHarness.Steel, 30), (TraitCostTestHarness.ComponentIndustrial, 4));
 
-            CostRuleHelpers.ApplyConvertAllToSpacer(costs, gun);
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, gun, CommonTrait());
 
             Assert.Single(costs);
             Assert.Equal(1, TraitCostTestHarness.CountOf(
@@ -592,7 +606,7 @@ namespace UniqueWeaponsUnbound.Tests
             List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
                 (TraitCostTestHarness.Plasteel, 25), (TraitCostTestHarness.ComponentSpacer, 1));
 
-            CostRuleHelpers.ApplyConvertAllToSpacer(costs, chargeRifle);
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, chargeRifle, CommonTrait());
 
             Assert.Single(costs);
             Assert.Equal(3, TraitCostTestHarness.CountOf(
@@ -610,7 +624,7 @@ namespace UniqueWeaponsUnbound.Tests
             List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
                 (TraitCostTestHarness.Steel, 30));
 
-            CostRuleHelpers.ApplyConvertAllToSpacer(costs, knife);
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, knife, CommonTrait());
 
             Assert.Equal(1, TraitCostTestHarness.CountOf(
                 costs, TraitCostTestHarness.ComponentSpacer));
@@ -624,7 +638,7 @@ namespace UniqueWeaponsUnbound.Tests
             List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
                 (TraitCostTestHarness.Steel, 300));
 
-            CostRuleHelpers.ApplyConvertAllToSpacer(costs, null);
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, null, CommonTrait());
 
             Assert.Single(costs);
             Assert.Equal(3, TraitCostTestHarness.CountOf(
