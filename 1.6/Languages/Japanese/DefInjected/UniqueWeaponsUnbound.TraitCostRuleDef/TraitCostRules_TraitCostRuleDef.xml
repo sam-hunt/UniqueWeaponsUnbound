@@ -18,6 +18,11 @@
   <!-- EN: Scales costs based on weapon quality. Higher-quality weapons cost more to customize. Includes the base 50% cost fraction so each trait costs half the weapon's full recipe value before quality scaling. -->
   <UWU_QualityMultiplier.description>武器の品質に応じてコストを増減します.高品質な武器ほどカスタマイズのコストが高くなります.基本の50%コスト係数を含んでおり,品質による増減の前は各特性のコストが武器のレシピ総額の半分になります.</UWU_QualityMultiplier.description>
 
+  <!-- EN: rarity multiplier -->
+  <UWU_RarityMultiplier.label>希少性倍率</UWU_RarityMultiplier.label>
+  <!-- EN: Scales costs by how rare the trait is. A trait that appears half as often as a common one costs twice as much to fit, and the increase is capped there. Negative traits are not scaled. -->
+  <UWU_RarityMultiplier.description>特性の希少性に応じてコストを増加させます.一般的な特性の半分の頻度でしか出現しない特性は,カスタマイズのコストが2倍になり,増加はそこで頭打ちになります.ネガティブな特性はこの倍率の対象外です.</UWU_RarityMultiplier.description>
+
   <!-- EN: negative trait material downgrade -->
   <UWU_NegativeDowngrade.label>ネガティブな特性の素材ダウングレード</UWU_NegativeDowngrade.label>
   <!-- EN: Downgrades cost materials by one technology level for negative traits. Spacer components become industrial, plasteel becomes steel, steel becomes wood. Reflects that negative modifications use cruder, cheaper techniques. -->

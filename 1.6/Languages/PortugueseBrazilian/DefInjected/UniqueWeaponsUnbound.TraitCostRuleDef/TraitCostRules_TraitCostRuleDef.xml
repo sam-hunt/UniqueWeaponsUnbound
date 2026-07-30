@@ -52,6 +52,11 @@
   <!-- EN: Scales costs based on weapon quality. Higher-quality weapons cost more to customize. Includes the base 50% cost fraction so each trait costs half the weapon's full recipe value before quality scaling. -->
   <UWU_QualityMultiplier.description>Ajusta os custos conforme a qualidade da arma. Armas de qualidade mais alta custam mais para personalizar. Inclui a fração de custo base de 50%, de modo que cada característica custa metade do valor completo da receita da arma antes do ajuste por qualidade.</UWU_QualityMultiplier.description>
 
+  <!-- EN: rarity multiplier -->
+  <UWU_RarityMultiplier.label>multiplicador de raridade</UWU_RarityMultiplier.label>
+  <!-- EN: Scales costs by how rare the trait is. A trait that appears half as often as a common one costs twice as much to fit, and the increase is capped there. Negative traits are not scaled. -->
+  <UWU_RarityMultiplier.description>Ajusta os custos conforme a raridade da característica. Uma característica que aparece com metade da frequência de uma comum custa o dobro para personalizar, e esse é o limite do aumento. Características negativas não são ajustadas.</UWU_RarityMultiplier.description>
+
   <!-- EN: negative trait material downgrade -->
   <UWU_NegativeDowngrade.label>rebaixamento de materiais para característica negativa</UWU_NegativeDowngrade.label>
   <!-- EN: Downgrades cost materials by one technology level for negative traits. Spacer components become industrial, plasteel becomes steel, steel becomes wood. Reflects that negative modifications use cruder, cheaper techniques. -->

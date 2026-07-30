@@ -18,6 +18,11 @@
   <!-- EN: Scales costs based on weapon quality. Higher-quality weapons cost more to customize. Includes the base 50% cost fraction so each trait costs half the weapon's full recipe value before quality scaling. -->
   <UWU_QualityMultiplier.description>根据武器品质缩放成本。品质越高的武器，自定义成本越高。其中已包含50%的基础成本比例，因此在品质缩放之前，每项特性的成本为武器完整配方价值的一半。</UWU_QualityMultiplier.description>
 
+  <!-- EN: rarity multiplier -->
+  <UWU_RarityMultiplier.label>稀有度倍率</UWU_RarityMultiplier.label>
+  <!-- EN: Scales costs by how rare the trait is. A trait that appears half as often as a common one costs twice as much to fit, and the increase is capped there. Negative traits are not scaled. -->
+  <UWU_RarityMultiplier.description>根据特性的稀有程度缩放成本。出现频率只有常见特性一半的特性，自定义成本会翻倍，且涨幅到此封顶。负面特性不进行此项缩放。</UWU_RarityMultiplier.description>
+
   <!-- EN: negative trait material downgrade -->
   <UWU_NegativeDowngrade.label>负面特性材料降级</UWU_NegativeDowngrade.label>
   <!-- EN: Downgrades cost materials by one technology level for negative traits. Spacer components become industrial, plasteel becomes steel, steel becomes wood. Reflects that negative modifications use cruder, cheaper techniques. -->
