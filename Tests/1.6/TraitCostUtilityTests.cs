@@ -224,6 +224,34 @@ namespace UniqueWeaponsUnbound.Tests
                 costs, TraitCostTestHarness.ComponentSpacer));
         }
 
+        // Phase 2.1 item 3: UMW's own power throttle (commonality 0.5, same as
+        // Monomolecular) moved from the industrial EMP split to the ultratech
+        // spacer conversion, matching zeushammer's Royalty tech tier.
+        private static WeaponTraitDef ZeusHeaded()
+        {
+            return TraitCostTestHarness.MakeTrait(
+                "UMW_ZeusHeaded", "zeus-headed", commonality: 0.5f);
+        }
+
+        [Fact]
+        public void Reference_ZeusHeadedOnAMasterworkSteelWarhammerBillsThreeSpacerComponents()
+        {
+            // Steel 150 -> x0.5 cost fraction x 2.0 masterwork = 1.0 -> Steel 150
+            // -> rarity 2x -> Steel 300. UWU_ChargeUnconditional ("zeus") converts
+            // by value: 300 x 1.9 = 570, / 200 = 2.85 -> 3. The complexity floor
+            // agrees rather than deciding it here: 18000 / 6000 = 3.
+            //
+            // Before Phase 2.1's item 3 keyword move: UWU_EmpSplit billed ~7
+            // ComponentIndustrial + 45 steel (the 70% EMP value split).
+            List<ThingDefCountClass> costs = TraitCostUtility.GetAdditionCost(
+                Warhammer(TraitCostTestHarness.Steel, QualityCategory.Masterwork),
+                ZeusHeaded());
+
+            Assert.Single(costs);
+            Assert.Equal(3, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
         [Fact]
         public void Reference_GoldInlayOnAMasterworkWarhammerBillsFiftySevenGold()
         {

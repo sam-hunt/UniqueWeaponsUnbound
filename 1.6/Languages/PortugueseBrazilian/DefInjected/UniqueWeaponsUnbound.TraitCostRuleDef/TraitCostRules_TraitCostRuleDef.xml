@@ -132,17 +132,17 @@
 
   <!-- pem covers every vanilla EMP trait, since pt-BR never writes "emp": EMPRounds
        = "munição PEM", EMPLauncher = "canhão PEM", EMPPulser = "pulsador PEM". zeus
-       is already an English entry and matches UMW_ZeusHeaded ("cabeça de zeus")
+       moved to UWU_ChargeUnconditional's default English list (this rule ships no
+       pt-BR override for it) and still matches UMW_ZeusHeaded ("cabeça de zeus")
        as-is. Excluded: cabeça, which four different melee labels share ("cabeça de
        sino", "cabeça sem rebote", "cabeça pesada", "cabeça de zeus"), two of them
        traits that must stay unmatched. -->
-  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <!-- EN: emp, flux, voltaic, sonic, shock, arc, thunder -->
   <UWU_EmpSplit.labelKeywords>
     <li>emp</li>
     <li>flux</li>
     <li>voltaic</li>
     <li>sonic</li>
-    <li>zeus</li>
     <li>shock</li>
     <li>arc</li>
     <li>thunder</li>

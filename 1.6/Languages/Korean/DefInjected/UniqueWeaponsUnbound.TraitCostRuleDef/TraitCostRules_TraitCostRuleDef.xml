@@ -88,17 +88,15 @@
   <UWU_EmpSplit.label>EMP 가치 분할</UWU_EmpSplit.label>
   <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
   <UWU_EmpSplit.description>고급 부품을 제거한 뒤, 기본 재료 비용의 70%를 시장 가치 기준으로 부품으로 변환합니다. EMP 개조에 필요한 전자 부품을 나타냅니다.</UWU_EmpSplit.description>
-  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <!-- EN: emp, flux, voltaic, sonic, shock, arc, thunder -->
   <UWU_EmpSplit.labelKeywords>
     <li>emp</li>
     <li>flux</li>
     <li>voltaic</li>
     <li>sonic</li>
-    <li>zeus</li>
     <li>shock</li>
     <li>arc</li>
     <li>thunder</li>
-    <li>제우스</li>
   </UWU_EmpSplit.labelKeywords>
 
   <!-- EN: lightweight swap -->
@@ -146,7 +144,7 @@
   <UWU_ChargeUnconditional.label>충전 무기(무조건)</UWU_ChargeUnconditional.label>
   <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
   <UWU_ChargeUnconditional.description>고도의 우주 시대 기술이 관련된 특성에 대해 무기 분류와 상관없이 모든 비용을 시장 가치 기준으로 고급 부품으로 변환합니다.</UWU_ChargeUnconditional.description>
-  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma -->
+  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma, zeus -->
   <UWU_ChargeUnconditional.labelKeywords>
     <li>crypto</li>
     <li>cryo</li>
@@ -157,8 +155,10 @@
     <li>mono</li>
     <li>monomolecular</li>
     <li>plasma</li>
+    <li>zeus</li>
     <li>플라즈마</li>
     <li>단분자</li>
+    <li>제우스</li>
   </UWU_ChargeUnconditional.labelKeywords>
 
   <!-- EN: akimbo cost multiplier -->

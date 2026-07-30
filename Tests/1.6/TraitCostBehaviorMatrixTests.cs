@@ -16,8 +16,9 @@ namespace UniqueWeaponsUnbound.Tests
     // than just re-baseline the assertion.
     //
     // Common chain: tech-level fallback (50) -> recipe costs (100) -> 0.5x cost
-    // fraction x quality (200) -> negative downgrade (300) -> keyword rules
-    // (1000-8000) -> material override (9000) -> prune to 3 types (9900).
+    // fraction x quality (200) -> rarity multiplier (250) -> negative downgrade
+    // (300) -> keyword rules (1000-8000) -> material override (9000) -> prune to
+    // 3 types (9900).
     // Settings are null headless, so the cost multiplier is 1 and the recipe
     // worker runs.
     [Collection("TraitCost")]

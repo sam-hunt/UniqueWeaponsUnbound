@@ -95,19 +95,15 @@
   <UWU_EmpSplit.label>EMP-Wertaufteilung</UWU_EmpSplit.label>
   <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
   <UWU_EmpSplit.description>Entfernt Hightech-Bauteile und wandelt anschließend 70% der Grundmaterialkosten nach Marktwert in Bauteile um. Das steht für die Elektronik, die EMP-Umarbeitungen benötigen.</UWU_EmpSplit.description>
-  <!-- 'zeuskopf' from UMW ZeusHeaded: the bare word Zeus never appears as its own
-       token in German, since the label fuses. -->
-  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <!-- EN: emp, flux, voltaic, sonic, shock, arc, thunder -->
   <UWU_EmpSplit.labelKeywords>
     <li>emp</li>
     <li>flux</li>
     <li>voltaic</li>
     <li>sonic</li>
-    <li>zeus</li>
     <li>shock</li>
     <li>arc</li>
     <li>thunder</li>
-    <li>zeuskopf</li>
   </UWU_EmpSplit.labelKeywords>
 
   <!-- EN: lightweight swap -->
@@ -155,8 +151,10 @@
   <!-- EN: Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category. -->
   <UWU_ChargeUnconditional.description>Wandelt bei Merkmalen, die hochentwickelte Raumfahrttechnologie einsetzen, alle Kosten nach Marktwert in Hightech-Bauteile um – unabhängig von der Waffenkategorie.</UWU_ChargeUnconditional.description>
   <!-- UMW Monomolecular/PlasmaCored labels. 'Plasmaschwert' is a weapon name, not
-       a trait label, so it stays out. -->
-  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma -->
+       a trait label, so it stays out. 'zeuskopf' from UMW ZeusHeaded: the bare
+       word Zeus never appears as its own token in German, since the label
+       fuses. -->
+  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma, zeus -->
   <UWU_ChargeUnconditional.labelKeywords>
     <li>crypto</li>
     <li>cryo</li>
@@ -167,8 +165,10 @@
     <li>mono</li>
     <li>monomolecular</li>
     <li>plasma</li>
+    <li>zeus</li>
     <li>monomolekular</li>
     <li>plasmaumhüllt</li>
+    <li>zeuskopf</li>
   </UWU_ChargeUnconditional.labelKeywords>
 
   <!-- EN: akimbo cost multiplier -->

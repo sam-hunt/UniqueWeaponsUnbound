@@ -103,22 +103,18 @@
   <UWU_EmpSplit.description>Убирает компоненты космической эпохи, затем конвертирует 70% стоимости базовых материалов в компоненты индустриальной эпохи по рыночной стоимости, отражая потребность в электронных деталях для модификаций ЭМИ.</UWU_EmpSplit.description>
 
   <!-- эми comes from the hyphenated vanilla labels ЭМИ-патроны / ЭМИ-пушка /
-       ЭМИ-импульсер, which split on the hyphen. электробоёк = UMW_ZeusHeaded, with
-       its е-spelling alongside. flux/voltaic/sonic/shock/arc/thunder have no Russian
-       ground and stay English-only. -->
-  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+       ЭМИ-импульсер, which split on the hyphen. flux/voltaic/sonic/shock/arc/thunder
+       have no Russian ground and stay English-only. -->
+  <!-- EN: emp, flux, voltaic, sonic, shock, arc, thunder -->
   <UWU_EmpSplit.labelKeywords>
     <li>emp</li>
     <li>flux</li>
     <li>voltaic</li>
     <li>sonic</li>
-    <li>zeus</li>
     <li>shock</li>
     <li>arc</li>
     <li>thunder</li>
     <li>эми</li>
-    <li>электробоёк</li>
-    <li>электробоек</li>
   </UWU_EmpSplit.labelKeywords>
 
   <!-- EN: lightweight swap -->
@@ -174,8 +170,9 @@
   <!-- конденсатор = ChargeCapacitor, мономолекулярное = UMW_Monomolecular,
        плазменный = UMW_PlasmaCored ("плазменный сердечник"). These mirror the
        English capacitor / monomolecular / plasma entries, which are already
-       unconditional. crypto/cryo/ultracoils/thump/rail have no Russian ground. -->
-  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma -->
+       unconditional. crypto/cryo/ultracoils/thump/rail have no Russian ground.
+       электробоёк = UMW_ZeusHeaded, with its е-spelling alongside. -->
+  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma, zeus -->
   <UWU_ChargeUnconditional.labelKeywords>
     <li>crypto</li>
     <li>cryo</li>
@@ -186,9 +183,12 @@
     <li>mono</li>
     <li>monomolecular</li>
     <li>plasma</li>
+    <li>zeus</li>
     <li>конденсатор</li>
     <li>мономолекулярное</li>
     <li>плазменный</li>
+    <li>электробоёк</li>
+    <li>электробоек</li>
   </UWU_ChargeUnconditional.labelKeywords>
 
   <!-- EN: akimbo cost multiplier -->

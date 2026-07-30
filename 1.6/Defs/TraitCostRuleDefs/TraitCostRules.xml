@@ -101,7 +101,6 @@
       <li>flux</li>
       <li>voltaic</li>
       <li>sonic</li>
-      <li>zeus</li>
       <li>shock</li>
       <li>arc</li>
       <li>thunder</li>
@@ -185,6 +184,7 @@
       <li>mono</li>
       <li>monomolecular</li>
       <li>plasma</li>
+      <li>zeus</li>
     </labelKeywords>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 

@@ -146,7 +146,7 @@ namespace UniqueWeaponsUnbound.Tests
             new[] { "UMW_Razored", "razored", "", "UWU_MetalFittings" },
             new[] { "UMW_Serrated", "serrated", "", "UWU_MetalFittings" },
             new[] { "UMW_Studded", "studded", "", "UWU_MetalFittings" },
-            new[] { "UMW_ZeusHeaded", "zeus-headed", "", "UWU_EmpSplit" },
+            new[] { "UMW_ZeusHeaded", "zeus-headed", "", "UWU_ChargeUnconditional" },
 
             // Deliberately plain: nothing in the vocabulary should reach these,
             // and they price off the weapon's own recipe. "dead-blow" is the one
@@ -208,9 +208,8 @@ namespace UniqueWeaponsUnbound.Tests
             AssertRuleMatched(byRule, "UWU_Ornamental", "UMW_Enameled", "UMW_Ornamental");
             AssertRuleMatched(byRule, "UWU_Inlay", "UMW_GoldInlay", "UMW_JadeInlay");
             AssertRuleMatched(byRule, "UWU_ChargeUnconditional",
-                "UMW_Monomolecular", "UMW_PlasmaCored");
+                "UMW_Monomolecular", "UMW_PlasmaCored", "UMW_ZeusHeaded");
             AssertRuleMatched(byRule, "UWU_Blood", "UMW_BloodStained");
-            AssertRuleMatched(byRule, "UWU_EmpSplit", "UMW_ZeusHeaded");
             AssertRuleMatched(byRule, "UWU_Lightweight", "UMW_Lightweight");
 
             AssertNoOtherRuleMatched(byRule);

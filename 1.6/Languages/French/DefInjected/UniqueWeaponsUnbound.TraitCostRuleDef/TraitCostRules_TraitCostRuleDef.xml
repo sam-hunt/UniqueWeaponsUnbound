@@ -95,15 +95,13 @@
   <UWU_EmpSplit.label>répartition de la valeur pour l'IEM</UWU_EmpSplit.label>
   <!-- EN: Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications. -->
   <UWU_EmpSplit.description>Retire les composants avancés, puis convertit 70% des coûts en matériaux de base en composants selon leur valeur marchande. Représente les pièces électroniques que nécessitent les modifications IEM.</UWU_EmpSplit.description>
-  <!-- 'iem' is essential: French never uses the letters EMP. 'zeus' needs no
-       companion, since French keeps Zeus as its own word (« tête de Zeus »). -->
-  <!-- EN: emp, flux, voltaic, sonic, zeus, shock, arc, thunder -->
+  <!-- 'iem' is essential: French never uses the letters EMP. -->
+  <!-- EN: emp, flux, voltaic, sonic, shock, arc, thunder -->
   <UWU_EmpSplit.labelKeywords>
     <li>emp</li>
     <li>flux</li>
     <li>voltaic</li>
     <li>sonic</li>
-    <li>zeus</li>
     <li>shock</li>
     <li>arc</li>
     <li>thunder</li>
@@ -164,8 +162,10 @@
   <!-- UMW Monomolecular = « mono-moléculaire » (which also yields mono, already an
        English entry), Odyssey ChargeCapacitor = « condensateur à impulsion »,
        MeleeWeapon_PlasmaSword = « épée plasmique ». 'cœur' from « à cœur de
-       plasma » stays out: far too common a word on its own. -->
-  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma -->
+       plasma » stays out: far too common a word on its own. 'zeus' needs no
+       companion here either, since French keeps Zeus as its own word
+       (« tête de Zeus »). -->
+  <!-- EN: crypto, cryo, capacitor, ultracoils, thump, rail, mono, monomolecular, plasma, zeus -->
   <UWU_ChargeUnconditional.labelKeywords>
     <li>crypto</li>
     <li>cryo</li>
@@ -176,6 +176,7 @@
     <li>mono</li>
     <li>monomolecular</li>
     <li>plasma</li>
+    <li>zeus</li>
     <li>moléculaire</li>
     <li>condensateur</li>
     <li>plasmique</li>
