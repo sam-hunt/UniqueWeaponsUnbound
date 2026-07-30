@@ -61,6 +61,18 @@ the source of truth; every other language derives from it.
   Translator comments above placeholdered English keys explain what gets
   injected — injected values are lowercase def labels; phrase around them
   accordingly.
+- **Some translatable fields can exist nowhere in a mod's XML** — text
+  inherited from vanilla `ParentName` defs or defaulted in C# (UMW's tool
+  labels and `chargeNoun`/`cooldownGerund` are the family's worked example;
+  found by its 2026-07-30 in-game translation report). The in-game report
+  (Dev Mode > Save translation report) sees them by reflection over the live
+  DefDatabase; the checker's `EXTERNAL_INJECTIONS` manifest and its guards
+  cover the known classes. This repo's defs are all self-contained, so its
+  manifest is empty — run the in-game report as a pre-release backstop, and
+  add manifest rows from it if such a field ever appears.
+- `UWU_SettingsCategory` deliberately stays English in every language (it is
+  the mod's proper name), so the in-game report will always list it under
+  "Keyed translations matching English (maybe ok)" — expected, not a gap.
 
 ## `labelKeywords` (TraitCostRuleDef) — keep English, append localized
 
@@ -115,6 +127,11 @@ translation. Sources, in order:
 Terms that MUST be grounded before use: weapon trait, unique weapon, relic,
 ideoligion, charge weapons, quality tiers, workbench names (smithy, machining
 table, fabrication bench), research project names, tech levels.
+
+The glossaries below are shared across the mod family (here, ../UniqueMeleeWeapons,
+../PersonaWeaponsUnbound): when a row or lesson is added or
+corrected in one repo's skill, mirror it into the siblings, adjusting
+domain-specific rows. Add rows whenever a native review lands corrections.
 
 ### Glossary — Russian (from PR #6 native review)
 

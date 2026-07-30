@@ -14,6 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check translations
+        # Deterministic localization gate: every shipped language must cover
+        # the full expected key set. The in-game translation report (Dev
+        # Mode) remains the pre-release backstop for field classes the
+        # script does not know about (see EXTERNAL_INJECTIONS in the script).
+        run: python3 Scripts/check-translations.py
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
