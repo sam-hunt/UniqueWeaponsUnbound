@@ -258,9 +258,13 @@ namespace UniqueWeaponsUnbound.Tests
                 MakeWeaponDef(defName, techLevel, workToMake, costList, costStuffCount), stuff);
         }
 
+        // commonality defaults to 0, the XML default, which
+        // RarityMultiplierWorker prices as common (1x) — so a test only sets it
+        // when the rarity multiplier is what it is measuring.
         internal static WeaponTraitDef MakeTrait(
             string defName, string label = null,
-            WeaponCategoryDef category = null, float marketValueOffset = 0f)
+            WeaponCategoryDef category = null, float marketValueOffset = 0f,
+            float commonality = 0f)
         {
             return new WeaponTraitDef
             {
@@ -268,7 +272,22 @@ namespace UniqueWeaponsUnbound.Tests
                 label = label ?? defName,
                 weaponCategory = category,
                 marketValueOffset = marketValueOffset,
+                commonality = commonality,
             };
+        }
+
+        // A trait whose MarketValue statFactor marks it negative — the UMW
+        // Carbonized / vanilla Ugly shape, as opposed to the marketValueOffset
+        // signal MakeTrait's own parameter covers.
+        internal static WeaponTraitDef MakeMarketValueFactorTrait(
+            string defName, string label, float marketValueFactor, float commonality)
+        {
+            WeaponTraitDef trait = MakeTrait(defName, label, commonality: commonality);
+            trait.statFactors = new List<StatModifier>
+            {
+                new StatModifier { stat = StatDefOf.MarketValue, value = marketValueFactor },
+            };
+            return trait;
         }
 
         // WeaponCategoryDefs are interned by name so a rule's category list and

@@ -184,6 +184,13 @@ namespace UniqueWeaponsUnbound
         // setting.
         private const float ComplexityWorkDivisor = 6000f;
 
+        // Ceiling on the rarity multiplier (RarityMultiplierWorker): the rarest
+        // trait pays at most double the base bill. Deliberately a hardcoded
+        // constant rather than a mod setting, same as the divisor above. Kept
+        // conservative because the multiplier is a heuristic — a
+        // structurally-rare-but-mild trait is overpriced by at most 2x.
+        public const float RarityCapMax = 2f;
+
         // Resolves the def a weapon's costs derive from: the base variant of a
         // unique weapon, falling back to the weapon's own def (base-def-less
         // unique weapons carry their own recipe and work value). Shared by
@@ -284,29 +291,43 @@ namespace UniqueWeaponsUnbound
         }
 
         // Convert all non-spacer-component costs into spacer components by
-        // market value (rounded up).
-        public static void ApplyConvertAllToSpacer(List<ThingDefCountClass> costs)
+        // market value (rounded up). A bill with no component line of its own
+        // also takes a complexity floor: a cheap recipe would otherwise buy a
+        // spacer-tech trait for a single component. The no-components condition
+        // is the same one the complexity branch above uses, and it keeps ranged
+        // weapons out of the floor's way — charge rifles (ComponentSpacer in
+        // their recipe) and industrial guns (ComponentIndustrial) price purely
+        // by value, exactly as they did before the floor existed.
+        public static void ApplyConvertAllToSpacer(List<ThingDefCountClass> costs, Thing weapon)
         {
             if (ComponentSpacer == null || ComponentSpacer.BaseMarketValue <= 0f)
                 return;
 
             float totalValue = 0f;
             int existingSpacerCount = 0;
+            bool hasComponents = false;
 
             for (int i = costs.Count - 1; i >= 0; i--)
             {
                 if (costs[i].thingDef == ComponentSpacer)
                 {
                     existingSpacerCount += costs[i].count;
+                    hasComponents = true;
                 }
                 else
                 {
+                    if (costs[i].thingDef == ComponentIndustrial)
+                        hasComponents = true;
                     totalValue += costs[i].count * costs[i].thingDef.BaseMarketValue;
                 }
                 costs.RemoveAt(i);
             }
 
-            int totalCount = existingSpacerCount + Mathf.CeilToInt(totalValue / ComponentSpacer.BaseMarketValue);
+            int totalCount = existingSpacerCount
+                + Mathf.CeilToInt(totalValue / ComponentSpacer.BaseMarketValue);
+            if (!hasComponents)
+                totalCount = Mathf.Max(totalCount, Mathf.CeilToInt(GetWeaponComplexity(weapon)));
+
             if (totalCount > 0)
                 costs.Add(new ThingDefCountClass(ComponentSpacer, totalCount));
         }

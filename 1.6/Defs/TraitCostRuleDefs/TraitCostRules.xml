@@ -27,6 +27,20 @@
     <priority>200</priority>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
 
+  <!-- Keywordless, so it runs on every trait, and it runs before the thematic
+       rules (1000+) so their by-value conversions inherit the scaled base.
+       Known accepted misfires: Alpha Armoury's Oversized and Undersized sit at
+       commonality 0.25 and carry no MarketValue data, so they are not detected
+       as negative and stack this 2x on top of their own cost factors (1.5x and
+       0.65x). Phase 3's per-trait AA tuning is where that gets revisited -->
+  <UniqueWeaponsUnbound.TraitCostRuleDef>
+    <defName>UWU_RarityMultiplier</defName>
+    <label>rarity multiplier</label>
+    <description>Scales costs by how rare the trait is. A trait that appears half as often as a common one costs twice as much to fit, and the increase is capped there. Negative traits are not scaled.</description>
+    <workerClass>UniqueWeaponsUnbound.RarityMultiplierWorker</workerClass>
+    <priority>250</priority>
+  </UniqueWeaponsUnbound.TraitCostRuleDef>
+
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_NegativeDowngrade</defName>
     <label>negative trait material downgrade</label>

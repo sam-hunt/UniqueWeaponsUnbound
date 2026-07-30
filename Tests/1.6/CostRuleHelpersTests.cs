@@ -524,6 +524,113 @@ namespace UniqueWeaponsUnbound.Tests
             Assert.Equal(0, TraitCostTestHarness.CountOf(costs, TraitCostTestHarness.Gold));
         }
 
+        // ---- Phase 2.1 item 2: the spacer conversion's complexity floor -------
+
+        [Fact]
+        public void ConvertAllToSpacer_ComponentlessBillTakesTheComplexityFloor()
+        {
+            // Wooden warhammer, Wood 75: 75 x 1.2 = 90 of value, / 200 -> 1 by
+            // value. The recipe carries no component line, so the floor applies:
+            // complexity 18000 / 6000 = 3 wins.
+            Thing warhammer = TraitCostTestHarness.MakeWeapon(
+                "TestFloorHammer", TechLevel.Medieval, workToMake: 18000f, costStuffCount: 150,
+                stuff: TraitCostTestHarness.WoodLog);
+            List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
+                (TraitCostTestHarness.WoodLog, 75));
+
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, warhammer);
+
+            Assert.Single(costs);
+            Assert.Equal(3, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
+        public void ConvertAllToSpacer_ByValueWinsWhenItExceedsTheFloor()
+        {
+            // Same weapon (floor 3), an expensive bill: Plasteel 200 = 1800 of
+            // value, / 200 = 9. The floor is a floor, not a cap.
+            Thing warhammer = TraitCostTestHarness.MakeWeapon(
+                "TestFloorHammerRich", TechLevel.Medieval, workToMake: 18000f,
+                costStuffCount: 150, stuff: TraitCostTestHarness.Plasteel);
+            List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
+                (TraitCostTestHarness.Plasteel, 200));
+
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, warhammer);
+
+            Assert.Equal(9, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
+        public void ConvertAllToSpacer_IndustrialComponentBillIgnoresTheFloor()
+        {
+            // The no-components condition keeps ranged weapons out of the
+            // floor's way. Assault rifle bill Steel 30 + comp 4: 30 x 1.9 +
+            // 4 x 32 = 185, / 200 -> 1, exactly as before the floor existed.
+            // Complexity would have billed ceil(40000 / 6000) = 7.
+            Thing gun = TraitCostTestHarness.MakeWeapon(
+                "TestFloorRifle", TechLevel.Industrial, workToMake: 40000f);
+            List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
+                (TraitCostTestHarness.Steel, 30), (TraitCostTestHarness.ComponentIndustrial, 4));
+
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, gun);
+
+            Assert.Single(costs);
+            Assert.Equal(1, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
+        public void ConvertAllToSpacer_SpacerComponentBillIgnoresTheFloor()
+        {
+            // Charge rifle bill Plasteel 25 + spacer 1: the kept component plus
+            // ceil(225 / 200) = 1 + 2 = 3. Complexity would have billed
+            // ceil(45000 / 6000) = 8.
+            Thing chargeRifle = TraitCostTestHarness.MakeWeapon(
+                "TestFloorChargeRifle", TechLevel.Spacer, workToMake: 45000f);
+            List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
+                (TraitCostTestHarness.Plasteel, 25), (TraitCostTestHarness.ComponentSpacer, 1));
+
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, chargeRifle);
+
+            Assert.Single(costs);
+            Assert.Equal(3, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
+        public void ConvertAllToSpacer_KnifeFloorIsStillOneComponent()
+        {
+            // Complexity 1800 / 6000 = 0.3 -> 1, which is also what the value
+            // path bills: the cheapest melee weapon does not get more expensive.
+            Thing knife = TraitCostTestHarness.MakeWeapon(
+                "TestFloorKnife", TechLevel.Neolithic, workToMake: 1800f, costStuffCount: 30,
+                stuff: TraitCostTestHarness.Steel);
+            List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
+                (TraitCostTestHarness.Steel, 30));
+
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, knife);
+
+            Assert.Equal(1, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
+        public void ConvertAllToSpacer_NullWeaponStillPricesByValue()
+        {
+            // Complexity resolves to 0 without a weapon, so the floor is inert
+            // rather than throwing: Steel 300 = 570 of value -> 3.
+            List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
+                (TraitCostTestHarness.Steel, 300));
+
+            CostRuleHelpers.ApplyConvertAllToSpacer(costs, null);
+
+            Assert.Single(costs);
+            Assert.Equal(3, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
         // ---- GetMaterialOverride: label and defName paths see the same tokens --
 
         [Fact]
