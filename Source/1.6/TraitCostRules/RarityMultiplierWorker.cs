@@ -29,7 +29,9 @@ namespace UniqueWeaponsUnbound
                 cost.count = Mathf.CeilToInt(cost.count * multiplier);
         }
 
-        // 1 / commonality, clamped into [1, RarityCapMax].
+        // 1 / commonality, clamped into [1, RarityCapMax]. The cap is the
+        // "rare trait cost cap" mod setting; at its minimum of 1 the clamp
+        // prices every trait as common, turning the rule off.
         //
         // Negative traits are exempt: for them commonality weights how often a
         // downgrade shows up, not how strong the trait is, and a rare drawback

@@ -251,6 +251,16 @@
   <UWU_UseRecipeBaseCost>Derivar el coste base de la receta de fabricación</UWU_UseRecipeBaseCost>
   <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
   <UWU_UseRecipeBaseCostDesc>Si se activa, el coste base de materiales para añadir rasgos se deriva de la receta de fabricación del arma. Si se desactiva, se usa en su lugar un coste fijo basado en recursos genéricos del nivel tecnológico del arma. Desactivarlo evita que las armas baratas de fabricar tengan costes de rasgos absurdamente bajos, pero también puede impedir que las armas singulares o de mods tengan costes acordes a su temática.</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: Rare trait cost cap: {0}x -->
+  <UWU_RarityCostCap>Límite del coste de los rasgos raros: {0}x</UWU_RarityCostCap>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
+  <UWU_RarityCostCapDesc>La rareza de un rasgo indica con qué poca frecuencia aparece en las armas únicas halladas en el mundo. Los rasgos más raros cuestan más, hasta esta cantidad de veces su coste base. Con 1x, la rareza no afecta al coste.</UWU_RarityCostCapDesc>
+  <!-- EN: Advanced trait minimum cost: {0}% -->
+  <UWU_ComplexityFloorScale>Coste mínimo de rasgos avanzados: {0}%</UWU_ComplexityFloorScale>
+  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
+  <UWU_ComplexityFloorScaleDesc>Los rasgos de la era espacial cuestan un mínimo de componentes avanzados en armas fabricadas sin componentes, como armas cuerpo a cuerpo o arcos. El mínimo varía en función del trabajo de fabricación, la calidad y la rareza del rasgo. El 0% lo elimina.</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <UWU_CostSettingNoEffect>Este ajuste no tiene efecto mientras el multiplicador del coste de los rasgos sea del 0%.</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->

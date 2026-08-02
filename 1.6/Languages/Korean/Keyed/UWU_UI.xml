@@ -232,6 +232,16 @@
   <UWU_UseRecipeBaseCost>제작 레시피에서 기본 비용 산출</UWU_UseRecipeBaseCost>
   <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
   <UWU_UseRecipeBaseCostDesc>활성화하면 특성 추가에 드는 기본 재료 비용을 무기의 제작 레시피에서 산출합니다. 비활성화하면 무기의 기술 수준에 해당하는 일반 자원을 기준으로 한 고정 비용을 대신 사용합니다. 비활성화하면 제작이 저렴한 무기의 특성 비용이 비합리적으로 낮아지는 것을 막을 수 있지만, 특수하거나 모드로 추가된 무기가 주제에 맞는 비용을 갖지 못할 수도 있습니다.</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: Rare trait cost cap: {0}x -->
+  <UWU_RarityCostCap>희귀 특성 비용 상한: {0}배</UWU_RarityCostCap>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
+  <UWU_RarityCostCapDesc>특성의 희귀도는 그 특성이 세상에서 발견되는 고유 무기에 얼마나 드물게 나타나는지를 나타냅니다. 희귀한 특성일수록 비용이 더 커지며, 최대 기본 비용의 이 배수까지 오를 수 있습니다. 1배일 때는 희귀도가 비용에 영향을 주지 않습니다.</UWU_RarityCostCapDesc>
+  <!-- EN: Advanced trait minimum cost: {0}% -->
+  <UWU_ComplexityFloorScale>고급 특성 최소 비용: {0}%</UWU_ComplexityFloorScale>
+  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
+  <UWU_ComplexityFloorScaleDesc>우주 기술 특성은 근접 무기나 활처럼 부품 없이 제작되는 무기에 최소한의 고급 부품 수를 요구합니다. 이 최솟값은 제작 작업량, 품질, 특성 희귀도에 따라 달라집니다. 0%로 설정하면 이 최솟값이 사라집니다.</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <UWU_CostSettingNoEffect>특성 비용 배수가 0%인 동안에는 이 설정이 적용되지 않습니다.</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->

@@ -365,6 +365,32 @@ namespace UniqueWeaponsUnbound.Tests
             TraitCostUtility.SetRules(rules);
         }
 
+        // Installs a mod-settings instance for tests that exercise the
+        // settings-backed cost knobs, restoring the previous one on dispose.
+        // UWU_Mod.Settings is process-global like the rule list, and all
+        // pipeline test classes share one xunit collection, so the swap is
+        // serialized the same way UseRules is.
+        internal static IDisposable OverrideSettings(UWU_Settings settings)
+        {
+            return new SettingsScope(settings);
+        }
+
+        private sealed class SettingsScope : IDisposable
+        {
+            private readonly UWU_Settings previous;
+
+            internal SettingsScope(UWU_Settings settings)
+            {
+                previous = UWU_Mod.Settings;
+                UWU_Mod.Settings = settings;
+            }
+
+            public void Dispose()
+            {
+                UWU_Mod.Settings = previous;
+            }
+        }
+
         // Parses the shipped rule XML rather than mirroring it in code, so the
         // pipeline tests cannot drift from what actually ships. The file is
         // copied next to the test assembly by the test csproj.

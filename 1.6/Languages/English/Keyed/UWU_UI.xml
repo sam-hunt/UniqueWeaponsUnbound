@@ -134,6 +134,11 @@
   <UWU_RefundRateNoEffect>Trait refund rate has no effect while trait cost multiplier is 0%.</UWU_RefundRateNoEffect>
   <UWU_UseRecipeBaseCost>Derive base cost from crafting recipe</UWU_UseRecipeBaseCost>
   <UWU_UseRecipeBaseCostDesc>When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs.</UWU_UseRecipeBaseCostDesc>
+  <UWU_RarityCostCap>Rare trait cost cap: {0}x</UWU_RarityCostCap>
+  <UWU_RarityCostCapDesc>A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost.</UWU_RarityCostCapDesc>
+  <UWU_ComplexityFloorScale>Advanced trait minimum cost: {0}%</UWU_ComplexityFloorScale>
+  <UWU_ComplexityFloorScaleDesc>Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it.</UWU_ComplexityFloorScaleDesc>
+  <UWU_CostSettingNoEffect>This setting has no effect while trait cost multiplier is 0%.</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <UWU_MinimumQuality>Minimum weapon quality: {0}</UWU_MinimumQuality>

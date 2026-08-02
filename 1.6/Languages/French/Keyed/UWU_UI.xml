@@ -275,6 +275,16 @@
   <UWU_UseRecipeBaseCost>Déduire le coût de base de la recette de fabrication</UWU_UseRecipeBaseCost>
   <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
   <UWU_UseRecipeBaseCostDesc>Lorsque cette option est active, le coût en matériaux de base pour ajouter des traits est déduit de la recette de fabrication de l'arme. Lorsqu'elle est inactive, un coût fixe fondé sur des ressources génériques correspondant au niveau technique de l'arme est utilisé à la place. La désactiver empêche les armes peu coûteuses à fabriquer d'avoir des coûts de traits déraisonnablement bas, mais peut aussi empêcher les armes atypiques ou issues de mods d'avoir des coûts thématiquement adaptés.</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: Rare trait cost cap: {0}x -->
+  <UWU_RarityCostCap>Plafond du coût des traits rares : {0}x</UWU_RarityCostCap>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
+  <UWU_RarityCostCapDesc>La rareté d'un trait indique la fréquence à laquelle il apparaît sur les armes uniques trouvées dans le monde. Les traits plus rares coûtent plus cher, jusqu'à ce multiple de leur coût de base. À 1x, la rareté n'affecte pas le coût.</UWU_RarityCostCapDesc>
+  <!-- EN: Advanced trait minimum cost: {0}% -->
+  <UWU_ComplexityFloorScale>Coût minimum des traits avancés : {0}%</UWU_ComplexityFloorScale>
+  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
+  <UWU_ComplexityFloorScaleDesc>Les traits de niveau spatial coûtent un nombre minimum de composants avancés sur les armes fabriquées sans composants, comme les armes de mêlée ou les arcs. Ce minimum varie selon le travail de fabrication, la qualité et la rareté du trait. 0% le supprime.</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <UWU_CostSettingNoEffect>Ce paramètre n'a aucun effet tant que le multiplicateur du coût des traits est à 0%.</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->

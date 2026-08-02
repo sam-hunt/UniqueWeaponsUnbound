@@ -7,7 +7,9 @@ namespace UniqueWeaponsUnbound
 {
     public class UWU_Mod : Mod
     {
-        public static UWU_Settings Settings { get; private set; }
+        // Setter is internal so the headless test suite can install a settings
+        // instance; production assigns it exactly once, in the ctor below.
+        public static UWU_Settings Settings { get; internal set; }
 
         private Vector2 settingsScroll;
         private float settingsHeight;
@@ -75,20 +77,50 @@ namespace UniqueWeaponsUnbound
                 refundLabel += "UWU_DefaultSuffix".Translate();
             if (costsFree)
             {
-                Color prevColor = GUI.color;
-                GUI.color = Color.gray;
-                listing.Label(refundLabel);
-                Rect sliderRect = listing.GetRect(22f);
-                Widgets.HorizontalSlider(sliderRect, Settings.traitRefundRate, 0f, 1f);
-                TooltipHandler.TipRegion(sliderRect,
+                DrawInertSlider(listing, refundLabel, Settings.traitRefundRate, 0f, 1f,
                     "UWU_RefundRateNoEffect".Translate());
-                GUI.color = prevColor;
             }
             else
             {
                 listing.Label(refundLabel);
                 Settings.traitRefundRate = listing.Slider(Settings.traitRefundRate, 0f, 1f);
                 Settings.traitRefundRate = Mathf.Round(Settings.traitRefundRate * 20f) / 20f;
+            }
+
+            listing.Gap();
+
+            string rarityCapText = Settings.rarityCostCap.ToString("0.##");
+            string rarityCapLabel = "UWU_RarityCostCap".Translate(rarityCapText);
+            if (Settings.rarityCostCap == 2f)
+                rarityCapLabel += "UWU_DefaultSuffix".Translate();
+            if (costsFree)
+            {
+                DrawInertSlider(listing, rarityCapLabel, Settings.rarityCostCap, 1f, 4f,
+                    "UWU_CostSettingNoEffect".Translate());
+            }
+            else
+            {
+                listing.Label(rarityCapLabel, tooltip: "UWU_RarityCostCapDesc".Translate());
+                Settings.rarityCostCap = listing.Slider(Settings.rarityCostCap, 1f, 4f);
+                Settings.rarityCostCap = Mathf.Round(Settings.rarityCostCap * 4f) / 4f;
+            }
+
+            listing.Gap();
+
+            string floorPct = (Settings.complexityFloorScale * 100f).ToString("F0");
+            string floorLabel = "UWU_ComplexityFloorScale".Translate(floorPct);
+            if (Settings.complexityFloorScale == 1f)
+                floorLabel += "UWU_DefaultSuffix".Translate();
+            if (costsFree)
+            {
+                DrawInertSlider(listing, floorLabel, Settings.complexityFloorScale, 0f, 2f,
+                    "UWU_CostSettingNoEffect".Translate());
+            }
+            else
+            {
+                listing.Label(floorLabel, tooltip: "UWU_ComplexityFloorScaleDesc".Translate());
+                Settings.complexityFloorScale = listing.Slider(Settings.complexityFloorScale, 0f, 2f);
+                Settings.complexityFloorScale = Mathf.Round(Settings.complexityFloorScale * 20f) / 20f;
             }
 
             listing.Gap(18.0f);
@@ -259,6 +291,21 @@ namespace UniqueWeaponsUnbound
             {
                 Settings.ResetToDefaults();
             }
+        }
+
+        // A grayed, non-interactive slider row for a setting that currently has
+        // no effect, with the explanation as a tooltip over the slider.
+        private static void DrawInertSlider(
+            Listing_Standard listing, string label, float value, float min, float max,
+            string tooltip)
+        {
+            Color prevColor = GUI.color;
+            GUI.color = Color.gray;
+            listing.Label(label);
+            Rect sliderRect = listing.GetRect(22f);
+            Widgets.HorizontalSlider(sliderRect, value, min, max);
+            TooltipHandler.TipRegion(sliderRect, tooltip);
+            GUI.color = prevColor;
         }
 
         // Renders one row of the haul-planner radio group. Disabled options

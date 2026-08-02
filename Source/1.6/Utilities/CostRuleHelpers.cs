@@ -181,15 +181,23 @@ namespace UniqueWeaponsUnbound
         // Divides WorkToMake into a complexity figure that tracks vanilla
         // component counts (a value of 1 is roughly one component's worth of
         // build effort). Deliberately a hardcoded constant rather than a mod
-        // setting.
+        // setting — the floor scale setting below scales the floor's output
+        // instead of redefining what one component's worth of effort is.
         private const float ComplexityWorkDivisor = 6000f;
 
-        // Ceiling on the rarity multiplier (RarityMultiplierWorker): the rarest
-        // trait pays at most double the base bill. Deliberately a hardcoded
-        // constant rather than a mod setting, same as the divisor above. Kept
-        // conservative because the multiplier is a heuristic — a
-        // structurally-rare-but-mild trait is overpriced by at most 2x.
-        public const float RarityCapMax = 2f;
+        // Ceiling on the rarity multiplier (RarityMultiplierWorker), backed by
+        // the "rare trait cost cap" slider; falls back to the shipped default
+        // when settings are not yet loaded. The default of 2 is conservative
+        // because the multiplier is a heuristic — a structurally-rare-but-mild
+        // trait is overpriced by at most the cap — and the slider's minimum of
+        // 1 pins every trait to the plain bill, disabling the rule.
+        public static float RarityCapMax => UWU_Mod.Settings?.rarityCostCap ?? 2f;
+
+        // Scale on the spacer conversion's complexity floor, backed by the
+        // "advanced trait minimum cost" slider; falls back to 1 (the shipped
+        // floor) when settings are not yet loaded. Scales both floor terms
+        // together, so 0 removes the floor and restores pure by-value pricing.
+        public static float ComplexityFloorScale => UWU_Mod.Settings?.complexityFloorScale ?? 1f;
 
         // Resolves the def a weapon's costs derive from: the base variant of a
         // unique weapon, falling back to the weapon's own def (base-def-less
@@ -305,7 +313,9 @@ namespace UniqueWeaponsUnbound
         // def alone would erase all three: a legendary steel longsword would
         // price exactly like an awful one. The outer max against the unscaled
         // complexity keeps it floor-only, so the multipliers can never discount
-        // below what the floor billed before.
+        // below what the floor billed before. ComplexityFloorScale multiplies
+        // the complexity both terms share, so the setting moves the whole floor
+        // together and 0 removes it.
         public static void ApplyConvertAllToSpacer(
             List<ThingDefCountClass> costs, Thing weapon, WeaponTraitDef trait)
         {
@@ -336,7 +346,7 @@ namespace UniqueWeaponsUnbound
                 + Mathf.CeilToInt(totalValue / ComponentSpacer.BaseMarketValue);
             if (!hasComponents)
             {
-                float complexity = GetWeaponComplexity(weapon);
+                float complexity = GetWeaponComplexity(weapon) * ComplexityFloorScale;
                 int floor = Mathf.Max(
                     Mathf.CeilToInt(complexity),
                     Mathf.CeilToInt(complexity

@@ -232,6 +232,16 @@
   <UWU_UseRecipeBaseCost>基本コストを製作レシピから算出</UWU_UseRecipeBaseCost>
   <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
   <UWU_UseRecipeBaseCostDesc>有効にすると,特性を追加する際の基本材料コストが武器の製作レシピから算出されます.無効にすると,代わりに武器の技術レベルに応じた汎用資源に基づく固定コストが使用されます.無効にすることで,製作コストの安い武器の特性コストが不当に低くなるのを防げますが,個性的な武器やMODの武器がテーマに合ったコストを持てなくなる場合もあります.</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: Rare trait cost cap: {0}x -->
+  <UWU_RarityCostCap>希少特性コストの上限: {0}倍</UWU_RarityCostCap>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
+  <UWU_RarityCostCapDesc>特性の希少性とは,その特性が世界で発見されるユニークな武器にどれだけ稀にしか出現しないかを表します.希少な特性ほどコストが高くなり,最大で基本コストのこの倍率まで増加します.1倍の場合,希少性はコストに影響しません.</UWU_RarityCostCapDesc>
+  <!-- EN: Advanced trait minimum cost: {0}% -->
+  <UWU_ComplexityFloorScale>先進特性の最低コスト: {0}%</UWU_ComplexityFloorScale>
+  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
+  <UWU_ComplexityFloorScaleDesc>宇宙世紀技術の特性は,近接武器や弓のような,コンポーネントを使わずに製作される武器では,最低限の数の先進コンポーネントをコストとして必要とします.この最低数は工数,品質,特性の希少性に応じて変化します.0%にすると,この最低数はなくなります.</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <UWU_CostSettingNoEffect>特性コスト倍率が0%の間は,この設定に効果はありません.</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->

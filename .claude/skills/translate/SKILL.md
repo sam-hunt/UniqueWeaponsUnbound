@@ -289,7 +289,10 @@ Mod-decided terms pending native review: research trio 特化武器锻造 / 特�
 it is `Stat_Stuff_Name`, i.e. *material*); vanilla-behavior suffix （原版）;
 "must disarm from hostile" 必须从敌人手中缴获 (vanilla only has `DisarmedTime`=解除武装);
 progression section header 进度; gizmo button 指令按钮; weapon def 武器def (kept
-Latin, as JP does).
+Latin, as JP does); 稀有度 (rarity as a noun, 2026-08-02 — the adjective 稀有 is
+vanilla-attested, the abstract noun is not); 太空时代特性最低成本 (the "Advanced
+trait minimum cost" label rendered with 太空时代 to match its Desc rather than
+coining a separate "advanced trait" term).
 
 ### Glossary — Korean (machine-assisted generation, 2026-07; no native review yet)
 
@@ -404,7 +407,9 @@ all — 환급 and 환불 are both 0 hits); texture tab 외형 (질감 and 텍�
 rare in vanilla); 연사 속도 / 연사 횟수 / 저지력 (burst speed/count, stopping power —
 these KO stat labels are untranslated in vanilla); 아킴보 (akimbo — not an Odyssey
 trait); vanilla-behavior suffix (바닐라); progression header 진행; gizmo button
-지시 버튼; weapon def 무기 def (kept Latin, as JP and zh do).
+지시 버튼; weapon def 무기 def (kept Latin, as JP and zh do); 고급 특성 (advanced
+trait, 2026-08-02 — mirrors the English label's shorthand for spacer-tech traits
+via the established 고급 부품; no vanilla precedent for the fixed phrase).
 
 ### Glossary — German (machine-assisted generation, 2026-07-28; no native review yet)
 
@@ -576,7 +581,9 @@ kept in Latin script (neither is a vanilla trait); flare launcher
 **Fackelwerfer** (from `DisruptorFlare` = Disruptorfackel); progression header
 **Fortschritt**; gizmo button **Befehlsschaltfläche**; research tree
 **Forschungsbaum** (0 vanilla hits); weapon def **Waffen-Def** (kept Latin, as
-ja, zh and ko do).
+ja, zh and ko do); spacer-tech trait **Merkmale der Raumfahrtstufe** (2026-08-02,
+reuses the shipped "Waffen der Raumfahrtstufe" pattern from
+`UniqueFabrication`'s customUnlockTexts rather than coining a compound).
 
 Unrelated to German but worth remembering during any generation here: this repo's
 `DefInjected/UniqueWeaponsUnbound.TraitCostRuleDef/` folder is namespace-qualified

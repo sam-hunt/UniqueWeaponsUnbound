@@ -631,6 +631,50 @@ namespace UniqueWeaponsUnbound.Tests
         }
 
         [Fact]
+        public void ConvertAllToSpacer_FloorScaleSettingScalesTheFloor()
+        {
+            // The advanced trait minimum cost slider at 200% doubles the
+            // complexity both floor terms share: the wooden warhammer's floor 3
+            // becomes 6, still beating the by-value 1.
+            Thing warhammer = TraitCostTestHarness.MakeWeapon(
+                "TestFloorHammerScaled", TechLevel.Medieval, workToMake: 18000f,
+                costStuffCount: 150, stuff: TraitCostTestHarness.WoodLog);
+            List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
+                (TraitCostTestHarness.WoodLog, 75));
+
+            using (TraitCostTestHarness.OverrideSettings(
+                new UWU_Settings { complexityFloorScale = 2f }))
+            {
+                CostRuleHelpers.ApplyConvertAllToSpacer(costs, warhammer, CommonTrait());
+            }
+
+            Assert.Equal(6, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
+        public void ConvertAllToSpacer_FloorScaleZeroRemovesTheFloor()
+        {
+            // The slider's off position: with the floor gone the componentless
+            // bill prices purely by value (90 / 200 -> 1), the pre-floor figure.
+            Thing warhammer = TraitCostTestHarness.MakeWeapon(
+                "TestFloorHammerUnfloored", TechLevel.Medieval, workToMake: 18000f,
+                costStuffCount: 150, stuff: TraitCostTestHarness.WoodLog);
+            List<ThingDefCountClass> costs = TraitCostTestHarness.Costs(
+                (TraitCostTestHarness.WoodLog, 75));
+
+            using (TraitCostTestHarness.OverrideSettings(
+                new UWU_Settings { complexityFloorScale = 0f }))
+            {
+                CostRuleHelpers.ApplyConvertAllToSpacer(costs, warhammer, CommonTrait());
+            }
+
+            Assert.Single(costs);
+            Assert.Equal(1, TraitCostTestHarness.CountOf(
+                costs, TraitCostTestHarness.ComponentSpacer));
+        }
+
+        [Fact]
         public void ConvertAllToSpacer_NullWeaponStillPricesByValue()
         {
             // Complexity resolves to 0 without a weapon, so the floor is inert

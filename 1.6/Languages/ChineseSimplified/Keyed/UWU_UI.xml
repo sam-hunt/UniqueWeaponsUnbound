@@ -232,6 +232,16 @@
   <UWU_UseRecipeBaseCost>根据制作配方推算基础成本</UWU_UseRecipeBaseCost>
   <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
   <UWU_UseRecipeBaseCostDesc>启用后，添加特性的基础材料成本将根据武器的制作配方推算。禁用后，则改用基于武器科技等级对应通用资源的固定成本。禁用此项可避免制作成本低廉的武器拥有过低的特性成本，但也可能使特色武器或模组武器无法拥有贴合主题的成本。</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: Rare trait cost cap: {0}x -->
+  <UWU_RarityCostCap>稀有特性成本上限: {0}倍</UWU_RarityCostCap>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
+  <UWU_RarityCostCapDesc>特性的稀有度是指该特性在世界中已发现的特化武器上出现的稀有程度。越稀有的特性成本越高，最多可达其基础成本的该倍数。上限为1倍时，稀有度不会影响成本。</UWU_RarityCostCapDesc>
+  <!-- EN: Advanced trait minimum cost: {0}% -->
+  <UWU_ComplexityFloorScale>太空时代特性最低成本: {0}%</UWU_ComplexityFloorScale>
+  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
+  <UWU_ComplexityFloorScaleDesc>对于本身不使用零部件建造的武器（例如近战武器或弓），太空时代特性的成本中至少包含一定数量的高级零部件。该最低数量会随制作工作量、品质与特性稀有度而变化。为0%时移除此限制。</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <UWU_CostSettingNoEffect>当特性成本倍率为0%时，此设置不起作用。</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->

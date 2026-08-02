@@ -13,6 +13,8 @@ namespace UniqueWeaponsUnbound
         public bool useRecipeBaseCost = true;
         public float traitCostMultiplier = 1f;
         public float traitRefundRate = 0.5f;
+        public float rarityCostCap = 2f;
+        public float complexityFloorScale = 1f;
 
         // Prerequisites
         public QualityCategory minimumQuality = QualityCategory.Awful;
@@ -41,6 +43,8 @@ namespace UniqueWeaponsUnbound
             useRecipeBaseCost = true;
             traitCostMultiplier = 1f;
             traitRefundRate = 0.5f;
+            rarityCostCap = 2f;
+            complexityFloorScale = 1f;
 
             minimumQuality = QualityCategory.Awful;
             allowDefConversion = true;
@@ -68,6 +72,8 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref useRecipeBaseCost, "useRecipeBaseCost", true);
             Scribe_Values.Look(ref traitCostMultiplier, "traitCostMultiplier", 1f);
             Scribe_Values.Look(ref traitRefundRate, "traitRefundRate", 0.5f);
+            Scribe_Values.Look(ref rarityCostCap, "rarityCostCap", 2f);
+            Scribe_Values.Look(ref complexityFloorScale, "complexityFloorScale", 1f);
 
             Scribe_Values.Look(ref minimumQuality, "minimumQuality", QualityCategory.Awful);
             Scribe_Values.Look(ref allowDefConversion, "allowDefConversion", true);

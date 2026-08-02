@@ -217,6 +217,16 @@
   <UWU_UseRecipeBaseCost>Использовать стоимость из рецепта крафта</UWU_UseRecipeBaseCost>
   <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
   <UWU_UseRecipeBaseCostDesc>При включении базовая стоимость материалов для добавления свойств берётся из рецепта крафта оружия. При отключении используется фиксированная стоимость на основе общих ресурсов соответствующего технологического уровня. Отключение этой опции предотвращает неоправданно низкую стоимость свойств для дешёвого в крафте оружия, но может также лишить отдельные/модифицированные оружия подходящей тематической стоимости.</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: Rare trait cost cap: {0}x -->
+  <UWU_RarityCostCap>Предел стоимости редких свойств: {0}x</UWU_RarityCostCap>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
+  <UWU_RarityCostCapDesc>Редкость свойства отражает, насколько редко оно встречается на уникальном оружии, найденном в мире. Более редкие свойства стоят дороже — вплоть до указанного кратного их базовой стоимости. При 1x редкость не влияет на стоимость.</UWU_RarityCostCapDesc>
+  <!-- EN: Advanced trait minimum cost: {0}% -->
+  <UWU_ComplexityFloorScale>Минимальная стоимость продвинутых свойств: {0}%</UWU_ComplexityFloorScale>
+  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
+  <UWU_ComplexityFloorScaleDesc>Свойства космического уровня технологий требуют минимального количества продвинутых компонентов на оружии, изготавливаемом без компонентов, например на оружии ближнего боя или луках. Минимум растёт в зависимости от объёма работ, качества и редкости свойства. 0% отключает этот минимум.</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <UWU_CostSettingNoEffect>Эта настройка не действует, когда множитель стоимости свойств равен 0%.</UWU_CostSettingNoEffect>
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->
   <UWU_MinimumQuality>Минимальное качество оружия: {0}</UWU_MinimumQuality>

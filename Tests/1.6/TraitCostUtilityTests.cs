@@ -114,6 +114,31 @@ namespace UniqueWeaponsUnbound.Tests
             Assert.Equal(1f, RarityMultiplierWorker.GetRarityMultiplier(trait), 4);
         }
 
+        [Theory]
+        [InlineData(1f, 1f)]
+        [InlineData(3f, 3f)]
+        [InlineData(4f, 4f)]
+        public void RarityMultiplier_CapReadsTheModSetting(float cap, float expected)
+        {
+            // The cap is the rare trait cost cap slider. Commonality 0.05 wants
+            // 20x, so the clamp always lands on the cap — and at the slider's
+            // minimum of 1 every trait prices as common, the setting's off
+            // position.
+            WeaponTraitDef trait = TraitCostTestHarness.MakeTrait(
+                "TestRaritySetting", "rarity setting probe", commonality: 0.05f);
+
+            using (TraitCostTestHarness.OverrideSettings(
+                new UWU_Settings { rarityCostCap = cap }))
+            {
+                Assert.Equal(
+                    expected, RarityMultiplierWorker.GetRarityMultiplier(trait), 4);
+            }
+
+            // Scope disposed: back to the shipped default of 2 with no settings
+            // loaded.
+            Assert.Equal(2f, RarityMultiplierWorker.GetRarityMultiplier(trait), 4);
+        }
+
         // ===== Reference outcomes (spec table, items 1-2) =====================
 
         // UMW warhammer: costStuffCount 150, WorkToMake 18000.

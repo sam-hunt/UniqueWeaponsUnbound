@@ -2,10 +2,11 @@
 
 ## Features
 
-- Mod option for gating customization on colony crafting skill recipe +2 or 12
-- Blood-soaked trait rule requiring hemogen if biotech and UMW are installed?
-- Monomolecular, plasma, zeus rules for UMW
+- Mod setting: quality cost influence slider (0–200% scale on the quality
+  multiplier's effect on trait costs; deferred 2026-08-02 while the rarity cap
+  and complexity floor sliders bed in)
 - Add Alpha Armoury rules support (Phase 3 — workers landed, rules are XML-only)
+- Mod option for gating customization on colony crafting skill recipe +2 or 12
 - Mod setting for chance of upgrading enemy spawn weapons to unique
   - increasing chance of biocoding at higher tech/quality?
 - Free Customize unique weapon relics on form/reform ideology
@@ -18,5 +19,4 @@
 
 ## Cleanup
 
-- split out any oversize files?
-- small optimization: MayRequire VE Weapons attribute on some trait rules?
+- scan for and split out any oversize files?

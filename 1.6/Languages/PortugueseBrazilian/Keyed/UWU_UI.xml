@@ -317,6 +317,16 @@
   <UWU_UseRecipeBaseCost>Derivar o custo base da receita de fabricação</UWU_UseRecipeBaseCost>
   <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
   <UWU_UseRecipeBaseCostDesc>Quando ativado, o custo base de materiais para adicionar características é derivado da receita de fabricação da arma. Quando desativado, é usado no lugar um custo fixo baseado em recursos genéricos do nível de tecnologia da arma. Desativar isto evita que armas baratas de fabricar tenham custos de características absurdamente baixos, mas também pode impedir que armas distintas ou de mods tenham custos tematicamente adequados.</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: Rare trait cost cap: {0}x -->
+  <UWU_RarityCostCap>Limite de custo de características raras: {0}x</UWU_RarityCostCap>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
+  <UWU_RarityCostCapDesc>A raridade de uma característica indica quão raramente ela aparece em armas únicas encontradas pelo mundo. Características mais raras custam mais, até esse número de vezes o seu custo base. Em 1x, a raridade não afeta o custo.</UWU_RarityCostCapDesc>
+  <!-- EN: Advanced trait minimum cost: {0}% -->
+  <UWU_ComplexityFloorScale>Custo mínimo de características avançadas: {0}%</UWU_ComplexityFloorScale>
+  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
+  <UWU_ComplexityFloorScaleDesc>Características de tecnologia espacial custam um número mínimo de componentes avançados em armas fabricadas sem componentes, como armas de corpo a corpo ou arcos. Esse mínimo varia conforme o trabalho para fazer, a qualidade e a raridade da característica. 0% remove esse mínimo.</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <UWU_CostSettingNoEffect>Esta configuração não tem efeito enquanto o multiplicador de custo de características estiver em 0%.</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->
