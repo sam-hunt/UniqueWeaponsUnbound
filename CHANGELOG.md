@@ -5,6 +5,29 @@ All notable changes to Unique Weapons Unbound will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-08-03
+
+### Added
+
+- Simplified Chinese, Korean, German, Spanish, French, and Brazilian Portuguese localizations (machine-assisted; review welcome).
+- Trait-aware customization costs — traits now price the fitting rather than a flat material bill.
+- Trait matching on defName tokens, so localized and modded trait labels still price correctly.
+- Melee cost vocabulary, plus new metal-fittings, blood, and oversized rules.
+- Rare traits cost more, scaled by rarity and capped. Negative traits unaffected.
+- A minimum cost for component-less spacer weapons, scaled by quality and rarity.
+- Setting: rare trait cost cap (1-4x, default 2x; 1x disables the rule).
+- Setting: advanced trait minimum cost (0-200%, default 100%; 0% removes the floor).
+- Melee trait effects published by other mods now appear in trait tooltips.
+
+### Changed
+
+- RimWorld Multiplayer marked incompatible — client-local cost settings can desync.
+
+### Fixed
+
+- Trait stat rows render unfinalized; `MeleeHitChance -1` no longer shows as `-100%`.
+- Wielder-side stat offsets are no longer double-reported.
+
 ## [1.4.2] - 2026-07-24
 
 ### Added
@@ -174,6 +197,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.5.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.0
 [1.4.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.4.2
 [1.4.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.4.1
 [1.4.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.4.0
