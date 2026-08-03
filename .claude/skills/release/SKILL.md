@@ -42,6 +42,10 @@ python3 Scripts/refresh-translation-expectations.py
 python3 Scripts/check-translations.py --strict
 ```
 
+- The refresh script refuses to start while RimWorld is already open (it
+  needs an exclusive boot for the mod-list swap). If it reports that, **stop
+  and ask the user** to close the client, and rerun only after they confirm
+  it is free.
 - The first command regenerates `Scripts/expected-injections.json` by
   launching the local RimWorld client with `-l10nprobe` (graphical boot,
   ~1-2 min; the L10nProbe dev mod dumps every DefInjected key the live game

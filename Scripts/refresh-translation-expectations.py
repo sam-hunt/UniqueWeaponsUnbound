@@ -111,7 +111,26 @@ def pinned_modsconfig(original_text):
     return ET.tostring(root, encoding="unicode", xml_declaration=True) + "\n"
 
 
+def game_is_running():
+    # The probe boot needs the client to itself: a second instance fights
+    # over the session, and the ModsConfig swap must not race a live game
+    # (which rewrites the file on mod-list edits and on exit). tasklist.exe
+    # is reachable from WSL via interop; if it is not, skip the check rather
+    # than block the flow.
+    try:
+        out = subprocess.run(
+            ["tasklist.exe", "/FI", "IMAGENAME eq RimWorldWin64.exe"],
+            capture_output=True, text=True, timeout=15).stdout
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return "RimWorldWin64.exe" in out
+
+
 def launch_probe(rw, dump_path):
+    if game_is_running():
+        sys.exit("RimWorld is already running — the probe needs an exclusive "
+                 "boot (mod-list swap + -l10nprobe). Close the client, then "
+                 "rerun this script.")
     dump_path.unlink(missing_ok=True)
     mc = modsconfig_path()
     original = mc.read_bytes()
