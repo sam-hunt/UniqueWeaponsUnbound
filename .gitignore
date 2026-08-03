@@ -50,3 +50,6 @@ test_*.exe
 
 # Logs
 *.log
+
+# Python bytecode (translation tooling)
+__pycache__/
