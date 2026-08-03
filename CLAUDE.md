@@ -78,5 +78,24 @@ print it with `stat.Worker.ValueToString(value, finalized: false, sense)` — wh
 
 **Settings Triple Invariant:** see `Source/1.6/Core/CLAUDE.md`.
 
+## Localization
+
+English (Keyed files + def fields) is the source of truth; other languages derive from it via the
+`/translate` skill (`.claude/skills/translate/SKILL.md` — grounding rules, glossary, workflows, and
+the `labelKeywords` convention) and are validated deterministically by
+`python3 Scripts/check-translations.py` (also a CI release gate). The DefInjected expected set is
+the checked-in sidecar `Scripts/expected-injections.json`: a dump of every injection point the
+*live* game sees for this mod — including any vanilla-inherited field or C#-default comp string
+that never appears in this repo's XML — produced by
+`Scripts/refresh-translation-expectations.py` driving the `../L10nProbe` dev mod (never shipped)
+through the game's own walker. The checker refuses to run against stale expectations (any defName
+in `Defs/` the sidecar has never seen, or label/description text that drifted), so new content
+forces a regen and the regen sees everything the game sees; the release skill regenerates every
+release, which also covers vanilla updates changing inherited text under unchanged defNames. Def
+type folders are the loader-accepted names, so this mod's own def class appears as the
+namespace-qualified `UniqueWeaponsUnbound.TraitCostRuleDef` in both the sidecar and
+`DefInjected/`. The public language roster lives in CONTRIBUTING.md and must move in the same
+commit as any language change.
+
 For reading `Player.log` or disassembling the RimWorld API, use the `rimworld-logs` skill.
 

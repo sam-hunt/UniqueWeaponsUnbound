@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+# Regenerates Scripts/expected-injections.json — the checked-in "sidecar" of
+# every DefInjected key the live game expects for this mod — by driving the
+# L10nProbe dev mod (../L10nProbe; must be deployed, active last in the mod
+# list, and configured with this mod's packageId).
+#
+# The sidecar is what makes unknown localization-gap classes impossible by
+# structure: check-translations.py validates languages against it and refuses
+# to run against stale expectations (any defName in Defs/ it has never seen),
+# so every content change forces a regen, and the regen sees everything the
+# game sees (vanilla-inherited fields, C# defaults) via the game's own walker,
+# Verse.DefInjectionUtility.ForEachPossibleDefInjection.
+#
+# Flow: launch the game with -l10nprobe (graphical boot, ~1-2 min; the probe
+# runs once defs are loaded, writes one JSON per configured mod, then quits
+# the game), fetch this mod's dump from the probe's Output folder, rewrite the
+# sidecar, print a key-level diff summary.
+#
+# The probe boots with a PINNED mod list (CANONICAL_ACTIVE_MODS below), not
+# whatever the user last played with: ModsConfig.xml is swapped for the run
+# and restored afterwards. The dump reflects the LIVE def graph, so any
+# third-party mod that patches our defs leaks into the expectations — a
+# 2026-08-03 run under a Combat Extended play list emitted CE's rebuilt
+# spear tools (shaft-0/shaft-1/head) and reshuffled hediff comps, none of
+# which exist for players without CE. The pinned list is the family's three
+# mods + hard deps + every DLC our defs can MayRequire, matching the
+# configuration the sidecars were first verified against.
+#
+# Operational facts (verified against the probe's SPEC + live runs, 2026-07-31):
+#   * The game's exit code is 0 even when probing fails — success is judged by
+#     the output file, never the exit code.
+#   * On per-mod failure the probe guarantees NO output file at that mod's
+#     path (a pre-existing one is deleted). We delete the file before
+#     launching anyway, so a leftover from an older run can't be mistaken for
+#     a fresh result.
+#   * meta.generated is the only field that changes between runs on identical
+#     content, so it is stripped from the sidecar: an unchanged repo
+#     regenerates to a byte-identical file and "git diff is empty" means
+#     "nothing changed". meta.gameBuild is kept — a diff in it explains why
+#     keys moved when no local def changed (vanilla update).
+#
+# Usage:
+#   python3 Scripts/refresh-translation-expectations.py            # launch + refresh
+#   python3 Scripts/refresh-translation-expectations.py --no-launch  # reuse the
+#     dump already in the probe's Output folder (debugging / probe just ran)
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+# Per-repo constants — keep the three sibling repos' copies of this script
+# structurally identical, differing only here.
+PACKAGE_ID = "shunter.uniqueweaponsunbound"
+
+ROOT = Path(__file__).resolve().parent.parent
+SIDECAR = ROOT / "Scripts" / "expected-injections.json"
+
+
+# The exact list the probe boots with — deterministic expectations need a
+# deterministic def graph. Order is load order; the probe must be last.
+CANONICAL_ACTIVE_MODS = [
+    "brrainz.harmony",
+    "ludeon.rimworld",
+    "ludeon.rimworld.royalty",
+    "ludeon.rimworld.ideology",
+    "ludeon.rimworld.biotech",
+    "ludeon.rimworld.odyssey",
+    "shunter.uniquemeleeweapons",
+    "shunter.uniqueweaponsunbound",
+    "shunter.personaweaponsunbound",
+    "shunter.l10nprobe",
+]
+
+
+def rimworld_path():
+    rw = os.environ.get("RIMWORLD_PATH")
+    if not rw:
+        sys.exit("RIMWORLD_PATH is not set (see CLAUDE.md's WSL setup note)")
+    rw = Path(rw)
+    if not (rw / "RimWorldWin64.exe").is_file():
+        sys.exit(f"No RimWorldWin64.exe under RIMWORLD_PATH ({rw})")
+    if not (rw / "Mods" / "L10nProbe" / "About").is_dir():
+        sys.exit(f"L10nProbe is not deployed under {rw / 'Mods'} — build "
+                 f"../L10nProbe first")
+    return rw
+
+
+def modsconfig_path():
+    configs = sorted(Path("/mnt/c/Users").glob(
+        "*/AppData/LocalLow/Ludeon Studios/RimWorld by Ludeon Studios"
+        "/Config/ModsConfig.xml"))
+    if not configs:
+        sys.exit("No ModsConfig.xml found under /mnt/c/Users — cannot pin "
+                 "the probe mod list")
+    return configs[-1]
+
+
+def pinned_modsconfig(original_text):
+    # Rebuild only <activeMods>; version and knownExpansions pass through.
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(original_text)
+    active = root.find("activeMods")
+    for li in list(active):
+        active.remove(li)
+    for pid in CANONICAL_ACTIVE_MODS:
+        ET.SubElement(active, "li").text = pid
+    ET.indent(root, space="  ")
+    return ET.tostring(root, encoding="unicode", xml_declaration=True) + "\n"
+
+
+def launch_probe(rw, dump_path):
+    dump_path.unlink(missing_ok=True)
+    mc = modsconfig_path()
+    original = mc.read_bytes()
+    mc.write_text(pinned_modsconfig(original.decode("utf-8-sig")),
+                  encoding="utf-8")
+    print("Launching RimWorld with -l10nprobe on the pinned mod list "
+          "(graphical boot, ~1-2 min)...")
+    try:
+        # WSL interop blocks until the Windows process exits; the probe
+        # quits the game itself after writing its dumps.
+        subprocess.run(["./RimWorldWin64.exe", "-l10nprobe"], cwd=rw,
+                       check=False)
+    finally:
+        # Always hand the player's own mod list back, byte-identical.
+        mc.write_bytes(original)
+        print(f"Restored {mc}")
+
+
+def load_dump(dump_path):
+    if not dump_path.is_file():
+        sys.exit(f"Probe wrote no dump at {dump_path} — absence of the file "
+                 f"IS the failure marker; check Player.log for a "
+                 f"'[L10nProbe] FAILED probing' line")
+    dump = json.loads(dump_path.read_text(encoding="utf-8"))
+    if dump.get("meta", {}).get("modPackageId") != PACKAGE_ID:
+        sys.exit(f"{dump_path} is not a {PACKAGE_ID} dump")
+    dump["meta"].pop("generated", None)
+    return dump
+
+
+def key_set(dump):
+    return {(dt, k) for dt, keys in dump["defInjections"].items() for k in keys}
+
+
+def summarize(old, new):
+    if old is None:
+        print(f"Sidecar created: {sum(len(k) for k in new['defInjections'].values())} "
+              f"entries across {len(new['defInjections'])} def types")
+        return
+    if old["meta"].get("gameBuild") != new["meta"].get("gameBuild"):
+        print(f"gameBuild: {old['meta'].get('gameBuild')} -> "
+              f"{new['meta'].get('gameBuild')} (vanilla-sourced English may "
+              f"have changed even where no local def did)")
+    if old["meta"].get("activeDlcs") != new["meta"].get("activeDlcs"):
+        print(f"activeDlcs: {old['meta'].get('activeDlcs')} -> "
+              f"{new['meta'].get('activeDlcs')}")
+    old_keys, new_keys = key_set(old), key_set(new)
+    for label, keys in (("added", new_keys - old_keys),
+                        ("removed", old_keys - new_keys)):
+        for dt, k in sorted(keys):
+            print(f"  {label}: {dt}/{k}")
+    changed = [(dt, k) for dt, k in sorted(old_keys & new_keys)
+               if old["defInjections"][dt][k] != new["defInjections"][dt][k]]
+    for dt, k in changed:
+        print(f"  changed: {dt}/{k}")
+    if old == new:
+        print("No changes — sidecar is byte-identical.")
+    else:
+        print(f"{len(new_keys - old_keys)} added, {len(old_keys - new_keys)} "
+              f"removed, {len(changed)} changed. New keys need translating in "
+              f"every language (/translate) before check-translations.py "
+              f"passes.")
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--no-launch", action="store_true",
+                    help="skip launching the game; consume the dump already "
+                         "in the probe's Output folder")
+    args = ap.parse_args()
+
+    rw = rimworld_path()
+    dump_path = rw / "Mods" / "L10nProbe" / "Output" / f"{PACKAGE_ID}.json"
+    if not args.no_launch:
+        launch_probe(rw, dump_path)
+    new = load_dump(dump_path)
+
+    old = json.loads(SIDECAR.read_text(encoding="utf-8")) \
+        if SIDECAR.is_file() else None
+    # Match the probe's own formatting (two-space indent, LF, UTF-8 no BOM,
+    # trailing newline) so the sidecar diffs cleanly against raw dumps.
+    SIDECAR.write_text(json.dumps(new, indent=2, ensure_ascii=False) + "\n",
+                       encoding="utf-8")
+    summarize(old, new)
+    print(f"Wrote {SIDECAR.relative_to(ROOT)}")
+
+
+if __name__ == "__main__":
+    main()

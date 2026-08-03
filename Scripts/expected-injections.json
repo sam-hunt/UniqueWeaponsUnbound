@@ -1,0 +1,464 @@
+{
+  "meta": {
+    "gameBuild": "1.6.4871 rev591",
+    "activeDlcs": [
+      "Core",
+      "Royalty",
+      "Ideology",
+      "Biotech",
+      "Odyssey"
+    ],
+    "modPackageId": "shunter.uniqueweaponsunbound",
+    "modName": "Unique Weapons Unbound"
+  },
+  "defInjections": {
+    "JobDef": {
+      "UWU_CustomizeWeapon.reportString": {
+        "english": "customizing weapon.",
+        "required": true
+      }
+    },
+    "ResearchProjectDef": {
+      "UniqueFabrication.customUnlockTexts": {
+        "english": [
+          "Upgrade and customize spacer weapons",
+          "Upgrade and customize ultratech weapons"
+        ],
+        "isCollection": true,
+        "required": true
+      },
+      "UniqueFabrication.description": {
+        "english": "Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs.",
+        "required": true
+      },
+      "UniqueFabrication.generalRules.rulesStrings": {
+        "english": [
+          "subject->unique fabrication",
+          "subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits",
+          "subject_story->used fabrication nanotechnology to alter spacer weapon components",
+          "subject_gerund->fabricating unique weapons"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true,
+        "required": true
+      },
+      "UniqueFabrication.label": {
+        "english": "unique fabrication",
+        "required": true
+      },
+      "UniqueMachining.customUnlockTexts": {
+        "english": [
+          "Upgrade and customize industrial unique weapons"
+        ],
+        "isCollection": true,
+        "required": true
+      },
+      "UniqueMachining.description": {
+        "english": "Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs.",
+        "required": true
+      },
+      "UniqueMachining.generalRules.rulesStrings": {
+        "english": [
+          "subject->unique machining",
+          "subject_story->reverse-engineered unique weapon modifications using industrial tools",
+          "subject_story->perfected the art of applying weapon traits with precision machinery",
+          "subject_gerund->machining unique weapons"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true,
+        "required": true
+      },
+      "UniqueMachining.label": {
+        "english": "unique machining",
+        "required": true
+      },
+      "UniqueSmithing.customUnlockTexts": {
+        "english": [
+          "Customize neolithic weapons",
+          "Customize medieval weapons"
+        ],
+        "isCollection": true,
+        "required": true
+      },
+      "UniqueSmithing.description": {
+        "english": "Upgrade and customize neolithic and medieval weapons at a smithy, adding or removing traits to suit your needs.",
+        "required": true
+      },
+      "UniqueSmithing.generalRules.rulesStrings": {
+        "english": [
+          "subject->unique smithing",
+          "subject_story->learned to modify unique weapons by studying their traits",
+          "subject_story->experimented with ancient weapon enhancements",
+          "subject_gerund->smithing unique weapons"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true,
+        "required": true
+      },
+      "UniqueSmithing.label": {
+        "english": "unique smithing",
+        "required": true
+      }
+    },
+    "UniqueWeaponsUnbound.TraitCostRuleDef": {
+      "UWU_Akimbo.description": {
+        "english": "Doubles all costs to reflect that akimbo adds a second rendered weapon and doubles the fire rate. This counteracts the base 50% cost fraction to bring the total to full recipe cost.",
+        "required": true
+      },
+      "UWU_Akimbo.label": {
+        "english": "akimbo cost multiplier",
+        "required": true
+      },
+      "UWU_Akimbo.labelKeywords": {
+        "english": [
+          "akimbo"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_BaseCostFromRecipe.description": {
+        "english": "Replaces the tech-level fallback with the weapon's actual crafting recipe costs, including both fixed ingredients and stuff costs. Only acts when the weapon has a craftable base definition.",
+        "required": true
+      },
+      "UWU_BaseCostFromRecipe.label": {
+        "english": "base cost from recipe",
+        "required": true
+      },
+      "UWU_BaseCostFromTechLevel.description": {
+        "english": "Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components",
+        "required": true
+      },
+      "UWU_BaseCostFromTechLevel.label": {
+        "english": "base cost from tech level",
+        "required": true
+      },
+      "UWU_Blood.addIngredients.0.thingDef": {
+        "english": "HemogenPack"
+      },
+      "UWU_Blood.description": {
+        "english": "Adds 10 hemogen packs on top of the computed cost for blood-themed traits. The hemogen is consumed for good: removing the trait refunds none of it. Without Biotech this rule does nothing.",
+        "required": true
+      },
+      "UWU_Blood.label": {
+        "english": "blood hemogen surcharge",
+        "required": true
+      },
+      "UWU_Blood.labelKeywords": {
+        "english": [
+          "blood",
+          "hemovoric"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_ChargeCategoryGated.description": {
+        "english": "Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications.",
+        "required": true
+      },
+      "UWU_ChargeCategoryGated.label": {
+        "english": "charge weapons (category-gated)",
+        "required": true
+      },
+      "UWU_ChargeCategoryGated.labelKeywords": {
+        "english": [
+          "charge",
+          "charger",
+          "frequency",
+          "tesla"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_ChargeUnconditional.description": {
+        "english": "Converts all costs into advanced components by market value for traits involving advanced spacer technology, regardless of weapon category.",
+        "required": true
+      },
+      "UWU_ChargeUnconditional.label": {
+        "english": "charge weapons (unconditional)",
+        "required": true
+      },
+      "UWU_ChargeUnconditional.labelKeywords": {
+        "english": [
+          "crypto",
+          "cryo",
+          "capacitor",
+          "ultracoils",
+          "thump",
+          "rail",
+          "mono",
+          "monomolecular",
+          "plasma",
+          "zeus"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_Comfort.description": {
+        "english": "Converts half of all cost materials to thrumbofur by count, reflecting the luxurious padding and wrapping used for comfort modifications.",
+        "required": true
+      },
+      "UWU_Comfort.label": {
+        "english": "comfort material conversion",
+        "required": true
+      },
+      "UWU_Comfort.labelKeywords": {
+        "english": [
+          "comfort"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_CostPrune.description": {
+        "english": "Limits the cost to at most 3 material types to prevent UI overflow. When there are more than 3, the cheapest materials by unit price are trimmed first.",
+        "required": true
+      },
+      "UWU_CostPrune.label": {
+        "english": "cost material pruning",
+        "required": true
+      },
+      "UWU_EmpSplit.description": {
+        "english": "Removes spacer components, then converts 70% of base material costs into industrial components by market value, representing the electronic parts needed for EMP modifications.",
+        "required": true
+      },
+      "UWU_EmpSplit.label": {
+        "english": "EMP value split",
+        "required": true
+      },
+      "UWU_EmpSplit.labelKeywords": {
+        "english": [
+          "emp",
+          "flux",
+          "voltaic",
+          "sonic",
+          "shock",
+          "arc",
+          "thunder"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_Flarestriker.description": {
+        "english": "Converts 70% of base material costs into bioferrite by market value, reflecting the exotic fuel source needed for flare launchers.",
+        "required": true
+      },
+      "UWU_Flarestriker.label": {
+        "english": "flarestriker value split",
+        "required": true
+      },
+      "UWU_Flarestriker.labelKeywords": {
+        "english": [
+          "flare",
+          "flarestriker"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_Grip.description": {
+        "english": "Removes industrial and spacer components from the cost. Grip modifications are simple mechanical adjustments that don't require complex parts.",
+        "required": true
+      },
+      "UWU_Grip.label": {
+        "english": "grip component removal",
+        "required": true
+      },
+      "UWU_Grip.labelKeywords": {
+        "english": [
+          "grip"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_HeavyScrap.description": {
+        "english": "Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk.",
+        "required": true
+      },
+      "UWU_HeavyScrap.label": {
+        "english": "heavy scrap flat cost",
+        "required": true
+      },
+      "UWU_HeavyScrap.labelKeywords": {
+        "english": [
+          "heavy",
+          "scrap"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_IncendiarySwap.description": {
+        "english": "Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity.",
+        "required": true
+      },
+      "UWU_IncendiarySwap.label": {
+        "english": "incendiary component swap",
+        "required": true
+      },
+      "UWU_IncendiarySwap.labelKeywords": {
+        "english": [
+          "incendiary",
+          "blast",
+          "blasts",
+          "pitch-soaked",
+          "detonation",
+          "chemburster",
+          "flaming",
+          "searing",
+          "burning",
+          "ember"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_Inlay.description": {
+        "english": "Removes industrial and spacer components from the cost. Inlays are purely cosmetic modifications that require only raw materials, not complex parts.",
+        "required": true
+      },
+      "UWU_Inlay.label": {
+        "english": "inlay component removal",
+        "required": true
+      },
+      "UWU_Inlay.labelKeywords": {
+        "english": [
+          "inlay"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_Lightweight.description": {
+        "english": "Replaces 40% of wood costs with birdskin, representing the featherwork used to lighten wooden weapons. Weapons with no wood in their costs are unaffected.",
+        "required": true
+      },
+      "UWU_Lightweight.label": {
+        "english": "lightweight swap",
+        "required": true
+      },
+      "UWU_Lightweight.labelKeywords": {
+        "english": [
+          "lightweight",
+          "whisper"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_MaterialOverride.description": {
+        "english": "Detects material names in the trait label (e.g. \"gold\" in \"Gold Inlay\") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule.",
+        "required": true
+      },
+      "UWU_MaterialOverride.label": {
+        "english": "material override fallback",
+        "required": true
+      },
+      "UWU_MetalFittings.description": {
+        "english": "Swaps 40% of the weapon's material for the metal its fittings are made of: steel for weapons of industrial tech level and below, plasteel for spacer and above. Serrations, spikes, studs and weights are metal parts fixed onto the base weapon.",
+        "required": true
+      },
+      "UWU_MetalFittings.label": {
+        "english": "metal fittings swap",
+        "required": true
+      },
+      "UWU_MetalFittings.labelKeywords": {
+        "english": [
+          "serrated",
+          "razored",
+          "honed",
+          "keen",
+          "barbed",
+          "studded",
+          "spike",
+          "spiked",
+          "flanged",
+          "quilloned",
+          "toothed",
+          "jagged",
+          "weighted",
+          "counterweight",
+          "counterweighted",
+          "needle"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_NegativeDowngrade.description": {
+        "english": "Downgrades cost materials by one technology level for negative traits. Spacer components become industrial, plasteel becomes steel, steel becomes wood. Reflects that negative modifications use cruder, cheaper techniques.",
+        "required": true
+      },
+      "UWU_NegativeDowngrade.label": {
+        "english": "negative trait material downgrade",
+        "required": true
+      },
+      "UWU_Ornamental.description": {
+        "english": "Removes components, then converts half of remaining costs to silver by count. Ornamental work is decorative craftsmanship, not technical engineering.",
+        "required": true
+      },
+      "UWU_Ornamental.label": {
+        "english": "ornamental conversion",
+        "required": true
+      },
+      "UWU_Ornamental.labelKeywords": {
+        "english": [
+          "ornamental",
+          "engraved",
+          "filigree",
+          "gilded",
+          "enameled",
+          "etched"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_Oversized.description": {
+        "english": "Increases all costs by half. An oversized weapon is simply more weapon, and modifying it takes more material.",
+        "required": true
+      },
+      "UWU_Oversized.label": {
+        "english": "oversized cost multiplier",
+        "required": true
+      },
+      "UWU_Oversized.labelKeywords": {
+        "english": [
+          "oversized"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      },
+      "UWU_QualityMultiplier.description": {
+        "english": "Scales costs based on weapon quality. Higher-quality weapons cost more to customize. Includes the base 50% cost fraction so each trait costs half the weapon's full recipe value before quality scaling.",
+        "required": true
+      },
+      "UWU_QualityMultiplier.label": {
+        "english": "quality multiplier",
+        "required": true
+      },
+      "UWU_RarityMultiplier.description": {
+        "english": "Scales costs by how rare the trait is. A trait that appears half as often as a common one costs twice as much to fit, and the increase is capped there. Negative traits are not scaled.",
+        "required": true
+      },
+      "UWU_RarityMultiplier.label": {
+        "english": "rarity multiplier",
+        "required": true
+      },
+      "UWU_ToxSwap.description": {
+        "english": "Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity.",
+        "required": true
+      },
+      "UWU_ToxSwap.label": {
+        "english": "toxic component swap",
+        "required": true
+      },
+      "UWU_ToxSwap.labelKeywords": {
+        "english": [
+          "tox",
+          "toxic",
+          "paralytic",
+          "acid-injector",
+          "venom",
+          "envenomed",
+          "poisoned",
+          "opiated",
+          "sedative"
+        ],
+        "isCollection": true,
+        "fullListAllowed": true
+      }
+    }
+  }
+}
