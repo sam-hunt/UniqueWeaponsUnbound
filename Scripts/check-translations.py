@@ -92,8 +92,24 @@ PARITY_EXEMPT_FIELDS = {"labelKeywords"}
 REQUIRED_DLCS = {"Odyssey"}
 
 
+# Def XML may declare a def via a subclass the game rolls into a base-type
+# database — the probe's walker (the game's own) then dumps those defs under
+# the base type, and DefInjected translations legally target that base-type
+# folder. Map each subclass element tag seen in this repo's Defs/ to the def
+# type the dump actually uses. Empty here today; ArchotechAndroidHardware's
+# copy carries the first real entry (VREA's AndroidGeneDef -> GeneDef). Note
+# this repo's own UniqueWeaponsUnbound.TraitCostRuleDef needs NO alias: def
+# types a mod itself defines dump under their namespace-qualified name,
+# matching the XML tag.
+DEF_TYPE_ALIASES = {}
+
+
 def norm(text):
-    return re.sub(r"\s+", " ", (text or "").strip())
+    # The game decodes literal "\n" escapes in def XML text at load, so the
+    # sidecar (dumped game-side) holds real newlines where the XML holds two
+    # characters; decode before collapsing whitespace or every multi-paragraph
+    # description reads as drifted.
+    return re.sub(r"\s+", " ", (text or "").replace("\\n", "\n").strip())
 
 
 def placeholders(text):
@@ -193,7 +209,8 @@ def collect_defs(defs_dirs):
                     continue
                 def_name = elem.findtext("defName")
                 if def_name:
-                    defs.setdefault(elem.tag, {})[def_name] = elem
+                    def_type = DEF_TYPE_ALIASES.get(elem.tag, elem.tag)
+                    defs.setdefault(def_type, {})[def_name] = elem
     return defs
 
 
