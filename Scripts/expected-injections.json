@@ -9,7 +9,19 @@
       "Odyssey"
     ],
     "modPackageId": "shunter.uniqueweaponsunbound",
-    "modName": "Unique Weapons Unbound"
+    "modName": "Unique Weapons Unbound",
+    "activeMods": [
+      "brrainz.harmony",
+      "ludeon.rimworld",
+      "ludeon.rimworld.royalty",
+      "ludeon.rimworld.ideology",
+      "ludeon.rimworld.biotech",
+      "ludeon.rimworld.odyssey",
+      "shunter.uniquemeleeweapons",
+      "shunter.uniqueweaponsunbound",
+      "shunter.personaweaponsunbound",
+      "shunter.l10nprobe"
+    ]
   },
   "defInjections": {
     "JobDef": {
