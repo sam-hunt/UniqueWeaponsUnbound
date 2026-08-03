@@ -60,7 +60,19 @@ SIDECAR = ROOT / "Scripts" / "expected-injections.json"
 
 
 # The exact list the probe boots with — deterministic expectations need a
-# deterministic def graph. Order is load order; the probe must be last.
+# deterministic def graph. Keep byte-identical across the three sibling
+# repos; order is load order; the probe must be last. Membership rule:
+#   * Core, plus every DLC any family mod hard-requires OR gates content
+#     behind via MayRequire — a def whose gate is absent never loads, so its
+#     keys drop out of the sidecar and its already-shipped translations turn
+#     illegal (UMW's Royalty-gated uniques are the live example);
+#   * hard dependencies (Harmony);
+#   * every sidecar-bearing family mod — one boot dumps all of them, and
+#     they may legitimately patch each other's defs;
+#   * a third-party mod ONLY if family content MayRequires it (none today).
+# Nothing else. The probe filters each dump by packageId, so an extra mod
+# adds no keys of its own — but its patches to OUR defs leak straight into
+# the expectations (how CE's spear tools got in; see header).
 CANONICAL_ACTIVE_MODS = [
     "brrainz.harmony",
     "ludeon.rimworld",
