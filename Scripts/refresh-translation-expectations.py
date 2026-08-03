@@ -49,6 +49,7 @@ import json
 import os
 import subprocess
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 # Per-repo constants — keep the three sibling repos' copies of this script
@@ -60,19 +61,26 @@ SIDECAR = ROOT / "Scripts" / "expected-injections.json"
 
 
 # The exact list the probe boots with — deterministic expectations need a
-# deterministic def graph. Keep byte-identical across the three sibling
-# repos; order is load order; the probe must be last. Membership rule:
+# deterministic def graph. Order is load order; the probe must be last.
+# Membership rule:
 #   * Core, plus every DLC any family mod hard-requires OR gates content
 #     behind via MayRequire — a def whose gate is absent never loads, so its
 #     keys drop out of the sidecar and its already-shipped translations turn
 #     illegal (UMW's Royalty-gated uniques are the live example);
 #   * hard dependencies (Harmony);
-#   * every sidecar-bearing family mod — one boot dumps all of them, and
-#     they may legitimately patch each other's defs;
+#   * the family's sidecar-bearing mods. Only THIS repo's mod is needed for
+#     THIS sidecar's correctness — the family is designed independent and
+#     does not patch each other's defs. The siblings ride along so one boot
+#     refreshes every dump and their refresh scripts can reuse it with
+#     --no-launch; keeping the three lists identical is that convenience,
+#     not a correctness rule;
 #   * a third-party mod ONLY if family content MayRequires it (none today).
 # Nothing else. The probe filters each dump by packageId, so an extra mod
 # adds no keys of its own — but its patches to OUR defs leak straight into
 # the expectations (how CE's spear tools got in; see header).
+# Forgetting this list fails loudly, not silently: L10nProbe's settings UI
+# reminds about it whenever a mod is ticked for probing, and launch_probe
+# warns when a ticked mod is absent here (its dump cannot succeed).
 CANONICAL_ACTIVE_MODS = [
     "brrainz.harmony",
     "ludeon.rimworld",
@@ -112,7 +120,6 @@ def modsconfig_path():
 
 def pinned_modsconfig(original_text):
     # Rebuild only <activeMods>; version and knownExpansions pass through.
-    import xml.etree.ElementTree as ET
     root = ET.fromstring(original_text)
     active = root.find("activeMods")
     for li in list(active):
@@ -138,11 +145,34 @@ def game_is_running():
     return "RimWorldWin64.exe" in out
 
 
+def warn_unpinned_probe_targets():
+    # Ticking a mod in L10nProbe's settings is the memorable onboarding step;
+    # adding it to CANONICAL_ACTIVE_MODS above is the forgettable one. Catch
+    # the gap before the boot: a ticked mod absent from the pinned list is
+    # simply not loaded during the run, so its dump is guaranteed to fail.
+    cfg = modsconfig_path().parent / "Mod_L10nProbe_L10nProbeMod.xml"
+    if not cfg.is_file():
+        return
+    try:
+        node = ET.parse(cfg).getroot().find(".//targetPackageIds")
+    except ET.ParseError:
+        return
+    pinned = set(CANONICAL_ACTIVE_MODS)
+    for li in node if node is not None else []:
+        pid = (li.text or "").strip().lower()
+        if pid and pid not in pinned:
+            print(f"warning: {pid} is ticked for probing in L10nProbe's "
+                  f"settings but is not in CANONICAL_ACTIVE_MODS — it will "
+                  f"not be loaded during this boot and its dump WILL fail",
+                  file=sys.stderr)
+
+
 def launch_probe(rw, dump_path):
     if game_is_running():
         sys.exit("RimWorld is already running — the probe needs an exclusive "
                  "boot (mod-list swap + -l10nprobe). Close the client, then "
                  "rerun this script.")
+    warn_unpinned_probe_targets()
     dump_path.unlink(missing_ok=True)
     mc = modsconfig_path()
     original = mc.read_bytes()
