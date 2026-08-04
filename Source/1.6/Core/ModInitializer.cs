@@ -16,6 +16,12 @@ namespace UniqueWeaponsUnbound
                 harmony.PatchAll();
             });
 
+            // The load-time StatDef.SetImmutability ran before any mod static
+            // ctor, so the postfix in StatDef_SetImmutability_Patch couldn't
+            // catch it — apply the trait-stat mutability correction directly
+            // once here. The postfix owns every later recompute.
+            report.Time("TraitStatMutability", TraitStatMutability.MarkTraitStatsMutable);
+
             report.Time("WeaponRegistry", () => WeaponRegistry.Initialize(report));
             report.Time("WorkbenchUtility", () => WorkbenchUtility.Initialize(report));
             report.Time("TraitCostUtility", () => TraitCostUtility.Initialize(report));
