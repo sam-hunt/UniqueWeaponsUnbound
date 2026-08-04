@@ -46,7 +46,7 @@ namespace UniqueWeaponsUnbound.Patches
             // projects (matches requireCustomizationResearch=true) rather than
             // silently hiding them. Still cache the reference so we don't re-
             // check Settings every frame.
-            if (UWU_Mod.Settings == null || UWU_Mod.Settings.requireCustomizationResearch)
+            if (UWU_Mod.Settings?.requireCustomizationResearch != false)
             {
                 lastFiltered = projects;
                 return;

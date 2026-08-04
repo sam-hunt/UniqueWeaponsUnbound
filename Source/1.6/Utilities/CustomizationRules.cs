@@ -76,7 +76,7 @@ namespace UniqueWeaponsUnbound
             if (UWU_Mod.Settings.requireRecipeResearch)
             {
                 ResearchProjectDef recipeResearch = recipeMaker.researchPrerequisite;
-                if (recipeResearch != null && !recipeResearch.IsFinished)
+                if (recipeResearch?.IsFinished == false)
                     return "UWU_RequiresResearch".Translate(recipeResearch.label);
             }
 
@@ -121,7 +121,7 @@ namespace UniqueWeaponsUnbound
         public static bool HasRequiredResearch(TechLevel techLevel)
         {
             ResearchProjectDef required = GetRequiredResearch(techLevel);
-            return required != null && required.IsFinished;
+            return required?.IsFinished == true;
         }
 
         // Rejection report for paths that are normally hidden (silent false).

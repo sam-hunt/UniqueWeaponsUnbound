@@ -63,7 +63,7 @@ namespace UniqueWeaponsUnbound
         // call sees null and bails instead of double-recovering.
         private void QueueWeaponRecoveryFor(Thing recoverWeapon)
         {
-            if (recoverWeapon == null || recoverWeapon.Destroyed)
+            if (recoverWeapon?.Destroyed != false)
                 return;
 
             if (pawn.Map == null)

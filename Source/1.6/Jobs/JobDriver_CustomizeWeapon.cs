@@ -80,7 +80,7 @@ namespace UniqueWeaponsUnbound
         {
             get
             {
-                if (weapon != null && !weapon.Destroyed)
+                if (weapon?.Destroyed == false)
                     return weapon.LabelShortCap;
                 Thing target = job?.GetTarget(WeaponIndex).Thing;
                 if (target != null)
@@ -220,7 +220,7 @@ namespace UniqueWeaponsUnbound
             // Only reserve weapon if it's spawned on the map (ground weapon case).
             // Equipped/inventory weapons don't need map reservations.
             Thing w = job.GetTarget(WeaponIndex).Thing;
-            if (w != null && w.Spawned
+            if (w?.Spawned == true
                 && !pawn.Reserve(w, job, 1, -1, null, errorOnFailed))
                 return false;
 
@@ -266,7 +266,7 @@ namespace UniqueWeaponsUnbound
             // surface the weapon — the more player-relevant outcome.
             this.FailOn(() =>
             {
-                if (weapon == null || !weapon.Destroyed)
+                if (weapon?.Destroyed != true)
                     return false;
                 SetBailMessage("UWU_BailWeaponLost".Translate(WeaponLabel));
                 return true;
@@ -278,7 +278,7 @@ namespace UniqueWeaponsUnbound
             this.FailOn(() =>
             {
                 Thing wb = job.GetTarget(WorkbenchIndex).Thing;
-                if (wb == null || !wb.Spawned || wb.IsForbidden(pawn))
+                if (wb?.Spawned != true || wb.IsForbidden(pawn))
                 {
                     SetBailMessage("UWU_BailWorkbenchUnavailable".Translate(WeaponLabel));
                     return true;
@@ -293,8 +293,8 @@ namespace UniqueWeaponsUnbound
             // Workbench loses power or runs out of fuel mid-job.
             this.FailOn(() =>
             {
-                bool inactive = (powerComp != null && !powerComp.PowerOn)
-                    || (fuelComp != null && !fuelComp.HasFuel);
+                bool inactive = (powerComp?.PowerOn == false)
+                    || (fuelComp?.HasFuel == false);
                 if (inactive)
                     SetBailMessage("UWU_BailWorkbenchInactive".Translate(WeaponLabel));
                 return inactive;
@@ -321,7 +321,7 @@ namespace UniqueWeaponsUnbound
                     if (surplus.Count > 0)
                     {
                         Building bench = Workbench;
-                        IntVec3 spawnPos = (bench != null && bench.Spawned)
+                        IntVec3 spawnPos = (bench?.Spawned == true)
                             ? bench.Position : pawn.Position;
                         WeaponModificationUtility.SpawnResourcesNear(
                             pawn.Map, spawnPos, surplus);
@@ -363,7 +363,7 @@ namespace UniqueWeaponsUnbound
             acquireWeapon.initAction = delegate
             {
                 Thing w = job.GetTarget(WeaponIndex).Thing;
-                if (w == null || w.Destroyed)
+                if (w?.Destroyed != false)
                 {
                     SetBailMessage("UWU_BailWeaponLost".Translate(WeaponLabel));
                     EndJobWith(JobCondition.Incompletable);
@@ -430,7 +430,7 @@ namespace UniqueWeaponsUnbound
                 .FailOn(() =>
                 {
                     Thing w = job.GetTarget(WeaponIndex).Thing;
-                    bool gone = w == null || !w.Spawned || w.IsForbidden(pawn)
+                    bool gone = w?.Spawned != true || w.IsForbidden(pawn)
                         || !pawn.CanReach(w, PathEndMode.ClosestTouch, Danger.Deadly);
                     if (gone)
                         SetBailMessage("UWU_BailWeaponInaccessible".Translate(WeaponLabel));
@@ -473,7 +473,7 @@ namespace UniqueWeaponsUnbound
             Toil waitForDialog = ToilMaker.MakeToil("MakeNewToils");
             waitForDialog.initAction = delegate
             {
-                if (weapon == null || weapon.Destroyed)
+                if (weapon?.Destroyed != false)
                 {
                     SetBailMessage("UWU_BailWeaponLost".Translate(WeaponLabel));
                     EndJobWith(JobCondition.Incompletable);
@@ -611,7 +611,7 @@ namespace UniqueWeaponsUnbound
             reReserveIfNeeded.initAction = delegate
             {
                 Thing t = job.GetTarget(IngredientIndex).Thing;
-                if (t == null || !t.Spawned)
+                if (t?.Spawned != true)
                     return;
                 if (pawn.Map.reservationManager.ReservedBy(t, pawn, job))
                     return;
@@ -694,8 +694,7 @@ namespace UniqueWeaponsUnbound
             Toil workToil = Toils_General.Wait(WorkTicksPerOp, WorkbenchIndex);
             workToil.AddPreTickAction(delegate
             {
-                if (fuelComp != null)
-                    fuelComp.Notify_UsedThisTick();
+                fuelComp?.Notify_UsedThisTick();
             });
             workToil.WithProgressBar(WorkbenchIndex,
                 () => 1f - (float)ticksLeftThisToil / WorkTicksPerOp);

@@ -84,7 +84,7 @@ namespace UniqueWeaponsUnbound
 
             // --- Ideology colors (Ideo + Misc palette, when DLC active) ---
             if (UWU_Mod.Settings.enableIdeologyColors
-                && availableIdeoColors != null && availableIdeoColors.Count > 0)
+                && availableIdeoColors?.Count > 0)
             {
                 curY += 10f;
                 Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
@@ -164,7 +164,7 @@ namespace UniqueWeaponsUnbound
 
             // Ideology colors
             if (UWU_Mod.Settings.enableIdeologyColors
-                && availableIdeoColors != null && availableIdeoColors.Count > 0)
+                && availableIdeoColors?.Count > 0)
             {
                 height += 10f + SectionHeaderHeight;
                 height += GridHeight(availableIdeoColors.Count, cols);

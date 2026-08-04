@@ -67,8 +67,7 @@ namespace UniqueWeaponsUnbound
                 string countText = "x" + cost.count;
                 float textWidth = Text.CalcSize(countText).x;
                 Rect textRect = new Rect(curX, rect.y, textWidth, rect.height);
-                bool isShort = insufficientResources != null
-                    && insufficientResources.Contains(cost.thingDef);
+                bool isShort = insufficientResources?.Contains(cost.thingDef) == true;
                 if (isShort)
                 {
                     Color prevCostColor = GUI.color;
@@ -152,7 +151,7 @@ namespace UniqueWeaponsUnbound
             bool insufficientForConfirm = false;
             if (canConfirm)
             {
-                if (insufficientResources != null && insufficientResources.Count > 0)
+                if (insufficientResources?.Count > 0)
                 {
                     canConfirm = false;
                     insufficientForConfirm = true;

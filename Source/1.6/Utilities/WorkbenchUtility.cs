@@ -260,11 +260,11 @@ namespace UniqueWeaponsUnbound
         public static AcceptanceReport GetWorkbenchOperationalReport(Building_WorkTable workbench)
         {
             CompPowerTrader power = workbench.TryGetComp<CompPowerTrader>();
-            if (power != null && !power.PowerOn)
+            if (power?.PowerOn == false)
                 return "NoPower".Translate();
 
             CompRefuelable fuel = workbench.TryGetComp<CompRefuelable>();
-            if (fuel != null && !fuel.HasFuel)
+            if (fuel?.HasFuel == false)
                 return "NoFuel".Translate();
 
             return true;
@@ -381,8 +381,7 @@ namespace UniqueWeaponsUnbound
                         bestTier = smithyDefs;
                 }
 
-                if (bestTier != null)
-                    bestTier.Add(def);
+                bestTier?.Add(def);
                 return;
             }
         }
@@ -425,7 +424,7 @@ namespace UniqueWeaponsUnbound
 
             foreach (RecipeDef recipe in recipes)
             {
-                if (recipe.ProducedThingDef != null && recipe.ProducedThingDef.IsWeapon)
+                if (recipe.ProducedThingDef?.IsWeapon == true)
                     return true;
             }
             return false;

@@ -56,7 +56,7 @@ namespace UniqueWeaponsUnbound
         {
             if (!nonHostileCount.TryGetValue(trait, out int total))
                 return false;
-            int contribution = (weaponTraits != null && weaponTraits.Contains(trait)) ? 1 : 0;
+            int contribution = (weaponTraits?.Contains(trait) == true) ? 1 : 0;
             return total - contribution <= 0;
         }
 
@@ -127,7 +127,7 @@ namespace UniqueWeaponsUnbound
                 if (!isWeapon && !isKit)
                     continue;
                 IntVec3 pos = t.PositionHeld;
-                if (fog != null && fog.IsFogged(pos))
+                if (fog?.IsFogged(pos) == true)
                     continue;
                 if (isWeapon)
                     AddWeaponTraits(t, nonHostile);
@@ -141,7 +141,7 @@ namespace UniqueWeaponsUnbound
             {
                 foreach (Pawn p in map.mapPawns.AllPawnsSpawned)
                 {
-                    if (fog != null && fog.IsFogged(p.Position))
+                    if (fog?.IsFogged(p.Position) == true)
                         continue;
                     bool isHostile = p.HostileTo(Faction.OfPlayer);
                     ScanPawn(p, isHostile, nonHostile, hostile);

@@ -20,7 +20,7 @@ namespace UniqueWeaponsUnbound
         {
             if (!def.labelKeywords.NullOrEmpty())
             {
-                if (def.weaponCategories != null && def.weaponCategories.Count > 0
+                if (def.weaponCategories?.Count > 0
                     && (trait.weaponCategory == null
                         || !def.weaponCategories.Contains(trait.weaponCategory)))
                     return false;

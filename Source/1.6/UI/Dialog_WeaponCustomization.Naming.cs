@@ -52,7 +52,7 @@ namespace UniqueWeaponsUnbound
             var adjectives = new List<string>();
             foreach (WeaponTraitDef trait in desiredTraits)
             {
-                if (trait.traitAdjectives != null && trait.traitAdjectives.Count > 0)
+                if (trait.traitAdjectives?.Count > 0)
                     adjectives.AddRange(trait.traitAdjectives);
             }
 

@@ -126,8 +126,7 @@ namespace UniqueWeaponsUnbound
                 bool isOriginalOrDesired =
                     originalTraits.Contains(trait) || desiredTraits.Contains(trait);
 
-                bool passesProgression = progressionPool == null
-                    || progressionPool.IsVisible(trait)
+                bool passesProgression = progressionPool?.IsVisible(trait) != false
                     || isOriginalOrDesired;
                 if (!passesProgression)
                     continue;
@@ -158,8 +157,7 @@ namespace UniqueWeaponsUnbound
             // Traits already on this weapon stay visible regardless — otherwise the
             // player couldn't see what they're removing. Hostile-only traits also
             // stay visible (they render disabled with a rejection reason instead).
-            if (progressionPool != null
-                && !progressionPool.IsVisible(trait)
+            if (progressionPool?.IsVisible(trait) == false
                 && !originalTraits.Contains(trait)
                 && !desiredTraits.Contains(trait))
                 return false;
@@ -217,8 +215,7 @@ namespace UniqueWeaponsUnbound
             // customized would empty the player's pool of available sources for it.
             // Save/restore tightly around the label so cost icons + rejection text
             // keep their normal coloring.
-            bool isLastSource = progressionPool != null
-                && progressionPool.IsLastNonHostileSource(trait, originalTraits);
+            bool isLastSource = progressionPool?.IsLastNonHostileSource(trait, originalTraits) == true;
             Text.Anchor = TextAnchor.MiddleLeft;
             Rect labelRect = new Rect(rowRect.x + 4f, rowRect.y,
                 rowRect.width * 0.35f, rowRect.height);

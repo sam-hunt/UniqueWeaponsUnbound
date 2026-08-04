@@ -202,7 +202,7 @@ namespace UniqueWeaponsUnbound
         // equip/unequip events don't fire on the bare scrub path.
         public static void HealOrphaned(Thing weapon)
         {
-            if (weapon == null || weapon.Destroyed)
+            if (weapon?.Destroyed != false)
                 return;
             CompUniqueWeapon comp = weapon.TryGetComp<CompUniqueWeapon>();
             if (comp == null)

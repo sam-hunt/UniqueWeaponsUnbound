@@ -35,7 +35,7 @@ namespace UniqueWeaponsUnbound
 
         private static FloatMenuOption BuildOption(Thing clickedThing, FloatMenuContext context)
         {
-            if (UWU_Mod.Settings == null || !UWU_Mod.Settings.enableGroundCustomization)
+            if (UWU_Mod.Settings?.enableGroundCustomization != true)
                 return null;
             if (clickedThing == null || clickedThing.def == null)
                 return null;

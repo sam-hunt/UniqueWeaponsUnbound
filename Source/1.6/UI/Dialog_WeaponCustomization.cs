@@ -170,7 +170,7 @@ namespace UniqueWeaponsUnbound
 
             // Snapshot original traits
             CompUniqueWeapon uniqueComp = weapon.TryGetComp<CompUniqueWeapon>();
-            if (uniqueComp != null && uniqueComp.TraitsListForReading != null)
+            if (uniqueComp?.TraitsListForReading != null)
                 originalTraits = new List<WeaponTraitDef>(uniqueComp.TraitsListForReading);
             else
                 originalTraits = new List<WeaponTraitDef>();

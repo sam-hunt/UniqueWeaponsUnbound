@@ -511,7 +511,7 @@ namespace UniqueWeaponsUnbound
         // ResourcesRaw category).
         public static bool IsRawResource(ThingDef def)
         {
-            return rawResources != null && rawResources.Contains(def);
+            return rawResources?.Contains(def) == true;
         }
 
         // Selects a bill material by the weapon's tech level: Industrial and

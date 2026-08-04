@@ -240,7 +240,7 @@ namespace UniqueWeaponsUnbound
 
                     // If removing the last trait, convert unique→base atomically
                     CompUniqueWeapon removeComp = weapon.TryGetComp<CompUniqueWeapon>();
-                    if (removeComp != null && removeComp.TraitsListForReading.Count == 0
+                    if (removeComp?.TraitsListForReading.Count == 0
                         && UWU_Mod.Settings.allowDefConversion)
                     {
                         ThingDef baseDef = WeaponRegistry.GetBaseVariant(weapon.def);

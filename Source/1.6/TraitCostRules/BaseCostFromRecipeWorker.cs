@@ -26,7 +26,7 @@ namespace UniqueWeaponsUnbound
                     continue;
 
                 ThingDefCountClass product = recipe.products[0];
-                if (product.count != 1 || product.thingDef == null || !product.thingDef.IsWeapon)
+                if (product.count != 1 || product.thingDef?.IsWeapon != true)
                     continue;
 
                 if (!recipeByProduct.ContainsKey(product.thingDef))

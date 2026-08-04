@@ -127,8 +127,7 @@ namespace UniqueWeaponsUnbound
 
         private static bool IsBladeLink(WeaponTraitDef trait)
         {
-            return trait.weaponCategory != null
-                && trait.weaponCategory.defName == "BladeLink";
+            return trait.weaponCategory?.defName == "BladeLink";
         }
     }
 }
