@@ -462,8 +462,12 @@ namespace UniqueWeaponsUnbound
             if (graphic is Graphic_Random random)
                 graphic = random.SubGraphicAtIndex(textureIndex);
 
+            // Unity-overloaded == (not ?.) so a destroyed Material also bails out
+            // instead of throwing MissingReferenceException on .mainTexture (UNT0008).
             Material mat = graphic.MatSingle;
-            Texture mainTex = mat?.mainTexture;
+            if (mat == null)
+                return null;
+            Texture mainTex = mat.mainTexture;
             if (mainTex == null)
                 return null;
 
