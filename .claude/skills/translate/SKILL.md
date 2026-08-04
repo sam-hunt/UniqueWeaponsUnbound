@@ -146,11 +146,26 @@ The glossaries below are shared across the mod family (here, ../UniqueMeleeWeapo
 corrected in one repo's skill, mirror it into the siblings, adjusting
 domain-specific rows. Add rows whenever a native review lands corrections.
 
+**The weapon-trait word is per-DLC, not per-language — check the right stat**
+(lesson from PersonaWeaponsUnbound, which inherited this repo's Russian row and
+found its grounding was domain-scoped). Weapon **trait** and pawn-personality
+**trait** are different words in many official localizations, and the weapon
+word itself can differ *between DLCs*: for THIS mod the authority is Odyssey's
+`Stat_ThingUniqueWeaponTrait_Label` / `WeaponTraits` / `StatsReport_WeaponTraits`
+(unique weapons), NOT Royalty's `Stat_Thing_PersonaWeaponTrait_Label` (persona
+weapons — PWU's domain) and NOT Core's pawn `<Traits>`. Always look the two
+weapon stats up separately by defName; never resolve "trait" once per language.
+The check is mandatory but its answer is not always "they differ": ru and ja
+diverge between the DLCs, es and pt-BR assign the same two words to opposite
+sides, ko diverges *within* Royalty, while zh-Hans, de and fr agree across both
+(each language's row below records what its lookup returned). Record the
+result in the target language's glossary either way.
+
 ### Glossary — Russian (from PR #6 native review)
 
 | English | Use | Never | Why |
 |---|---|---|---|
-| trait (weapon) | свойство | черта | vanilla `WeaponTraits`=Свойства; черта = pawn personality traits |
+| trait (weapon) | свойство | черта | Odyssey `WeaponTraits`=Свойства. черта is both the pawn-personality word AND Royalty's official *persona*-weapon word (`Stat_Thing_PersonaWeaponTrait_Label`=Черты — PWU's domain, discovered there 2026-07): the DLC domains diverge in RU, so this row is Odyssey-scoped, not a general "never черта for weapons" |
 | ideoligion | идеолигия | идеология | vanilla's coined portmanteau (`ReformIdeoligion`) |
 | charge (weapons) | энерг- root | заряд- | vanilla `Gun_ChargeRifle`=энерговинтовка; заряд reads as ammo |
 | fueled/electric smithy | топливная кузня / электрокузня | кузница | vanilla building labels |
