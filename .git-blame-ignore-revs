@@ -7,3 +7,6 @@ fb73a07a27362c79ce9b314f5ce7defaa4add820
 
 # style: Normalize whitespace in Russian localization files
 434f840aa57c3975888d35d4c3245e321fedbb71
+
+# style: Apply RCS1146 conditional-access fixes via roslynator
+1fc96d993537dbafbe901c51ca18f3f92e01c9c6
