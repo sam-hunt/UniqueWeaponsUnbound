@@ -20,7 +20,5 @@
 
 ## Cleanup
 
-- scan for and split out any oversize files if appropriate seams exist
-
 - Decide whether to standardize `generate_release_notes` in release.yml across
   the family (UMW uses false + manual changelog paste; UWU/PWU use true).
