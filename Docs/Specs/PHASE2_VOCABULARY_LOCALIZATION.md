@@ -115,7 +115,7 @@ found, stop and report rather than hacking around it).
 
 ## Verification
 
-- Build + `./Scripts/test-windows.sh`. Add/extend a coverage test or use the
+- Build + `dotnet test`. Add/extend a coverage test or use the
   Phase 1 dev-mode dump: **≥19 of UMW's 28 traits** must match at least one
   thematic rule (expected still-plain: `bell-cast`, `dead-blow`, `piledriver`,
   `carbonized`, `storied` — and `blood-stained` without Biotech; negatives

@@ -34,17 +34,19 @@ A gitignored Stop hook (`.claude/hooks/sync-mod.sh`) rebuilds + redeploys after 
 
 ### Tests
 
-xUnit suite under `Tests/1.6/` (a separate project, never shipped). Run with `./Scripts/test-windows.sh` — it shells out to the Windows `dotnet` CLI. CI builds but doesn't run it.
+xUnit suite under `Tests/1.6/` (a separate project, never shipped). Run natively:
 
-**Never run `dotnet test` natively from WSL here** (evaluated 2026-08-04, unlike
-the AAH/BTG siblings where native runs work): mono *can* host the net472 runner,
-but 61/351 tests fail on the exact binaries that pass 351/351 under the Windows
-runner — the reflection-heavy harness (`GetUninitializedObject`-built defs
-against real RimWorld assemblies) diverges between the runtimes, so a native run
-is noise, not signal. Worse, a native build overwrites `1.6/Assemblies/` with a
-Debug DLL and leaves mixed-toolchain `obj/` state that breaks the next
-`test-windows.sh` run with CS0006. Recovery: delete `Source/1.6/{obj,bin}`,
-`Tests/1.6/{obj,bin}`, and `1.6/Assemblies/`, then rebuild.
+```bash
+dotnet test Tests/1.6/UniqueWeaponsUnbound.Tests.csproj
+```
+
+vstest hosts the net472 suite via mono automatically. CI builds but doesn't run it.
+
+If a native test failure looks runtime-flavored, suspect assembly resolution first:
+mono resolves field types eagerly where the Windows CLR is lazy, so a DLL missing
+from the test bin copy target (see the comment in the test csproj) throws
+`BadImageFormatException`/`TypeLoadException` under mono only — and one such failure
+can poison static state and surface as unrelated value mismatches downstream.
 
 ## Architecture
 

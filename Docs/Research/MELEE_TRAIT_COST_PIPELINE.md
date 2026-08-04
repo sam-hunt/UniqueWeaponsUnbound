@@ -540,4 +540,5 @@ preference for the local install as source of truth:
   `$RIMWORLD_PATH/Data/**/*.xml`.
 
 Tests live at `Tests/1.6/TraitCostUtilityTests.cs`; run via
-`./Scripts/test-windows.sh` (WSL cannot host the net472 runner).
+`dotnet test Tests/1.6/UniqueWeaponsUnbound.Tests.csproj` (vstest hosts the
+net472 suite via mono on WSL).

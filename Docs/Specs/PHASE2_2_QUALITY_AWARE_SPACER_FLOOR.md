@@ -136,6 +136,6 @@ re-deriving the two 6s to 4s and the 8 to 4.
 ## Verification
 
 - Extend/update `Tests/1.6/TraitCostUtilityTests.cs` per item 2; full suite
-  via `./Scripts/test-windows.sh`; build + deploy green.
+  via `dotnet test`; build + deploy green.
 - No coverage-matrix or translation-checker impact expected
   (`check-translations.py` untouched).

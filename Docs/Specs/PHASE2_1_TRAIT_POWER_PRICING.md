@@ -181,7 +181,7 @@ weapon's market value — deferred owner question); any AA-specific rules
 - Update the two zeus pins in `TraitRuleCoverageTests.cs`; the AA drain
   assertion must stay green (no other rule starts firing).
 - `check-translations.py` 0/0 across all 8 languages after item 4.
-- Full suite via `./Scripts/test-windows.sh`; build + deploy green.
+- Full suite via `dotnet test`; build + deploy green.
 
 ## Ratified decisions (owner, 2026-07-30)
 

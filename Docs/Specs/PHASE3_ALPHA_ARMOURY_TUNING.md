@@ -70,7 +70,7 @@ Rejected approaches); melee anything (AA is ranged-only, verified V5).
 
 ## Verification
 
-- Build + `./Scripts/test-windows.sh`; unit tests for the additive-worker rules
+- Build + `dotnet test`; unit tests for the additive-worker rules
   can run against synthetic traits with AA-shaped labels (no AA dependency in
   tests — the test project must stay standalone).
 - With AA present locally (workshop copy path in V5): dev-mode dump shows each

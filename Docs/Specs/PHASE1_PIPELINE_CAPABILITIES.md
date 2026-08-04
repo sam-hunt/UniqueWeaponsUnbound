@@ -173,7 +173,7 @@ settings sync (V6 — separate effort).
 
 ## Verification
 
-- Extend `Tests/1.6/TraitCostUtilityTests.cs`; run `./Scripts/test-windows.sh`
+- Extend `Tests/1.6/TraitCostUtilityTests.cs`; run `dotnet test`
   (WSL cannot host the net472 runner). Cover: defName-only matching, prefix
   strip (incl. acronym-collision negative case), spacer-component swap,
   exotic-stuff split (jade/gold/stony no longer no-op), complexity counts
