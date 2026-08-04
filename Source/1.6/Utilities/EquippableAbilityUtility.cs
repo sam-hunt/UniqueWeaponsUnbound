@@ -98,6 +98,62 @@ namespace UniqueWeaponsUnbound
             }
         }
 
+        // Mirrors a live weapon's remaining ability charges onto a
+        // prospective (preview) weapon after StampTraits wired its ability
+        // comp. Fresh wiring seeds max charges — correct when the staged
+        // customization ADDS the ability trait (the player pays for it, and
+        // the real flow's Notify_PropsChanged refills) — but when the staged
+        // set KEEPS a trait the source weapon already carries, the real flow
+        // preserves the current count (SetupAndPreserveCharges), so the
+        // preview must show the source's count, not a free refill.
+        //
+        // "Kept" is decided by abilityProps reference identity: the target's
+        // wired props instance lives on the trait def itself, so the source
+        // carrying a trait with the same abilityProps means the same trait
+        // def. The source's cached Ability is read through the private field
+        // rather than AbilityForReading so a never-constructed ability on the
+        // LIVE weapon isn't constructed (and its global id drawn) as a side
+        // effect of previewing; a null cache leaves the preview at max
+        // charges, matching what lazy construction would report for that
+        // weapon anyway.
+        public static void MirrorChargesForKeptTrait(Thing source, Thing target)
+        {
+            if (source == null || CachedAbilityField == null)
+                return;
+
+            CompEquippableAbilityReloadable targetComp =
+                target.TryGetComp<CompEquippableAbilityReloadable>();
+            if (!(targetComp?.props is CompProperties_EquippableAbilityReloadable wiredProps))
+                return;
+
+            CompUniqueWeapon sourceComp = source.TryGetComp<CompUniqueWeapon>();
+            if (sourceComp == null)
+                return;
+
+            bool kept = false;
+            foreach (WeaponTraitDef trait in sourceComp.TraitsListForReading)
+            {
+                if (trait.abilityProps == wiredProps)
+                {
+                    kept = true;
+                    break;
+                }
+            }
+            if (!kept)
+                return;
+
+            CompEquippableAbilityReloadable sourceAbilityComp =
+                source.TryGetComp<CompEquippableAbilityReloadable>();
+            if (sourceAbilityComp == null)
+                return;
+
+            Ability sourceAbility = (Ability)CachedAbilityField.GetValue(sourceAbilityComp);
+            if (sourceAbility?.def == null || sourceAbility.def != wiredProps.abilityDef)
+                return;
+
+            targetComp.RemainingCharges = sourceAbility.RemainingCharges;
+        }
+
         // Restores CompEquippableAbilityReloadable to its def-default state:
         // drops the cached Ability and points props back at the empty stub from
         // weapon.def.comps. A subsequent AddTrait → CompUniqueWeapon.Setup()

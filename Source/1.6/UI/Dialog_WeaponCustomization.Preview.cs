@@ -325,13 +325,19 @@ namespace UniqueWeaponsUnbound
         // setting: color one is read live from CompUniqueWeapon.ForceColor
         // (just that field — no trait scan, no Setup() cache), and color two is
         // derived from the trait list (+ stuff) by the weapon's own
-        // DrawColorTwo. Abilities/verbs don't affect appearance, so the heavier
-        // AddTrait wiring is skipped — the list is replaced directly. Beyond
-        // appearance, the thing also backs the preview's info card, so when it
-        // is (re)made the original weapon's identity state (quality, hitpoints,
-        // biocoding, art, relic status) is stamped on via WeaponDefConversion's
-        // copy helpers — copy semantics, not the conversion pipeline's
-        // ownership transfers, so the live weapon's state is never disturbed.
+        // DrawColorTwo. The trait list is stamped wholesale via StampTraits,
+        // which also converges the non-appearance state the info card can read
+        // — trait-fold caches and ability-comp wiring — with what the real
+        // customization flow produces on the live weapon. Beyond that, when
+        // the thing is (re)made the original weapon's identity state (quality,
+        // hitpoints, biocoding, art, relic status) is stamped on via
+        // WeaponDefConversion's copy helpers — copy semantics, not the
+        // conversion pipeline's ownership transfers, so the live weapon's
+        // state is never disturbed. The info card shares the appearance path's
+        // ceiling: a stat effect another mod applies purely from its own
+        // equip- or draw-time patches (rather than from state reachable
+        // through the thing) can't be reconstructed here and won't show until
+        // the weapon is actually crafted and equipped.
         //
         // Building a Thing mutates global sim state, which the old graphic-only
         // path never touched: Thing.PostMake pulls a UniqueIDsManager id and
@@ -341,8 +347,10 @@ namespace UniqueWeaponsUnbound
         // tick): the make is wrapped in Rand.Push/PopState so the throwaway
         // rolls don't perturb the shared Rand stream, and the Thing is cached
         // on previewThing and re-made only when the result def changes — so the
-        // id draw fires per def, not per rebuild. Re-stamping traits/color
-        // below touches no global state. The cached thing is never spawned,
+        // id draw fires per def, not per rebuild. Re-stamping color below
+        // touches no global state; StampTraits draws an ability id only when
+        // the stamp changes the desired ability trait — a bounded draw,
+        // documented on the method itself. The cached thing is never spawned,
         // never scribed, and never destroyed — simply dropped with the dialog.
         // That lifecycle is also what makes the identity stamp's shared
         // references (art TaleReference, relic precept, coded pawn) safe: the
@@ -399,10 +407,16 @@ namespace UniqueWeaponsUnbound
             CompUniqueWeapon comp = previewThing.TryGetComp<CompUniqueWeapon>();
             if (comp != null)
             {
-                // Replace PostPostMake's random roll with the prospective trait set.
-                List<WeaponTraitDef> traits = comp.TraitsListForReading;
-                traits.Clear();
-                traits.AddRange(desiredTraits);
+                // Replace PostPostMake's random roll with the prospective trait
+                // set. StampTraits leaves the comp/verb cache state and the
+                // ability-comp wiring equivalent to reaching the same list
+                // through the real flow's AddTrait/RemoveTrait, so the info
+                // card backed by this thing shows ability charge rows and never
+                // reads a trait fold cached against a stale list. The original
+                // weapon rides along as the charge source: a kept ability
+                // trait previews the weapon's real remaining charges, while an
+                // added one previews the full charges the real flow grants.
+                WeaponModificationUtility.StampTraits(previewThing, desiredTraits, weapon);
 
                 // Write color one and invalidate the cached graphic (SetColor fires
                 // Notify_ColorChanged), so Graphic rebuilds against the prospective
