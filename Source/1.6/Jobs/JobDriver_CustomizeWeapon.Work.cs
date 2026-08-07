@@ -176,12 +176,12 @@ namespace UniqueWeaponsUnbound
                 case OpType.AddTrait:
                     opDescr = "adding trait " + (op.trait?.defName ?? "(null)");
                     bailMessageText = "UWU_BailOpAddTraitFailed".Translate(
-                        WeaponLabel, op.trait?.LabelCap ?? "");
+                        WeaponLabel, op.trait?.label ?? "");
                     break;
                 case OpType.RemoveTrait:
                     opDescr = "removing trait " + (op.trait?.defName ?? "(null)");
                     bailMessageText = "UWU_BailOpRemoveTraitFailed".Translate(
-                        WeaponLabel, op.trait?.LabelCap ?? "");
+                        WeaponLabel, op.trait?.label ?? "");
                     break;
                 case OpType.ApplyCosmetics:
                     opDescr = "applying cosmetics";

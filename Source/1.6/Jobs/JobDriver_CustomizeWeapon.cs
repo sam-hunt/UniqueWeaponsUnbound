@@ -75,16 +75,18 @@ namespace UniqueWeaponsUnbound
         // Best label for the weapon: the live Thing if we have one, otherwise
         // the job target (still labelled even if despawned), otherwise a
         // fallback. Stays valid through every bail path including pre-acquire
-        // failures.
+        // failures. Lowercase, like every vanilla label placed mid-sentence;
+        // sentence-start consumers CapitalizeFirst the composed string instead
+        // (SetBailMessage does this for every bail path).
         private string WeaponLabel
         {
             get
             {
                 if (weapon?.Destroyed == false)
-                    return weapon.LabelShortCap;
+                    return weapon.LabelShort;
                 Thing target = job?.GetTarget(WeaponIndex).Thing;
                 if (target != null)
-                    return target.LabelShortCap;
+                    return target.LabelShort;
                 return "UWU_WeaponFallback".Translate();
             }
         }
@@ -96,7 +98,7 @@ namespace UniqueWeaponsUnbound
         private void SetBailMessage(string text)
         {
             if (string.IsNullOrEmpty(bailMessage))
-                bailMessage = text;
+                bailMessage = text.CapitalizeFirst();
         }
 
         // Records the standard "ingredients lost mid-customization" bail
@@ -104,7 +106,7 @@ namespace UniqueWeaponsUnbound
         // per-op consume paths in ApplyOperation.
         private void RecordShortfallBail(WeaponTraitDef trait)
         {
-            string traitLabel = trait?.LabelCap ?? "";
+            string traitLabel = trait?.label ?? "";
             SetBailMessage("UWU_IngredientShortfall".Translate(WeaponLabel, traitLabel));
         }
 
@@ -232,8 +234,8 @@ namespace UniqueWeaponsUnbound
             if (phaseReport != null)
                 return phaseReport;
 
-            string weaponLabel = weapon?.LabelShortCap
-                ?? job.GetTarget(WeaponIndex).Thing?.LabelShortCap
+            string weaponLabel = weapon?.LabelShort
+                ?? job.GetTarget(WeaponIndex).Thing?.LabelShort
                 ?? "UWU_WeaponFallback".Translate();
 
             if (spec != null && currentOpIndex >= 0 && currentOpIndex < spec.operations.Count)
@@ -243,10 +245,10 @@ namespace UniqueWeaponsUnbound
                 {
                     case OpType.AddTrait:
                         return "UWU_AddingTrait".Translate(
-                            op.trait.LabelCap, weaponLabel);
+                            op.trait.label, weaponLabel);
                     case OpType.RemoveTrait:
                         return "UWU_RemovingTrait".Translate(
-                            op.trait.LabelCap, weaponLabel);
+                            op.trait.label, weaponLabel);
                     case OpType.ApplyCosmetics:
                         return "UWU_ApplyingCosmetics".Translate(weaponLabel);
                 }
@@ -344,7 +346,7 @@ namespace UniqueWeaponsUnbound
                 else if (condition == JobCondition.Errored)
                 {
                     Messages.Message(
-                        "UWU_BailUnexpected".Translate(WeaponLabel), pawn,
+                        "UWU_BailUnexpected".Translate(WeaponLabel).CapitalizeFirst(), pawn,
                         MessageTypeDefOf.NegativeEvent, historical: false);
                 }
 
@@ -446,8 +448,8 @@ namespace UniqueWeaponsUnbound
             Toil placeWeapon = ToilMaker.MakeToil("MakeNewToils");
             placeWeapon.initAction = delegate
             {
-                string label = weapon?.LabelShortCap ?? "UWU_WeaponFallback".Translate();
-                phaseReport = "UWU_PlacingWeapon".Translate(label, Workbench.LabelShortCap);
+                string label = weapon?.LabelShort ?? "UWU_WeaponFallback".Translate();
+                phaseReport = "UWU_PlacingWeapon".Translate(label, Workbench.LabelShort);
 
                 Thing carried = pawn.carryTracker.CarriedThing;
                 if (carried != null)
@@ -557,7 +559,7 @@ namespace UniqueWeaponsUnbound
             Toil setHaulReport = ToilMaker.MakeToil("HaulSetReport");
             setHaulReport.initAction = delegate
             {
-                string label = weapon?.LabelShortCap ?? "UWU_WeaponFallback".Translate();
+                string label = weapon?.LabelShort ?? "UWU_WeaponFallback".Translate();
                 phaseReport = "UWU_GatheringMaterials".Translate(label);
                 if (currentTripInvLoad == null)
                     currentTripInvLoad = new List<ThingDefCountClass>();
@@ -739,7 +741,7 @@ namespace UniqueWeaponsUnbound
                     Log.Error("[Unique Weapons Unbound] Ability sync failed during finalize on "
                         + WeaponLabel + ": " + ex);
                     Messages.Message(
-                        "UWU_FinalizeAbilitySyncFailed".Translate(WeaponLabel),
+                        "UWU_FinalizeAbilitySyncFailed".Translate(WeaponLabel).CapitalizeFirst(),
                         weapon, MessageTypeDefOf.NegativeEvent, historical: false);
                 }
 
@@ -755,7 +757,7 @@ namespace UniqueWeaponsUnbound
                     Log.Error("[Unique Weapons Unbound] Final color application failed on "
                         + WeaponLabel + ": " + ex);
                     Messages.Message(
-                        "UWU_FinalizeColorFailed".Translate(WeaponLabel),
+                        "UWU_FinalizeColorFailed".Translate(WeaponLabel).CapitalizeFirst(),
                         weapon, MessageTypeDefOf.NegativeEvent, historical: false);
                 }
 

@@ -50,7 +50,7 @@ namespace UniqueWeaponsUnbound
             foreach (WeaponTraitDef existing in desiredTraits)
             {
                 if (TraitsOverlap(candidate, existing))
-                    return "UWU_ConflictsWith".Translate(existing.LabelCap);
+                    return "UWU_ConflictsWith".Translate(existing.label);
             }
 
             if (UWU_Mod.Settings.enforceCanGenerateAlone
@@ -93,7 +93,7 @@ namespace UniqueWeaponsUnbound
                     ? desiredTraits[1]
                     : desiredTraits[0];
                 if (!remaining.canGenerateAlone)
-                    return "UWU_TraitCannotBeOnlyTrait".Translate(remaining.LabelCap);
+                    return "UWU_TraitCannotBeOnlyTrait".Translate(remaining.label).CapitalizeFirst();
             }
             return null;
         }

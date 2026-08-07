@@ -158,7 +158,7 @@ namespace UniqueWeaponsUnbound.Patches
                     if (!result.Found)
                     {
                         Messages.Message(
-                            "UWU_CustomizeWeapon".Translate(weapon.LabelShortCap)
+                            "UWU_CustomizeWeapon".Translate(weapon.LabelShort)
                                 + " (" + result.BestRejection.Reason + ")",
                             weapon, MessageTypeDefOf.RejectInput, false);
                         return;

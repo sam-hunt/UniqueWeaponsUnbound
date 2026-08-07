@@ -637,12 +637,12 @@ namespace UniqueWeaponsUnbound
                 // null-spec and bails silently. Surface a player-visible
                 // message and close cleanly so the bail is attributable.
                 string label;
-                try { label = weapon?.LabelShortCap ?? "(unknown weapon)"; }
+                try { label = weapon?.LabelShort ?? "(unknown weapon)"; }
                 catch { label = weapon?.def?.defName ?? "(unknown weapon)"; }
                 Log.Error("[Unique Weapons Unbound] Customization dialog errored for "
                     + label + ": " + ex);
                 Messages.Message(
-                    "UWU_DialogErrored".Translate(label),
+                    "UWU_DialogErrored".Translate(label).CapitalizeFirst(),
                     weapon, MessageTypeDefOf.NegativeEvent, historical: false);
                 Close();
             }
@@ -684,7 +684,7 @@ namespace UniqueWeaponsUnbound
             // Title
             Text.Font = GameFont.Medium;
             Rect titleRect = new Rect(inRect.x, inRect.y, inRect.width, TitleHeight);
-            string titleLabel = "UWU_CustomizeWeapon".Translate(weapon.LabelShortCap);
+            string titleLabel = "UWU_CustomizeWeapon".Translate(weapon.LabelShort);
             Widgets.Label(titleRect, titleLabel);
 
             // "i" button for the ORIGINAL weapon, right after the title text —

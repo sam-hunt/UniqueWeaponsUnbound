@@ -423,13 +423,13 @@ namespace UniqueWeaponsUnbound
                 case IngredientReservation.ReservationOutcome.NoActiveDriver:
                     logReason = "no active customize-weapon driver "
                         + "(invariant violation — dialog opened without our driver running)";
-                    messageText = "UWU_CouldNotStartInternalError".Translate(weapon.LabelShortCap);
+                    messageText = "UWU_CouldNotStartInternalError".Translate(weapon.LabelShort);
                     isInternalError = true;
                     break;
                 case IngredientReservation.ReservationOutcome.PlanInfeasible:
                     logReason = "no haul planner could satisfy demand from the "
                         + "candidate pool (Sequential fallback also returned null)";
-                    messageText = "UWU_CouldNotStartPlanInfeasible".Translate(weapon.LabelShortCap);
+                    messageText = "UWU_CouldNotStartPlanInfeasible".Translate(weapon.LabelShort);
                     break;
                 case IngredientReservation.ReservationOutcome.ReservationConflict:
                     string defLabel = result.ConflictDef?.label ?? "(unknown)";
@@ -444,10 +444,10 @@ namespace UniqueWeaponsUnbound
                     // investigate that pawn rather than retrying blindly.
                     messageText = result.ConflictReserver != null
                         ? "UWU_CouldNotStartReservationConflictHeldBy".Translate(
-                            weapon.LabelShortCap, defLabel, result.ConflictCount,
+                            weapon.LabelShort, defLabel, result.ConflictCount,
                             result.ConflictReserver.LabelShortCap)
                         : "UWU_CouldNotStartReservationConflict".Translate(
-                            weapon.LabelShortCap, defLabel, result.ConflictCount);
+                            weapon.LabelShort, defLabel, result.ConflictCount);
                     break;
                 default:
                     return;

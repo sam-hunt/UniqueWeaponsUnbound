@@ -32,7 +32,7 @@ namespace UniqueWeaponsUnbound
                 foreach (WeaponTraitDef trait in desiredTraits)
                 {
                     if (trait.forcedColor != null)
-                        forcingTraitName = trait.LabelCap;
+                        forcingTraitName = trait.label;
                 }
 
                 // Vertically center the forced-color display within the tab

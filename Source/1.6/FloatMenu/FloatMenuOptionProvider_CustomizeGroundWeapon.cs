@@ -72,7 +72,7 @@ namespace UniqueWeaponsUnbound
             if (!customizable.Accepted)
                 return DisabledOrHidden(weapon, customizable);
 
-            string label = "UWU_CustomizeWeapon".Translate(weapon.LabelShortCap);
+            string label = "UWU_CustomizeWeapon".Translate(weapon.LabelShort);
 
             // Weapon reachability + forbidden checks
             if (!pawn.CanReach(weapon, PathEndMode.ClosestTouch, Danger.Deadly))
@@ -114,7 +114,7 @@ namespace UniqueWeaponsUnbound
         private static string SafeLabel(Thing t)
         {
             if (t == null) return "(null)";
-            try { return t.LabelShortCap; }
+            try { return t.LabelShort; }
             catch { return t.def?.defName ?? "(unlabelled)"; }
         }
 
@@ -123,7 +123,7 @@ namespace UniqueWeaponsUnbound
             if (report.Reason.NullOrEmpty())
                 return null;
 
-            string label = "UWU_CustomizeWeapon".Translate(weapon.LabelShortCap)
+            string label = "UWU_CustomizeWeapon".Translate(weapon.LabelShort)
                 + " (" + report.Reason + ")";
             return new FloatMenuOption(label, null);
         }
