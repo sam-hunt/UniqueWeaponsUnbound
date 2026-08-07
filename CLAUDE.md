@@ -96,6 +96,14 @@ classes where `?.` is fine. Enforced at build time by UNT0007/UNT0008
 (Microsoft.Unity.Analyzers). Corollary: never bulk-apply Roslynator's RCS1146
 (use conditional access) fixer to Unity-typed receivers; see the note in `.editorconfig`.
 
+**Label casing (vanilla convention):** thing/trait/def labels placed mid-sentence in
+player-facing text use the lowercase form (`LabelShort`, `.label`) — vanilla renders
+"Pick up revolver x1", never "Pick up Revolver x1". Keyed strings carry their own
+sentence-start capital; where a `{0}` placeholder can begin the sentence (bail messages,
+some translations reorder it there), `CapitalizeFirst()` the composed string instead of
+capitalizing the argument. `LabelCap`/`LabelShortCap` is for standalone display (list
+rows, name fields) and proper nouns (pawns, precepts).
+
 **Logging:** Prefix mod-specific logs with the mod name — `Log.Message("[Unique Weapons Unbound] ...")`.
 
 **Settings Triple Invariant:** see `Source/1.6/Core/CLAUDE.md`.
