@@ -5,6 +5,15 @@ All notable changes to Unique Weapons Unbound will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2026-08-07
+
+### Fixed
+
+- Labels read lowercase mid-sentence, matching vanilla.
+- Multi-weapon selection no longer shows a merged customize gizmo.
+- Customize gizmo costs much less per frame.
+- Hardened the variant preview against destroyed Unity materials.
+
 ## [1.5.1] - 2026-08-04
 
 ### Fixed
@@ -204,6 +213,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.5.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.2
 [1.5.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.1
 [1.5.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.0
 [1.4.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.4.2
