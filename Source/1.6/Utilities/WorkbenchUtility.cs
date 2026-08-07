@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using RimWorld;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -69,14 +68,10 @@ namespace UniqueWeaponsUnbound
             IntVec3 distanceOrigin)
         {
             return FindBestWorkbenchCore(pawn.Map, baseDef, uniqueDef, weaponTechLevel,
-                distanceOrigin, pawn, workbench =>
-                {
-                    if (!pawn.CanReach(workbench, PathEndMode.InteractionCell, Danger.Deadly))
-                        return "NoPath".Translate();
-                    if (workbench.IsForbidden(pawn))
-                        return "ForbiddenLower".Translate();
-                    return true;
-                });
+                distanceOrigin, pawn,
+                canReach: workbench =>
+                    pawn.CanReach(workbench, PathEndMode.InteractionCell, Danger.Deadly),
+                isForbidden: workbench => workbench.IsForbidden(pawn));
         }
 
         // Finds the closest valid colonist workbench for customizing the
@@ -89,27 +84,23 @@ namespace UniqueWeaponsUnbound
             IntVec3 distanceOrigin)
         {
             return FindBestWorkbenchCore(map, baseDef, uniqueDef, weaponTechLevel,
-                distanceOrigin, null, workbench =>
-                {
-                    if (!map.reachability.CanReach(distanceOrigin, workbench,
-                            PathEndMode.InteractionCell,
-                            TraverseParms.For(TraverseMode.PassDoors)))
-                        return "NoPath".Translate();
-                    if (workbench.IsForbidden(Faction.OfPlayer))
-                        return "ForbiddenLower".Translate();
-                    return true;
-                });
+                distanceOrigin, null,
+                canReach: workbench => map.reachability.CanReach(distanceOrigin, workbench,
+                    PathEndMode.InteractionCell,
+                    TraverseParms.For(TraverseMode.PassDoors)),
+                isForbidden: workbench => workbench.IsForbidden(Faction.OfPlayer));
         }
 
         // Common core for workbench search. Iterates colonist workbenches,
         // applies tier and operational checks, then delegates
-        // reachability/forbidden checks to the caller-provided predicate.
+        // reachability/forbidden checks to the caller-provided predicates.
         // Returns the closest valid workbench or the highest-priority rejection
         // reason.
         private static WorkbenchSearchResult FindBestWorkbenchCore(
             Map map, ThingDef baseDef, ThingDef uniqueDef, TechLevel weaponTechLevel,
             IntVec3 distanceOrigin, Pawn pawn,
-            Func<Building_WorkTable, AcceptanceReport> accessCheck)
+            Func<Building_WorkTable, bool> canReach,
+            Func<Building_WorkTable, bool> isForbidden)
         {
             // Track two tiers: prefer unreserved benches, fall back to reserved.
             // This avoids interrupting in-progress work when a free bench is available,
@@ -153,16 +144,24 @@ namespace UniqueWeaponsUnbound
                     continue;
                 }
 
-                // Caller-provided access check (reachability + forbidden)
-                AcceptanceReport accessReport = accessCheck(workbench);
-                if (!accessReport.Accepted)
+                // Caller-provided access checks: reachability (priority 2),
+                // then forbidden (priority 1). Rejection reasons are only
+                // translated when they become the best rejection so far.
+                if (!canReach(workbench))
                 {
-                    // Determine priority from the rejection reason
-                    int priority = accessReport.Reason == "ForbiddenLower".Translate() ? 1 : 2;
-                    if (bestRejectionPriority < priority)
+                    if (bestRejectionPriority < 2)
                     {
-                        bestRejectionPriority = priority;
-                        bestRejection = accessReport;
+                        bestRejectionPriority = 2;
+                        bestRejection = "NoPath".Translate();
+                    }
+                    continue;
+                }
+                if (isForbidden(workbench))
+                {
+                    if (bestRejectionPriority < 1)
+                    {
+                        bestRejectionPriority = 1;
+                        bestRejection = "ForbiddenLower".Translate();
                     }
                     continue;
                 }
@@ -430,21 +429,41 @@ namespace UniqueWeaponsUnbound
             return false;
         }
 
+        // Per-bench memo of every ThingDef its recipes produce, so the runtime
+        // workbench search doesn't rescan AllRecipes (potentially hundreds on
+        // modded multi-purpose benches) per bench per query. Built lazily at
+        // first gameplay query rather than in Initialize so recipes added
+        // after startup (VEF inheritance) are included; vanilla freezes
+        // AllRecipes in allRecipesCached on first access, so once built the
+        // memo cannot diverge from a direct rescan.
+        private static readonly Dictionary<ThingDef, HashSet<ThingDef>> producedDefsByBench =
+            new Dictionary<ThingDef, HashSet<ThingDef>>();
+
         // Whether the workbench def has a recipe that produces the given base
         // or unique weapon def.
         private static bool WorkbenchHasRecipeFor(ThingDef benchDef, ThingDef baseDef, ThingDef uniqueDef)
         {
+            if (!producedDefsByBench.TryGetValue(benchDef, out HashSet<ThingDef> produced))
+                producedDefsByBench[benchDef] = produced = BuildProducedDefsSet(benchDef);
+
+            return (baseDef != null && produced.Contains(baseDef))
+                || (uniqueDef != null && produced.Contains(uniqueDef));
+        }
+
+        private static HashSet<ThingDef> BuildProducedDefsSet(ThingDef benchDef)
+        {
+            var set = new HashSet<ThingDef>();
             List<RecipeDef> recipes = benchDef.AllRecipes;
             if (recipes == null)
-                return false;
+                return set;
 
             foreach (RecipeDef recipe in recipes)
             {
                 ThingDef produced = recipe.ProducedThingDef;
-                if (produced != null && (produced == baseDef || produced == uniqueDef))
-                    return true;
+                if (produced != null)
+                    set.Add(produced);
             }
-            return false;
+            return set;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using RimWorld;
 using Verse;
 
@@ -26,12 +27,12 @@ namespace UniqueWeaponsUnbound
             else
             {
                 if (WeaponRegistry.GetUniqueVariant(def) == null)
-                    return HiddenUnlessDev("UWU_DevNoUniqueVariant".Translate());
+                    return HiddenUnlessDev(() => "UWU_DevNoUniqueVariant".Translate());
 
                 // When def conversion is disabled, only already-unique weapons
                 // can enter the customization system.
                 if (!UWU_Mod.Settings.allowDefConversion)
-                    return HiddenUnlessDev("UWU_DevDefConversionDisabled".Translate());
+                    return HiddenUnlessDev(() => "UWU_DevDefConversionDisabled".Translate());
             }
 
             // Tech-level ceiling applies regardless of requireCustomizationResearch:
@@ -39,7 +40,8 @@ namespace UniqueWeaponsUnbound
             // in the customization system at all, not about gating the research projects.
             ResearchProjectDef requiredResearch = GetRequiredResearch(def.techLevel);
             if (requiredResearch == null)
-                return HiddenUnlessDev("UWU_DevTechLevelBeyondComprehension".Translate(def.techLevel.ToStringHuman()));
+                return HiddenUnlessDev(() =>
+                    "UWU_DevTechLevelBeyondComprehension".Translate(def.techLevel.ToStringHuman()));
 
             if (UWU_Mod.Settings.requireCustomizationResearch)
             {
@@ -127,12 +129,14 @@ namespace UniqueWeaponsUnbound
         // Rejection report for paths that are normally hidden (silent false).
         // In dev mode, surfaces the reason so the option/gizmo renders as
         // visible-but-disabled, letting modders diagnose why a weapon isn't
-        // customizable without exporting logs.
-        private static AcceptanceReport HiddenUnlessDev(string devReason)
+        // customizable without exporting logs. Takes a factory rather than the
+        // translated string so the hidden path (evaluated per frame for every
+        // selected non-customizable weapon) skips the translation lookup.
+        private static AcceptanceReport HiddenUnlessDev(Func<string> devReason)
         {
             if (!Prefs.DevMode)
                 return false;
-            return devReason;
+            return devReason();
         }
 
         // Returns the weapon's tech level if it participates in the
