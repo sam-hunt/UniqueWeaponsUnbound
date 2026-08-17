@@ -38,3 +38,10 @@
   skill notes mentioning gating exclusions (2026-08-18): found only the two
   items above (`UWU_Blood`'s ungating comment and the Alpha Armoury TODOs) —
   no other gating exclusions exist today.
+- Run the initial Steam Workshop description translation pass: create
+  `.steamworkshop/Description/<Language>.txt` for each non-English language
+  in `1.6/Languages/`, localize each title per `.steamworkshop/README.md`
+  (no English brand appended), and sync each language's
+  `UWU_SettingsCategory` Keyed value to its title line. The
+  structure/process landed 2026-08-18 (ported from BTG); only `English.txt`
+  exists so far.

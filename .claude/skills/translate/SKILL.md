@@ -90,9 +90,13 @@ the source of truth; every other language derives from it.
   key also appears in `Defs/` — but nothing relies on that staying true. If
   a vanilla-sourced key ever does appear, ground it by copying the official
   translation of the matching vanilla def verbatim.
-- `UWU_SettingsCategory` deliberately stays English in every language (it is
-  the mod's proper name), so the in-game report will always list it under
-  "Keyed translations matching English (maybe ok)" — expected, not a gap.
+- `UWU_SettingsCategory` is that language's localized Workshop title and must
+  stay in sync with the title line (line 1) of
+  `.steamworkshop/Description/<Language>.txt` (see the CLAUDE.md
+  localization note). Until the initial Workshop translation pass runs (see
+  TODOs.md) it still holds the English brand, so the in-game report will
+  list it under "Keyed translations matching English (maybe ok)" — expected
+  for now, not a gap.
 
 ## `labelKeywords` (TraitCostRuleDef) — keep English, append localized
 

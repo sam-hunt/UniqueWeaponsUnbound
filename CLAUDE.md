@@ -127,5 +127,10 @@ namespace-qualified `UniqueWeaponsUnbound.TraitCostRuleDef` in both the sidecar 
 `DefInjected/`. The public language roster lives in CONTRIBUTING.md and must move in the same
 commit as any language change.
 
+**Workshop title coupling:** each language's `UWU_SettingsCategory` Keyed value is the localized
+Steam Workshop title and must equal the title line (line 1) of
+`.steamworkshop/Description/<Language>.txt` — always change the two together (English keeps
+`Unique Weapons Unbound` in both).
+
 For reading `Player.log` or disassembling the RimWorld API, use the `rimworld-logs` skill.
 
