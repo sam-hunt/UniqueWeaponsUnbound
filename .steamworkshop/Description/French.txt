@@ -1,0 +1,92 @@
+Armes uniques déchaînées
+
+[h1]À propos[/h1]
+L'arme unique parfaite tombe rarement avec exactement les traits voulus. Vous pouvez désormais combler cet écart : sur les établis de fabrication existants, avec des prérequis de recherche, des coûts en matériaux, et des paramètres d'équilibrage qui font que tout reste mérité.
+
+[hr][/hr]
+[h2]Personnalisation des traits[/h2]
+[list]
+[*]Ajoutez et retirez des traits d'arme sur les établis de forgeron, les établis d'assemblage, les ateliers de fabrication, etc.
+[*]Transformez une arme normale en variante unique en lui ajoutant son premier trait
+[*]Retirez tous les traits pour ramener une arme unique à sa forme de base
+[*]Validation complète, fidèle au jeu de base : maximum de 3 traits, règles de conflit et restrictions de catégorie, toutes appliquées
+[/list]
+
+[h2]Coûts thématiques[/h2]
+Modifier les traits n'est pas gratuit. Le système de coût utilise la recette de fabrication de l'arme elle-même comme base, puis ajuste selon la qualité et transforme les matériaux pour correspondre au thème du trait.
+[list]
+[*]Les traits toxiques coûtent de l'herbe médicinale au lieu de composants. Les traits incendiaires utilisent du chemfuel. Les traits à impulsion exigent des composants avancés.
+[*]Les traits négatifs coûtent moins cher à ajouter (travail plus grossier, matériaux dégradés), mais leur retrait coûte des ressources (restaurer l'arme exige un travail du niveau approprié)
+[*]Les traits liés intrinsèquement à un matériau sont détectés automatiquement d'après leur nom : par exemple, « Incrusté d'or » coûte de l'or, « Munitions à l'uranium appauvri » coûte de l'uranium
+[*]Aperçu du coût en temps réel avec détail complet des matériaux avant de valider
+[/list]
+
+[h2]Couleurs, textures et noms[/h2]
+[list]
+[*]Choisissez parmi les palettes de couleurs armes standard, Ideology (si le DLC est actif), et structure.
+[*]Parcourez les variantes de texture pour les armes disposant de plusieurs styles visuels
+[*]Générez automatiquement des noms grâce à la grammaire du jeu de base, ou saisissez le vôtre
+[*]Les couleurs verrouillées par un trait sont clairement indiquées, pour que vous sachiez quel trait contrôle la couleur
+[/list]
+
+[h2]Trois façons de personnaliser[/h2]
+[list]
+[*][b]Bouton de commande de l'arme :[/b] sélectionnez une arme au sol, cliquez sur le bouton Personnaliser, puis choisissez un colon
+[*][b]Menu de l'établi :[/b] sélectionnez un colon puis faites un clic droit sur un établi pour personnaliser son arme équipée ou transportée
+[*][b]Menu de l'arme au sol :[/b] faites un clic droit sur une arme au sol pour envoyer un colon vers l'établi approprié le plus proche
+[/list]
+
+[h2]Progression de la recherche[/h2]
+La personnalisation est conditionnée par trois niveaux de recherche, qui reflètent la progression de fabrication des armes :
+[olist]
+[*][b]Forge d'armes uniques :[/b] armes néolithiques et médiévales, sur les établis de forgeron
+[*][b]Usinage d'armes uniques :[/b] armes industrielles, sur les établis d'assemblage
+[*][b]Fabrication d'armes uniques :[/b] armes spatiales, ultra et archotech, sur les ateliers de fabrication (nécessite un schéma technique)
+[/olist]
+
+[h2]Prise en charge du DLC Ideology[/h2]
+[list]
+[*]Les reliques Ideology peuvent être personnalisées tout en conservant leur statut de relique
+[*]Les noms des reliques restent verrouillés et ne peuvent être modifiés que lors de la création ou de la réforme d'une idéoligion, comme prévu
+[*]Les superpositions de couleur de l'idéoligion et de couleur favorite apparaissent dans le sélecteur de couleur
+[/list]
+
+
+[hr][/hr]
+[h1]Compatibilité des mods[/h1]
+[list]
+[*]Peut être ajouté sans risque à des parties existantes
+[*]Peut être retiré sans risque d'une partie en cours (seules des erreurs rouges sans danger apparaîtront)
+[*]Automatiquement compatible avec les mods qui ajoutent de nouvelles armes uniques, de nouveaux traits d'arme ou de nouvelles recettes de fabrication. Aucune référence de def codée en dur
+[*]Les établis ajoutés par d'autres mods qui héritent des recettes d'armes du jeu de base sont détectés automatiquement
+[*]Compatible avec CE, PUAH, Ideology, Simple sidearms, Make it Unique, Alpha Armory
+[*]Les créateurs de mods peuvent étendre le système de coût avec des règles purement XML ou des workers C# personnalisés (voir le [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Guide pour créateurs de mods[/url]). L'API XML est assez basique pour le moment, mais elle va bientôt recevoir une belle mise à niveau.
+[/list]
+
+[hr][/hr]
+[h1]FAQ[/h1]
+[b]Q : Ai-je besoin du DLC Odyssey ?[/b]
+R : Oui. Ce mod s'appuie sur le système d'armes uniques d'Odyssey.
+
+[b]Q : Pourquoi ne puis-je pas personnaliser [nom de l'arme] ?[/b]
+R : Seules les armes prenant en charge le système d'armes uniques du jeu de base peuvent être personnalisées. Odyssey définit une [url=https://rimworldwiki.com/wiki/Unique_weapons]liste limitée d'armes éligibles[/url], et les mods sont libres d'ajouter les leurs. Si une arme ne figure pas sur cette liste, c'est le jeu de base (ou le mod qui l'ajoute) qui en décide, pas ce mod.
+
+[b]Q : Puis-je personnaliser des armes provenant d'autres mods ?[/b]
+R : Si le mod ajoute des armes uniques en utilisant le système CompUniqueWeapon du jeu de base, elles sont automatiquement prises en charge. Les coûts sont calculés à partir de la recette de fabrication de l'arme.
+
+[b]Q : Est-ce déséquilibré ?[/b]
+R : Cela dépend de vous. Les paramètres par défaut exigent de la recherche, un établi correspondant, et des coûts en matériaux significatifs. Si vous voulez plus de difficulté, augmentez le multiplicateur de coût. Si vous voulez plus de facilité, réduisez-le ou ignorez les recherches. Votre colonie, vos règles.
+
+[b]Q : Puis-je interrompre une tâche de personnalisation sans risque ?[/b]
+R : Oui. Chaque modification de trait est une tâche de fabrication distincte. L'interrompre ne fait perdre aucune ressource ; le travail inachevé est simplement annulé.
+
+[b]Q : Combat Extended ?[/b]
+R : Oui ? Je ne connais pas grand-chose à CE, mais les tests n'ont montré aucune erreur. Les coûts des traits s'ajustent automatiquement aux coûts de fabrication modifiés par CE.
+
+[b]Q : Ce mod a-t-il été réalisé à l'aide de LLM ?[/b]
+R : Une partie du code répétitif, et la plupart des localisations. Je suis ingénieur logiciel de métier, et j'écris du code depuis 25 ans. Tout le code est relu et testé manuellement ; tous les rapports de bug et conflits de mods sont suivis personnellement, dans la mesure du temps et des détails disponibles. Tous les visuels sont soit commandés à des artistes humains, soit réalisés à la main dans Krita, soit les deux.
+
+
+[h2]Liens[/h2]
+[url=https://github.com/sam-hunt/UniqueWeaponsUnbound]GitHub[/url] : code source, rapports de bugs et demandes de fonctionnalités
+Illustration principale par [url=https://steamcommunity.com/profiles/76561198094174176/myworkshopfiles/?appid=294100]IcingWithCheeseCake[/url]

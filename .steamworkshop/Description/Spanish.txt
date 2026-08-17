@@ -1,0 +1,92 @@
+Armas únicas desatadas
+
+[h1]Acerca de[/h1]
+El arma única perfecta rara vez aparece con los rasgos perfectos. Ahora puedes cerrar esa brecha: en las mesas de trabajo que ya tienes, con investigaciones que sirven de requisito previo, costes de materiales y ajustes de equilibrio pensados para que todo se sienta merecido.
+
+[hr][/hr]
+[h2]Personalización de rasgos[/h2]
+[list]
+[*]Añade y quita rasgos de armas en forjas, mesas de maquinado, mesas de ensamblaje y similares
+[*]Convierte armas normales en variantes únicas añadiéndoles su primer rasgo
+[*]Quita todos los rasgos para devolver un arma única a su forma base
+[*]Validación completa según el juego base: se respetan el máximo de 3 rasgos, las reglas de conflicto y las restricciones de categoría
+[/list]
+
+[h2]Costes temáticos[/h2]
+Modificar rasgos no es gratis. El sistema de costes usa la propia receta de fabricación del arma como base, luego lo ajusta según la calidad y transforma los materiales para que encajen con la temática del rasgo.
+[list]
+[*]Los rasgos tóxicos cuestan hierbas medicinales en lugar de componentes. Los rasgos incendiarios usan biocombustible. Los rasgos de carga exigen componentes avanzados.
+[*]Los rasgos negativos son más baratos de añadir (trabajo más tosco, materiales de menor calidad), pero cuesta recursos quitarlos (restaurar el arma exige un trabajo del nivel adecuado)
+[*]Los rasgos con un material intrínseco se detectan automáticamente por su nombre, así que Incrustación de oro cuesta oro y Balas de uranio empobrecido cuestan uranio
+[*]Vista previa del coste en tiempo real, con el desglose completo de materiales antes de confirmar
+[/list]
+
+[h2]Colores, texturas y nombres[/h2]
+[list]
+[*]Elige entre las paletas de colores estándar de las armas, las de Ideology (si el DLC está activo) y las de estructuras
+[*]Explora las variantes de textura de las armas que tienen varios estilos visuales
+[*]Genera nombres automáticamente con la gramática del juego base o escribe el tuyo propio
+[*]Los colores bloqueados por un rasgo se indican con claridad, para que sepas qué rasgo controla el color
+[/list]
+
+[h2]Tres formas de personalizar[/h2]
+[list]
+[*][b]Botón de orden del arma:[/b] selecciona un arma en el suelo, pulsa el botón de personalizar y elige un colono
+[*][b]Menú de la mesa de trabajo:[/b] selecciona un colono y haz clic derecho en una mesa de trabajo para personalizar las armas que lleva equipadas o en el inventario
+[*][b]Menú del arma en el suelo:[/b] haz clic derecho en un arma que esté en el suelo para enviar a un colono a la mesa de trabajo adecuada más cercana
+[/list]
+
+[h2]Progresión de investigación[/h2]
+La personalización está condicionada por tres niveles de investigación que reflejan la progresión de fabricación de armas:
+[olist]
+[*][b]Herrería de armas únicas:[/b] armas neolíticas y medievales, en forjas
+[*][b]Maquinado de armas únicas:[/b] armas industriales, en mesas de maquinado
+[*][b]Fabricación de armas únicas:[/b] armas de la era espacial, ultratecnológicas y arqueotecnológicas, en mesas de ensamblaje (requiere tecnoplano)
+[/olist]
+
+[h2]Compatibilidad con el DLC Ideology[/h2]
+[list]
+[*]Las reliquias de Ideology se pueden personalizar sin perder su condición de reliquia
+[*]El nombre de las reliquias permanece bloqueado y solo se puede cambiar reformando la ideoligión, tal y como está previsto
+[*]Las superposiciones de color de la ideoligión y del color favorito aparecen en el selector de color
+[/list]
+
+
+[hr][/hr]
+[h1]Compatibilidad con otros mods[/h1]
+[list]
+[*]Se puede añadir sin problemas a partidas ya en marcha
+[*]Se puede quitar sin problemas de una partida (solo aparecerán errores en rojo que se pueden ignorar con seguridad)
+[*]Compatible automáticamente con mods que añaden armas únicas, rasgos de arma o recetas de fabricación nuevos. No usa referencias fijas a defs concretos
+[*]Las mesas de trabajo añadidas por mods que heredan las recetas de armas del juego base se detectan automáticamente
+[*]Funciona con CE, PUAH, Ideology, Simple sidearms, Make it Unique, Alpha Armory
+[*]Los creadores de mods pueden ampliar el sistema de costes con reglas solo en XML o con workers personalizados en C# (consulta la [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Guía para creadores de mods[/url]). Por ahora, la API de XML es bastante básica, pero pronto recibirá una mejora importante.
+[/list]
+
+[hr][/hr]
+[h1]Preguntas frecuentes[/h1]
+[b]P: ¿Necesito el DLC Odyssey?[/b]
+R: Sí. Este mod se basa en el sistema de armas únicas de Odyssey.
+
+[b]P: ¿Por qué no puedo personalizar [nombre del arma]?[/b]
+R: Solo se pueden personalizar las armas compatibles con el sistema de armas únicas del juego base. Odyssey define una [url=https://rimworldwiki.com/wiki/Unique_weapons]lista limitada de armas aptas[/url], y los mods pueden añadir las suyas propias. Si un arma no está en esa lista, la decisión es del juego base (o del mod que la añade), no de este mod.
+
+[b]P: ¿Puedo personalizar armas de otros mods?[/b]
+R: Si el mod añade armas únicas usando el sistema CompUniqueWeapon del juego base, son compatibles automáticamente. Los costes se calculan a partir de la receta de fabricación del arma.
+
+[b]P: ¿Esto está descompensado?[/b]
+R: Eso depende de ti. Los ajustes por defecto exigen investigación, la mesa de trabajo adecuada y costes de materiales con sentido. Si quieres que sea más difícil, sube el multiplicador de coste. Si prefieres que sea más fácil, bájalo o sáltate las investigaciones. Tu colonia, tus reglas.
+
+[b]P: ¿Puedo interrumpir un trabajo de personalización sin problema?[/b]
+R: Sí. Cada cambio de rasgo es un trabajo de fabricación independiente. Interrumpirlo no hace perder recursos; el trabajo sin terminar simplemente se cancela.
+
+[b]P: ¿Combat Extended?[/b]
+R: ¿Sí? No sé mucho sobre CE, pero las pruebas no mostraron errores. Los costes de los rasgos se ajustan automáticamente a los costes de fabricación modificados por CE.
+
+[b]P: ¿Esto se ha hecho con LLMs?[/b]
+R: Parte del código más mecánico, sí, y la mayoría de las localizaciones. Soy ingeniero de software de profesión y llevo 25 años programando. Todo el código se revisa y se prueba a mano; todos los informes de errores y conflictos con otros mods se atienden personalmente, según el tiempo y el detalle lo permitan. Todo el arte está encargado a artistas humanos, hecho a mano en Krita, o ambas cosas.
+
+
+[h2]Enlaces[/h2]
+[url=https://github.com/sam-hunt/UniqueWeaponsUnbound]GitHub[/url]: código fuente, informes de errores y solicitudes de funciones
+Ilustración principal de [url=https://steamcommunity.com/profiles/76561198094174176/myworkshopfiles/?appid=294100]IcingWithCheeseCake[/url]

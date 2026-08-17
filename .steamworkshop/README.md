@@ -30,5 +30,5 @@ differ: schinese, koreana, brazilian, latam, ...). The `release` skill diffs
 `English.txt` against the last release tag and refreshes the translations
 whenever it changed.
 
-Currently only `English.txt` exists; the per-language files are pending the
-initial Workshop translation pass (tracked in `TODOs.md`).
+All languages in `1.6/Languages/` are covered; the non-English files are
+machine-assisted first passes (2026-08-18) pending native review.

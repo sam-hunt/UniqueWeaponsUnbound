@@ -1,0 +1,92 @@
+Einzigartige Waffen entfesselt
+
+[h1]Über den Mod[/h1]
+Die perfekte einzigartige Waffe hat nur selten auch die perfekten Merkmale. Jetzt kannst du diese Lücke schließen – an bestehenden Arbeitsstationen, mit Forschungsvoraussetzungen, Materialkosten und Balance-Einstellungen, die dafür sorgen, dass es sich verdient anfühlt.
+
+[hr][/hr]
+[h2]Merkmalsanpassung[/h2]
+[list]
+[*]Füge Waffenmerkmale an Schmieden, Werkbänken und Fabrikationstischen usw. hinzu oder entferne sie
+[*]Verwandle normale Waffen in einzigartige Varianten, indem du ihr erstes Merkmal hinzufügst
+[*]Entferne alle Merkmale, um eine einzigartige Waffe in ihre Basisform zurückzuversetzen
+[*]Vollständige Grundspiel-Validierung: Maximal 3 Merkmale, Konfliktregeln und Kategoriebeschränkungen werden durchgesetzt
+[/list]
+
+[h2]Thematische Kosten[/h2]
+Merkmalsänderungen sind nicht kostenlos. Das Kostensystem nutzt den eigenen Herstellungsauftrag der Waffe als Grundlage, skaliert dann nach Qualität und wandelt die Materialien passend zum Thema des Merkmals um.
+[list]
+[*]Giftmerkmale kosten Kräutermedizin statt Bauteile. Brandmerkmale verwenden Sprit. Impulsmerkmale erfordern Hightech-Bauteile.
+[*]Negative Merkmale sind günstiger hinzuzufügen (gröbere Arbeit, minderwertige Materialien), kosten aber Ressourcen beim Entfernen (die Wiederherstellung der Waffe erfordert Arbeit auf angemessenem Niveau)
+[*]Materialgebundene Merkmale werden automatisch anhand ihres Namens erkannt: 'vergoldet' kostet also Gold, Munition aus abgereichertem Uran kostet Uran
+[*]Kostenvorschau in Echtzeit mit vollständiger Materialaufschlüsselung, bevor du dich festlegst
+[/list]
+
+[h2]Farben, Texturen & Namen[/h2]
+[list]
+[*]Wähle aus den Farbpaletten für Standardwaffen, Ideologie (bei aktivem DLC) und Strukturen.
+[*]Durchstöbere Texturvarianten für Waffen mit mehreren visuellen Stilen
+[*]Erzeuge automatisch Namen mit der Grammatik des Grundspiels oder gib eigene ein
+[*]Durch Merkmale festgelegte Farben werden deutlich gekennzeichnet, damit du weißt, welches Merkmal die Farbe bestimmt
+[/list]
+
+[h2]Drei Wege zur Anpassung[/h2]
+[list]
+[*][b]Waffen-Befehlsschaltfläche:[/b] Selektiere eine Waffe am Boden, klicke auf die Schaltfläche 'Anpassen' und wähle einen Kolonisten aus
+[*][b]Arbeitsstation-Menü:[/b] Selektiere einen Kolonisten und rechtsklicke eine Arbeitsstation, um dessen ausgerüstete oder mitgeführte Waffen anzupassen
+[*][b]Menü für Waffen am Boden:[/b] Rechtsklicke eine Waffe am Boden, um einen Kolonisten zur nächstgelegenen geeigneten Arbeitsstation zu schicken
+[/list]
+
+[h2]Forschungsfortschritt[/h2]
+Die Anpassung ist an drei Forschungsstufen gebunden, die den Fortschritt der Waffenherstellung widerspiegeln:
+[olist]
+[*][b]Schmieden einzigartiger Waffen:[/b] Neolithische und mittelalterliche Waffen an Schmieden
+[*][b]Maschinenbau einzigartiger Waffen:[/b] Industrielle Waffen an Werkbänken
+[*][b]Fabrikation einzigartiger Waffen:[/b] Waffen der Raumfahrt-, Ultratech- und Archotech-Stufe an Fabrikationstischen (erfordert Techplan)
+[/olist]
+
+[h2]Ideology-DLC-Unterstützung[/h2]
+[list]
+[*]Reliquien der Ideologie können angepasst werden, ohne ihren Reliquienstatus zu verlieren
+[*]Namen von Reliquien bleiben gesperrt und können, wie vorgesehen, nur beim Reformieren einer Ideologie geändert werden
+[*]Ideologie- und Lieblingsfarben-Overlays erscheinen in der Farbauswahl
+[/list]
+
+
+[hr][/hr]
+[h1]Mod-Kompatibilität[/h1]
+[list]
+[*]Kann bestehenden Spielständen sicher hinzugefügt werden
+[*]Kann sicher aus Spielständen entfernt werden (nur unbedenkliche rote Fehlermeldungen)
+[*]Automatisch kompatibel mit Mods, die neue einzigartige Waffen, Waffenmerkmale oder Herstellungsaufträge hinzufügen. Keine hartcodierten Def-Referenzen
+[*]Arbeitsstationen aus Mods, die Grundspiel-Waffenaufträge erben, werden automatisch erkannt
+[*]Funktioniert mit CE, PUAH, Ideology, Simple sidearms, Make it Unique, Alpha Armory
+[*]Modder können die Kostenpipeline mit reinen XML-Regeln oder eigenen C#-Workern erweitern (siehe [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Leitfaden für Modder[/url]). Die XML-API ist derzeit noch recht simpel, wird aber bald deutlich ausgebaut.
+[/list]
+
+[hr][/hr]
+[h1]FAQ[/h1]
+[b]F: Brauche ich das Odyssey-DLC?[/b]
+A: Ja. Dieser Mod baut auf dem System für einzigartige Waffen aus Odyssey auf.
+
+[b]F: Warum kann ich [Waffenname] nicht anpassen?[/b]
+A: Nur Waffen, die das Grundspiel-System für einzigartige Waffen unterstützen, können angepasst werden. Odyssey definiert eine [url=https://rimworldwiki.com/wiki/Unique_weapons]begrenzte Liste geeigneter Waffen[/url], und Mods können ihre eigenen hinzufügen. Steht eine Waffe nicht auf dieser Liste, entscheidet das Grundspiel (oder der Mod, der sie hinzufügt) darüber – nicht dieser Mod.
+
+[b]F: Kann ich Waffen aus anderen Mods anpassen?[/b]
+A: Wenn der Mod einzigartige Waffen über das Grundspiel-System CompUniqueWeapon hinzufügt, werden sie automatisch unterstützt. Die Kosten werden aus dem Herstellungsauftrag der Waffe berechnet.
+
+[b]F: Ist das unausgewogen?[/b]
+A: Das liegt bei dir. Die Standardeinstellungen erfordern Forschung, passende Arbeitsstationen und spürbare Materialkosten. Willst du es schwerer, drehe den Kostenmultiplikator hoch. Willst du es leichter, drehe ihn runter oder überspringe die Forschungen. Deine Kolonie, deine Regeln.
+
+[b]F: Kann ich einen Anpassungsauftrag gefahrlos unterbrechen?[/b]
+A: Ja. Jede Merkmalsänderung ist ein eigener Herstellungsauftrag. Beim Unterbrechen gehen keine Ressourcen verloren; unfertige Arbeit wird einfach abgebrochen.
+
+[b]F: Combat Extended?[/b]
+A: Ja? Ich weiß nicht viel über CE, aber Tests zeigten keine Fehler. Merkmalskosten passen sich automatisch an die von CE angepassten Herstellungskosten an.
+
+[b]F: Wurde das mit LLMs erstellt!?[/b]
+A: Ein Teil der Fleißarbeit im Code, und die meisten Lokalisierungen. Ich bin von Beruf Softwareentwickler und schreibe seit 25 Jahren Code. Sämtlicher Code wird manuell überprüft und getestet; allen Fehlerberichten und Mod-Konflikten wird persönlich nachgegangen, soweit Zeit und Details es erlauben. Alle Grafiken stammen entweder von beauftragten Künstlern, wurden von Hand in Krita erstellt, oder beides.
+
+
+[h2]Links[/h2]
+[url=https://github.com/sam-hunt/UniqueWeaponsUnbound]GitHub[/url]: Quellcode, Fehlerberichte und Funktionswünsche
+Heldengrafik von [url=https://steamcommunity.com/profiles/76561198094174176/myworkshopfiles/?appid=294100]IcingWithCheeseCake[/url]
