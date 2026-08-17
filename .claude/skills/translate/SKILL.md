@@ -31,6 +31,13 @@ the source of truth; every other language derives from it.
 - English Keyed source: `1.6/Languages/English/Keyed/UWU_UI.xml`
 - Target layout: `1.6/Languages/<Language>/Keyed/*.xml` and
   `1.6/Languages/<Language>/DefInjected/<DefTypeFolder>/*.xml`
+- A gated compat load root would be an additional language root:
+  `1.6/Mods/<Name>/Languages/<Language>/...`, mirroring its own def's gate
+  (MayRequire is ignored on DefInjected, so the LoadFolders folder is the
+  only gate). This repo ships none today — `UWU_Blood` is deliberately
+  ungated instead (see `TraitCostRules.xml`) — but the checker and StageMod
+  both already support one if the Alpha Armoury rules or a Biotech-gated
+  def ever need it.
 - `<DefTypeFolder>` must be the def's resolvable type name: bare for vanilla
   types (`JobDef`, `ResearchProjectDef`), **namespace-qualified for this mod's
   own def classes** (`UniqueWeaponsUnbound.TraitCostRuleDef`) — a bare custom
@@ -1285,8 +1292,15 @@ weapon def **def da arma** (kept Latin, as ja, zh, ko, de, es and fr do).
 ### Initial generation (`/translate <Language>`)
 
 1. Run the checker; confirm English itself is clean.
-2. Enumerate English Keyed keys and DefInjected-translatable def fields
-   (mirror the English/Russian file structure).
+2. Enumerate the target key set: every Keyed key in
+   `1.6/Languages/English/Keyed/UWU_UI.xml`, plus every `required`
+   DefInjected entry in the `Scripts/expected-injections.json` sidecar,
+   taking the English source text from each entry's `english` field — NOT
+   by scanning `1.6/Defs/` or an English DefInjected tree, either of which
+   would miss inherited/vanilla-parent or C#-default fields the sidecar
+   alone sees (see the file-map bullet above). Route any gated def's
+   entries to its own compat root if one exists; otherwise everything goes
+   in the main `1.6/Languages/<Language>/` tree.
 3. Extract the vanilla tar for the target language into the scratchpad;
    build a term list for the grounded terms above.
 4. Translate via subagent(s) carrying: the glossary, the vanilla term list,

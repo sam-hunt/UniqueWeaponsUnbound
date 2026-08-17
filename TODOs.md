@@ -22,3 +22,19 @@
 
 - Decide whether to standardize `generate_release_notes` in release.yml across
   the family (UMW uses false + manual changelog paste; UWU/PWU use true).
+
+## Localization
+
+- `UWU_Blood` could move to a `1.6/Mods/Biotech` compat load root now that the
+  checker/StageMod support gated roots (2026-08-18 port from BTG); its
+  DefInjected entries in all 8 languages would move with it. Currently
+  deliberately ungated instead (see the comment in
+  `1.6/Defs/TraitCostRuleDefs/TraitCostRules.xml`).
+- The Alpha Armoury TODO rules at the bottom of `TraitCostRules.xml` become
+  translatable via a `1.6/Mods/AlphaArmoury`-style compat root once
+  implemented (several are also `MayRequire Biotech`/`Royalty`/`Anomaly` on
+  top of Alpha Armoury, which would need their own nested gating story).
+- Scanned the repo for other commented-out/excluded DefInjected entries or
+  skill notes mentioning gating exclusions (2026-08-18): found only the two
+  items above (`UWU_Blood`'s ungating comment and the Alpha Armoury TODOs) —
+  no other gating exclusions exist today.
