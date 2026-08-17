@@ -83,6 +83,9 @@ A: Yes. Each trait change is a separate crafting job. Interrupting won't lose re
 [b]Q: Combat Extended?[/b]
 A: Yes? I don't know much about CE, but testing showed no errors. Trait costs adjust automatically for CE's adjusted crafting costs.
 
+[b]Q: Was this made using LLMs!?[/b]
+A: Some of the grunt code, and most localizations. I'm a software engineer by trade, and have been writing code for 25 years. All code is manually reviewed and tested; all bug reports and mod-conflicts followed up personally as time and detail allows. All art is either commissioned from humans, hand-authored in Krita, or both.
+
 
 [h2]Links[/h2]
 [url=https://github.com/sam-hunt/UniqueWeaponsUnbound]GitHub[/url] - Source code, bug reports, and feature requests
