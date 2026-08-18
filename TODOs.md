@@ -38,3 +38,4 @@
   skill notes mentioning gating exclusions (2026-08-18): found only the two
   items above (`UWU_Blood`'s ungating comment and the Alpha Armoury TODOs) —
   no other gating exclusions exist today.
+- Dedupe glossary/Japanese.md's UMW melee-term block against UniqueMeleeWeapons' own glossary/Japanese.md (both hold a copy since the 2026-08-18 l10n consolidation)
