@@ -111,21 +111,32 @@ rows, name fields) and proper nouns (pawns, precepts).
 ## Localization
 
 English (Keyed files + def fields) is the source of truth; other languages derive from it via the
-`/translate` skill (`.claude/skills/translate/SKILL.md` — grounding rules, glossary, workflows, and
-the `labelKeywords` convention) and are validated deterministically by
+`/translate` skill (`.claude/skills/translate/SKILL.md` — grounding rules, this mod's translation
+surface, and the `labelKeywords` convention; per-language glossaries live beside it in
+`glossary/<Language>.md`) and are validated deterministically by
 `python3 Scripts/check-translations.py` (also a CI release gate). The DefInjected expected set is
 the checked-in sidecar `Scripts/expected-injections.json`: a dump of every injection point the
 *live* game sees for this mod — including any vanilla-inherited field or C#-default comp string
-that never appears in this repo's XML — produced by
-`Scripts/refresh-translation-expectations.py` driving the `../L10nProbe` dev mod (never shipped)
-through the game's own walker. The checker refuses to run against stale expectations (any defName
-in `Defs/` the sidecar has never seen, or label/description text that drifted), so new content
-forces a regen and the regen sees everything the game sees; the release skill regenerates every
-release, which also covers vanilla updates changing inherited text under unchanged defNames. Def
-type folders are the loader-accepted names, so this mod's own def class appears as the
-namespace-qualified `UniqueWeaponsUnbound.TraitCostRuleDef` in both the sidecar and
-`DefInjected/`. The public language roster lives in CONTRIBUTING.md and must move in the same
-commit as any language change.
+that never appears in this repo's XML — produced by `Scripts/refresh-translation-expectations.py`
+driving the L10nProbe dev mod through the game's own walker. The checker refuses to run against
+stale expectations (any defName in `Defs/` the sidecar has never seen, or label/description text
+that drifted), so new content forces a regen and the regen sees everything the game sees; the
+release skill regenerates every release, which also covers vanilla updates changing inherited text
+under unchanged defNames. Def type folders are the loader-accepted names, so this mod's own def
+class appears as the namespace-qualified `UniqueWeaponsUnbound.TraitCostRuleDef` in both the
+sidecar and `DefInjected/`. The public language roster lives in CONTRIBUTING.md and must move in
+the same commit as any language change.
+
+- **Shared l10n toolkit (`l10n/` submodule):** the family-wide translation process, per-language
+  mechanics references, cross-language lessons, Workshop conventions, and the checker/refresh
+  script engines live in the `rimworld-l10n` repo, consumed here as the `l10n/` git submodule
+  (canonical working checkout: `~/dev/rimworld-l10n`). `Scripts/check-translations.py` and
+  `Scripts/refresh-translation-expectations.py` are thin per-repo config shims over its engines. If
+  `l10n/` is empty, run `git submodule update --init`. Never edit `l10n/` in place here:
+  mod-independent learnings go upstream in the canonical checkout, then the pin is bumped in each
+  consuming repo; mod-specific learnings (coined terms, `labelKeywords`, `RulePackDef` worked
+  examples) go in this repo's skill/glossary. The L10nProbe dev mod's source now lives at
+  `l10n/probe/`; build/deploy it only from the canonical `~/dev/rimworld-l10n` checkout.
 
 **Workshop title coupling:** each language's `UWU_SettingsCategory` Keyed value is the localized
 Steam Workshop title and must equal the title line (line 1) of
