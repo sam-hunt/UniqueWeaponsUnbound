@@ -54,6 +54,8 @@ can poison static state and surface as unrelated value mismatches downstream.
 
 `Source/1.6/Core/ModInitializer.cs` - Static constructor with `[StaticConstructorOnStartup]` auto-patches via Harmony attribute discovery. Harmony ID: `shunter.uniqueweaponsunbound`.
 
+**Patch-timing hazard (other mods' methods):** applying a Harmony detour JIT-compiles the target method, which runs its declaring type's static ctor — done before defs load, a target cctor that resolves defs breaks permanently (the BetterTradersGuild v1.1.0 CWTL incident). This repo patches from `[StaticConstructorOnStartup]` (post-defs), which guards against it; that placement is load-bearing — never move `PatchAll()` or a manual `Patch()` onto the `Mod` constructor path, especially for a patch targeting another mod's method. Worked example of deferring foreign-target patches when ctor-time patching is required: BetterTradersGuild's `Core/DeferredModPatches.cs`.
+
 ### Key Patterns
 
 **Namespace Convention:** Use `*Patches` suffix for patch namespaces to avoid RimWorld type conflicts.
