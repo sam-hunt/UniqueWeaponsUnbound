@@ -48,6 +48,13 @@ from the test bin copy target (see the comment in the test csproj) throws
 `BadImageFormatException`/`TypeLoadException` under mono only — and one such failure
 can poison static state and surface as unrelated value mismatches downstream.
 
+**Startup smoke test (pre-release):** `python3 Scripts/integration-smoke-test.py` (game
+closed) boots UWU plus its optional integration mods (VEF, Alpha Armoury) and family
+siblings on a pinned list, then classifies Player.log errors by origin and fails on
+anything attributed to UWU or an integration seam. Run before every release (wired into
+the release skill); thin shim over the shared engine in `l10n/smoke/` (born from the
+BetterTradersGuild v1.1.0 CWTL incident).
+
 ## Architecture
 
 ### Entry Point
