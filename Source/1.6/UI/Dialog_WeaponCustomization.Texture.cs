@@ -26,12 +26,16 @@ namespace UniqueWeaponsUnbound
             EnsureTextureVariantPreviews();
 
             // Grid of clickable texture variant cells, scrollable when other mods
-            // add more variants than fit in the tab area.
+            // add more variants than fit in the tab area. One cell per UNIQUE
+            // variant (deduped display list) — but every selection is written
+            // as a full subGraphics[] index, the domain overrideGraphicIndex
+            // indexes on the live weapon.
             float scrollWidth = rect.width - 16f;
             int cols = Mathf.Max(1,
                 Mathf.FloorToInt(scrollWidth / (TextureCellSize + TextureCellGap)));
 
-            int rows = (textureVariantCount + cols - 1) / cols;
+            int cellCount = uniqueVariantIndexes.Count;
+            int rows = (cellCount + cols - 1) / cols;
             float innerHeight = rows > 0
                 ? rows * TextureCellSize + Mathf.Max(0, rows - 1) * TextureCellGap
                 : 0f;
@@ -41,8 +45,9 @@ namespace UniqueWeaponsUnbound
 
             float curY = 0f;
             int col = 0;
-            for (int i = 0; i < textureVariantCount; i++)
+            for (int k = 0; k < cellCount; k++)
             {
+                int variantIndex = uniqueVariantIndexes[k];
                 Rect cellRect = new Rect(
                     col * (TextureCellSize + TextureCellGap),
                     curY,
@@ -52,18 +57,18 @@ namespace UniqueWeaponsUnbound
                 // Cell background
                 Widgets.DrawBoxSolid(cellRect, new Color(0.15f, 0.15f, 0.15f, 0.5f));
 
-                // Draw texture variant preview
+                // Draw texture variant preview (array is cell-indexed)
                 if (textureVariantPreviews != null
-                    && i < textureVariantPreviews.Length
-                    && textureVariantPreviews[i] != null)
+                    && k < textureVariantPreviews.Length
+                    && textureVariantPreviews[k] != null)
                 {
                     Rect previewRect = cellRect.ContractedBy(8f);
-                    GUI.DrawTexture(previewRect, textureVariantPreviews[i],
+                    GUI.DrawTexture(previewRect, textureVariantPreviews[k],
                         ScaleMode.ScaleToFit, true);
                 }
 
                 // Selected highlight (no border on unselected)
-                if (i == desiredTextureIndex)
+                if (IsSelectedVariantCell(variantIndex))
                 {
                     Widgets.DrawBox(cellRect, 2);
                     GUI.color = Color.white;
@@ -76,7 +81,7 @@ namespace UniqueWeaponsUnbound
 
                 // Click to select
                 if (Widgets.ButtonInvisible(cellRect))
-                    desiredTextureIndex = i;
+                    desiredTextureIndex = variantIndex;
 
                 col++;
                 if (col >= cols)

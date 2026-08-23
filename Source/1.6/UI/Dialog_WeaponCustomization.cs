@@ -55,6 +55,17 @@ namespace UniqueWeaponsUnbound
         private readonly int originalTextureIndex;
         private readonly ColorDef originalColor;
         private readonly int textureVariantCount;
+        // Texture variant display list: full-array subGraphics indexes, first
+        // index per texture name (see TextureVariantDeduper). Shorter than
+        // textureVariantCount only when the mod owning the textures is loaded
+        // more than once; on a healthy install it is exactly [0..count).
+        // Selection stays in the FULL index domain throughout — vanilla applies
+        // it via Thing.overrideGraphicIndex against the full subGraphics[].
+        private readonly List<int> uniqueVariantIndexes;
+        // Full-array index -> first full-array index sharing its texture name
+        // (itself when unique). Used to highlight the right grid cell when the
+        // desired index points at a duplicate copy.
+        private readonly int[] canonicalVariantIndexes;
         private readonly List<ColorDef> availableWeaponColors;
         private readonly List<ColorDef> availableIdeoColors; // Ideology DLC: Ideo + Misc colors
         private readonly List<ColorDef> availableStructureColors;
@@ -290,12 +301,35 @@ namespace UniqueWeaponsUnbound
                 desiredColor = availableWeaponColors.RandomElement();
             initialDesiredColor = desiredColor;
 
-            // Snapshot original texture index
+            // Snapshot original texture index. The modulo fallback must use the
+            // FULL variant count — it mirrors how vanilla picked the variant
+            // rendered on the map, which knows nothing of the dedupe below.
             textureVariantCount = GetTextureVariantCount();
             originalTextureIndex = weapon.overrideGraphicIndex
                 ?? (weapon.thingIDNumber % Mathf.Max(1, textureVariantCount));
             desiredTextureIndex = originalTextureIndex;
+
+            // Dedupe the variant DISPLAY list (double-loaded texture mods show
+            // every variant N times; see TextureVariantDeduper). Duplicates are
+            // pixel-identical, so map rendering is left alone.
+            TextureVariantDeduper.Compute(CollectVariantTextureKeys(),
+                out uniqueVariantIndexes, out canonicalVariantIndexes);
+            if (uniqueVariantIndexes.Count < textureVariantCount
+                && warnedVariantDupeDefs.Add(uniqueDef.defName))
+            {
+                Log.Warning("[Unique Weapons Unbound] " + uniqueDef.defName + ": "
+                    + textureVariantCount + " texture variants but only "
+                    + uniqueVariantIndexes.Count + " unique - the mod that owns these"
+                    + " textures appears to be loaded more than once (local copy +"
+                    + " Workshop subscription?).");
+            }
         }
+
+        // Defs already warned about duplicated texture variants — the log line
+        // is a load-order diagnostic, once per def per game session is plenty.
+        // Keyed by defName (not the def) so entries can't pin stale def
+        // instances across an in-process play-data reload.
+        private static readonly HashSet<string> warnedVariantDupeDefs = new HashSet<string>();
 
         // --- Computed properties ---
 
@@ -559,23 +593,64 @@ namespace UniqueWeaponsUnbound
             return raw;
         }
 
-        // Resolves the unique weapon def's graphic and returns the number of
-        // texture variants. Unwraps Graphic_RandomRotated if needed to access
-        // the underlying Graphic_Random. Returns 1 if the graphic is not a
-        // random-variant type.
-        private int GetTextureVariantCount()
+        // Resolves the unique weapon def's graphic to its Graphic_Random,
+        // unwrapping Graphic_RandomRotated if needed. Returns null if the
+        // graphic is not a random-variant type.
+        private Graphic_Random ResolveRandomGraphic()
         {
             Graphic graphic = uniqueDef?.graphicData?.Graphic;
-            if (graphic == null)
-                return 1;
-
             if (graphic is Graphic_RandomRotated rotated)
                 graphic = rotated.SubGraphic;
+            return graphic as Graphic_Random;
+        }
 
-            if (graphic is Graphic_Random random)
-                return random.SubGraphicsCount;
+        // Number of texture variants; 1 if the graphic has no variants.
+        private int GetTextureVariantCount()
+        {
+            Graphic_Random random = ResolveRandomGraphic();
+            return random != null ? random.SubGraphicsCount : 1;
+        }
 
-            return 1;
+        // Dedupe key per full-array variant index: the variant's main texture
+        // name, or null when unresolvable (BadGraphic fallbacks, non-random
+        // graphics) — a null key is treated as always-unique downstream.
+        private string[] CollectVariantTextureKeys()
+        {
+            string[] keys = new string[textureVariantCount];
+            Graphic_Random random = ResolveRandomGraphic();
+            if (random == null)
+                return keys;
+
+            for (int i = 0; i < keys.Length; i++)
+            {
+                Graphic sub = random.SubGraphicAtIndex(i);
+                if (sub == null)
+                    continue;
+                // Unity-overloaded == (not ?.) so a destroyed Material bails out
+                // instead of throwing on .mainTexture — see BuildVariantPreview.
+                Material mat = sub.MatSingle;
+                if (mat == null)
+                    continue;
+                Texture tex = mat.mainTexture;
+                if (tex != null)
+                    keys[i] = tex.name;
+            }
+            return keys;
+        }
+
+        // True when the grid cell holding this (canonical) full-array index
+        // represents the current desired variant. Compares through the
+        // canonical map rather than raw index equality, so a desired index
+        // pointing at a duplicate copy (thingIDNumber-derived, or saved via
+        // overrideGraphicIndex before a second mod copy shifted the array)
+        // still highlights the cell showing that texture.
+        private bool IsSelectedVariantCell(int variantIndex)
+        {
+            int canonical = desiredTextureIndex >= 0
+                    && desiredTextureIndex < canonicalVariantIndexes.Length
+                ? canonicalVariantIndexes[desiredTextureIndex]
+                : desiredTextureIndex;
+            return canonical == variantIndex;
         }
 
         // Computes net cost and net surplus by subtracting refunds from costs

@@ -27,7 +27,9 @@ namespace UniqueWeaponsUnbound
         // it bounds those draws to def changes instead of firing on every rebuild.
         private Thing previewThing;
 
-        // Cached texture variant grid previews — rebuilt when color/def/traits change
+        // Cached texture variant grid previews — rebuilt when color/def/traits
+        // change. Cell-indexed: entry k previews full-array variant
+        // uniqueVariantIndexes[k] (the deduped display list).
         private RenderTexture[] textureVariantPreviews;
         private ColorDef cachedTextureGridColor;
         private ThingDef cachedTextureGridDef;
@@ -504,14 +506,15 @@ namespace UniqueWeaponsUnbound
                 return;
 
             DestroyTextureVariantPreviews();
-            textureVariantPreviews = new RenderTexture[textureVariantCount];
+            textureVariantPreviews = new RenderTexture[uniqueVariantIndexes.Count];
 
             // The variants share def/color/traits and differ only by index, so
             // build the prospective graphic once and index into it per tile.
+            // Only the deduped display list gets a preview.
             Graphic topLevel = BuildPreviewGraphic(resultDef, effectiveColor);
-            for (int i = 0; i < textureVariantCount; i++)
-                textureVariantPreviews[i] = BuildVariantPreview(
-                    topLevel, i, TextureGridRTSize);
+            for (int k = 0; k < textureVariantPreviews.Length; k++)
+                textureVariantPreviews[k] = BuildVariantPreview(
+                    topLevel, uniqueVariantIndexes[k], TextureGridRTSize);
 
             cachedTextureGridColor = effectiveColor;
             cachedTextureGridDef = resultDef;
