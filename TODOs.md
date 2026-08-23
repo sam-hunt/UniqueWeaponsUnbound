@@ -18,11 +18,6 @@
   else a mod attaches is dropped)
 - Check Alpha Armoury and VWE for trait effects that could be patched to add tooltip effect strings
 
-## Cleanup
-
-- Decide whether to standardize `generate_release_notes` in release.yml across
-  the family (UMW uses false + manual changelog paste; UWU/PWU use true).
-
 ## Localization
 
 - `UWU_Blood` could move to a `1.6/Mods/Biotech` compat load root now that the
