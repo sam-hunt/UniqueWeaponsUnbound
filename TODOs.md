@@ -2,6 +2,7 @@
 
 ## Pre-release checks
 
+- Verify the 475333b texture dedupe in-game: with a unique-weapon mod double-loaded (copy UMW into local Mods/ while subscribed), the texture tab shows each variant once + logs the once-per-def warning; on the normal load order the grid is unchanged and selecting/reopening still highlights the chosen cell.
 - Verify the 231f55a reload fix in-game: switch language mid-session, then confirm customization still finds unique variants + workbenches, cost rows show the new language's materials and are payable, and bench-requirement messages use new-language labels (then switch back).
 
 ## Features
