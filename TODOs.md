@@ -1,5 +1,9 @@
 # TODOs
 
+## Pre-release checks
+
+- Verify the 231f55a reload fix in-game: switch language mid-session, then confirm customization still finds unique variants + workbenches, cost rows show the new language's materials and are payable, and bench-requirement messages use new-language labels (then switch back).
+
 ## Features
 
 - Mod setting: quality cost influence slider (0–200% scale on the quality
