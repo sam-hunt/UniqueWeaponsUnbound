@@ -20,14 +20,22 @@ namespace UniqueWeaponsUnbound
         private static string fabricationLabel;
 
         // Initializes workbench tier sets and the weapon-workbench registry.
-        // Must be called during StaticConstructorOnStartup (after all defs are
-        // loaded). A non-null report absorbs any fatal exception so the rest of
-        // the mod can still initialize; passing null preserves the throwing
-        // contract for direct callers.
+        // Called once per play-data load via UWU_Startup.Run (after all defs
+        // are loaded and DefInjected is applied) — an in-process reload
+        // replaces every def instance, so the sets AND the display labels
+        // (baked from def.label in the active language) must be rebuilt; the
+        // full rebuild below keeps this idempotent. A non-null report absorbs
+        // any fatal exception so the rest of the mod can still initialize;
+        // passing null preserves the throwing contract for direct callers.
         public static void Initialize(InitDiagnostics report = null)
         {
             try
             {
+                // Drop memoized produced-def sets from any previous play-data
+                // load — their ThingDef keys are dead after a reload, and the
+                // memo re-fills lazily against the live defs.
+                producedDefsByBench.Clear();
+
                 // Initialize workbench tier sets from vanilla anchors
                 smithyDefs = ResolveDefSet("FueledSmithy", "ElectricSmithy");
                 machiningDefs = ResolveDefSet("TableMachining");
@@ -435,7 +443,8 @@ namespace UniqueWeaponsUnbound
         // first gameplay query rather than in Initialize so recipes added
         // after startup (VEF inheritance) are included; vanilla freezes
         // AllRecipes in allRecipesCached on first access, so once built the
-        // memo cannot diverge from a direct rescan.
+        // memo cannot diverge from a direct rescan. Cleared by Initialize on
+        // each play-data load so it never serves dead def keys after a reload.
         private static readonly Dictionary<ThingDef, HashSet<ThingDef>> producedDefsByBench =
             new Dictionary<ThingDef, HashSet<ThingDef>>();
 

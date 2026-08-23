@@ -32,8 +32,11 @@ namespace UniqueWeaponsUnbound
         public static IReadOnlyList<TraitCostRuleDef> CachedRules => cachedRules;
 
         // Initializes material caches and builds the sorted rule list from
-        // DefDatabase. Must be called during StaticConstructorOnStartup (after
-        // all defs are loaded). A non-null report absorbs any fatal exception
+        // DefDatabase. Called once per play-data load via UWU_Startup.Run
+        // (after all defs are loaded) — an in-process reload replaces every
+        // def instance, so the rule list and each worker's OnStartup-resolved
+        // materials must be rebuilt from the fresh database; the full rebuild
+        // keeps this idempotent. A non-null report absorbs any fatal exception
         // so the rest of the mod can still initialize; passing null preserves
         // the throwing contract for direct callers.
         public static void Initialize(InitDiagnostics report = null)

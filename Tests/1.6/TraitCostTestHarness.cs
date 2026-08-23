@@ -159,9 +159,10 @@ namespace UniqueWeaponsUnbound.Tests
             SignalChip = MakeMaterial("SignalChip", "signal chip", 1000f, null, stuff: false);
             ValuelessMaterial = MakeMaterial("TestValuelessGoo", "valueless goo", 0f, null, stuff: false);
 
-            // NegativeDowngradeWorker builds its downgrade map from these on
-            // first Apply and caches it statically, so they must be in place
-            // before any test runs the pipeline.
+            // NegativeDowngradeWorker builds its downgrade map from these in
+            // OnStartup (reached via UseRules → SetRules), falling back to a
+            // lazy build on first Apply, so they must be in place before any
+            // test installs rules or runs the pipeline.
             ThingDefOf.WoodLog = WoodLog;
             ThingDefOf.Steel = Steel;
             ThingDefOf.Plasteel = Plasteel;

@@ -16,11 +16,13 @@ namespace UniqueWeaponsUnbound
         private static Dictionary<ThingDef, ThingDef> uniqueToBase;
         private static List<ThingDef> orphanUniqueDefs;
 
-        // Builds the base↔unique weapon pair cache. Must be called during
-        // StaticConstructorOnStartup (after all defs are loaded). A non-null
-        // report absorbs any fatal exception so the rest of the mod can still
-        // initialize; passing null preserves the throwing contract for direct
-        // callers.
+        // Builds the base↔unique weapon pair cache. Called once per play-data
+        // load via UWU_Startup.Run (after all defs are loaded) — an in-process
+        // reload replaces every def instance, so the cache must be rebuilt from
+        // the fresh DefDatabase; the full rebuild below keeps this idempotent.
+        // A non-null report absorbs any fatal exception so the rest of the mod
+        // can still initialize; passing null preserves the throwing contract
+        // for direct callers.
         public static void Initialize(InitDiagnostics report = null)
         {
             try

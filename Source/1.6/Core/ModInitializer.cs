@@ -19,12 +19,18 @@ namespace UniqueWeaponsUnbound
             // The load-time StatDef.SetImmutability ran before any mod static
             // ctor, so the postfix in StatDef_SetImmutability_Patch couldn't
             // catch it — apply the trait-stat mutability correction directly
-            // once here. The postfix owns every later recompute.
+            // once here. The postfix owns every later recompute, including the
+            // one inside each in-process play-data reload (PlayDataLoader.
+            // ResetStaticDataPost calls SetImmutability on every load).
             report.Time("TraitStatMutability", TraitStatMutability.MarkTraitStatsMutable);
 
-            report.Time("WeaponRegistry", () => WeaponRegistry.Initialize(report));
-            report.Time("WorkbenchUtility", () => WorkbenchUtility.Initialize(report));
-            report.Time("TraitCostUtility", () => TraitCostUtility.Initialize(report));
+            // Def-derived caches live in UWU_Startup.Run, which must fire once
+            // per play-data LOAD (a mid-session language switch replaces every
+            // def instance), not once per process. The CallAll postfix armed by
+            // PatchAll above covers every reload, but it cannot fire for the
+            // CallAll invocation this static ctor is running inside of — so the
+            // first load calls Run directly, sharing this report and summary.
+            UWU_Startup.Run(report);
 
             report.Time("reflection checks", () =>
             {

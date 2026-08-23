@@ -113,6 +113,15 @@ some translations reorder it there), `CapitalizeFirst()` the composed string ins
 capitalizing the argument. `LabelCap`/`LabelShortCap` is for standalone display (list
 rows, name fields) and proper nouns (pawns, precepts).
 
+**Per-load startup (`Core/UWU_Startup.cs`):** an in-process play-data reload (mid-session language
+switch) replaces every def instance, and a `[StaticConstructorOnStartup]` type initializer never
+re-runs — so all def-derived/def-mutating startup work lives in `UWU_Startup.Run()`, fired once per
+load (directly from `ModInitializer` on the first load, from the
+`StaticConstructorOnStartupUtility.CallAll` postfix on every reload), and everything it calls must
+stay idempotent. Texture-caching static ctors keep the attribute (load-agnostic, vanilla's own
+canonical use). Full rationale and the verified load ordering live in
+`Patches/StaticConstructorOnStartupUtility_CallAll_Patch.cs`.
+
 **Logging:** Prefix mod-specific logs with the mod name — `Log.Message("[Unique Weapons Unbound] ...")`.
 
 **Settings Triple Invariant:** see `Source/1.6/Core/CLAUDE.md`.

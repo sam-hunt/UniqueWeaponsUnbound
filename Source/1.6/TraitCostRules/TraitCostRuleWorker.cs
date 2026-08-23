@@ -33,10 +33,12 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        // Called once per rule at startup, after all defs are loaded and the
-        // material caches are built. Workers that turn def-specified defNames
-        // into ThingDefs resolve them here, so Apply stays a plain lookup and
-        // nothing is logged per call.
+        // Called once per rule per play-data load (via TraitCostUtility.
+        // Initialize → SetRules), after all defs are loaded and the material
+        // caches are built. Workers that turn def-specified defNames into
+        // ThingDefs resolve them here, so Apply stays a plain lookup and
+        // nothing is logged per call. Must stay idempotent: a reload rebuilds
+        // the rule list from fresh defs and re-runs this on their workers.
         public virtual void OnStartup()
         {
         }

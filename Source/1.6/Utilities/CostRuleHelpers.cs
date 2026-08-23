@@ -32,8 +32,11 @@ namespace UniqueWeaponsUnbound
         public static ThingDef Silver { get; private set; }
 
         // Builds the raw resource and material label caches and resolves
-        // ThingDefs. Must be called during StaticConstructorOnStartup (after
-        // all defs are loaded).
+        // ThingDefs. Called once per play-data load via TraitCostUtility.
+        // Initialize (after all defs are loaded and DefInjected is applied) —
+        // an in-process reload replaces every def instance and re-localizes
+        // every label, so both the def caches and the label-keyed lookup must
+        // be rebuilt; the full rebuild below keeps this idempotent.
         public static void Initialize()
         {
             materialsByLabel = new Dictionary<string, ThingDef>();
