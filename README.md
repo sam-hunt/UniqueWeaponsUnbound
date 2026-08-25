@@ -3,10 +3,7 @@
 > A RimWorld mod for customizing unique weapons
 
 [![RimWorld](https://img.shields.io/badge/RimWorld-1.6-blue.svg)](https://rimworldgame.com/)
-[![Odyssey DLC](https://img.shields.io/badge/DLC-Odyssey-blue.svg)](https://store.steampowered.com/app/2380740/RimWorld__Odyssey/)
-[![Version](https://img.shields.io/badge/Version-1.5.2-brightgreen.svg)](https://github.com/sam-hunt/UniqueWeaponsUnbound/releases)
-[![Development Status](https://img.shields.io/badge/Status-Released-brightgreen.svg)](https://github.com/sam-hunt/UniqueWeaponsUnbound/releases)
-
+[![Odyssey DLC](https://img.shields.io/badge/DLC-Odyssey-red.svg)](https://store.steampowered.com/app/2380740/RimWorld__Odyssey/)
 [![Subscribers](https://img.shields.io/steam/subscriptions/3707263149?logo=steam&label=subscribers)](https://steamcommunity.com/sharedfiles/filedetails/?id=3707263149)
 [![Downloads](https://img.shields.io/steam/downloads/3707263149?logo=steam&label=downloads)](https://steamcommunity.com/sharedfiles/filedetails/?id=3707263149)
 [![Favorites](https://img.shields.io/steam/favorites/3707263149?logo=steam&label=favorites)](https://steamcommunity.com/sharedfiles/filedetails/?id=3707263149)
