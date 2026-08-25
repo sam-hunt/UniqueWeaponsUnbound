@@ -7,6 +7,11 @@
 [![Version](https://img.shields.io/badge/Version-1.5.2-brightgreen.svg)](https://github.com/sam-hunt/UniqueWeaponsUnbound/releases)
 [![Development Status](https://img.shields.io/badge/Status-Released-brightgreen.svg)](https://github.com/sam-hunt/UniqueWeaponsUnbound/releases)
 
+[![Subscribers](https://img.shields.io/steam/subscriptions/3707263149?logo=steam&label=subscribers)](https://steamcommunity.com/sharedfiles/filedetails/?id=3707263149)
+[![Downloads](https://img.shields.io/steam/downloads/3707263149?logo=steam&label=downloads)](https://steamcommunity.com/sharedfiles/filedetails/?id=3707263149)
+[![Favorites](https://img.shields.io/steam/favorites/3707263149?logo=steam&label=favorites)](https://steamcommunity.com/sharedfiles/filedetails/?id=3707263149)
+[![Views](https://img.shields.io/steam/views/3707263149?logo=steam&label=views)](https://steamcommunity.com/sharedfiles/filedetails/?id=3707263149)
+
 ![Preview](About/Preview.png)
 
 ## About
