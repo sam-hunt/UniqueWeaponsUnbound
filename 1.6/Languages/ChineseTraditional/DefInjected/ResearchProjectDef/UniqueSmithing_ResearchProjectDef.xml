@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique smithing -->
+  <UniqueSmithing.label>獨特武器鍛造</UniqueSmithing.label>
+  <!-- EN: Upgrade and customize neolithic and medieval weapons at a smithy, adding or removing traits to suit your needs. -->
+  <UniqueSmithing.description>在鍛造桌上升級並自訂原始部落與中世紀的武器，依你的需求加入或移除特質。</UniqueSmithing.description>
+
+  <!-- EN: Customize neolithic weapons -->
+  <UniqueSmithing.customUnlockTexts.0>自訂原始部落武器</UniqueSmithing.customUnlockTexts.0>
+  <!-- EN: Customize medieval weapons -->
+  <UniqueSmithing.customUnlockTexts.1>自訂中世紀武器</UniqueSmithing.customUnlockTexts.1>
+
+  <!-- EN:
+    <li>subject->unique smithing</li>
+    <li>subject_story->learned to modify unique weapons by studying their traits</li>
+    <li>subject_story->experimented with ancient weapon enhancements</li>
+    <li>subject_gerund->smithing unique weapons</li>
+  -->
+  <UniqueSmithing.generalRules.rulesStrings>
+    <li>subject->獨特武器鍛造</li>
+    <li>subject_story->研究獨特武器的特質，學會了改造它們</li>
+    <li>subject_story->實驗了遠古的武器強化手法</li>
+    <li>subject_gerund->鍛造獨特武器</li>
+  </UniqueSmithing.generalRules.rulesStrings>
+
+</LanguageData>

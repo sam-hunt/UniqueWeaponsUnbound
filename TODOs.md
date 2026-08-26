@@ -27,7 +27,7 @@
 
 - `UWU_Blood` could move to a `1.6/Mods/Biotech` compat load root now that the
   checker/StageMod support gated roots (2026-08-18 port from BTG); its
-  DefInjected entries in all 8 languages would move with it. Currently
+  DefInjected entries in all 9 languages would move with it. Currently
   deliberately ungated instead (see the comment in
   `1.6/Defs/TraitCostRuleDefs/TraitCostRules.xml`).
 - The Alpha Armoury TODO rules at the bottom of `TraitCostRules.xml` become

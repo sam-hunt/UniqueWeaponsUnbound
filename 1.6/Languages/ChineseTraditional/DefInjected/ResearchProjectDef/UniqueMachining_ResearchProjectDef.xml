@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique machining -->
+  <UniqueMachining.label>獨特武器機械加工</UniqueMachining.label>
+  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>在機械加工桌上升級並自訂工業時代的武器，依你的需求加入或移除特質。</UniqueMachining.description>
+
+  <!-- EN: Upgrade and customize industrial unique weapons -->
+  <UniqueMachining.customUnlockTexts.0>升級並自訂工業時代的獨特武器</UniqueMachining.customUnlockTexts.0>
+
+  <!-- EN:
+    <li>subject->unique machining</li>
+    <li>subject_story->reverse-engineered unique weapon modifications using industrial tools</li>
+    <li>subject_story->perfected the art of applying weapon traits with precision machinery</li>
+    <li>subject_gerund->machining unique weapons</li>
+  -->
+  <UniqueMachining.generalRules.rulesStrings>
+    <li>subject->獨特武器機械加工</li>
+    <li>subject_story->用工業工具逆向解析出獨特武器的改造方式</li>
+    <li>subject_story->以精密機具將套用武器特質的技藝磨練至完美</li>
+    <li>subject_gerund->機械加工獨特武器</li>
+  </UniqueMachining.generalRules.rulesStrings>
+
+</LanguageData>

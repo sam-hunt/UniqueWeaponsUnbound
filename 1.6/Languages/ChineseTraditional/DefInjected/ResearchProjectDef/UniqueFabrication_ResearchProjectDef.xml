@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- EN: unique fabrication -->
+  <UniqueFabrication.label>獨特武器精密製作</UniqueFabrication.label>
+  <!-- EN: Upgrade and customize spacer and ultratech weapons at a fabrication bench, adding or removing traits to suit your needs. -->
+  <UniqueFabrication.description>在精密製作桌上升級並自訂太空與高科技等級的武器，依你的需求加入或移除特質。</UniqueFabrication.description>
+
+  <!-- EN: Upgrade and customize spacer weapons -->
+  <UniqueFabrication.customUnlockTexts.0>升級並自訂太空科技武器</UniqueFabrication.customUnlockTexts.0>
+  <!-- EN: Upgrade and customize ultratech weapons -->
+  <UniqueFabrication.customUnlockTexts.1>升級並自訂高科技武器</UniqueFabrication.customUnlockTexts.1>
+
+  <!-- EN:
+    <li>subject->unique fabrication</li>
+    <li>subject_story->decoded the secrets of modifying pulse-charged and beam weapon traits</li>
+    <li>subject_story->used fabrication nanotechnology to alter spacer weapon components</li>
+    <li>subject_gerund->fabricating unique weapons</li>
+  -->
+  <UniqueFabrication.generalRules.rulesStrings>
+    <li>subject->獨特武器精密製作</li>
+    <li>subject_story->解開了改造脈衝充能與光束武器特質的秘密</li>
+    <li>subject_story->用精密製作的奈米技術改動了太空科技武器的零件</li>
+    <li>subject_gerund->精密製作獨特武器</li>
+  </UniqueFabrication.generalRules.rulesStrings>
+
+</LanguageData>
