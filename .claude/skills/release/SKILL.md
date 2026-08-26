@@ -133,12 +133,11 @@ final. Do all of the following, then present it as **one** confirmation:
 - Update `CHANGELOG.md`: new `## [X.Y.Z] - YYYY-MM-DD` section at the top
   (below the header, today's date, Keep a Changelog style: `### Added`,
   `### Fixed`, ...), plus the `[X.Y.Z]` link reference at the bottom.
-- Bump the version string in all three files: `About/About.xml`
+- Bump the version string in both files: `About/About.xml`
   (`<modVersion>`), `Source/1.6/Properties/AssemblyInfo.cs`
-  (`AssemblyVersion` and `AssemblyFileVersion`), `README.md` (version
-  badge `Version-X.Y.Z`).
+  (`AssemblyVersion` and `AssemblyFileVersion`).
 - Show the user, together: current version → new version (and bump type),
-  the changelog notes, the full diff of all four files, and exactly what
+  the changelog notes, the full diff of all three files, and exactly what
   step 7 will do (rebuild, commit `chore: Bump version to X.Y.Z`, tag
   `vX.Y.Z`, push with tags).
 - **Ask the user to confirm — this is the only release confirmation.** On
@@ -151,7 +150,7 @@ No further questions unless something is unexpected:
 - Rebuild (`dotnet build UniqueWeaponsUnbound.sln -c Release`) so the
   deployed DLL carries the bumped `AssemblyVersion`. Stop on failure.
 - Stage only the release files: `About/About.xml`,
-  `Source/1.6/Properties/AssemblyInfo.cs`, `README.md`, `CHANGELOG.md`. If
+  `Source/1.6/Properties/AssemblyInfo.cs`, `CHANGELOG.md`. If
   other tracked files are modified, list them and ask whether to include
   them (the one conditional exception).
 - Commit with message: `chore: Bump version to X.Y.Z`
