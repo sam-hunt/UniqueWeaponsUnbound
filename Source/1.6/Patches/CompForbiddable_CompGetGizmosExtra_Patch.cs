@@ -153,7 +153,10 @@ namespace UniqueWeaponsUnbound.Patches
         // search off the per-frame path; frames rather than ticks so the
         // enabled/disabled state stays responsive while paused (e.g. the
         // player forbidding a bench). Keyed by thingIDNumber; stale entries
-        // from a previous save fail the frame check and recompute.
+        // from a previous save fail the frame check and recompute. The
+        // pawn-independent skill check (colony-wide subjects) shares the
+        // cache: it walks the colonist list, and under the expertise kind
+        // that's a reflection call per colonist.
         private const int SearchCacheTtlFrames = 30;
 
         private struct CachedSearch
@@ -177,8 +180,14 @@ namespace UniqueWeaponsUnbound.Patches
                 return cached.Result;
             }
 
-            var result = WorkbenchUtility.FindBestWorkbench(
-                weapon.Map, baseDef, uniqueDef, techLevel, weapon.Position);
+            // Skill prerequisite first (cheaper, and the more fundamental
+            // reason); a null pawn defers the CustomizingPawn subject to the
+            // targeter, so this only ever rejects for the colony-wide subjects.
+            AcceptanceReport skill = SkillCheckRules.GetReport(null, weapon, baseDef, uniqueDef);
+            var result = skill.Accepted
+                ? WorkbenchUtility.FindBestWorkbench(
+                    weapon.Map, baseDef, uniqueDef, techLevel, weapon.Position)
+                : new WorkbenchUtility.WorkbenchSearchResult { BestRejection = skill };
             if (gizmoSearchCache.Count > 128)
                 gizmoSearchCache.Clear();
             gizmoSearchCache[weapon.thingIDNumber] = new CachedSearch
@@ -219,13 +228,40 @@ namespace UniqueWeaponsUnbound.Patches
             targeterSearchCache.Clear();
             TargetingParameters parms = TargetingParameters.ForColonist();
 
-            // Layer 3: pawn-specific validation on the targeter
+            // Layer 3: pawn-specific validation on the targeter. The skill
+            // check deliberately does NOT exclude pawns here: an under-skilled
+            // colonist stays targetable, the mouse-attached tip below shows
+            // their level against the requirement, and picking them anyway
+            // surfaces the rejection as a message (Layer 4).
             parms.validator = delegate(TargetInfo targetInfo)
             {
                 if (!(targetInfo.Thing is Pawn p))
                     return false;
                 return GetCachedTargeterSearch(p, weapon, baseDef, uniqueDef, techLevel).Found;
             };
+
+            // Per-pawn skill tip, only under the CustomizingPawn subject (the
+            // colony-wide subjects were already answered by the gizmo state).
+            Action<LocalTargetInfo> onGui = null;
+            if (UWU_Mod.Settings.skillCheckSubject == SkillCheckSubject.CustomizingPawn)
+            {
+                SkillCheckRules.Requirement requirement =
+                    SkillCheckRules.GetRequirement(baseDef, uniqueDef, techLevel);
+                if (!requirement.IsEmpty)
+                {
+                    onGui = delegate(LocalTargetInfo hovered)
+                    {
+                        if (!(hovered.Thing is Pawn p) || !p.IsColonist)
+                            return;
+                        string tip = SkillCheckRules.GetTargeterTip(p, requirement, out bool failing);
+                        if (!tip.NullOrEmpty())
+                        {
+                            Widgets.MouseAttachedLabel(tip, 0f, 0f,
+                                failing ? ColorLibrary.RedReadable : (Color?)null);
+                        }
+                    };
+                }
+            }
 
             Find.Targeter.BeginTargeting(parms,
                 delegate(LocalTargetInfo target)
@@ -234,6 +270,16 @@ namespace UniqueWeaponsUnbound.Patches
                     Pawn pawn = target.Pawn;
                     if (pawn == null)
                         return;
+
+                    AcceptanceReport skill = SkillCheckRules.GetReport(pawn, weapon, baseDef, uniqueDef);
+                    if (!skill.Accepted)
+                    {
+                        Messages.Message(
+                            "UWU_CustomizeWeapon".Translate(weapon.LabelShort)
+                                + " (" + skill.Reason + ")",
+                            weapon, MessageTypeDefOf.RejectInput, false);
+                        return;
+                    }
 
                     var result = WorkbenchUtility.FindBestWorkbench(
                         pawn, baseDef, uniqueDef, techLevel, weapon.Position);
@@ -251,7 +297,8 @@ namespace UniqueWeaponsUnbound.Patches
                     job.targetC = result.Workbench;
                     job.count = 1;
                     pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-                });
+                },
+                onGui);
         }
     }
 }

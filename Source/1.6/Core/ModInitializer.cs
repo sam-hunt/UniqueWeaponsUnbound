@@ -48,6 +48,7 @@ namespace UniqueWeaponsUnbound
             {
                 _ = VEFWeaponTraitGraphicsIntegration.Available;
                 _ = AlphaArmouryIntegration.Available;
+                _ = VanillaSkillsExpandedIntegration.Available;
             });
 
             report.LogSummary();

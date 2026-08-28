@@ -25,6 +25,9 @@ namespace UniqueWeaponsUnbound
         public bool allowUncraftableCustomization = true;
         public bool allowUltratechCustomization = true;
         public bool allowArchotechCustomization;
+        public SkillCheckSubject skillCheckSubject = SkillCheckSubject.None;
+        public SkillCheckKind skillCheckKind = SkillCheckKind.RecipeOrTechTier;
+        public int skillCheckMinimumLevel = 10;
 
         // Haul Planner
         public HaulPlannerKind haulPlannerKind = HaulPlannerKind.Sweep;
@@ -54,6 +57,9 @@ namespace UniqueWeaponsUnbound
             allowUncraftableCustomization = true;
             allowUltratechCustomization = true;
             allowArchotechCustomization = false;
+            skillCheckSubject = SkillCheckSubject.None;
+            skillCheckKind = SkillCheckKind.RecipeOrTechTier;
+            skillCheckMinimumLevel = 10;
 
             haulPlannerKind = HaulPlannerKind.Sweep;
 
@@ -83,6 +89,9 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref allowUncraftableCustomization, "allowUncraftableCustomization", true);
             Scribe_Values.Look(ref allowUltratechCustomization, "allowUltratechCustomization", true);
             Scribe_Values.Look(ref allowArchotechCustomization, "allowArchotechCustomization");
+            Scribe_Values.Look(ref skillCheckSubject, "skillCheckSubject", SkillCheckSubject.None);
+            Scribe_Values.Look(ref skillCheckKind, "skillCheckKind", SkillCheckKind.RecipeOrTechTier);
+            Scribe_Values.Look(ref skillCheckMinimumLevel, "skillCheckMinimumLevel", 10);
 
             Scribe_Values.Look(ref haulPlannerKind, "haulPlannerKind", HaulPlannerKind.Sweep);
 

@@ -72,6 +72,12 @@ namespace UniqueWeaponsUnbound
             if (!customizable.Accepted)
                 return DisabledOrHidden(weapon, customizable);
 
+            // Skill prerequisite (optional; O(colonists) at most) — after the
+            // research gates, before pathing and the workbench search
+            AcceptanceReport skill = SkillCheckRules.GetReport(pawn, weapon, baseDef, uniqueDef);
+            if (!skill.Accepted)
+                return DisabledOrHidden(weapon, skill);
+
             string label = "UWU_CustomizeWeapon".Translate(weapon.LabelShort);
 
             // Weapon reachability + forbidden checks

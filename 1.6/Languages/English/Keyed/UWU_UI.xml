@@ -7,6 +7,18 @@
   <UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
   <UWU_NoSuitableWorkbench>no suitable workbench</UWU_NoSuitableWorkbench>
   <UWU_RequiresMinimumQuality>requires {0} quality or better</UWU_RequiresMinimumQuality>
+  <!-- Skill check rejections. {0} = skill label (lowercase, e.g. crafting) or expertise label; {1} = required level -->
+  <UWU_RequiresExpertise>requires {0} expertise</UWU_RequiresExpertise>
+  <UWU_NoColonistWithSkill>no colonist has {0} {1}</UWU_NoColonistWithSkill>
+  <UWU_NoColonistOnMapWithSkill>no colonist on this map has {0} {1}</UWU_NoColonistOnMapWithSkill>
+  <UWU_NoColonistWithExpertise>no colonist has {0} expertise</UWU_NoColonistWithExpertise>
+  <UWU_NoColonistOnMapWithExpertise>no colonist on this map has {0} expertise</UWU_NoColonistOnMapWithExpertise>
+  <!-- Mouse-attached tip over a hovered colonist while targeting. {0} = skill label (capitalized), {1} = pawn's level, {2} = required level -->
+  <UWU_TargeterSkill>{0}: {1} (required {2})</UWU_TargeterSkill>
+  <UWU_TargeterHasExpertise>Has {0} expertise</UWU_TargeterHasExpertise>
+  <UWU_TargeterLacksExpertise>No {0} expertise</UWU_TargeterLacksExpertise>
+  <!-- Used in place of the Vanilla Skills Expanded expertise label when it cannot be read -->
+  <UWU_WeaponsmithingFallbackLabel>weaponsmithing</UWU_WeaponsmithingFallbackLabel>
   <UWU_CustomizeGizmoLabel>Customize</UWU_CustomizeGizmoLabel>
   <UWU_CustomizeGizmoDesc>Select a colonist to customize this weapon at a nearby workbench.</UWU_CustomizeGizmoDesc>
 
@@ -160,6 +172,32 @@
   <UWU_AllowArchotech>Allow customizing archotech-level weapons</UWU_AllowArchotech>
   <!-- {0} = unique fabrication (research label) -->
   <UWU_AllowArchotechDesc>Allow customization of archotech weapons, requiring {0} research.</UWU_AllowArchotechDesc>
+  <UWU_SkillCheckSubject>Skill check applies to</UWU_SkillCheckSubject>
+  <UWU_SkillCheckSubjectDesc>Optionally require crafting skill before a weapon can be customized. Choose whose skill is checked here; what is required is set below.</UWU_SkillCheckSubjectDesc>
+  <UWU_SkillCheckSubjectNone>No one</UWU_SkillCheckSubjectNone>
+  <UWU_SkillCheckSubjectNoneDesc>Any pawn can customize weapons.</UWU_SkillCheckSubjectNoneDesc>
+  <UWU_SkillCheckSubjectPawn>The pawn doing the customization</UWU_SkillCheckSubjectPawn>
+  <UWU_SkillCheckSubjectPawnDesc>The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering a colonist shows their skill against the requirement.</UWU_SkillCheckSubjectPawnDesc>
+  <UWU_SkillCheckSubjectMap>The most skilled colonist on the map</UWU_SkillCheckSubjectMap>
+  <UWU_SkillCheckSubjectMapDesc>Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves.</UWU_SkillCheckSubjectMapDesc>
+  <UWU_SkillCheckSubjectWorld>The most skilled colonist anywhere</UWU_SkillCheckSubjectWorld>
+  <UWU_SkillCheckSubjectWorldDesc>Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf.</UWU_SkillCheckSubjectWorldDesc>
+  <UWU_SkillCheckKind>Skill requirement</UWU_SkillCheckKind>
+  <UWU_SkillCheckKindDesc>What the checked pawn must have.</UWU_SkillCheckKindDesc>
+  <UWU_SkillCheckKindNoEffect>Has no effect while the skill check applies to no one.</UWU_SkillCheckKindNoEffect>
+  <UWU_SkillCheckKindRecipe>Based on the weapon's crafting recipe</UWU_SkillCheckKindRecipe>
+  <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
+  <UWU_SkillCheckKindRecipeDesc>Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}.</UWU_SkillCheckKindRecipeDesc>
+  <!-- {0} = tech level (lowercase), {1} = required crafting level -->
+  <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
+  <UWU_SkillCheckKindFlat>Minimum crafting skill: {0}</UWU_SkillCheckKindFlat>
+  <UWU_SkillCheckKindFlatDesc>Require at least this crafting skill level for every weapon.</UWU_SkillCheckKindFlatDesc>
+  <UWU_SkillCheckFlatSliderNoEffect>Has no effect unless "Minimum crafting skill" is selected.</UWU_SkillCheckFlatSliderNoEffect>
+  <UWU_SkillCheckKindWeaponsmith>Weaponsmithing expertise (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
+  <UWU_SkillCheckKindWeaponsmithDesc>Require the weaponsmithing expertise from Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
+  <UWU_SkillCheckWeaponsmithUnavailableDesc>Requires Vanilla Skills Expanded, which is not active.</UWU_SkillCheckWeaponsmithUnavailableDesc>
+  <!-- {0} = the fallback crafting level -->
+  <UWU_SkillCheckWeaponsmithFallbackDesc>Weaponsmithing expertise is selected but Vanilla Skills Expanded is not active, so a minimum crafting skill of {0} applies instead. Select this option to make a flat minimum the permanent choice.</UWU_SkillCheckWeaponsmithFallbackDesc>
 
   <!-- Settings: Miscellaneous -->
   <UWU_AllowDefConversion>Allow weapon def conversion</UWU_AllowDefConversion>

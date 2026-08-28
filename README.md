@@ -60,6 +60,7 @@ All balance levers are configurable from the in-game mod settings:
 - **Workbench restrictions** — allow any weapon-crafting workbench regardless of tech level
 - **Tech-level gates** — independently allow or block ultratech and archotech weapon customization
 - **Uncraftable weapons** — allow customization of weapons with no crafting recipe
+- **Skill check** (off by default) — require crafting skill from the customizing pawn or your best colonist, based on the weapon's recipe, a flat minimum, or Vanilla Skills Expanded's weaponsmithing expertise
 - **Sole-trait enforcement** — optionally enforce vanilla's sole-trait generation restrictions during customization
 
 ### Mod Compatibility
