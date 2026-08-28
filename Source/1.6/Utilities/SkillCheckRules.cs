@@ -279,37 +279,16 @@ namespace UniqueWeaponsUnbound
         }
 
         // Mouse-attached line for the ground-weapon targeter under the
-        // CustomizingPawn subject: the hovered pawn's level against the
-        // requirement (or their expertise status), so the player can pick a
-        // qualified colonist without guessing. Empty when nothing applies.
-        // failing reports whether the pawn would be rejected, for colouring.
-        public static string GetTargeterTip(Pawn pawn, Requirement requirement, out bool failing)
+        // CustomizingPawn subject: the hovered pawn's shortfall in the same
+        // words the float menus and the rejection message use (vanilla's
+        // SkillTooLow, or the expertise line), so the player can pick a
+        // qualified colonist without guessing. Null when the pawn qualifies
+        // or nothing applies — a qualifying pawn needs no annotation.
+        public static string GetTargeterTip(Pawn pawn, Requirement requirement)
         {
-            failing = false;
-            if (pawn == null || requirement?.IsEmpty != false)
+            if (pawn == null || requirement?.IsEmpty != false || PawnSatisfies(pawn, requirement))
                 return null;
-
-            if (requirement.RequiresWeaponsmithExpertise)
-            {
-                bool has = VanillaSkillsExpandedIntegration.HasExpertise(
-                    pawn, VanillaSkillsExpandedIntegration.WeaponsmithDefName);
-                failing = !has;
-                return (has ? "UWU_TargeterHasExpertise" : "UWU_TargeterLacksExpertise")
-                    .Translate(WeaponsmithLabel());
-            }
-
-            // Show every skill entry; the first unmet one decides the colour.
-            string tip = null;
-            for (int i = 0; i < requirement.Skills.Count; i++)
-            {
-                SkillRequirement sr = requirement.Skills[i];
-                if (!sr.PawnSatisfies(pawn))
-                    failing = true;
-                string line = "UWU_TargeterSkill".Translate(
-                    sr.skill.LabelCap, SkillLevel(pawn, sr.skill), sr.minLevel);
-                tip = tip == null ? line : tip + "\n" + line;
-            }
-            return tip;
+            return PawnShortfall(pawn, requirement);
         }
 
         // The pawn's displayed level in a skill: the skill record's level, or a

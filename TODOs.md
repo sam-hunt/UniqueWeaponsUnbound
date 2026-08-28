@@ -3,7 +3,7 @@
 ## Pre-release checks
 
 - Verify the 475333b texture dedupe in-game: with a unique-weapon mod double-loaded (copy UMW into local Mods/ while subscribed), the texture tab shows each variant once + logs the once-per-def warning; on the normal load order the grid is unchanged and selecting/reopening still highlights the chosen cell.
-- Verify the skill-check prerequisite in-game: with "applies to" set to the customizing pawn, the ground gizmo's targeter shows "Crafting: N (required M)" (red when short) over hovered colonists, picking a short one shows the top-left rejection, and the workbench float menu shows the same reason disabled; with a colony-wide subject the gizmo itself disables; with weaponsmithing selected and VSE disabled, the settings page shows the flat row active at 15 and the check enforces 15.
+- Verify the skill-check prerequisite in-game: with "applies to" set to the customizing pawn, the ground gizmo's targeter shows a red "need crafting level M, have N" over hovered under-skilled colonists (nothing over qualified ones), picking a short one shows the top-left rejection, and the workbench float menu shows the same reason disabled; with a colony-wide subject the gizmo itself disables; with weaponsmithing selected and VSE disabled, the settings page shows the flat row active at 15 and the check enforces 15.
 - Verify the 231f55a reload fix in-game: switch language mid-session, then confirm customization still finds unique variants + workbenches, cost rows show the new language's materials and are payable, and bench-requirement messages use new-language labels (then switch back).
 
 ## Features

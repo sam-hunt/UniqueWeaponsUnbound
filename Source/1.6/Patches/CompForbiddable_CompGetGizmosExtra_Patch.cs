@@ -240,8 +240,9 @@ namespace UniqueWeaponsUnbound.Patches
                 return GetCachedTargeterSearch(p, weapon, baseDef, uniqueDef, techLevel).Found;
             };
 
-            // Per-pawn skill tip, only under the CustomizingPawn subject (the
-            // colony-wide subjects were already answered by the gizmo state).
+            // Per-pawn skill tip on under-skilled colonists, only under the
+            // CustomizingPawn subject (the colony-wide subjects were already
+            // answered by the gizmo state).
             Action<LocalTargetInfo> onGui = null;
             if (UWU_Mod.Settings.skillCheckSubject == SkillCheckSubject.CustomizingPawn)
             {
@@ -253,12 +254,9 @@ namespace UniqueWeaponsUnbound.Patches
                     {
                         if (!(hovered.Thing is Pawn p) || !p.IsColonist)
                             return;
-                        string tip = SkillCheckRules.GetTargeterTip(p, requirement, out bool failing);
+                        string tip = SkillCheckRules.GetTargeterTip(p, requirement);
                         if (!tip.NullOrEmpty())
-                        {
-                            Widgets.MouseAttachedLabel(tip, 0f, 0f,
-                                failing ? ColorLibrary.RedReadable : (Color?)null);
-                        }
+                            Widgets.MouseAttachedLabel(tip, 0f, 0f, ColorLibrary.RedReadable);
                     };
                 }
             }

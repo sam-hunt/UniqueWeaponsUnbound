@@ -7,16 +7,13 @@
   <UWU_RequiresWorkbench>requires {0}</UWU_RequiresWorkbench>
   <UWU_NoSuitableWorkbench>no suitable workbench</UWU_NoSuitableWorkbench>
   <UWU_RequiresMinimumQuality>requires {0} quality or better</UWU_RequiresMinimumQuality>
-  <!-- Skill check rejections. {0} = skill label (lowercase, e.g. crafting) or expertise label; {1} = required level -->
+  <!-- Skill check rejections (a pawn's own skill shortfall reuses vanilla SkillTooLow).
+       {0} = skill label (lowercase, e.g. crafting) or expertise label; {1} = required level -->
   <UWU_RequiresExpertise>requires {0} expertise</UWU_RequiresExpertise>
   <UWU_NoColonistWithSkill>no colonist has {0} {1}</UWU_NoColonistWithSkill>
   <UWU_NoColonistOnMapWithSkill>no colonist on this map has {0} {1}</UWU_NoColonistOnMapWithSkill>
   <UWU_NoColonistWithExpertise>no colonist has {0} expertise</UWU_NoColonistWithExpertise>
   <UWU_NoColonistOnMapWithExpertise>no colonist on this map has {0} expertise</UWU_NoColonistOnMapWithExpertise>
-  <!-- Mouse-attached tip over a hovered colonist while targeting. {0} = skill label (capitalized), {1} = pawn's level, {2} = required level -->
-  <UWU_TargeterSkill>{0}: {1} (required {2})</UWU_TargeterSkill>
-  <UWU_TargeterHasExpertise>Has {0} expertise</UWU_TargeterHasExpertise>
-  <UWU_TargeterLacksExpertise>No {0} expertise</UWU_TargeterLacksExpertise>
   <!-- Used in place of the Vanilla Skills Expanded expertise label when it cannot be read -->
   <UWU_WeaponsmithingFallbackLabel>weaponsmithing</UWU_WeaponsmithingFallbackLabel>
   <UWU_CustomizeGizmoLabel>Customize</UWU_CustomizeGizmoLabel>
@@ -177,7 +174,7 @@
   <UWU_SkillCheckSubjectNone>No one</UWU_SkillCheckSubjectNone>
   <UWU_SkillCheckSubjectNoneDesc>Any pawn can customize weapons.</UWU_SkillCheckSubjectNoneDesc>
   <UWU_SkillCheckSubjectPawn>The pawn doing the customization</UWU_SkillCheckSubjectPawn>
-  <UWU_SkillCheckSubjectPawnDesc>The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering a colonist shows their skill against the requirement.</UWU_SkillCheckSubjectPawnDesc>
+  <UWU_SkillCheckSubjectPawnDesc>The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall.</UWU_SkillCheckSubjectPawnDesc>
   <UWU_SkillCheckSubjectMap>The most skilled colonist on the map</UWU_SkillCheckSubjectMap>
   <UWU_SkillCheckSubjectMapDesc>Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves.</UWU_SkillCheckSubjectMapDesc>
   <UWU_SkillCheckSubjectWorld>The most skilled colonist anywhere</UWU_SkillCheckSubjectWorld>
