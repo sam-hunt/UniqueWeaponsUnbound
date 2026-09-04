@@ -30,6 +30,9 @@ namespace UniqueWeaponsUnbound
         // Vanilla Skills Expanded's weaponsmithing expertise. Without VSE this
         // resolves to FlatMinimum at WeaponsmithFallbackLevel.
         WeaponsmithExpertise,
+        // The per-tech-tier crafting minimum for every weapon, recipe or not
+        // (the same table RecipeOrTechTier falls back to).
+        TechTier,
     }
 
     // The optional skill prerequisite for customization: setting resolution
@@ -73,6 +76,14 @@ namespace UniqueWeaponsUnbound
             flatLevel = Mathf.Clamp(settings.skillCheckMinimumLevel, MinFlatLevel, MaxFlatLevel);
             return settings.skillCheckKind;
         }
+
+        // The tiers the table below distinguishes, lowest first; the settings
+        // UI enumerates this to describe the table.
+        public static readonly TechLevel[] TechTiers =
+        {
+            TechLevel.Neolithic, TechLevel.Medieval, TechLevel.Industrial,
+            TechLevel.Spacer, TechLevel.Ultra, TechLevel.Archotech,
+        };
 
         // Fallback crafting minimum for weapons with no recipe, by tech tier.
         // Derived from a survey of every craftable vanilla weapon's recipe
@@ -129,6 +140,10 @@ namespace UniqueWeaponsUnbound
 
                 case SkillCheckKind.FlatMinimum:
                     AddCrafting(requirement, flatLevel);
+                    break;
+
+                case SkillCheckKind.TechTier:
+                    AddCrafting(requirement, TechTierMinimumCraftingSkill(techLevel));
                     break;
 
                 default: // RecipeOrTechTier

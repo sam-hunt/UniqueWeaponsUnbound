@@ -169,8 +169,10 @@
   <UWU_AllowArchotech>Allow customizing archotech-level weapons</UWU_AllowArchotech>
   <!-- {0} = unique fabrication (research label) -->
   <UWU_AllowArchotechDesc>Allow customization of archotech weapons, requiring {0} research.</UWU_AllowArchotechDesc>
+  <UWU_SkillCheckEnable>Require minimum crafting skill</UWU_SkillCheckEnable>
+  <UWU_SkillCheckEnableDesc>Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. Unticking this sets the skill check to apply to no one.</UWU_SkillCheckEnableDesc>
   <UWU_SkillCheckSubject>Skill check applies to</UWU_SkillCheckSubject>
-  <UWU_SkillCheckSubjectDesc>Optionally require crafting skill before a weapon can be customized. Choose whose skill is checked here; what is required is set below.</UWU_SkillCheckSubjectDesc>
+  <UWU_SkillCheckSubjectDesc>Whose skill is checked. What is required is set below.</UWU_SkillCheckSubjectDesc>
   <UWU_SkillCheckSubjectNone>No one</UWU_SkillCheckSubjectNone>
   <UWU_SkillCheckSubjectNoneDesc>Any pawn can customize weapons.</UWU_SkillCheckSubjectNoneDesc>
   <UWU_SkillCheckSubjectPawn>The pawn doing the customization</UWU_SkillCheckSubjectPawn>
@@ -187,6 +189,10 @@
   <UWU_SkillCheckKindRecipeDesc>Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}.</UWU_SkillCheckKindRecipeDesc>
   <!-- {0} = tech level (lowercase), {1} = required crafting level -->
   <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
+  <!-- {0} = the tech-level minimums lowest tier first, slash-separated, e.g. 4/5/7/9/12/15 -->
+  <UWU_SkillCheckKindTechTier>Based on the weapon's tech level ({0})</UWU_SkillCheckKindTechTier>
+  <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
+  <UWU_SkillCheckKindTechTierDesc>Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}.</UWU_SkillCheckKindTechTierDesc>
   <UWU_SkillCheckKindFlat>Minimum crafting skill: {0}</UWU_SkillCheckKindFlat>
   <UWU_SkillCheckKindFlatDesc>Require at least this crafting skill level for every weapon.</UWU_SkillCheckKindFlatDesc>
   <UWU_SkillCheckFlatSliderNoEffect>Has no effect unless "Minimum crafting skill" is selected.</UWU_SkillCheckFlatSliderNoEffect>

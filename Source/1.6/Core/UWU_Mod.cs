@@ -14,12 +14,27 @@ namespace UniqueWeaponsUnbound
         private Vector2 settingsScroll;
         private float settingsHeight;
 
+        // Whether the skill-check subsection is expanded. Purely a dialog-level
+        // view state (never scribed): derived from the stored subject the first
+        // time the dialog draws after opening, then driven only by the
+        // player's own clicks on the "Require minimum crafting skill" checkbox.
+        // Null means "derive on next draw"; WriteSettings (fired when the
+        // dialog closes) and Reset to defaults clear it so the next open
+        // re-derives.
+        private static bool? skillCheckExpanded;
+
         public UWU_Mod(ModContentPack content) : base(content)
         {
             Settings = GetSettings<UWU_Settings>();
         }
 
         public override string SettingsCategory() => "UWU_SettingsCategory".Translate();
+
+        public override void WriteSettings()
+        {
+            base.WriteSettings();
+            skillCheckExpanded = null;
+        }
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
@@ -294,37 +309,68 @@ namespace UniqueWeaponsUnbound
             if (Widgets.ButtonText(buttonRect, "UWU_ResetToDefaults".Translate()))
             {
                 Settings.ResetToDefaults();
+                skillCheckExpanded = null;
             }
         }
 
-        // The optional skill prerequisite: two radio groups (who is checked,
-        // what is demanded) and the flat-minimum slider. The second group and
-        // the slider render inert while the subject is "no one"; the slider is
-        // also inert unless the flat kind is in force. The weaponsmithing row
-        // is inert without Vanilla Skills Expanded, and when it is nonetheless
-        // the stored selection the flat row renders as active at the fallback
-        // level — mirroring what SkillCheckRules.EffectiveKind enforces —
-        // without touching the stored value, so installing VSE later restores
-        // the player's intent (same non-mutating treatment as the
+        // The optional skill prerequisite, behind a "Require minimum crafting
+        // skill" checkbox that expands two radio groups (who is checked, what
+        // is demanded) and the flat-minimum slider. Unticking the checkbox
+        // resets the subject to "no one" and collapses the section; ticking it
+        // only expands (the subject stays "no one" until the player picks
+        // one). Picking "no one" from the radio group does not collapse the
+        // section — only reopening the dialog re-derives the expanded state.
+        //
+        // Within the section the second group and the slider render inert
+        // while the subject is "no one"; the slider is also inert unless the
+        // flat kind is in force. The weaponsmithing row is inert without
+        // Vanilla Skills Expanded, and when it is nonetheless the stored
+        // selection the flat row renders as active at the fallback level —
+        // mirroring what SkillCheckRules.EffectiveKind enforces — without
+        // touching the stored value, so installing VSE later restores the
+        // player's intent (same non-mutating treatment as the
         // Archotech-implies-Ultratech checkbox above).
+        private const float SkillCheckLabelIndent = 16f;
+        private const float SkillCheckOptionIndent = 32f;
+
         private static void DrawSkillCheckSettings(Listing_Standard listing)
         {
+            if (skillCheckExpanded == null)
+                skillCheckExpanded = SkillCheckRules.Enabled;
+
+            bool expanded = skillCheckExpanded.Value;
+            listing.CheckboxLabeled("UWU_SkillCheckEnable".Translate(), ref expanded,
+                "UWU_SkillCheckEnableDesc".Translate());
+            if (expanded != skillCheckExpanded.Value)
+            {
+                skillCheckExpanded = expanded;
+                if (!expanded)
+                    Settings.skillCheckSubject = SkillCheckSubject.None;
+            }
+            if (!expanded)
+                return;
+
+            listing.Gap(8f);
+            listing.Indent(SkillCheckLabelIndent);
+            listing.ColumnWidth -= SkillCheckLabelIndent;
+            float optionTab = SkillCheckOptionIndent - SkillCheckLabelIndent;
+
             listing.Label("UWU_SkillCheckSubject".Translate(),
                 tooltip: "UWU_SkillCheckSubjectDesc".Translate());
             listing.Gap(4f);
 
             DrawSubjectOption(listing, SkillCheckSubject.None,
                 "UWU_SkillCheckSubjectNone".Translate() + "UWU_DefaultSuffix".Translate(),
-                "UWU_SkillCheckSubjectNoneDesc".Translate());
+                "UWU_SkillCheckSubjectNoneDesc".Translate(), optionTab);
             DrawSubjectOption(listing, SkillCheckSubject.CustomizingPawn,
                 "UWU_SkillCheckSubjectPawn".Translate(),
-                "UWU_SkillCheckSubjectPawnDesc".Translate());
+                "UWU_SkillCheckSubjectPawnDesc".Translate(), optionTab);
             DrawSubjectOption(listing, SkillCheckSubject.BestOnMap,
                 "UWU_SkillCheckSubjectMap".Translate(),
-                "UWU_SkillCheckSubjectMapDesc".Translate());
+                "UWU_SkillCheckSubjectMapDesc".Translate(), optionTab);
             DrawSubjectOption(listing, SkillCheckSubject.BestAnywhere,
                 "UWU_SkillCheckSubjectWorld".Translate(),
-                "UWU_SkillCheckSubjectWorldDesc".Translate());
+                "UWU_SkillCheckSubjectWorldDesc".Translate(), optionTab);
 
             listing.Gap(8f);
 
@@ -346,13 +392,34 @@ namespace UniqueWeaponsUnbound
                 "UWU_SkillCheckKindRecipe".Translate() + "UWU_DefaultSuffix".Translate(),
                 enabled ? "UWU_SkillCheckKindRecipeDesc".Translate(TechTierSummary()) : inertTip,
                 active: effective == SkillCheckKind.RecipeOrTechTier,
-                enabled: enabled))
+                enabled: enabled, tabIn: optionTab))
             {
                 Settings.skillCheckKind = SkillCheckKind.RecipeOrTechTier;
             }
 
-            // The radio label doubles as the slider's value label (no
-            // "(default)" suffix here — on a radio row it would read as the
+            if (DrawRadioOption(listing,
+                "UWU_SkillCheckKindTechTier".Translate(TechTierLevels()),
+                enabled ? "UWU_SkillCheckKindTechTierDesc".Translate(TechTierSummary()) : inertTip,
+                active: effective == SkillCheckKind.TechTier,
+                enabled: enabled, tabIn: optionTab))
+            {
+                Settings.skillCheckKind = SkillCheckKind.TechTier;
+            }
+
+            string weaponsmithTip = !enabled ? inertTip
+                : vseAvailable ? "UWU_SkillCheckKindWeaponsmithDesc".Translate()
+                : "UWU_SkillCheckWeaponsmithUnavailableDesc".Translate();
+            if (DrawRadioOption(listing,
+                "UWU_SkillCheckKindWeaponsmith".Translate(), weaponsmithTip,
+                active: effective == SkillCheckKind.WeaponsmithExpertise,
+                enabled: enabled && vseAvailable, tabIn: optionTab))
+            {
+                Settings.skillCheckKind = SkillCheckKind.WeaponsmithExpertise;
+            }
+
+            // The flat row sits last so its slider closes the group instead of
+            // splitting it. The radio label doubles as the slider's value label
+            // (no "(default)" suffix here — on a radio row it would read as the
             // default option rather than the default level).
             string flatLabel = "UWU_SkillCheckKindFlat".Translate(flatLevel);
             string flatTip = !enabled ? inertTip
@@ -360,15 +427,15 @@ namespace UniqueWeaponsUnbound
                 : "UWU_SkillCheckKindFlatDesc".Translate();
             if (DrawRadioOption(listing, flatLabel, flatTip,
                 active: effective == SkillCheckKind.FlatMinimum,
-                enabled: enabled))
+                enabled: enabled, tabIn: optionTab))
             {
                 Settings.skillCheckKind = SkillCheckKind.FlatMinimum;
             }
 
-            // Slider indented under its radio row; live only when the flat
-            // kind is the player's own selection.
+            // Slider indented under its radio row's label; live only when the
+            // flat kind is the player's own selection.
             Rect sliderRect = listing.GetRect(22f);
-            sliderRect.xMin += 24f;
+            sliderRect.xMin += optionTab + 24f;
             bool sliderLive = enabled && effective == SkillCheckKind.FlatMinimum && !fallback;
             if (sliderLive)
             {
@@ -385,39 +452,28 @@ namespace UniqueWeaponsUnbound
                 TooltipHandler.TipRegion(sliderRect,
                     !enabled || fallback ? flatTip : "UWU_SkillCheckFlatSliderNoEffect".Translate());
             }
-            listing.Gap(8f);
 
-            string weaponsmithTip = !enabled ? inertTip
-                : vseAvailable ? "UWU_SkillCheckKindWeaponsmithDesc".Translate()
-                : "UWU_SkillCheckWeaponsmithUnavailableDesc".Translate();
-            if (DrawRadioOption(listing,
-                "UWU_SkillCheckKindWeaponsmith".Translate(), weaponsmithTip,
-                active: effective == SkillCheckKind.WeaponsmithExpertise,
-                enabled: enabled && vseAvailable))
-            {
-                Settings.skillCheckKind = SkillCheckKind.WeaponsmithExpertise;
-            }
+            listing.ColumnWidth += SkillCheckLabelIndent;
+            listing.Outdent(SkillCheckLabelIndent);
         }
 
         private static void DrawSubjectOption(
-            Listing_Standard listing, SkillCheckSubject subject, string label, string tooltip)
+            Listing_Standard listing, SkillCheckSubject subject, string label, string tooltip,
+            float tabIn)
         {
             if (DrawRadioOption(listing, label, tooltip,
-                active: Settings.skillCheckSubject == subject, enabled: true))
+                active: Settings.skillCheckSubject == subject, enabled: true, tabIn: tabIn))
             {
                 Settings.skillCheckSubject = subject;
             }
         }
 
-        // The per-tier fallback minimums, for the recipe option's tooltip, read
-        // from the rule table so the text can't drift from the behaviour.
+        // The per-tier minimums for the radio tooltips ("neolithic 4, medieval
+        // 5, ..."), read from the rule table so the text can't drift from the
+        // behaviour.
         private static string TechTierSummary()
         {
-            TechLevel[] tiers =
-            {
-                TechLevel.Neolithic, TechLevel.Medieval, TechLevel.Industrial,
-                TechLevel.Spacer, TechLevel.Ultra, TechLevel.Archotech,
-            };
+            TechLevel[] tiers = SkillCheckRules.TechTiers;
             var parts = new string[tiers.Length];
             for (int i = 0; i < tiers.Length; i++)
             {
@@ -428,14 +484,26 @@ namespace UniqueWeaponsUnbound
             return string.Join(", ", parts);
         }
 
+        // The same table compressed for the tech-level radio label
+        // ("4/5/7/9/12/15"), lowest tier first.
+        private static string TechTierLevels()
+        {
+            TechLevel[] tiers = SkillCheckRules.TechTiers;
+            var parts = new string[tiers.Length];
+            for (int i = 0; i < tiers.Length; i++)
+                parts[i] = SkillCheckRules.TechTierMinimumCraftingSkill(tiers[i]).ToString();
+            return string.Join("/", parts);
+        }
+
         // One radio row. Disabled rows render in vanilla's subtle grey and
         // ignore clicks (Widgets.RadioButtonLabeled still reports the click, so
         // the enabled check lives here). Returns true when an enabled row was
         // clicked.
         private static bool DrawRadioOption(
-            Listing_Standard listing, string label, string tooltip, bool active, bool enabled)
+            Listing_Standard listing, string label, string tooltip, bool active, bool enabled,
+            float tabIn = 0f)
         {
-            bool clicked = listing.RadioButton(label, active, 0f, tooltip, null, disabled: !enabled);
+            bool clicked = listing.RadioButton(label, active, tabIn, tooltip, null, disabled: !enabled);
             listing.Gap(4f);
             return clicked && enabled;
         }

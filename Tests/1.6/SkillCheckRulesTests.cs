@@ -167,6 +167,40 @@ namespace UniqueWeaponsUnbound.Tests
         }
 
         [Fact]
+        public void TechTierKind_UsesTierTable_IgnoringRecipe()
+        {
+            ThingDef craftable = MakeWeapon(TechLevel.Industrial,
+                RecipeRequiring(new SkillRequirement { skill = Crafting, minLevel = 3 }));
+            ThingDef uncraftable = MakeWeapon(TechLevel.Industrial);
+            using (TraitCostTestHarness.OverrideSettings(
+                SettingsFor(SkillCheckSubject.CustomizingPawn, SkillCheckKind.TechTier, flatLevel: 12)))
+            {
+                int expected = SkillCheckRules.TechTierMinimumCraftingSkill(TechLevel.Industrial);
+                foreach (ThingDef weapon in new[] { craftable, uncraftable })
+                {
+                    var req = SkillCheckRules.GetRequirement(weapon, null, TechLevel.Industrial);
+                    Assert.Single(req.Skills);
+                    Assert.Same(Crafting, req.Skills[0].skill);
+                    Assert.Equal(expected, req.Skills[0].minLevel);
+                }
+            }
+        }
+
+        [Fact]
+        public void TechTiers_ListEveryTierLowestFirst_MatchingTheTable()
+        {
+            TechLevel[] tiers = SkillCheckRules.TechTiers;
+            Assert.Equal(TechLevel.Neolithic, tiers[0]);
+            Assert.Equal(TechLevel.Archotech, tiers[tiers.Length - 1]);
+            for (int i = 1; i < tiers.Length; i++)
+            {
+                Assert.True(tiers[i] > tiers[i - 1]);
+                Assert.True(SkillCheckRules.TechTierMinimumCraftingSkill(tiers[i])
+                    > SkillCheckRules.TechTierMinimumCraftingSkill(tiers[i - 1]));
+            }
+        }
+
+        [Fact]
         public void FlatKind_UsesSliderLevel_IgnoringRecipe()
         {
             ThingDef weapon = MakeWeapon(TechLevel.Industrial,
