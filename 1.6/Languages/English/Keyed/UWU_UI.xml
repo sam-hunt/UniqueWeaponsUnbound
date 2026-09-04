@@ -198,8 +198,6 @@
   <UWU_SkillCheckFlatSliderSelects>Adjusting this selects "Minimum crafting skill".</UWU_SkillCheckFlatSliderSelects>
   <UWU_SkillCheckKindWeaponsmith>Weaponsmithing expertise (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
   <UWU_SkillCheckKindWeaponsmithDesc>Require the weaponsmithing expertise from Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
-  <!-- {0} = the fallback crafting level -->
-  <UWU_SkillCheckWeaponsmithFallbackDesc>Weaponsmithing expertise is selected but Vanilla Skills Expanded is not active, so a minimum crafting skill of {0} applies instead. Select this option to make a flat minimum the permanent choice.</UWU_SkillCheckWeaponsmithFallbackDesc>
 
   <!-- Settings: Miscellaneous -->
   <UWU_AllowDefConversion>Allow weapon def conversion</UWU_AllowDefConversion>

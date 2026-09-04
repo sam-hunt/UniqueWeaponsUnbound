@@ -325,11 +325,12 @@ namespace UniqueWeaponsUnbound
         // while the subject is "no one"; the slider is also inert unless the
         // flat kind is in force. The weaponsmithing row is hidden without
         // Vanilla Skills Expanded, and when it is nonetheless the stored
-        // selection the flat row renders as active at the fallback level —
-        // mirroring what SkillCheckRules.EffectiveKind enforces — without
-        // touching the stored value, so installing VSE later restores the
-        // player's intent (same non-mutating treatment as the
-        // Archotech-implies-Ultratech checkbox above).
+        // selection the flat row simply renders as active at the fallback
+        // level — mirroring what SkillCheckRules.EffectiveKind enforces —
+        // without touching the stored value or explaining itself, so
+        // installing VSE later restores the player's intent (same
+        // non-mutating treatment as the Archotech-implies-Ultratech checkbox
+        // above).
         private const float SkillCheckLabelIndent = 16f;
         private const float SkillCheckOptionIndent = 32f;
 
@@ -377,7 +378,6 @@ namespace UniqueWeaponsUnbound
             bool enabled = SkillCheckRules.Enabled;
             string inertTip = "UWU_SkillCheckKindNoEffect".Translate();
             bool vseAvailable = VanillaSkillsExpandedIntegration.Available;
-            bool fallback = SkillCheckRules.WeaponsmithFallbackActive;
             SkillCheckKind effective = SkillCheckRules.EffectiveKind(out int flatLevel);
 
             Color prevColor = GUI.color;
@@ -423,9 +423,7 @@ namespace UniqueWeaponsUnbound
             // (no "(default)" suffix here — on a radio row it would read as the
             // default option rather than the default level).
             string flatLabel = "UWU_SkillCheckKindFlat".Translate(flatLevel);
-            string flatTip = !enabled ? inertTip
-                : fallback ? "UWU_SkillCheckWeaponsmithFallbackDesc".Translate(SkillCheckRules.WeaponsmithFallbackLevel)
-                : "UWU_SkillCheckKindFlatDesc".Translate();
+            string flatTip = enabled ? "UWU_SkillCheckKindFlatDesc".Translate() : inertTip;
             if (DrawRadioOption(listing, flatLabel, flatTip,
                 active: effective == SkillCheckKind.FlatMinimum,
                 enabled: enabled, tabIn: optionTab))
@@ -436,11 +434,10 @@ namespace UniqueWeaponsUnbound
             // Slider indented under its radio row's label. Live whenever the
             // group is, and touching it (a press over it or a value change)
             // also selects the flat kind, so the player needn't click the radio
-            // first; under the weaponsmithing fallback that press is exactly
-            // the "make the flat minimum permanent" action the tooltip offers,
-            // at the displayed level. With the group inert (subject "no one")
-            // the slider is grey and non-interactive, and never re-enables
-            // anything.
+            // first (under the weaponsmithing fallback that makes the displayed
+            // fallback level the permanent choice). With the group inert
+            // (subject "no one") the slider is grey and non-interactive, and
+            // never re-enables anything.
             Rect sliderRect = listing.GetRect(22f);
             sliderRect.xMin += optionTab + 12f;
             if (enabled)
@@ -455,11 +452,8 @@ namespace UniqueWeaponsUnbound
                     Settings.skillCheckMinimumLevel = chosen;
                     Settings.skillCheckKind = SkillCheckKind.FlatMinimum;
                 }
-                if (effective != SkillCheckKind.FlatMinimum || fallback)
-                {
-                    TooltipHandler.TipRegion(sliderRect,
-                        fallback ? flatTip : "UWU_SkillCheckFlatSliderSelects".Translate());
-                }
+                if (effective != SkillCheckKind.FlatMinimum)
+                    TooltipHandler.TipRegion(sliderRect, "UWU_SkillCheckFlatSliderSelects".Translate());
             }
             else
             {
