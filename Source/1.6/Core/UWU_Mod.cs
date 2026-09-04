@@ -227,7 +227,7 @@ namespace UniqueWeaponsUnbound
                 ref Settings.allowArchotechCustomization,
                 "UWU_AllowArchotechDesc".Translate(UWU_ResearchDefOf.UniqueFabrication.label));
 
-            listing.Gap(18.0f);
+            listing.Gap();
 
             DrawSkillCheckSettings(listing);
 
