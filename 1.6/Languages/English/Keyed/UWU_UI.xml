@@ -170,7 +170,7 @@
   <!-- {0} = unique fabrication (research label) -->
   <UWU_AllowArchotechDesc>Allow customization of archotech weapons, requiring {0} research.</UWU_AllowArchotechDesc>
   <UWU_SkillCheckEnable>Require minimum crafting skill</UWU_SkillCheckEnable>
-  <UWU_SkillCheckEnableDesc>Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. Unticking this sets the skill check to apply to no one.</UWU_SkillCheckEnableDesc>
+  <UWU_SkillCheckEnableDesc>Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below.</UWU_SkillCheckEnableDesc>
   <UWU_SkillCheckSubject>Skill check applies to</UWU_SkillCheckSubject>
   <UWU_SkillCheckSubjectDesc>Whose skill is checked. What is required is set below.</UWU_SkillCheckSubjectDesc>
   <UWU_SkillCheckSubjectNone>No one</UWU_SkillCheckSubjectNone>
@@ -198,7 +198,6 @@
   <UWU_SkillCheckFlatSliderSelects>Adjusting this selects "Minimum crafting skill".</UWU_SkillCheckFlatSliderSelects>
   <UWU_SkillCheckKindWeaponsmith>Weaponsmithing expertise (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
   <UWU_SkillCheckKindWeaponsmithDesc>Require the weaponsmithing expertise from Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
-  <UWU_SkillCheckWeaponsmithUnavailableDesc>Requires Vanilla Skills Expanded, which is not active.</UWU_SkillCheckWeaponsmithUnavailableDesc>
   <!-- {0} = the fallback crafting level -->
   <UWU_SkillCheckWeaponsmithFallbackDesc>Weaponsmithing expertise is selected but Vanilla Skills Expanded is not active, so a minimum crafting skill of {0} applies instead. Select this option to make a flat minimum the permanent choice.</UWU_SkillCheckWeaponsmithFallbackDesc>
 

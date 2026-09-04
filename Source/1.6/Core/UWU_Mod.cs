@@ -323,7 +323,7 @@ namespace UniqueWeaponsUnbound
         //
         // Within the section the second group and the slider render inert
         // while the subject is "no one"; the slider is also inert unless the
-        // flat kind is in force. The weaponsmithing row is inert without
+        // flat kind is in force. The weaponsmithing row is hidden without
         // Vanilla Skills Expanded, and when it is nonetheless the stored
         // selection the flat row renders as active at the fallback level —
         // mirroring what SkillCheckRules.EffectiveKind enforces — without
@@ -406,13 +406,14 @@ namespace UniqueWeaponsUnbound
                 Settings.skillCheckKind = SkillCheckKind.TechTier;
             }
 
-            string weaponsmithTip = !enabled ? inertTip
-                : vseAvailable ? "UWU_SkillCheckKindWeaponsmithDesc".Translate()
-                : "UWU_SkillCheckWeaponsmithUnavailableDesc".Translate();
-            if (DrawRadioOption(listing,
-                "UWU_SkillCheckKindWeaponsmith".Translate(), weaponsmithTip,
+            // Hidden without VSE; a stored weaponsmithing selection then shows
+            // as the flat row active at the fallback level (see the summary
+            // comment above) and is kept for when VSE returns.
+            if (vseAvailable && DrawRadioOption(listing,
+                "UWU_SkillCheckKindWeaponsmith".Translate(),
+                enabled ? "UWU_SkillCheckKindWeaponsmithDesc".Translate() : inertTip,
                 active: effective == SkillCheckKind.WeaponsmithExpertise,
-                enabled: enabled && vseAvailable, tabIn: optionTab))
+                enabled: enabled, tabIn: optionTab))
             {
                 Settings.skillCheckKind = SkillCheckKind.WeaponsmithExpertise;
             }
