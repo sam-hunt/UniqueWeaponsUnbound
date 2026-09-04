@@ -432,16 +432,33 @@ namespace UniqueWeaponsUnbound
                 Settings.skillCheckKind = SkillCheckKind.FlatMinimum;
             }
 
-            // Slider indented under its radio row's label; live only when the
-            // flat kind is the player's own selection.
+            // Slider indented under its radio row's label. Live whenever the
+            // group is, and touching it (a press over it or a value change)
+            // also selects the flat kind, so the player needn't click the radio
+            // first; under the weaponsmithing fallback that press is exactly
+            // the "make the flat minimum permanent" action the tooltip offers,
+            // at the displayed level. With the group inert (subject "no one")
+            // the slider is grey and non-interactive, and never re-enables
+            // anything.
             Rect sliderRect = listing.GetRect(22f);
-            sliderRect.xMin += optionTab + 24f;
-            bool sliderLive = enabled && effective == SkillCheckKind.FlatMinimum && !fallback;
-            if (sliderLive)
+            sliderRect.xMin += optionTab + 12f;
+            if (enabled)
             {
-                Settings.skillCheckMinimumLevel = Mathf.RoundToInt(Widgets.HorizontalSlider(
-                    sliderRect, Settings.skillCheckMinimumLevel,
+                // Read before the slider consumes the event.
+                bool pressed = Event.current.type == EventType.MouseDown
+                    && Event.current.button == 0 && Mouse.IsOver(sliderRect);
+                int chosen = Mathf.RoundToInt(Widgets.HorizontalSlider(sliderRect, flatLevel,
                     SkillCheckRules.MinFlatLevel, SkillCheckRules.MaxFlatLevel));
+                if (pressed || chosen != flatLevel)
+                {
+                    Settings.skillCheckMinimumLevel = chosen;
+                    Settings.skillCheckKind = SkillCheckKind.FlatMinimum;
+                }
+                if (effective != SkillCheckKind.FlatMinimum || fallback)
+                {
+                    TooltipHandler.TipRegion(sliderRect,
+                        fallback ? flatTip : "UWU_SkillCheckFlatSliderSelects".Translate());
+                }
             }
             else
             {
@@ -449,8 +466,7 @@ namespace UniqueWeaponsUnbound
                 Widgets.HorizontalSlider(sliderRect, flatLevel,
                     SkillCheckRules.MinFlatLevel, SkillCheckRules.MaxFlatLevel);
                 GUI.color = prevColor;
-                TooltipHandler.TipRegion(sliderRect,
-                    !enabled || fallback ? flatTip : "UWU_SkillCheckFlatSliderNoEffect".Translate());
+                TooltipHandler.TipRegion(sliderRect, inertTip);
             }
 
             listing.ColumnWidth += SkillCheckLabelIndent;

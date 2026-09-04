@@ -195,7 +195,7 @@
   <UWU_SkillCheckKindTechTierDesc>Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}.</UWU_SkillCheckKindTechTierDesc>
   <UWU_SkillCheckKindFlat>Minimum crafting skill: {0}</UWU_SkillCheckKindFlat>
   <UWU_SkillCheckKindFlatDesc>Require at least this crafting skill level for every weapon.</UWU_SkillCheckKindFlatDesc>
-  <UWU_SkillCheckFlatSliderNoEffect>Has no effect unless "Minimum crafting skill" is selected.</UWU_SkillCheckFlatSliderNoEffect>
+  <UWU_SkillCheckFlatSliderSelects>Adjusting this selects "Minimum crafting skill".</UWU_SkillCheckFlatSliderSelects>
   <UWU_SkillCheckKindWeaponsmith>Weaponsmithing expertise (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
   <UWU_SkillCheckKindWeaponsmithDesc>Require the weaponsmithing expertise from Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
   <UWU_SkillCheckWeaponsmithUnavailableDesc>Requires Vanilla Skills Expanded, which is not active.</UWU_SkillCheckWeaponsmithUnavailableDesc>
