@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Entries are short one-liners ready to paste as Steam Workshop change notes: what changed for the player, no rationale, no def names, no sub-bullets. -->
 
+## [1.6.0] - 2026-10-04
+
+### Added
+
+- Optional crafting skill check for customization (off by default).
+- Skill check subject: the customizing pawn, or the best colonist on the map or anywhere.
+- Skill requirement: recipe, tech level, flat minimum, or VSE weaponsmithing expertise.
+- Traditional Chinese localization (machine-assisted; review welcome).
+
+### Changed
+
+- Higher-quality customize gizmo icon.
+
+### Fixed
+
+- Customization keeps working after switching language mid-session.
+- No duplicate texture variants when a mod is loaded twice.
+
 ## [1.5.2] - 2026-08-07
 
 ### Fixed
@@ -215,6 +233,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.6.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.6.0
 [1.5.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.2
 [1.5.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.1
 [1.5.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.0
