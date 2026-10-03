@@ -42,6 +42,21 @@
        normal ou melhor", which is pre-inflected and can't be templated. -->
   <!-- EN: requires {0} quality or better -->
   <UWU_RequiresMinimumQuality>requer qualidade {0} ou melhor</UWU_RequiresMinimumQuality>
+  <!-- Skill check rejections (a pawn's own skill shortfall reuses vanilla SkillTooLow).
+       {0} = skill label (lowercase, e.g. fabricação) or expertise label; {1} = required level -->
+  <!-- EN: requires {0} expertise -->
+  <UWU_RequiresExpertise>requer especialização em {0}</UWU_RequiresExpertise>
+  <!-- EN: no colonist has {0} {1} -->
+  <UWU_NoColonistWithSkill>nenhum colono tem {0} {1}</UWU_NoColonistWithSkill>
+  <!-- EN: no colonist on this map has {0} {1} -->
+  <UWU_NoColonistOnMapWithSkill>nenhum colono neste mapa tem {0} {1}</UWU_NoColonistOnMapWithSkill>
+  <!-- EN: no colonist has {0} expertise -->
+  <UWU_NoColonistWithExpertise>nenhum colono tem especialização em {0}</UWU_NoColonistWithExpertise>
+  <!-- EN: no colonist on this map has {0} expertise -->
+  <UWU_NoColonistOnMapWithExpertise>nenhum colono neste mapa tem especialização em {0}</UWU_NoColonistOnMapWithExpertise>
+  <!-- Used in place of the Vanilla Skills Expanded expertise label when it cannot be read -->
+  <!-- EN: weaponsmithing -->
+  <UWU_WeaponsmithingFallbackLabel>armaria</UWU_WeaponsmithingFallbackLabel>
   <!-- EN: Customize -->
   <UWU_CustomizeGizmoLabel>Personalizar</UWU_CustomizeGizmoLabel>
   <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
@@ -371,6 +386,60 @@
   <!-- {0} = unique fabrication (research label) -->
   <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
   <UWU_AllowArchotechDesc>Permite a personalização de armas arquotecnológicas, exigindo a pesquisa {0}.</UWU_AllowArchotechDesc>
+  <!-- EN: Require minimum crafting skill -->
+  <UWU_SkillCheckEnable>Exigir habilidade mínima de fabricação</UWU_SkillCheckEnable>
+  <!-- EN: Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. -->
+  <UWU_SkillCheckEnableDesc>Exige habilidade de fabricação antes que uma arma possa ser personalizada. Escolha abaixo de quem a habilidade é verificada e o que é exigido.</UWU_SkillCheckEnableDesc>
+  <!-- EN: Skill check applies to -->
+  <UWU_SkillCheckSubject>A verificação de habilidade vale para</UWU_SkillCheckSubject>
+  <!-- EN: Whose skill is checked. What is required is set below. -->
+  <UWU_SkillCheckSubjectDesc>De quem a habilidade é verificada. O que é exigido é definido abaixo.</UWU_SkillCheckSubjectDesc>
+  <!-- EN: No one -->
+  <UWU_SkillCheckSubjectNone>Ninguém</UWU_SkillCheckSubjectNone>
+  <!-- EN: Any pawn can customize weapons. -->
+  <UWU_SkillCheckSubjectNoneDesc>Qualquer pessoa pode personalizar armas.</UWU_SkillCheckSubjectNoneDesc>
+  <!-- EN: The pawn doing the customization -->
+  <UWU_SkillCheckSubjectPawn>A pessoa que faz a personalização</UWU_SkillCheckSubjectPawn>
+  <!-- EN: The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall. -->
+  <UWU_SkillCheckSubjectPawnDesc>A pessoa designada para personalizar a arma deve cumprir o requisito. Ao selecionar alguém para uma arma no chão, passar o cursor sobre um colono sem habilidade suficiente mostra o que lhe falta.</UWU_SkillCheckSubjectPawnDesc>
+  <!-- EN: The most skilled colonist on the map -->
+  <UWU_SkillCheckSubjectMap>O colono mais habilidoso do mapa</UWU_SkillCheckSubjectMap>
+  <!-- EN: Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves. -->
+  <UWU_SkillCheckSubjectMapDesc>Qualquer colono no mapa da arma pode cumprir o requisito em nome da colônia. Quem faz o trabalho não precisa ter a habilidade.</UWU_SkillCheckSubjectMapDesc>
+  <!-- EN: The most skilled colonist anywhere -->
+  <UWU_SkillCheckSubjectWorld>O colono mais habilidoso em qualquer lugar</UWU_SkillCheckSubjectWorld>
+  <!-- EN: Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf. -->
+  <UWU_SkillCheckSubjectWorldDesc>Qualquer colono em qualquer lugar do mundo, inclusive em caravanas e transportes, pode cumprir o requisito em nome da colônia.</UWU_SkillCheckSubjectWorldDesc>
+  <!-- EN: Skill requirement -->
+  <UWU_SkillCheckKind>Requisito de habilidade</UWU_SkillCheckKind>
+  <!-- EN: What the checked pawn must have. -->
+  <UWU_SkillCheckKindDesc>O que a pessoa verificada precisa ter.</UWU_SkillCheckKindDesc>
+  <!-- EN: Has no effect while the skill check applies to no one. -->
+  <UWU_SkillCheckKindNoEffect>Não tem efeito enquanto a verificação de habilidade não valer para ninguém.</UWU_SkillCheckKindNoEffect>
+  <!-- EN: Based on the weapon's crafting recipe -->
+  <UWU_SkillCheckKindRecipe>Com base na receita de fabricação da arma</UWU_SkillCheckKindRecipe>
+  <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
+  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}. -->
+  <UWU_SkillCheckKindRecipeDesc>Usa os requisitos de habilidade da receita de fabricação da arma, de modo que quem poderia fabricá-la também possa personalizá-la. Armas sem receita exigem uma habilidade mínima de fabricação conforme o nível de tecnologia: {0}.</UWU_SkillCheckKindRecipeDesc>
+  <!-- {0} = tech level (lowercase), {1} = required crafting level -->
+  <!-- EN: {0} {1} -->
+  <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
+  <!-- {0} = the tech-level minimums lowest tier first, slash-separated, e.g. 4/5/7/9/12/15 -->
+  <!-- EN: Based on the weapon's tech level ({0}) -->
+  <UWU_SkillCheckKindTechTier>Com base no nível de tecnologia da arma ({0})</UWU_SkillCheckKindTechTier>
+  <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
+  <!-- EN: Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}. -->
+  <UWU_SkillCheckKindTechTierDesc>Exige uma habilidade mínima de fabricação definida pelo nível de tecnologia da arma, ignorando a receita de fabricação: {0}.</UWU_SkillCheckKindTechTierDesc>
+  <!-- EN: Minimum crafting skill: {0} -->
+  <UWU_SkillCheckKindFlat>Habilidade mínima de fabricação: {0}</UWU_SkillCheckKindFlat>
+  <!-- EN: Require at least this crafting skill level for every weapon. -->
+  <UWU_SkillCheckKindFlatDesc>Exige pelo menos este nível de habilidade de fabricação para toda arma.</UWU_SkillCheckKindFlatDesc>
+  <!-- EN: Adjusting this selects "Minimum crafting skill". -->
+  <UWU_SkillCheckFlatSliderSelects>Ajustar isto seleciona "Habilidade mínima de fabricação".</UWU_SkillCheckFlatSliderSelects>
+  <!-- EN: Weaponsmithing expertise (Vanilla Skills Expanded) -->
+  <UWU_SkillCheckKindWeaponsmith>Especialização em armaria (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
+  <!-- EN: Require the weaponsmithing expertise from Vanilla Skills Expanded. -->
+  <UWU_SkillCheckKindWeaponsmithDesc>Exige a especialização em armaria do Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
 
   <!-- Settings: Miscellaneous -->
   <!-- EN: Allow weapon def conversion -->

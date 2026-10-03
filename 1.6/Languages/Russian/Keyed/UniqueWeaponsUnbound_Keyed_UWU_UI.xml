@@ -11,6 +11,19 @@
   <UWU_NoSuitableWorkbench>нет подходящего верстака</UWU_NoSuitableWorkbench>
   <!-- EN: requires {0} quality or better -->
   <UWU_RequiresMinimumQuality>требуется качество {0} или выше</UWU_RequiresMinimumQuality>
+  <!-- Skill check rejections (a pawn's own skill shortfall reuses vanilla SkillTooLow) -->
+  <!-- EN: requires {0} expertise -->
+  <UWU_RequiresExpertise>требуется мастерство «{0}»</UWU_RequiresExpertise>
+  <!-- EN: no colonist has {0} {1} -->
+  <UWU_NoColonistWithSkill>нет поселенца с навыком «{0}» уровня {1}</UWU_NoColonistWithSkill>
+  <!-- EN: no colonist on this map has {0} {1} -->
+  <UWU_NoColonistOnMapWithSkill>на этой карте нет поселенца с навыком «{0}» уровня {1}</UWU_NoColonistOnMapWithSkill>
+  <!-- EN: no colonist has {0} expertise -->
+  <UWU_NoColonistWithExpertise>нет поселенца с мастерством «{0}»</UWU_NoColonistWithExpertise>
+  <!-- EN: no colonist on this map has {0} expertise -->
+  <UWU_NoColonistOnMapWithExpertise>на этой карте нет поселенца с мастерством «{0}»</UWU_NoColonistOnMapWithExpertise>
+  <!-- EN: weaponsmithing -->
+  <UWU_WeaponsmithingFallbackLabel>оружейное дело</UWU_WeaponsmithingFallbackLabel>
   <!-- EN: Customize -->
   <UWU_CustomizeGizmoLabel>Настроить</UWU_CustomizeGizmoLabel>
   <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
@@ -258,6 +271,56 @@
   <UWU_AllowArchotech>Разрешить настройку оружия архотехнологического уровня</UWU_AllowArchotech>
   <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
   <UWU_AllowArchotechDesc>Разрешить настройку архотехнологического оружия, требуется исследование «{0}».</UWU_AllowArchotechDesc>
+  <!-- EN: Require minimum crafting skill -->
+  <UWU_SkillCheckEnable>Требовать минимальный навык ремесла</UWU_SkillCheckEnable>
+  <!-- EN: Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. -->
+  <UWU_SkillCheckEnableDesc>Требовать определённый навык ремесла, прежде чем можно будет настроить оружие. Ниже выберите, чей навык проверяется и что именно требуется.</UWU_SkillCheckEnableDesc>
+  <!-- EN: Skill check applies to -->
+  <UWU_SkillCheckSubject>Проверка навыка применяется к</UWU_SkillCheckSubject>
+  <!-- EN: Whose skill is checked. What is required is set below. -->
+  <UWU_SkillCheckSubjectDesc>Чей навык проверяется. Что именно требуется, задаётся ниже.</UWU_SkillCheckSubjectDesc>
+  <!-- EN: No one -->
+  <UWU_SkillCheckSubjectNone>Ни к кому</UWU_SkillCheckSubjectNone>
+  <!-- EN: Any pawn can customize weapons. -->
+  <UWU_SkillCheckSubjectNoneDesc>Настраивать оружие может любой персонаж.</UWU_SkillCheckSubjectNoneDesc>
+  <!-- EN: The pawn doing the customization -->
+  <UWU_SkillCheckSubjectPawn>Персонаж, выполняющий настройку</UWU_SkillCheckSubjectPawn>
+  <!-- EN: The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall. -->
+  <UWU_SkillCheckSubjectPawnDesc>Требованию должен соответствовать персонаж, получивший приказ настроить оружие. При выборе персонажа для оружия на земле наведение курсора на поселенца с недостаточным навыком показывает, чего ему не хватает.</UWU_SkillCheckSubjectPawnDesc>
+  <!-- EN: The most skilled colonist on the map -->
+  <UWU_SkillCheckSubjectMap>Самый умелый поселенец на карте</UWU_SkillCheckSubjectMap>
+  <!-- EN: Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves. -->
+  <UWU_SkillCheckSubjectMapDesc>Требованию от имени колонии может соответствовать любой поселенец на карте, где лежит оружие. Самому исполнителю этот навык не нужен.</UWU_SkillCheckSubjectMapDesc>
+  <!-- EN: The most skilled colonist anywhere -->
+  <UWU_SkillCheckSubjectWorld>Самый умелый поселенец где угодно</UWU_SkillCheckSubjectWorld>
+  <!-- EN: Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf. -->
+  <UWU_SkillCheckSubjectWorldDesc>Требованию от имени колонии может соответствовать любой поселенец в мире, включая караваны и транспортные капсулы.</UWU_SkillCheckSubjectWorldDesc>
+  <!-- EN: Skill requirement -->
+  <UWU_SkillCheckKind>Требование к навыку</UWU_SkillCheckKind>
+  <!-- EN: What the checked pawn must have. -->
+  <UWU_SkillCheckKindDesc>Что должен иметь проверяемый персонаж.</UWU_SkillCheckKindDesc>
+  <!-- EN: Has no effect while the skill check applies to no one. -->
+  <UWU_SkillCheckKindNoEffect>Не действует, пока проверка навыка ни к кому не применяется.</UWU_SkillCheckKindNoEffect>
+  <!-- EN: Based on the weapon's crafting recipe -->
+  <UWU_SkillCheckKindRecipe>По рецепту крафта оружия</UWU_SkillCheckKindRecipe>
+  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}. -->
+  <UWU_SkillCheckKindRecipeDesc>Используются требования к навыкам из рецепта крафта оружия, так что настроить его может каждый, кто мог бы его создать. Для оружия без рецепта требуется минимальный навык ремесла в зависимости от технологического уровня: {0}.</UWU_SkillCheckKindRecipeDesc>
+  <!-- EN: {0} {1} -->
+  <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
+  <!-- EN: Based on the weapon's tech level ({0}) -->
+  <UWU_SkillCheckKindTechTier>По технологическому уровню оружия ({0})</UWU_SkillCheckKindTechTier>
+  <!-- EN: Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}. -->
+  <UWU_SkillCheckKindTechTierDesc>Требовать минимальный навык ремесла, заданный технологическим уровнем оружия, без учёта рецепта: {0}.</UWU_SkillCheckKindTechTierDesc>
+  <!-- EN: Minimum crafting skill: {0} -->
+  <UWU_SkillCheckKindFlat>Минимальный навык ремесла: {0}</UWU_SkillCheckKindFlat>
+  <!-- EN: Require at least this crafting skill level for every weapon. -->
+  <UWU_SkillCheckKindFlatDesc>Требовать для любого оружия не ниже этого уровня навыка ремесла.</UWU_SkillCheckKindFlatDesc>
+  <!-- EN: Adjusting this selects "Minimum crafting skill". -->
+  <UWU_SkillCheckFlatSliderSelects>При изменении выбирается вариант «Минимальный навык ремесла».</UWU_SkillCheckFlatSliderSelects>
+  <!-- EN: Weaponsmithing expertise (Vanilla Skills Expanded) -->
+  <UWU_SkillCheckKindWeaponsmith>Мастерство оружейного дела (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
+  <!-- EN: Require the weaponsmithing expertise from Vanilla Skills Expanded. -->
+  <UWU_SkillCheckKindWeaponsmithDesc>Требовать мастерство оружейного дела из Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
   <!-- Settings: Miscellaneous -->
   <!-- EN: Allow weapon def conversion -->
   <UWU_AllowDefConversion>Разрешить преобразование определения оружия</UWU_AllowDefConversion>

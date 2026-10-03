@@ -12,6 +12,18 @@
   <UWU_NoSuitableWorkbench>沒有合適的工作桌</UWU_NoSuitableWorkbench>
   <!-- EN: requires {0} quality or better -->
   <UWU_RequiresMinimumQuality>需要{0}或更高的品質</UWU_RequiresMinimumQuality>
+  <!-- EN: requires {0} expertise -->
+  <UWU_RequiresExpertise>需要{0}專長</UWU_RequiresExpertise>
+  <!-- EN: no colonist has {0} {1} -->
+  <UWU_NoColonistWithSkill>沒有殖民者擁有等級{1}的{0}</UWU_NoColonistWithSkill>
+  <!-- EN: no colonist on this map has {0} {1} -->
+  <UWU_NoColonistOnMapWithSkill>此地圖上沒有殖民者擁有等級{1}的{0}</UWU_NoColonistOnMapWithSkill>
+  <!-- EN: no colonist has {0} expertise -->
+  <UWU_NoColonistWithExpertise>沒有殖民者擁有{0}專長</UWU_NoColonistWithExpertise>
+  <!-- EN: no colonist on this map has {0} expertise -->
+  <UWU_NoColonistOnMapWithExpertise>此地圖上沒有殖民者擁有{0}專長</UWU_NoColonistOnMapWithExpertise>
+  <!-- EN: weaponsmithing -->
+  <UWU_WeaponsmithingFallbackLabel>武器鍛造</UWU_WeaponsmithingFallbackLabel>
   <!-- EN: Customize -->
   <UWU_CustomizeGizmoLabel>自訂</UWU_CustomizeGizmoLabel>
   <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
@@ -274,6 +286,56 @@
   <UWU_AllowArchotech>允許自訂遠古科技等級的武器</UWU_AllowArchotech>
   <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
   <UWU_AllowArchotechDesc>允許自訂遠古科技武器，需要「{0}」研究。</UWU_AllowArchotechDesc>
+  <!-- EN: Require minimum crafting skill -->
+  <UWU_SkillCheckEnable>要求最低手工技能</UWU_SkillCheckEnable>
+  <!-- EN: Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. -->
+  <UWU_SkillCheckEnableDesc>自訂武器前必須具備手工技能。可在下方選擇檢查誰的技能以及要求為何。</UWU_SkillCheckEnableDesc>
+  <!-- EN: Skill check applies to -->
+  <UWU_SkillCheckSubject>技能檢查對象</UWU_SkillCheckSubject>
+  <!-- EN: Whose skill is checked. What is required is set below. -->
+  <UWU_SkillCheckSubjectDesc>檢查誰的技能。具體要求在下方設定。</UWU_SkillCheckSubjectDesc>
+  <!-- EN: No one -->
+  <UWU_SkillCheckSubjectNone>無人</UWU_SkillCheckSubjectNone>
+  <!-- EN: Any pawn can customize weapons. -->
+  <UWU_SkillCheckSubjectNoneDesc>任何人都可以自訂武器。</UWU_SkillCheckSubjectNoneDesc>
+  <!-- EN: The pawn doing the customization -->
+  <UWU_SkillCheckSubjectPawn>執行自訂的人員</UWU_SkillCheckSubjectPawn>
+  <!-- EN: The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall. -->
+  <UWU_SkillCheckSubjectPawnDesc>被指派自訂武器的人員必須符合要求。為地上的武器選擇人員時，將游標移到技能不足的殖民者上會顯示其差距。</UWU_SkillCheckSubjectPawnDesc>
+  <!-- EN: The most skilled colonist on the map -->
+  <UWU_SkillCheckSubjectMap>地圖上技能最高的殖民者</UWU_SkillCheckSubjectMap>
+  <!-- EN: Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves. -->
+  <UWU_SkillCheckSubjectMapDesc>武器所在地圖上的任何殖民者都可以代表殖民地滿足要求。實際執行工作的人員本身不需要具備該技能。</UWU_SkillCheckSubjectMapDesc>
+  <!-- EN: The most skilled colonist anywhere -->
+  <UWU_SkillCheckSubjectWorld>任何地方技能最高的殖民者</UWU_SkillCheckSubjectWorld>
+  <!-- EN: Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf. -->
+  <UWU_SkillCheckSubjectWorldDesc>世界上任何地方的殖民者，包括旅隊與運輸艙中的殖民者，都可以代表殖民地滿足要求。</UWU_SkillCheckSubjectWorldDesc>
+  <!-- EN: Skill requirement -->
+  <UWU_SkillCheckKind>技能要求</UWU_SkillCheckKind>
+  <!-- EN: What the checked pawn must have. -->
+  <UWU_SkillCheckKindDesc>被檢查的人員必須具備什麼。</UWU_SkillCheckKindDesc>
+  <!-- EN: Has no effect while the skill check applies to no one. -->
+  <UWU_SkillCheckKindNoEffect>當技能檢查不針對任何人時無效。</UWU_SkillCheckKindNoEffect>
+  <!-- EN: Based on the weapon's crafting recipe -->
+  <UWU_SkillCheckKindRecipe>依據武器的製作配方</UWU_SkillCheckKindRecipe>
+  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}. -->
+  <UWU_SkillCheckKindRecipeDesc>採用武器製作配方的技能要求，因此能製作某把武器的人就能自訂它。沒有配方的武器則依科技等級要求最低手工技能：{0}。</UWU_SkillCheckKindRecipeDesc>
+  <!-- EN: {0} {1} -->
+  <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
+  <!-- EN: Based on the weapon's tech level ({0}) -->
+  <UWU_SkillCheckKindTechTier>依據武器的科技等級({0})</UWU_SkillCheckKindTechTier>
+  <!-- EN: Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}. -->
+  <UWU_SkillCheckKindTechTierDesc>依武器的科技等級要求最低手工技能，忽略其製作配方：{0}。</UWU_SkillCheckKindTechTierDesc>
+  <!-- EN: Minimum crafting skill: {0} -->
+  <UWU_SkillCheckKindFlat>最低手工技能：{0}</UWU_SkillCheckKindFlat>
+  <!-- EN: Require at least this crafting skill level for every weapon. -->
+  <UWU_SkillCheckKindFlatDesc>所有武器都要求至少達到此手工技能等級。</UWU_SkillCheckKindFlatDesc>
+  <!-- EN: Adjusting this selects "Minimum crafting skill". -->
+  <UWU_SkillCheckFlatSliderSelects>調整此項會選擇「最低手工技能」。</UWU_SkillCheckFlatSliderSelects>
+  <!-- EN: Weaponsmithing expertise (Vanilla Skills Expanded) -->
+  <UWU_SkillCheckKindWeaponsmith>武器鍛造專長(Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
+  <!-- EN: Require the weaponsmithing expertise from Vanilla Skills Expanded. -->
+  <UWU_SkillCheckKindWeaponsmithDesc>要求具備 Vanilla Skills Expanded 的武器鍛造專長。</UWU_SkillCheckKindWeaponsmithDesc>
 
   <!-- Settings: Miscellaneous -->
   <!-- EN: Allow weapon def conversion -->

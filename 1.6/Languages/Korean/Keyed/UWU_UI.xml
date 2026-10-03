@@ -12,6 +12,21 @@
   <UWU_NoSuitableWorkbench>적합한 작업대 없음</UWU_NoSuitableWorkbench>
   <!-- EN: requires {0} quality or better -->
   <UWU_RequiresMinimumQuality>{0} 품질 이상 필요</UWU_RequiresMinimumQuality>
+  <!-- Skill check rejections (a pawn's own skill shortfall reuses vanilla SkillTooLow).
+       {0} = skill label (lowercase, e.g. crafting) or expertise label; {1} = required level -->
+  <!-- EN: requires {0} expertise -->
+  <UWU_RequiresExpertise>{0} 전문성 필요</UWU_RequiresExpertise>
+  <!-- EN: no colonist has {0} {1} -->
+  <UWU_NoColonistWithSkill>{0} {1}등급을 갖춘 정착민 없음</UWU_NoColonistWithSkill>
+  <!-- EN: no colonist on this map has {0} {1} -->
+  <UWU_NoColonistOnMapWithSkill>이 지도에 {0} {1}등급을 갖춘 정착민 없음</UWU_NoColonistOnMapWithSkill>
+  <!-- EN: no colonist has {0} expertise -->
+  <UWU_NoColonistWithExpertise>{0} 전문성을 가진 정착민 없음</UWU_NoColonistWithExpertise>
+  <!-- EN: no colonist on this map has {0} expertise -->
+  <UWU_NoColonistOnMapWithExpertise>이 지도에 {0} 전문성을 가진 정착민 없음</UWU_NoColonistOnMapWithExpertise>
+  <!-- Used in place of the Vanilla Skills Expanded expertise label when it cannot be read -->
+  <!-- EN: weaponsmithing -->
+  <UWU_WeaponsmithingFallbackLabel>무기 제작</UWU_WeaponsmithingFallbackLabel>
   <!-- EN: Customize -->
   <UWU_CustomizeGizmoLabel>개조</UWU_CustomizeGizmoLabel>
   <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
@@ -278,6 +293,60 @@
   <!-- {0} = unique fabrication (research label) -->
   <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
   <UWU_AllowArchotechDesc>초월 기술 무기의 개조를 허용하며, {0} 연구를 요구합니다.</UWU_AllowArchotechDesc>
+  <!-- EN: Require minimum crafting skill -->
+  <UWU_SkillCheckEnable>최소 제작 기술 요구</UWU_SkillCheckEnable>
+  <!-- EN: Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. -->
+  <UWU_SkillCheckEnableDesc>무기를 개조하기 전에 제작 기술을 요구합니다. 누구의 기술을 확인할지와 요구 수준은 아래에서 정합니다.</UWU_SkillCheckEnableDesc>
+  <!-- EN: Skill check applies to -->
+  <UWU_SkillCheckSubject>기술 확인 대상</UWU_SkillCheckSubject>
+  <!-- EN: Whose skill is checked. What is required is set below. -->
+  <UWU_SkillCheckSubjectDesc>누구의 기술을 확인할지 정합니다. 요구 수준은 아래에서 정합니다.</UWU_SkillCheckSubjectDesc>
+  <!-- EN: No one -->
+  <UWU_SkillCheckSubjectNone>없음</UWU_SkillCheckSubjectNone>
+  <!-- EN: Any pawn can customize weapons. -->
+  <UWU_SkillCheckSubjectNoneDesc>어떤 인물이든 무기를 개조할 수 있습니다.</UWU_SkillCheckSubjectNoneDesc>
+  <!-- EN: The pawn doing the customization -->
+  <UWU_SkillCheckSubjectPawn>개조 작업을 하는 인물</UWU_SkillCheckSubjectPawn>
+  <!-- EN: The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall. -->
+  <UWU_SkillCheckSubjectPawnDesc>무기 개조 명령을 받은 인물이 요구 조건을 충족해야 합니다. 바닥에 있는 무기를 개조할 인물을 고를 때, 기술이 부족한 정착민 위에 마우스를 올리면 부족한 수치가 표시됩니다.</UWU_SkillCheckSubjectPawnDesc>
+  <!-- EN: The most skilled colonist on the map -->
+  <UWU_SkillCheckSubjectMap>지도에서 가장 숙련된 정착민</UWU_SkillCheckSubjectMap>
+  <!-- EN: Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves. -->
+  <UWU_SkillCheckSubjectMapDesc>무기가 있는 지도의 정착민 중 누구든 정착지를 대표해 요구 조건을 충족할 수 있습니다. 작업하는 인물 본인에게 해당 기술이 없어도 됩니다.</UWU_SkillCheckSubjectMapDesc>
+  <!-- EN: The most skilled colonist anywhere -->
+  <UWU_SkillCheckSubjectWorld>어디서든 가장 숙련된 정착민</UWU_SkillCheckSubjectWorld>
+  <!-- EN: Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf. -->
+  <UWU_SkillCheckSubjectWorldDesc>상단과 수송 포드 안을 포함해 세계 어디에 있든 정착민 중 누구든 정착지를 대표해 요구 조건을 충족할 수 있습니다.</UWU_SkillCheckSubjectWorldDesc>
+  <!-- EN: Skill requirement -->
+  <UWU_SkillCheckKind>기술 요구 조건</UWU_SkillCheckKind>
+  <!-- EN: What the checked pawn must have. -->
+  <UWU_SkillCheckKindDesc>확인 대상이 갖춰야 하는 조건입니다.</UWU_SkillCheckKindDesc>
+  <!-- EN: Has no effect while the skill check applies to no one. -->
+  <UWU_SkillCheckKindNoEffect>기술 확인 대상이 없음일 때는 효과가 없습니다.</UWU_SkillCheckKindNoEffect>
+  <!-- EN: Based on the weapon's crafting recipe -->
+  <UWU_SkillCheckKindRecipe>무기의 제작 레시피 기준</UWU_SkillCheckKindRecipe>
+  <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
+  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}. -->
+  <UWU_SkillCheckKindRecipeDesc>무기의 제작 레시피가 요구하는 기술을 그대로 사용하므로, 무기를 제작할 수 있는 사람이라면 개조도 할 수 있습니다. 레시피가 없는 무기는 기술 수준에 따라 최소 제작 기술이 요구됩니다: {0}.</UWU_SkillCheckKindRecipeDesc>
+  <!-- {0} = tech level (lowercase), {1} = required crafting level -->
+  <!-- EN: {0} {1} -->
+  <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
+  <!-- {0} = the tech-level minimums lowest tier first, slash-separated, e.g. 4/5/7/9/12/15 -->
+  <!-- EN: Based on the weapon's tech level ({0}) -->
+  <UWU_SkillCheckKindTechTier>무기의 기술 수준 기준 ({0})</UWU_SkillCheckKindTechTier>
+  <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
+  <!-- EN: Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}. -->
+  <UWU_SkillCheckKindTechTierDesc>무기의 제작 레시피와 상관없이, 무기의 기술 수준에 따라 정해진 최소 제작 기술을 요구합니다: {0}.</UWU_SkillCheckKindTechTierDesc>
+  <!-- EN: Minimum crafting skill: {0} -->
+  <UWU_SkillCheckKindFlat>최소 제작 기술: {0}</UWU_SkillCheckKindFlat>
+  <!-- EN: Require at least this crafting skill level for every weapon. -->
+  <UWU_SkillCheckKindFlatDesc>모든 무기에 이 제작 기술 등급 이상을 요구합니다.</UWU_SkillCheckKindFlatDesc>
+  <!-- EN: Adjusting this selects "Minimum crafting skill". -->
+  <UWU_SkillCheckFlatSliderSelects>이 값을 조절하면 '최소 제작 기술'이 선택됩니다.</UWU_SkillCheckFlatSliderSelects>
+  <!-- EN: Weaponsmithing expertise (Vanilla Skills Expanded) -->
+  <UWU_SkillCheckKindWeaponsmith>무기 제작 전문성 (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
+  <!-- EN: Require the weaponsmithing expertise from Vanilla Skills Expanded. -->
+  <UWU_SkillCheckKindWeaponsmithDesc>Vanilla Skills Expanded의 무기 제작 전문성을 요구합니다.</UWU_SkillCheckKindWeaponsmithDesc>
 
   <!-- Settings: Miscellaneous -->
   <!-- EN: Allow weapon def conversion -->

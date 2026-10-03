@@ -12,6 +12,21 @@
   <UWU_NoSuitableWorkbench>keine geeignete Arbeitsstation</UWU_NoSuitableWorkbench>
   <!-- EN: requires {0} quality or better -->
   <UWU_RequiresMinimumQuality>benötigt Qualität {0} oder besser</UWU_RequiresMinimumQuality>
+  <!-- Skill check rejections (a pawn's own skill shortfall reuses vanilla SkillTooLow).
+       {0} = skill label (lowercase, e.g. crafting) or expertise label; {1} = required level -->
+  <!-- EN: requires {0} expertise -->
+  <UWU_RequiresExpertise>benötigt Expertise: {0}</UWU_RequiresExpertise>
+  <!-- EN: no colonist has {0} {1} -->
+  <UWU_NoColonistWithSkill>kein Kolonist hat {0} Stufe {1}</UWU_NoColonistWithSkill>
+  <!-- EN: no colonist on this map has {0} {1} -->
+  <UWU_NoColonistOnMapWithSkill>kein Kolonist auf dieser Karte hat {0} Stufe {1}</UWU_NoColonistOnMapWithSkill>
+  <!-- EN: no colonist has {0} expertise -->
+  <UWU_NoColonistWithExpertise>kein Kolonist hat Expertise: {0}</UWU_NoColonistWithExpertise>
+  <!-- EN: no colonist on this map has {0} expertise -->
+  <UWU_NoColonistOnMapWithExpertise>kein Kolonist auf dieser Karte hat Expertise: {0}</UWU_NoColonistOnMapWithExpertise>
+  <!-- Used in place of the Vanilla Skills Expanded expertise label when it cannot be read -->
+  <!-- EN: weaponsmithing -->
+  <UWU_WeaponsmithingFallbackLabel>Waffenschmieden</UWU_WeaponsmithingFallbackLabel>
   <!-- EN: Customize -->
   <UWU_CustomizeGizmoLabel>Anpassen</UWU_CustomizeGizmoLabel>
   <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
@@ -278,6 +293,60 @@
   <!-- {0} = unique fabrication (research label) -->
   <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
   <UWU_AllowArchotechDesc>Erlaubt die Anpassung von Archotech-Waffen; erfordert die Forschung '{0}'.</UWU_AllowArchotechDesc>
+  <!-- EN: Require minimum crafting skill -->
+  <UWU_SkillCheckEnable>Mindestfertigkeit im Handwerk verlangen</UWU_SkillCheckEnable>
+  <!-- EN: Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. -->
+  <UWU_SkillCheckEnableDesc>Verlangt eine Handwerksfertigkeit, bevor eine Waffe angepasst werden kann. Lege unten fest, wessen Fertigkeit geprüft wird und was verlangt wird.</UWU_SkillCheckEnableDesc>
+  <!-- EN: Skill check applies to -->
+  <UWU_SkillCheckSubject>Fertigkeitsprüfung gilt für</UWU_SkillCheckSubject>
+  <!-- EN: Whose skill is checked. What is required is set below. -->
+  <UWU_SkillCheckSubjectDesc>Wessen Fertigkeit geprüft wird. Was verlangt wird, legst du unten fest.</UWU_SkillCheckSubjectDesc>
+  <!-- EN: No one -->
+  <UWU_SkillCheckSubjectNone>Niemanden</UWU_SkillCheckSubjectNone>
+  <!-- EN: Any pawn can customize weapons. -->
+  <UWU_SkillCheckSubjectNoneDesc>Jede Person kann Waffen anpassen.</UWU_SkillCheckSubjectNoneDesc>
+  <!-- EN: The pawn doing the customization -->
+  <UWU_SkillCheckSubjectPawn>Die Person, die die Anpassung durchführt</UWU_SkillCheckSubjectPawn>
+  <!-- EN: The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall. -->
+  <UWU_SkillCheckSubjectPawnDesc>Die Person, die den Auftrag zum Anpassen der Waffe erhält, muss die Anforderung erfüllen. Wenn du für eine Waffe am Boden eine Person auswählst, zeigt das Überfahren eines nicht ausreichend qualifizierten Kolonisten dessen Defizit an.</UWU_SkillCheckSubjectPawnDesc>
+  <!-- EN: The most skilled colonist on the map -->
+  <UWU_SkillCheckSubjectMap>Der fähigste Kolonist auf der Karte</UWU_SkillCheckSubjectMap>
+  <!-- EN: Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves. -->
+  <UWU_SkillCheckSubjectMapDesc>Jeder Kolonist auf der Karte der Waffe kann die Anforderung stellvertretend für die Kolonie erfüllen. Die Person, die die Arbeit ausführt, braucht die Fertigkeit selbst nicht.</UWU_SkillCheckSubjectMapDesc>
+  <!-- EN: The most skilled colonist anywhere -->
+  <UWU_SkillCheckSubjectWorld>Der fähigste Kolonist irgendwo in der Welt</UWU_SkillCheckSubjectWorld>
+  <!-- EN: Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf. -->
+  <UWU_SkillCheckSubjectWorldDesc>Jeder Kolonist irgendwo in der Welt, auch in Karawanen und Transporten, kann die Anforderung stellvertretend für die Kolonie erfüllen.</UWU_SkillCheckSubjectWorldDesc>
+  <!-- EN: Skill requirement -->
+  <UWU_SkillCheckKind>Fertigkeitsanforderung</UWU_SkillCheckKind>
+  <!-- EN: What the checked pawn must have. -->
+  <UWU_SkillCheckKindDesc>Was die geprüfte Person haben muss.</UWU_SkillCheckKindDesc>
+  <!-- EN: Has no effect while the skill check applies to no one. -->
+  <UWU_SkillCheckKindNoEffect>Hat keine Wirkung, solange die Fertigkeitsprüfung für niemanden gilt.</UWU_SkillCheckKindNoEffect>
+  <!-- EN: Based on the weapon's crafting recipe -->
+  <UWU_SkillCheckKindRecipe>Basierend auf dem Herstellungsauftrag der Waffe</UWU_SkillCheckKindRecipe>
+  <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
+  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}. -->
+  <UWU_SkillCheckKindRecipeDesc>Verwendet die Fertigkeitsanforderungen des Herstellungsauftrags der Waffe, sodass jeder, der eine Waffe herstellen könnte, sie auch anpassen kann. Waffen ohne Auftrag erfordern eine Mindestfertigkeit im Handwerk je nach Techstufe: {0}.</UWU_SkillCheckKindRecipeDesc>
+  <!-- {0} = tech level (lowercase), {1} = required crafting level -->
+  <!-- EN: {0} {1} -->
+  <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
+  <!-- {0} = the tech-level minimums lowest tier first, slash-separated, e.g. 4/5/7/9/12/15 -->
+  <!-- EN: Based on the weapon's tech level ({0}) -->
+  <UWU_SkillCheckKindTechTier>Basierend auf der Techstufe der Waffe ({0})</UWU_SkillCheckKindTechTier>
+  <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
+  <!-- EN: Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}. -->
+  <UWU_SkillCheckKindTechTierDesc>Verlangt eine Mindestfertigkeit im Handwerk gemäß der Techstufe der Waffe, unabhängig von ihrem Herstellungsauftrag: {0}.</UWU_SkillCheckKindTechTierDesc>
+  <!-- EN: Minimum crafting skill: {0} -->
+  <UWU_SkillCheckKindFlat>Mindestfertigkeit im Handwerk: {0}</UWU_SkillCheckKindFlat>
+  <!-- EN: Require at least this crafting skill level for every weapon. -->
+  <UWU_SkillCheckKindFlatDesc>Verlangt für jede Waffe mindestens diese Stufe im Handwerk.</UWU_SkillCheckKindFlatDesc>
+  <!-- EN: Adjusting this selects "Minimum crafting skill". -->
+  <UWU_SkillCheckFlatSliderSelects>Das Verstellen wählt 'Mindestfertigkeit im Handwerk' aus.</UWU_SkillCheckFlatSliderSelects>
+  <!-- EN: Weaponsmithing expertise (Vanilla Skills Expanded) -->
+  <UWU_SkillCheckKindWeaponsmith>Expertise Waffenschmieden (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
+  <!-- EN: Require the weaponsmithing expertise from Vanilla Skills Expanded. -->
+  <UWU_SkillCheckKindWeaponsmithDesc>Verlangt die Expertise Waffenschmieden aus Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
 
   <!-- Settings: Miscellaneous -->
   <!-- EN: Allow weapon def conversion -->

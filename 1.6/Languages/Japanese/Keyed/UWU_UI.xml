@@ -12,6 +12,18 @@
   <UWU_NoSuitableWorkbench>適切な作業台がない</UWU_NoSuitableWorkbench>
   <!-- EN: requires {0} quality or better -->
   <UWU_RequiresMinimumQuality>{0}以上の品質が必要</UWU_RequiresMinimumQuality>
+  <!-- EN: requires {0} expertise -->
+  <UWU_RequiresExpertise>{0}の専門知識が必要</UWU_RequiresExpertise>
+  <!-- EN: no colonist has {0} {1} -->
+  <UWU_NoColonistWithSkill>{0}レベル{1}以上の入植者がいない</UWU_NoColonistWithSkill>
+  <!-- EN: no colonist on this map has {0} {1} -->
+  <UWU_NoColonistOnMapWithSkill>このマップに{0}レベル{1}以上の入植者がいない</UWU_NoColonistOnMapWithSkill>
+  <!-- EN: no colonist has {0} expertise -->
+  <UWU_NoColonistWithExpertise>{0}の専門知識を持つ入植者がいない</UWU_NoColonistWithExpertise>
+  <!-- EN: no colonist on this map has {0} expertise -->
+  <UWU_NoColonistOnMapWithExpertise>このマップに{0}の専門知識を持つ入植者がいない</UWU_NoColonistOnMapWithExpertise>
+  <!-- EN: weaponsmithing -->
+  <UWU_WeaponsmithingFallbackLabel>武器鍛冶</UWU_WeaponsmithingFallbackLabel>
   <!-- EN: Customize -->
   <UWU_CustomizeGizmoLabel>カスタマイズ</UWU_CustomizeGizmoLabel>
   <!-- EN: Select a colonist to customize this weapon at a nearby workbench. -->
@@ -274,6 +286,56 @@
   <UWU_AllowArchotech>アルコテック級武器のカスタマイズを許可</UWU_AllowArchotech>
   <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
   <UWU_AllowArchotechDesc>アルコテック武器のカスタマイズを許可します.研究「{0}」の完了が必要になります.</UWU_AllowArchotechDesc>
+  <!-- EN: Require minimum crafting skill -->
+  <UWU_SkillCheckEnable>最低限の工芸スキルを必要とする</UWU_SkillCheckEnable>
+  <!-- EN: Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. -->
+  <UWU_SkillCheckEnableDesc>武器をカスタマイズする前に工芸スキルを必要とします.誰のスキルを確認するか,何を必要とするかは下で選択します.</UWU_SkillCheckEnableDesc>
+  <!-- EN: Skill check applies to -->
+  <UWU_SkillCheckSubject>スキルチェックの対象</UWU_SkillCheckSubject>
+  <!-- EN: Whose skill is checked. What is required is set below. -->
+  <UWU_SkillCheckSubjectDesc>スキルを確認する対象です.必要な内容は下で設定します.</UWU_SkillCheckSubjectDesc>
+  <!-- EN: No one -->
+  <UWU_SkillCheckSubjectNone>対象なし</UWU_SkillCheckSubjectNone>
+  <!-- EN: Any pawn can customize weapons. -->
+  <UWU_SkillCheckSubjectNoneDesc>誰でも武器をカスタマイズできます.</UWU_SkillCheckSubjectNoneDesc>
+  <!-- EN: The pawn doing the customization -->
+  <UWU_SkillCheckSubjectPawn>カスタマイズを行う入植者</UWU_SkillCheckSubjectPawn>
+  <!-- EN: The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall. -->
+  <UWU_SkillCheckSubjectPawnDesc>武器のカスタマイズを指示された入植者が条件を満たす必要があります.地面にある武器に対して入植者を選択する際,スキルが足りない入植者にカーソルを合わせると,その不足分が表示されます.</UWU_SkillCheckSubjectPawnDesc>
+  <!-- EN: The most skilled colonist on the map -->
+  <UWU_SkillCheckSubjectMap>マップ上で最も熟練した入植者</UWU_SkillCheckSubjectMap>
+  <!-- EN: Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves. -->
+  <UWU_SkillCheckSubjectMapDesc>武器があるマップ上の入植者の誰かが,コロニーに代わって条件を満たせば構いません.作業を行う入植者自身がスキルを持っている必要はありません.</UWU_SkillCheckSubjectMapDesc>
+  <!-- EN: The most skilled colonist anywhere -->
+  <UWU_SkillCheckSubjectWorld>世界中で最も熟練した入植者</UWU_SkillCheckSubjectWorld>
+  <!-- EN: Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf. -->
+  <UWU_SkillCheckSubjectWorldDesc>キャラバン隊や輸送中の入植者も含め,世界中のどこにいる入植者でも,コロニーに代わって条件を満たせば構いません.</UWU_SkillCheckSubjectWorldDesc>
+  <!-- EN: Skill requirement -->
+  <UWU_SkillCheckKind>スキル要件</UWU_SkillCheckKind>
+  <!-- EN: What the checked pawn must have. -->
+  <UWU_SkillCheckKindDesc>確認対象の入植者が満たすべき内容です.</UWU_SkillCheckKindDesc>
+  <!-- EN: Has no effect while the skill check applies to no one. -->
+  <UWU_SkillCheckKindNoEffect>スキルチェックの対象が「対象なし」の間は,効果がありません.</UWU_SkillCheckKindNoEffect>
+  <!-- EN: Based on the weapon's crafting recipe -->
+  <UWU_SkillCheckKindRecipe>武器の製作レシピに基づく</UWU_SkillCheckKindRecipe>
+  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}. -->
+  <UWU_SkillCheckKindRecipeDesc>武器の製作レシピのスキル要件を使用します.武器を製作できる入植者なら誰でもカスタマイズできます.レシピを持たない武器には,技術レベルごとの最低工芸スキルが必要です: {0}.</UWU_SkillCheckKindRecipeDesc>
+  <!-- EN: {0} {1} -->
+  <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
+  <!-- EN: Based on the weapon's tech level ({0}) -->
+  <UWU_SkillCheckKindTechTier>武器の技術レベルに基づく ({0})</UWU_SkillCheckKindTechTier>
+  <!-- EN: Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}. -->
+  <UWU_SkillCheckKindTechTierDesc>製作レシピを無視し,武器の技術レベルで決まる最低工芸スキルを必要とします: {0}.</UWU_SkillCheckKindTechTierDesc>
+  <!-- EN: Minimum crafting skill: {0} -->
+  <UWU_SkillCheckKindFlat>最低工芸スキル: {0}</UWU_SkillCheckKindFlat>
+  <!-- EN: Require at least this crafting skill level for every weapon. -->
+  <UWU_SkillCheckKindFlatDesc>すべての武器に対して,少なくともこのレベルの工芸スキルを必要とします.</UWU_SkillCheckKindFlatDesc>
+  <!-- EN: Adjusting this selects "Minimum crafting skill". -->
+  <UWU_SkillCheckFlatSliderSelects>これを調整すると「最低工芸スキル」が選択されます.</UWU_SkillCheckFlatSliderSelects>
+  <!-- EN: Weaponsmithing expertise (Vanilla Skills Expanded) -->
+  <UWU_SkillCheckKindWeaponsmith>武器鍛冶の専門知識 (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
+  <!-- EN: Require the weaponsmithing expertise from Vanilla Skills Expanded. -->
+  <UWU_SkillCheckKindWeaponsmithDesc>Vanilla Skills Expandedの武器鍛冶の専門知識を必要とします.</UWU_SkillCheckKindWeaponsmithDesc>
 
   <!-- Settings: Miscellaneous -->
   <!-- EN: Allow weapon def conversion -->
