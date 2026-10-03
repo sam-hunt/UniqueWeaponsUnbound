@@ -83,7 +83,7 @@ R : Oui. Chaque modification de trait est une tâche de fabrication distincte. L
 [b]Q : Combat Extended ?[/b]
 R : Oui ? Je ne connais pas grand-chose à CE, mais les tests n'ont montré aucune erreur. Les coûts des traits s'ajustent automatiquement aux coûts de fabrication modifiés par CE.
 
-[b]Q : Ce mod a-t-il été réalisé à l'aide de LLM ?[/b]
+[b]Q : Ce mod a-t-il été réalisé avec l'assistance de LLM ?[/b]
 R : Une partie du code répétitif, et la plupart des localisations. Je suis ingénieur logiciel de métier, et j'écris du code depuis 25 ans. Tout le code est relu et testé manuellement ; tous les rapports de bug et conflits de mods sont suivis personnellement, dans la mesure du temps et des détails disponibles. Tous les visuels sont soit commandés à des artistes humains, soit réalisés à la main dans Krita, soit les deux.
 
 

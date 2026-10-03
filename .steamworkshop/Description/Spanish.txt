@@ -83,7 +83,7 @@ R: Sí. Cada cambio de rasgo es un trabajo de fabricación independiente. Interr
 [b]P: ¿Combat Extended?[/b]
 R: ¿Sí? No sé mucho sobre CE, pero las pruebas no mostraron errores. Los costes de los rasgos se ajustan automáticamente a los costes de fabricación modificados por CE.
 
-[b]P: ¿Esto se ha hecho con LLMs?[/b]
+[b]P: ¿Esto se ha hecho con ayuda de LLMs?[/b]
 R: Parte del código más mecánico, sí, y la mayoría de las localizaciones. Soy ingeniero de software de profesión y llevo 25 años programando. Todo el código se revisa y se prueba a mano; todos los informes de errores y conflictos con otros mods se atienden personalmente, según el tiempo y el detalle lo permitan. Todo el arte está encargado a artistas humanos, hecho a mano en Krita, o ambas cosas.
 
 

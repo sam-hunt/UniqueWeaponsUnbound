@@ -83,7 +83,7 @@ R: Sim. Cada alteração de característica é uma tarefa de fabricação separa
 [b]P: Combat Extended?[/b]
 R: Sim? Não conheço muito bem o CE, mas os testes não mostraram erros. Os custos de características se ajustam automaticamente aos custos de fabricação alterados pelo CE.
 
-[b]P: Isso foi feito usando LLMs!?[/b]
+[b]P: Isso foi feito com a ajuda de LLMs?[/b]
 R: Parte do código mais braçal, e a maioria das localizações. Sou engenheiro de software de profissão e escrevo código há 25 anos. Todo o código é revisado e testado manualmente; todos os relatos de bugs e conflitos de mods são acompanhados pessoalmente, na medida do tempo e do detalhamento disponíveis. Toda a arte é encomendada de humanos, feita à mão no Krita, ou ambos.
 
 

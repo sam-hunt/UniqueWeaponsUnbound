@@ -83,7 +83,7 @@ A: Ja. Jede Merkmalsänderung ist ein eigener Herstellungsauftrag. Beim Unterbre
 [b]F: Combat Extended?[/b]
 A: Ja? Ich weiß nicht viel über CE, aber Tests zeigten keine Fehler. Merkmalskosten passen sich automatisch an die von CE angepassten Herstellungskosten an.
 
-[b]F: Wurde das mit LLMs erstellt!?[/b]
+[b]F: Wurde das mit Unterstützung von LLMs erstellt?[/b]
 A: Ein Teil der Fleißarbeit im Code, und die meisten Lokalisierungen. Ich bin von Beruf Softwareentwickler und schreibe seit 25 Jahren Code. Sämtlicher Code wird manuell überprüft und getestet; allen Fehlerberichten und Mod-Konflikten wird persönlich nachgegangen, soweit Zeit und Details es erlauben. Alle Grafiken stammen entweder von beauftragten Künstlern, wurden von Hand in Krita erstellt, oder beides.
 
 
