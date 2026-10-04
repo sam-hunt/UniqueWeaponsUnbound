@@ -95,13 +95,13 @@ print it with `stat.Worker.ValueToString(value, finalized: false, sense)` — wh
 `CompUniqueWeapon` does. `StatDef.ValueToString` defaults to `finalized: true` and applies
 `toStringStyle`, which renders `MeleeHitChance`'s raw `-1` as `-100%` instead of `-1.0`.
 
-**No `?.`/`??` on Unity objects:** Never use null propagation or null coalescing on
+**No `?.`/`??`/`??=` on Unity objects:** Never use null propagation or null coalescing on
 receivers deriving from `UnityEngine.Object` (`Material`, `Texture`, `RenderTexture`,
 `GameObject`, ...). Unity overloads `==` so destroyed objects compare equal to null;
 `?.` bypasses the overload with a raw reference check and then throws
 `MissingReferenceException` on the member access. Use explicit `== null`/`!= null`
 guards for those types. Verse types (`Thing`, `Pawn`, `ThingComp`, defs) are plain
-classes where `?.` is fine. Enforced at build time by UNT0007/UNT0008
+classes where `?.` is fine. Enforced at build time by UNT0007/UNT0008/UNT0023
 (Microsoft.Unity.Analyzers). Corollary: never bulk-apply Roslynator's RCS1146
 (use conditional access) fixer to Unity-typed receivers; see the note in `.editorconfig`.
 
