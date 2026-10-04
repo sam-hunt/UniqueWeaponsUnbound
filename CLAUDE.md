@@ -30,7 +30,7 @@ A gitignored Stop hook (`.claude/hooks/sync-mod.sh`) rebuilds + redeploys after 
 
 **WSL Setup:** Requires `RIMWORLD_PATH` env var in `~/.bashrc` pointing to the Windows RimWorld install (e.g., `/mnt/c/Program Files (x86)/Steam/steamapps/common/RimWorld`).
 
-**Releases:** Push a tag matching `v*.*.*` to trigger the release workflow (`.github/workflows/release.yml`).
+**Releases:** Push a tag matching `v*.*.*` to trigger the release workflow (`.github/workflows/release.yml`). Tags include `X.Y.Z-rc.N` release candidates: CHANGELOG-less and Workshop-less, with the suffix only in `modVersion` and `AssemblyInformationalVersion` (the numeric assembly attributes stay `X.Y.Z.0`); `release.yml` treats any suffixed tag as a prerelease to match, and the `/release` skill resolves the version and measures ranges from the last *stable* tag.
 
 ### Tests
 
