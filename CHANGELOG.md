@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Entries are short one-liners ready to paste as Steam Workshop change notes: what changed for the player, no rationale, no def names, no sub-bullets. -->
 
+## [Unreleased]
+
+### Fixed
+
+- The customize gizmo icon no longer goes blank after switching language without restarting the game.
+
 ## [1.6.0] - 2026-10-04
 
 ### Added

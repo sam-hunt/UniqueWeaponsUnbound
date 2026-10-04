@@ -118,8 +118,12 @@ switch) replaces every def instance, and a `[StaticConstructorOnStartup]` type i
 re-runs — so all def-derived/def-mutating startup work lives in `UWU_Startup.Run()`, fired once per
 load (directly from `ModInitializer` on the first load, from the
 `StaticConstructorOnStartupUtility.CallAll` postfix on every reload), and everything it calls must
-stay idempotent. Texture-caching static ctors keep the attribute (load-agnostic, vanilla's own
-canonical use). Full rationale and the verified load ordering live in
+stay idempotent. Texture-caching static ctors keep the attribute (it keeps the first
+`ContentFinder` call on the main thread), but a mod-shipped texture must not sit in a plain static:
+a reload `Object.Destroy`s every texture from a mod's `Textures/` folder (`ModContentPack.ClearDestroy`)
+while the type initializer never re-runs, leaving a dead reference (the gizmo icon went blank).
+Hold it behind a getter that re-resolves on an explicit Unity-null `== null` check (never `??`/`??=`);
+vanilla/DLC paths survive via the `Resources.Load` fallback. See `Defs/UWU_Textures.cs`. Full rationale and the verified load ordering live in
 `Patches/StaticConstructorOnStartupUtility_CallAll_Patch.cs`.
 
 **Logging:** Prefix mod-specific logs with the mod name — `Log.Message("[Unique Weapons Unbound] ...")`.
