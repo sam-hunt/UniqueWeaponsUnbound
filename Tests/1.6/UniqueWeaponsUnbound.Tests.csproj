@@ -6,6 +6,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <!-- Tests are pure-data: they synthesize HaulPlanRequest inputs and call
          IHaulPlanner.Plan. No live RimWorld game context, no maps, no Find.*. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <!-- Mirror the main csproj's RimWorld install detection. The post-build

@@ -40,7 +40,7 @@ xUnit suite under `Tests/1.6/` (a separate project, never shipped). Run natively
 dotnet test Tests/1.6/UniqueWeaponsUnbound.Tests.csproj
 ```
 
-vstest hosts the net472 suite via mono automatically. CI builds but doesn't run it.
+vstest hosts the net472 suite via mono automatically. CI builds but doesn't run it. The release skill runs the suite and a Release build as its first gate.
 
 If a native test failure looks runtime-flavored, suspect assembly resolution first:
 mono resolves field types eagerly where the Windows CLR is lazy, so a DLL missing
@@ -66,6 +66,8 @@ BetterTradersGuild v1.1.0 CWTL incident).
 ### Key Patterns
 
 **Namespace Convention:** Use `*Patches` suffix for patch namespaces to avoid RimWorld type conflicts.
+
+**Warnings are build errors:** The csproj files set `TreatWarningsAsErrors`, so every compiler and analyzer warning fails the build, locally, in the Stop hook and in CI. Severities are pinned in `.editorconfig`: `warning` blocks the build, `suggestion` is IDE-only. Fix the code, not the severity, unless the rule is wrong for this domain.
 
 **Comments:** Plain `//` comments only — never XML doc comments (`///` with `<summary>` etc.). No tooling consumes the doc XML in this project, so the tag scaffolding is noise.
 
@@ -160,7 +162,7 @@ the same commit as any language change.
   L10nProbe dev mod's source now lives at `l10n/probe/`; build/deploy it only from the canonical
   `~/dev/rimworld-l10n` checkout. Upstream ships as semver release tags (`vMAJOR.MINOR.PATCH`; a
   major means this repo's shim or flow needs an edit), and the pin here moves only at release
-  (release skill step 2), at the start of a translation pass, or when a new major lands, never per
+  (release skill step 3), at the start of a translation pass, or when a new major lands, never per
   upstream commit, so `git submodule status` names the pinned tag and a stable repo's log stays
   free of pin bumps.
 
