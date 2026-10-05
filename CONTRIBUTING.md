@@ -4,6 +4,12 @@ Bug reports, fixes, and features are welcome — open an issue or pull request.
 Build instructions are in [README.md](README.md); the mod builds with
 `dotnet build UniqueWeaponsUnbound.sln -c Release`.
 
+If you work in Claude Code, the repo ships a Stop hook (`.claude/hooks/sync-mod.sh`,
+wired by `.claude/settings.json`) that rebuilds and redeploys the mod into your
+RimWorld Mods folder after any turn that changed mod files. It does nothing when no
+RimWorld install is found. Like any script in a repo you clone, read it before you
+let an agent run it.
+
 ## Localization
 
 The mod targets the languages below, chosen by RimWorld's per-language
