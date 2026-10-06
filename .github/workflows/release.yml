@@ -98,10 +98,10 @@ jobs:
           # body_path is pre-pended to the auto-generated notes by the GitHub API,
           # so the curated CHANGELOG prose leads and the compare link (plus any
           # contributor PRs) follows it - not the other way round. GitHub picks
-          # the compare link's base itself (no previous_tag_name here), and it
-          # counts prereleases, so the first stable after a candidate line gets
-          # an rc.N...stable link; the CHANGELOG section above it still spans
-          # everything since the last stable, which is the record that matters.
+          # the compare link's base itself (no previous_tag_name here) and skips
+          # prereleases, so the first stable after a candidate line links from
+          # the previous stable, not from rc.N, and spans the same range as its
+          # CHANGELOG section.
           body_path: RELEASE_NOTES.md
           generate_release_notes: true
           # Same test as the notes step: any SemVer suffix marks a prerelease,
