@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Entries are short one-liners ready to paste as Steam Workshop change notes: what changed for the player, no rationale, no def names, no sub-bullets. -->
 
-## [Unreleased]
+## [1.7.0] - 2026-10-15
+
+### Added
+
+- RimWorld 1.7 support.
 
 ### Fixed
 
-- The customize gizmo icon no longer goes blank after switching language without restarting the game.
+- Customize gizmo icon no longer goes blank after switching language.
 
 ## [1.6.0] - 2026-10-04
 
@@ -239,6 +243,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.7.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.0
 [1.6.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.6.0
 [1.5.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.2
 [1.5.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.1
