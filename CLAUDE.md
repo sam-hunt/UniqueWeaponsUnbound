@@ -20,7 +20,7 @@ RIMWORLD_PATH="/path/to/RimWorld" dotnet build UniqueWeaponsUnbound.sln -c Relea
 # Or: dotnet build -p:RimWorldPath="/path/to/RimWorld"
 ```
 
-The build system auto-detects the RimWorld installation path on Windows/Linux/Mac (including WSL targeting a Windows install). For CI builds without RimWorld installed, it falls back to the `Krafs.Rimworld.Ref` NuGet package. For local development and api inspection (monodis, ilspycmd etc), the local installation should be preferred as the source of truth.
+The build compiles against the `Krafs.Rimworld.Ref` NuGet package (pinned to the final 1.6 build, `1.6.4871`) everywhere, locally and in CI; the local RimWorld install is never referenced, only deployed to and decompiled. The install path (auto-detected on Windows/Linux/Mac including WSL targeting a Windows install, or `RIMWORLD_PATH`) decides only whether the build deploys, gated on the game's `Mods/` folder existing so it works on the 1.6 Unity layout and the flat 1.7 Waylith layout alike. For api inspection (monodis, ilspycmd etc), the local installation is the source of truth, but its assembly is whichever Steam branch is installed (now 1.7), so a decompile-verified call path recorded against 1.6 should say which version it was verified on, and say so again if a re-verification on 1.7 differs. The `rimworld-logs` skill has the per-version paths.
 
 ### Deployment
 
@@ -28,7 +28,7 @@ Every local build auto-deploys into the RimWorld `Mods/` folder (when a local in
 
 A tracked Stop hook (`.claude/hooks/sync-mod.sh`, wired by the tracked `.claude/settings.json`; logs to `$TMPDIR/UniqueWeaponsUnbound-build.log`) rebuilds + redeploys after any turn that touched mod source/content. The script is byte-identical across the mod family and derives the solution, project folder and mod name itself, so change it in the template and copy it verbatim, never per repo; it bails when no RimWorld install is found, so CI and contributors without the game are unaffected. Its `find` watch list must cover every content root `StageMod` ships (root, any version folder, and the compat roots `Mods/` and `*/Mods/`), or edits under a missed root silently stop redeploying.
 
-**WSL Setup:** Requires `RIMWORLD_PATH` env var in `~/.bashrc` pointing to the Windows RimWorld install (e.g., `/mnt/c/Program Files (x86)/Steam/steamapps/common/RimWorld`).
+**WSL Setup:** Requires `RIMWORLD_PATH` env var in `~/.bashrc` pointing to the Windows RimWorld install (e.g., `/mnt/c/Program Files (x86)/Steam/steamapps/common/RimWorld`). The test suite's 1.6 runtime assemblies come from `~/.local/share/RimWorld-1.6/Managed` by default, or `RIMWORLD_MANAGED_1_6` (see Tests).
 
 **Releases:** Push a tag matching `v*.*.*` to trigger the release workflow (`.github/workflows/release.yml`). Tags include `X.Y.Z-rc.N` release candidates: CHANGELOG-less and Workshop-less, with the suffix only in `modVersion` and `AssemblyInformationalVersion` (the numeric assembly attributes stay `X.Y.Z.0`); `release.yml` treats any suffixed tag as a prerelease to match, and the `/release` skill resolves the version and measures ranges from the last *stable* tag.
 
@@ -41,6 +41,15 @@ dotnet test Tests/1.6/UniqueWeaponsUnbound.Tests.csproj
 ```
 
 vstest hosts the net472 suite via mono automatically. CI builds but doesn't run it. The release skill runs the suite and a Release build as its first gate.
+
+The suite loads the game's real 1.6 runtime assemblies (Krafs's reference-only stubs
+cannot be loaded at run time). The Tests csproj resolves their folder in order:
+`RIMWORLD_MANAGED_1_6`, then a 1.6 install's `<Data>/Managed/`, then the frozen copy at
+`~/.local/share/RimWorld-1.6/Managed` (its README.txt records provenance). A 1.7 install
+has no 1.6 assemblies at all, so on 1.7 the frozen copy is the only source; without one
+the build still succeeds on the Krafs fallback but every test fails with
+`TypeLoadException` on Assembly-CSharp, and that fallback run overwrites any real DLLs an
+earlier build had copied into the test bin.
 
 If a native test failure looks runtime-flavored, suspect assembly resolution first:
 mono resolves field types eagerly where the Windows CLR is lazy, so a DLL missing

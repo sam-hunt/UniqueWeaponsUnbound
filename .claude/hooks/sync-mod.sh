@@ -53,14 +53,16 @@ fi
 # Has any mod-relevant input changed since the last successful deploy? Scope to
 # source + content only (never obj/bin or build outputs, which would otherwise mark
 # every build as "changed"). The content list mirrors StageMod's roots: the repo root,
-# any version folder (*/) and the compat roots (Mods/, */Mods/).
+# any version folder (*/) and the compat roots (Mods/, */Mods/). AssetBundles/ holds
+# committed shader bundles that a separate Unity build rewrites, often with no other
+# file touched the same turn.
 changed=1
 if [ -f "$STAMP" ]; then
   newer="$( {
     find Source Tests -type f \( -name '*.cs' -o -name '*.csproj' \) \
          -not -path '*/obj/*' -not -path '*/bin/*' -newer "$STAMP"
-    find Defs Patches Languages Textures Sounds Mods About LoadFolders.xml \
-         */Defs */Patches */Languages */Textures */Sounds */Mods \
+    find Defs Patches Languages Textures Sounds AssetBundles Mods About LoadFolders.xml \
+         */Defs */Patches */Languages */Textures */Sounds */AssetBundles */Mods \
          -type f -newer "$STAMP"
   } 2>/dev/null | head -n1 )"
   [ -z "$newer" ] && changed=0

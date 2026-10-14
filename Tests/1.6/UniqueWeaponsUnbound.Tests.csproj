@@ -9,11 +9,21 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <!-- Mirror the main csproj's RimWorld install detection. The post-build
-       copy step prefers the live install's runtime DLLs over Krafs's ref/
-       stubs because the latter are stamped [assembly: ReferenceAssembly]
-       and the CLR throws BadImageFormatException when the JIT tries to
-       resolve types from them at test execution time. -->
+  <!-- ===== Where the game's 1.6 runtime assemblies come from =====
+       The post-build copy step below needs the game's real runtime DLLs, not
+       Krafs's ref/ stubs: those are stamped [assembly: ReferenceAssembly] and the
+       CLR throws BadImageFormatException when the JIT resolves types from them at
+       test execution time. Resolution order:
+         1. RIMWORLD_MANAGED_1_6 (or -p:RimWorldManagedPath=...): an explicit folder.
+         2. The install's <Data>/Managed/ folder, which only exists while the
+            installed game is 1.6. Since RimWorld 1.7 (Waylith, .NET 10) the install
+            is flat, ships no 1.6 assemblies, and its own Assembly-CSharp.dll is a
+            net10 assembly this net472 test host cannot load.
+         3. A frozen copy of the final 1.6 build's Managed/ files at
+            ~/.local/share/RimWorld-1.6/Managed (see its README.txt), kept outside
+            any repo so a 1.7 install, a git clean or a fresh clone cannot lose it.
+       Any 1.6 install's Managed/ folder is a valid source for that copy.
+       RimWorldPath mirrors the main csproj's defaults; here it only feeds step 2. -->
   <PropertyGroup>
     <RimWorldPath Condition="'$(RimWorldPath)' == ''">$(RIMWORLD_PATH)</RimWorldPath>
   </PropertyGroup>
@@ -27,28 +37,19 @@
     <RimWorldPath>$(HOME)/Library/Application Support/Steam/steamapps/common/RimWorld</RimWorldPath>
   </PropertyGroup>
   <PropertyGroup>
-    <RimWorldDataFolder Condition="'$(RimWorldDataFolder)' == ''">$(RIMWORLD_DATA_FOLDER)</RimWorldDataFolder>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RimWorldDataFolder)' == '' And $([MSBuild]::IsOSPlatform('Windows'))">
-    <RimWorldDataFolder>RimWorldWin64_Data</RimWorldDataFolder>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RimWorldDataFolder)' == '' And $([MSBuild]::IsOSPlatform('Linux'))">
-    <RimWorldDataFolder>RimWorldLinux_Data</RimWorldDataFolder>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RimWorldDataFolder)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">
-    <RimWorldDataFolder>RimWorldMac_Data</RimWorldDataFolder>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RimWorldPath)' != '' And !Exists('$(RimWorldPath)/$(RimWorldDataFolder)/Managed/Assembly-CSharp.dll') And Exists('$(RimWorldPath)/RimWorldWin64_Data/Managed/Assembly-CSharp.dll')">
-    <RimWorldDataFolder>RimWorldWin64_Data</RimWorldDataFolder>
-  </PropertyGroup>
-  <PropertyGroup>
-    <UseLocalRimWorld Condition="Exists('$(RimWorldPath)/$(RimWorldDataFolder)/Managed/Assembly-CSharp.dll')">true</UseLocalRimWorld>
+    <RimWorldManagedPath Condition="'$(RimWorldManagedPath)' == ''">$(RIMWORLD_MANAGED_1_6)</RimWorldManagedPath>
+    <RimWorldManagedPath Condition="'$(RimWorldManagedPath)' == '' And Exists('$(RimWorldPath)/RimWorldWin64_Data/Managed/Assembly-CSharp.dll')">$(RimWorldPath)/RimWorldWin64_Data/Managed</RimWorldManagedPath>
+    <RimWorldManagedPath Condition="'$(RimWorldManagedPath)' == '' And Exists('$(RimWorldPath)/RimWorldLinux_Data/Managed/Assembly-CSharp.dll')">$(RimWorldPath)/RimWorldLinux_Data/Managed</RimWorldManagedPath>
+    <RimWorldManagedPath Condition="'$(RimWorldManagedPath)' == '' And Exists('$(RimWorldPath)/RimWorldMac_Data/Managed/Assembly-CSharp.dll')">$(RimWorldPath)/RimWorldMac_Data/Managed</RimWorldManagedPath>
+    <RimWorldManagedPath Condition="'$(RimWorldManagedPath)' == '' And Exists('$(HOME)/.local/share/RimWorld-1.6/Managed/Assembly-CSharp.dll')">$(HOME)/.local/share/RimWorld-1.6/Managed</RimWorldManagedPath>
+    <RimWorldManagedPath Condition="'$(RimWorldManagedPath)' == '' And Exists('$(USERPROFILE)/.local/share/RimWorld-1.6/Managed/Assembly-CSharp.dll')">$(USERPROFILE)/.local/share/RimWorld-1.6/Managed</RimWorldManagedPath>
+    <UseRuntimeAssemblies Condition="'$(RimWorldManagedPath)' != '' And Exists('$(RimWorldManagedPath)/Assembly-CSharp.dll')">true</UseRuntimeAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- GeneratePathProperty exposes $(PkgKrafs_Rimworld_Ref) so the
          post-build target below can locate the package's ref/ folder as
-         a CI fallback when no local RimWorld install is detected. -->
+         a CI fallback when no runtime assembly source is found. -->
     <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.*" GeneratePathProperty="true" />
     <PackageReference Include="xunit" Version="2.9.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
@@ -94,42 +95,43 @@
 
   <!-- Copy RimWorld runtime assemblies into the test output so the test
        runner can resolve Verse.* / RimWorld.* / UnityEngine.* types at JIT
-       time. Prefer the live install's Managed/ folder (real runtime DLLs);
-       fall back to Krafs's ref/ folder only when no install is detected.
+       time. Prefer real runtime DLLs from $(RimWorldManagedPath) (resolved
+       above); fall back to Krafs's ref/ folder only when none are found.
        The Krafs fallback is non-functional at runtime — its DLLs are
        reference-only — but keeps `dotnet build` green on CI without an
-       install present. Tests can't actually run in that mode. -->
+       install present. Tests can't actually run in that mode, and a run in
+       that mode overwrites any real DLLs a previous build had copied here. -->
   <Target Name="CopyRimWorldAssembliesToTestOutput" AfterTargets="Build">
-    <ItemGroup Condition="'$(UseLocalRimWorld)' == 'true'">
-      <_RimWorldAssemblies Include="$(RimWorldPath)/$(RimWorldDataFolder)/Managed/Assembly-CSharp.dll" />
+    <ItemGroup Condition="'$(UseRuntimeAssemblies)' == 'true'">
+      <_RimWorldAssemblies Include="$(RimWorldManagedPath)/Assembly-CSharp.dll" />
       <!-- Mono (the native WSL/Linux test host) resolves field types eagerly, so
            loading Verse.Current pulls in Assembly-CSharp-firstpass (its
            colorCorrectionCurvesInt field's type lives there). The Windows CLR
            resolves lazily and never needs it — omitting this DLL is invisible on
            Windows but fails ~61 tests under mono with BadImageFormatException. -->
-      <_RimWorldAssemblies Include="$(RimWorldPath)/$(RimWorldDataFolder)/Managed/Assembly-CSharp-firstpass.dll" />
-      <_RimWorldAssemblies Include="$(RimWorldPath)/$(RimWorldDataFolder)/Managed/UnityEngine*.dll" />
+      <_RimWorldAssemblies Include="$(RimWorldManagedPath)/Assembly-CSharp-firstpass.dll" />
+      <_RimWorldAssemblies Include="$(RimWorldManagedPath)/UnityEngine*.dll" />
       <!-- Unity.Burst and friends: assembly-level attributes on Assembly-CSharp
            reference them, so anything that reflects over the assembly's
            attributes (xunit does, when serializing a RimWorld enum used as a
            [InlineData] argument) loads them. The ref-only copies throw
            BadImageFormatException there and break test discovery. -->
-      <_RimWorldAssemblies Include="$(RimWorldPath)/$(RimWorldDataFolder)/Managed/Unity.*.dll" />
+      <_RimWorldAssemblies Include="$(RimWorldManagedPath)/Unity.*.dll" />
       <!-- Assembly-CSharp's manifest refs netstandard 2.1 — RimWorld ships
            those facades from its bundled Mono runtime. The default test
            output picks up Microsoft.NETFramework.ReferenceAssemblies'
            ref-only stubs which fail strong-name verification at runtime.
            Copying RimWorld's runtime versions over the top fixes that. -->
-      <_RimWorldAssemblies Include="$(RimWorldPath)/$(RimWorldDataFolder)/Managed/netstandard.dll" />
-      <_RimWorldAssemblies Include="$(RimWorldPath)/$(RimWorldDataFolder)/Managed/System.Runtime.dll" />
+      <_RimWorldAssemblies Include="$(RimWorldManagedPath)/netstandard.dll" />
+      <_RimWorldAssemblies Include="$(RimWorldManagedPath)/System.Runtime.dll" />
       <!-- Steamworks for the same reason: RimWorld.Scenario implements
            WorkshopUploadable, so JITting anything that mentions Scenario (e.g.
            StatWorker.FinalizeValue, which every stat lookup goes through) makes
            the CLR load this assembly. Krafs's ref-only copy fails there with
            BadImageFormatException. -->
-      <_RimWorldAssemblies Include="$(RimWorldPath)/$(RimWorldDataFolder)/Managed/com.rlabrecque.steamworks.net.dll" />
+      <_RimWorldAssemblies Include="$(RimWorldManagedPath)/com.rlabrecque.steamworks.net.dll" />
     </ItemGroup>
-    <ItemGroup Condition="'$(UseLocalRimWorld)' != 'true'">
+    <ItemGroup Condition="'$(UseRuntimeAssemblies)' != 'true'">
       <_RimWorldAssemblies Include="$(PkgKrafs_Rimworld_Ref)\ref\net472\*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(_RimWorldAssemblies)"

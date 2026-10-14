@@ -14,8 +14,21 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <!-- RimWorld Installation Path Configuration -->
-  <!-- Override with environment variables RIMWORLD_PATH / RIMWORLD_DATA_FOLDER or pass -p: properties to dotnet build -->
+  <!-- ===== Compile references =====
+       The 1.6 build compiles against the published reference assemblies, never the
+       local install: since RimWorld 1.7 the install carries no 1.6 assemblies (and no
+       Managed/ folder at all: the Waylith runtime keeps Assembly-CSharp.dll,
+       UnityStubs.dll and Waylith.dll flat in the install root), and CI has always used
+       this package, so local and CI builds now reference the same bits. Pinned to the
+       final 1.6 build so a later package can't move the API under a 1.6-targeting
+       project. The local game is only the deploy target (below) and the decompile
+       target (CLAUDE.md "Debugging"). -->
+  <ItemGroup>
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4871" />
+  </ItemGroup>
+
+  <!-- ===== RimWorld install: deploy target only =====
+       Override with the RIMWORLD_PATH environment variable or -p:RimWorldPath=... -->
   <PropertyGroup>
     <RimWorldPath Condition="'$(RimWorldPath)' == ''">$(RIMWORLD_PATH)</RimWorldPath>
   </PropertyGroup>
@@ -31,53 +44,14 @@
     <RimWorldPath>$(HOME)/Library/Application Support/Steam/steamapps/common/RimWorld</RimWorldPath>
   </PropertyGroup>
 
-  <!-- Platform-specific data folder names -->
-  <!-- Override with environment variable RIMWORLD_DATA_FOLDER or pass -p:RimWorldDataFolder="..." to dotnet build -->
+  <!-- Gated on the game being installed, not on its layout: Mods/ exists on every
+       version and platform, whereas the 1.6-era probe for
+       <Data>/Managed/Assembly-CSharp.dll went false on a 1.7 install and silently
+       skipped the deploy while the build still reported success, leaving a stale DLL
+       in the Mods folder (the Stop hook stamps on build success, so it never noticed). -->
   <PropertyGroup>
-    <RimWorldDataFolder Condition="'$(RimWorldDataFolder)' == ''">$(RIMWORLD_DATA_FOLDER)</RimWorldDataFolder>
+    <RimWorldInstalled Condition="Exists('$(RimWorldPath)/Mods')">true</RimWorldInstalled>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(RimWorldDataFolder)' == '' And $([MSBuild]::IsOSPlatform('Windows'))">
-    <RimWorldDataFolder>RimWorldWin64_Data</RimWorldDataFolder>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RimWorldDataFolder)' == '' And $([MSBuild]::IsOSPlatform('Linux'))">
-    <RimWorldDataFolder>RimWorldLinux_Data</RimWorldDataFolder>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RimWorldDataFolder)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">
-    <RimWorldDataFolder>RimWorldMac_Data</RimWorldDataFolder>
-  </PropertyGroup>
-  <!-- WSL fallback: if Linux data folder not found, try Windows data folder -->
-  <PropertyGroup Condition="'$(RimWorldPath)' != '' And !Exists('$(RimWorldPath)/$(RimWorldDataFolder)/Managed/Assembly-CSharp.dll') And Exists('$(RimWorldPath)/RimWorldWin64_Data/Managed/Assembly-CSharp.dll')">
-    <RimWorldDataFolder>RimWorldWin64_Data</RimWorldDataFolder>
-  </PropertyGroup>
-
-  <!-- Detect if local RimWorld installation exists -->
-  <PropertyGroup>
-    <UseLocalRimWorld Condition="Exists('$(RimWorldPath)/$(RimWorldDataFolder)/Managed/Assembly-CSharp.dll')">true</UseLocalRimWorld>
-  </PropertyGroup>
-
-  <!-- Use local references when RimWorld is installed -->
-  <ItemGroup Condition="'$(UseLocalRimWorld)' == 'true'">
-    <Reference Include="Assembly-CSharp" Private="false">
-      <HintPath>$(RimWorldPath)/$(RimWorldDataFolder)/Managed/Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine" Private="false">
-      <HintPath>$(RimWorldPath)/$(RimWorldDataFolder)/Managed/UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule" Private="false">
-      <HintPath>$(RimWorldPath)/$(RimWorldDataFolder)/Managed/UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule" Private="false">
-      <HintPath>$(RimWorldPath)/$(RimWorldDataFolder)/Managed/UnityEngine.IMGUIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule" Private="false">
-      <HintPath>$(RimWorldPath)/$(RimWorldDataFolder)/Managed/UnityEngine.TextRenderingModule.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <!-- Fall back to NuGet package for CI builds without local RimWorld -->
-  <ItemGroup Condition="'$(UseLocalRimWorld)' != 'true'">
-    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.*" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.3.*">
@@ -186,7 +160,7 @@
        project's ProjectReference, and an ungated deploy would silently swap the
        played mod's DLL for a Debug build on every test run. -->
   <Target Name="DeployToModFolder" AfterTargets="Build"
-          Condition="'$(UseLocalRimWorld)' == 'true' And '$(Configuration)' == 'Release'">
+          Condition="'$(RimWorldInstalled)' == 'true' And '$(Configuration)' == 'Release'">
     <CallTarget Targets="StageMod" />
   </Target>
 </Project>
