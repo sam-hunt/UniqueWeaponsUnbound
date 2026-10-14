@@ -177,6 +177,9 @@ python3 Scripts/integration-smoke-test.py
   until the errors are fixed or the user explicitly waives them. Third-party
   (`other`) errors are reported but not gating; mention them so the user can
   judge.
+- The smoke test boots whatever Steam branch is installed, so a Workshop
+  release of a 1.6+1.7 mod is smoke-tested on both branches when the change
+  touched C# or patches.
 
 ### 7. Version, changelog, and the single release confirmation
 

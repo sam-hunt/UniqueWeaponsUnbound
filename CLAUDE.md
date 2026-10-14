@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Unique Weapons Unbound** is a RimWorld 1.6 mod that allows players to customize unique weapons. Requires the Harmony mod and the Odyssey DLC.
+**Unique Weapons Unbound** is a RimWorld 1.6 and 1.7 mod that allows players to customize unique weapons. Requires the Harmony mod and the Odyssey DLC.
 
 ## Build Commands
 
