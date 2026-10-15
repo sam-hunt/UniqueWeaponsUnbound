@@ -65,7 +65,7 @@ namespace UniqueWeaponsUnbound
             // didn't resolve, regardless of the progression setting: the note tells
             // unaffected players they can ignore it, while a player who enables
             // progression later still learns the integration is broken.
-            if (!Available && ModsConfig.IsActive(PackageId))
+            if (!Available && ModDetection.IsActive(PackageId))
             {
                 Log.Warning("[Unique Weapons Unbound] Alpha Armoury active but "
                     + WeaponKitTypeName + "." + TraitFieldName

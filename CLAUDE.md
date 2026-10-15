@@ -74,6 +74,8 @@ BetterTradersGuild v1.1.0 CWTL incident).
 
 ### Key Patterns
 
+**Mod-active checks from C#:** always `ModDetection.IsActive(packageId)` (`Utilities/ModDetection.cs`), never `ModsConfig.IsActive(string)`: the latter is an exact match on the stored ids, and Steam Workshop installs are stored with a `_steam` postfix, so it is false for every Workshop build. The engine's own `MayRequire`/`IfModActive` gates are postfix-tolerant, so XML never had the problem.
+
 **Namespace Convention:** Use `*Patches` suffix for patch namespaces to avoid RimWorld type conflicts.
 
 **Warnings are build errors:** The csproj files set `TreatWarningsAsErrors`, so every compiler and analyzer warning fails the build, locally, in the Stop hook and in CI. Severities are pinned in `.editorconfig`: `warning` blocks the build, `suggestion` is IDE-only. Fix the code, not the severity, unless the rule is wrong for this domain.
