@@ -627,7 +627,7 @@ namespace UniqueWeaponsUnbound
                 if (sub == null)
                     continue;
                 // Unity-overloaded == (not ?.) so a destroyed Material bails out
-                // instead of throwing on .mainTexture — see BuildVariantPreview.
+                // instead of throwing on .mainTexture (UNT0008, see CLAUDE.md).
                 Material mat = sub.MatSingle;
                 if (mat == null)
                     continue;

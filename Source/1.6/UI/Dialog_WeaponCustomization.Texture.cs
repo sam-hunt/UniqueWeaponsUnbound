@@ -22,9 +22,6 @@ namespace UniqueWeaponsUnbound
                 return;
             }
 
-            // Pre-render all variant previews (cached, rebuilds on color/def change)
-            EnsureTextureVariantPreviews();
-
             // Grid of clickable texture variant cells, scrollable when other mods
             // add more variants than fit in the tab area. One cell per UNIQUE
             // variant (deduped display list) — but every selection is written
@@ -58,15 +55,8 @@ namespace UniqueWeaponsUnbound
                     // Cell background
                     Widgets.DrawBoxSolid(cellRect, new Color(0.15f, 0.15f, 0.15f, 0.5f));
 
-                    // Draw texture variant preview (array is cell-indexed)
-                    if (textureVariantPreviews != null
-                        && k < textureVariantPreviews.Length
-                        && textureVariantPreviews[k] != null)
-                    {
-                        Rect previewRect = cellRect.ContractedBy(8f);
-                        GUI.DrawTexture(previewRect, textureVariantPreviews[k],
-                            ScaleMode.ScaleToFit, true);
-                    }
+                    // Draw this variant of the prospective weapon
+                    DrawVariantPreview(cellRect.ContractedBy(8f), variantIndex);
 
                     // Selected highlight (no border on unselected)
                     if (IsSelectedVariantCell(variantIndex))
