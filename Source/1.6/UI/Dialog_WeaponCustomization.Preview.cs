@@ -261,9 +261,20 @@ namespace UniqueWeaponsUnbound
             SyncPreviewThing(resultDef, effectiveColor);
 
             if (previewThing != null && previewThing.def == resultDef)
-                Widgets.ThingIcon(rect, previewThing);
+                Widgets.ThingIcon(rect, previewThing, scale: FittedIconScale(resultDef));
             else
-                Widgets.ThingIcon(rect, resultDef);
+                Widgets.ThingIcon(rect, resultDef, scale: FittedIconScale(resultDef));
+        }
+
+        // Widgets.ThingIcon multiplies in GenUI.IconDrawScale(def) — uiIconScale
+        // times the graphic's drawSize over the def's footprint — which is sized
+        // for map-placed things in small list rows. Weapons commonly draw at 1.5
+        // to 2.0 and have a 1x1 footprint, so left alone the sprite overflows the
+        // preview box. Cancel it so every weapon fits its rect the same way.
+        private static float FittedIconScale(ThingDef def)
+        {
+            float scale = GenUI.IconDrawScale(def);
+            return scale > 0f ? 1f / scale : 1f;
         }
 
         // Draws one texture variant of the prospective weapon into a grid cell.
@@ -278,9 +289,10 @@ namespace UniqueWeaponsUnbound
             ColorDef effectiveColor = IsRevertedToBase ? null : EffectiveColor;
             SyncPreviewThing(resultDef, effectiveColor);
 
+            float scale = FittedIconScale(resultDef);
             if (previewThing == null || previewThing.def != resultDef)
             {
-                Widgets.ThingIcon(rect, resultDef);
+                Widgets.ThingIcon(rect, resultDef, scale: scale);
                 return;
             }
 
@@ -288,7 +300,7 @@ namespace UniqueWeaponsUnbound
             WeaponModificationUtility.SetTextureIndex(previewThing, variantIndex);
             try
             {
-                Widgets.ThingIcon(rect, previewThing);
+                Widgets.ThingIcon(rect, previewThing, scale: scale);
             }
             finally
             {
