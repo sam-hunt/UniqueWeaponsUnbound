@@ -7,33 +7,20 @@ namespace UniqueWeaponsUnbound
 {
     public partial class Dialog_WeaponCustomization
     {
-        private const int PreviewRTSize = 256;
-        private const int TextureGridRTSize = 128;
-
-        // Cached preview render — rebuilt only when preview state changes.
-        // The trait snapshot is part of the key because appearance is now
-        // trait-dependent: a trait can drive color two (or any override reachable
-        // through the thing's graphic), so toggling one must rebuild even when the
-        // def and color-one choice are unchanged.
-        private RenderTexture previewRT;
+        // One prospective Thing, kept in the dialog's desired state (def, trait
+        // list, color one, texture variant) and drawn through vanilla's own
+        // Widgets.ThingIcon. The thing is re-made only on def change and
+        // re-stamped only when the appearance key below changes, because
+        // ThingMaker.MakeThing mutates global sim state (Thing.PostMake draws a
+        // UniqueIDsManager id, PostPostMake rolls off the global Rand) and
+        // StampTraits can draw an ability id. The trait snapshot is part of the
+        // key because appearance is trait-dependent: a trait can drive color two
+        // (or any override reachable through the thing's graphic).
+        private Thing previewThing;
         private int cachedPreviewTextureIndex = -1;
         private ColorDef cachedPreviewColor;
         private ThingDef cachedPreviewDef;
         private List<WeaponTraitDef> cachedPreviewTraits;
-
-        // One prospective Thing reused across rebuilds (re-made only on def change).
-        // ThingMaker.MakeThing mutates global sim state — Thing.PostMake draws a
-        // UniqueIDsManager id and PostPostMake rolls off the global Rand — so caching
-        // it bounds those draws to def changes instead of firing on every rebuild.
-        private Thing previewThing;
-
-        // Cached texture variant grid previews — rebuilt when color/def/traits
-        // change. Cell-indexed: entry k previews full-array variant
-        // uniqueVariantIndexes[k] (the deduped display list).
-        private RenderTexture[] textureVariantPreviews;
-        private ColorDef cachedTextureGridColor;
-        private ThingDef cachedTextureGridDef;
-        private List<WeaponTraitDef> cachedTextureGridTraits;
 
         // --- Left pane: weapon preview ---
 
@@ -53,7 +40,7 @@ namespace UniqueWeaponsUnbound
             // Vanilla "i" stats button — opens the info card for the prospective
             // weapon, so the player reads final stats rather than summing trait
             // modifiers by hand. The thing's identity state is stamped when it's
-            // (re)built (see BuildPreviewGraphic); the desired name is stamped
+            // (re)built (see StampPreviewThing); the desired name is stamped
             // here instead because name edits never trigger a rebuild (they
             // don't affect appearance). SetName also mirrors the name into
             // CompArt.Title, matching what accepting the customization does.
@@ -101,73 +88,77 @@ namespace UniqueWeaponsUnbound
                     Rect chipsInnerRect = new Rect(0f, 0f, innerWidth, chipsContentHeight);
 
                     Widgets.BeginScrollView(chipsOuterRect, ref desiredTraitsScroll, chipsInnerRect);
-
-                    float chipY = 0f;
-                    foreach (WeaponTraitDef trait in desiredTraits)
+                    try
                     {
-                        Rect chipRect = new Rect(0f, chipY, innerWidth, TraitRowHeight);
-
-                        // Chip background with hover highlight
-                        bool hovered = Mouse.IsOver(chipRect);
-                        Widgets.DrawBoxSolid(chipRect, hovered
-                            ? new Color(0.3f, 0.3f, 0.3f, 0.5f)
-                            : new Color(0.2f, 0.2f, 0.2f, 0.4f));
-
-                        // Label — yellow when removing this trait would empty the
-                        // player's pool of available sources for it (progression mode).
-                        bool isLastSource = progressionPool?.IsLastNonHostileSource(trait, originalTraits) == true;
-                        Text.Anchor = TextAnchor.MiddleLeft;
-                        Rect labelRect = new Rect(
-                            chipRect.x + 4f, chipRect.y,
-                            chipRect.width * 0.5f, chipRect.height);
-                        Color prevLabelColor = GUI.color;
-                        if (isLastSource)
-                            GUI.color = ColorLibrary.Yellow;
-                        Widgets.Label(labelRect, trait.LabelCap);
-                        GUI.color = prevLabelColor;
-
-                        // Cost icons (right-aligned) — only for newly added traits
-                        if (!originalTraits.Contains(trait))
+                        float chipY = 0f;
+                        foreach (WeaponTraitDef trait in desiredTraits)
                         {
-                            List<ThingDefCountClass> chipCosts = GetAdditionCost(trait);
-                            Rect chipCostRect = new Rect(
-                                labelRect.xMax, chipRect.y,
-                                chipRect.xMax - labelRect.xMax - 4f, chipRect.height);
-                            DrawCostIcons(chipCostRect, chipCosts, rightAlign: true,
-                                insufficientResources: insufficientResources);
+                            Rect chipRect = new Rect(0f, chipY, innerWidth, TraitRowHeight);
+
+                            // Chip background with hover highlight
+                            bool hovered = Mouse.IsOver(chipRect);
+                            Widgets.DrawBoxSolid(chipRect, hovered
+                                ? new Color(0.3f, 0.3f, 0.3f, 0.5f)
+                                : new Color(0.2f, 0.2f, 0.2f, 0.4f));
+
+                            // Label — yellow when removing this trait would empty the
+                            // player's pool of available sources for it (progression mode).
+                            bool isLastSource = progressionPool?.IsLastNonHostileSource(trait, originalTraits) == true;
+                            Text.Anchor = TextAnchor.MiddleLeft;
+                            Rect labelRect = new Rect(
+                                chipRect.x + 4f, chipRect.y,
+                                chipRect.width * 0.5f, chipRect.height);
+                            Color prevLabelColor = GUI.color;
+                            if (isLastSource)
+                                GUI.color = ColorLibrary.Yellow;
+                            Widgets.Label(labelRect, trait.LabelCap);
+                            GUI.color = prevLabelColor;
+
+                            // Cost icons (right-aligned) — only for newly added traits
+                            if (!originalTraits.Contains(trait))
+                            {
+                                List<ThingDefCountClass> chipCosts = GetAdditionCost(trait);
+                                Rect chipCostRect = new Rect(
+                                    labelRect.xMax, chipRect.y,
+                                    chipRect.xMax - labelRect.xMax - 4f, chipRect.height);
+                                DrawCostIcons(chipCostRect, chipCosts, rightAlign: true,
+                                    insufficientResources: insufficientResources);
+                            }
+
+                            Text.Anchor = TextAnchor.UpperLeft;
+
+                            // Tooltip (same as traits tab). The "last source" warning
+                            // gets its own tooltip box stacked alongside, so it reads as
+                            // a distinct alert rather than being lost at the bottom of
+                            // a long stat block.
+                            string tooltip = BuildTraitTooltip(trait);
+                            if (!string.IsNullOrEmpty(tooltip))
+                                TooltipHandler.TipRegion(chipRect, tooltip);
+                            if (isLastSource)
+                            {
+                                // Color the tooltip body to match the chip's yellow label,
+                                // so the visual cue and the explanatory tip share an identity.
+                                // Hex matches ColorLibrary.Yellow (#ffff14).
+                                TooltipHandler.TipRegion(chipRect,
+                                    "<color=#ffff14>" + "UWU_LastTraitSourceWarning".Translate() + "</color>");
+                            }
+
+                            // Click: switch to traits tab and scroll trait into view
+                            if (Widgets.ButtonInvisible(chipRect))
+                            {
+                                activeTab = 0;
+                                int traitIndex = compatibleTraits.IndexOf(trait);
+                                if (traitIndex >= 0)
+                                    traitListScroll.y = traitIndex * (TraitRowHeight + TraitRowGap);
+                            }
+
+                            chipY += chipStride;
                         }
-
-                        Text.Anchor = TextAnchor.UpperLeft;
-
-                        // Tooltip (same as traits tab). The "last source" warning
-                        // gets its own tooltip box stacked alongside, so it reads as
-                        // a distinct alert rather than being lost at the bottom of
-                        // a long stat block.
-                        string tooltip = BuildTraitTooltip(trait);
-                        if (!string.IsNullOrEmpty(tooltip))
-                            TooltipHandler.TipRegion(chipRect, tooltip);
-                        if (isLastSource)
-                        {
-                            // Color the tooltip body to match the chip's yellow label,
-                            // so the visual cue and the explanatory tip share an identity.
-                            // Hex matches ColorLibrary.Yellow (#ffff14).
-                            TooltipHandler.TipRegion(chipRect,
-                                "<color=#ffff14>" + "UWU_LastTraitSourceWarning".Translate() + "</color>");
-                        }
-
-                        // Click: switch to traits tab and scroll trait into view
-                        if (Widgets.ButtonInvisible(chipRect))
-                        {
-                            activeTab = 0;
-                            int traitIndex = compatibleTraits.IndexOf(trait);
-                            if (traitIndex >= 0)
-                                traitListScroll.y = traitIndex * (TraitRowHeight + TraitRowGap);
-                        }
-
-                        chipY += chipStride;
                     }
-
-                    Widgets.EndScrollView();
+                    finally
+                    {
+                        Widgets.EndScrollView();
+                    }
                 }
 
                 bool hasSurplus = currentSurplus?.Count > 0;
@@ -262,65 +253,107 @@ namespace UniqueWeaponsUnbound
             return sb.ToString();
         }
 
+
         private void DrawPreviewIcon(Rect rect)
         {
             ThingDef resultDef = ResultingDef;
             ColorDef effectiveColor = IsRevertedToBase ? null : EffectiveColor;
+            SyncPreviewThing(resultDef, effectiveColor);
 
-            bool needsRebuild = previewRT == null
-                || cachedPreviewTextureIndex != desiredTextureIndex
-                || cachedPreviewColor != effectiveColor
-                || cachedPreviewDef != resultDef
-                || !SameTraits(cachedPreviewTraits, desiredTraits);
+            if (previewThing != null && previewThing.def == resultDef)
+                Widgets.ThingIcon(rect, previewThing, scale: FittedIconScale(resultDef));
+            else
+                Widgets.ThingIcon(rect, resultDef, scale: FittedIconScale(resultDef));
+        }
 
-            // Rebuild during Layout to avoid disrupting Repaint's active rendering.
-            // Graphics.Blit changes RenderTexture.active, which during Repaint would
-            // redirect subsequent UI draws into our texture instead of the screen.
-            if (needsRebuild && Event.current.type == EventType.Layout)
+        // Widgets.ThingIcon multiplies in GenUI.IconDrawScale(def) — uiIconScale
+        // times the graphic's drawSize over the def's footprint — which is sized
+        // for map-placed things in small list rows. Weapons commonly draw at 1.5
+        // to 2.0 and have a 1x1 footprint, so left alone the sprite overflows the
+        // preview box. Cancel it so every weapon fits its rect the same way.
+        private static float FittedIconScale(ThingDef def)
+        {
+            float scale = GenUI.IconDrawScale(def);
+            return scale > 0f ? 1f / scale : 1f;
+        }
+
+        // Draws one texture variant of the prospective weapon into a grid cell.
+        // The variant is selected the same way the game selects it at draw time
+        // (Graphic_Random.SubGraphicFor reads Thing.overrideGraphicIndex), by
+        // pointing the preview thing at the variant for the duration of the
+        // draw, then restoring the desired index so the main preview and the
+        // info card keep showing the player's choice.
+        private void DrawVariantPreview(Rect rect, int variantIndex)
+        {
+            ThingDef resultDef = ResultingDef;
+            ColorDef effectiveColor = IsRevertedToBase ? null : EffectiveColor;
+            SyncPreviewThing(resultDef, effectiveColor);
+
+            float scale = FittedIconScale(resultDef);
+            if (previewThing == null || previewThing.def != resultDef)
             {
-                RebuildPreviewRT(resultDef, effectiveColor);
-                cachedPreviewTextureIndex = desiredTextureIndex;
-                cachedPreviewColor = effectiveColor;
-                cachedPreviewDef = resultDef;
-                cachedPreviewTraits = new List<WeaponTraitDef>(desiredTraits);
+                Widgets.ThingIcon(rect, resultDef, scale: scale);
+                return;
             }
 
-            if (previewRT != null)
-                GUI.DrawTexture(rect, previewRT, ScaleMode.ScaleToFit, true);
-            else
-                Widgets.ThingIcon(rect, resultDef);
+            int desired = previewThing.overrideGraphicIndex ?? desiredTextureIndex;
+            WeaponModificationUtility.SetTextureIndex(previewThing, variantIndex);
+            try
+            {
+                Widgets.ThingIcon(rect, previewThing, scale: scale);
+            }
+            finally
+            {
+                WeaponModificationUtility.SetTextureIndex(previewThing, desired);
+            }
         }
 
-        private void RebuildPreviewRT(ThingDef resultDef, ColorDef colorDef)
+        // Brings previewThing into the prospective customization state — the
+        // desired def, color, trait set and texture variant — when any of them
+        // changed since the last sync, so the icon draws above read a Thing that
+        // describes itself rather than a hand-predicted appearance.
+        private void SyncPreviewThing(ThingDef resultDef, ColorDef colorDef)
         {
-            DestroyPreviewRT();
-            Graphic topLevel = BuildPreviewGraphic(resultDef, colorDef);
-            previewRT = BuildVariantPreview(topLevel, desiredTextureIndex, PreviewRTSize);
+            bool stale = previewThing == null
+                || cachedPreviewTextureIndex != desiredTextureIndex
+                || cachedPreviewColor != colorDef
+                || cachedPreviewDef != resultDef
+                || !SameTraits(cachedPreviewTraits, desiredTraits);
+            if (!stale)
+                return;
+
+            StampPreviewThing(resultDef, colorDef);
+            cachedPreviewTextureIndex = desiredTextureIndex;
+            cachedPreviewColor = colorDef;
+            cachedPreviewDef = resultDef;
+            cachedPreviewTraits = new List<WeaponTraitDef>(desiredTraits);
         }
 
-        // Resolves the weapon's top-level (collection-level) graphic for a
-        // prospective customization state — the desired def, color, and trait
-        // set — by building a Thing in that state and asking it, rather than
-        // predicting the appearance by hand.
+        // Puts a Thing into a prospective customization state — the desired
+        // def, color, and trait set — so vanilla's icon widget can ask it how
+        // it looks, rather than predicting the appearance by hand.
         //
-        // We let the actual object describe itself: Thing.Graphic resolves
-        // through GraphicData.GraphicColoredFor using the thing's own
-        // DrawColor/DrawColorTwo, so the weapon's own Thing/Comp graphic
-        // overrides run against the prospective trait list. That keeps the
-        // preview decoupled from how a given weapon (vanilla or a downstream
-        // mod) maps state to appearance — any override reachable through the
-        // thing's graphic comes through for free, with no knowledge of its
-        // mechanism here. (The one ceiling: an override that lives purely in a
+        // We let the actual object describe itself: Widgets.ThingIcon resolves
+        // Thing.Graphic through GraphicData.GraphicColoredFor using the thing's
+        // own DrawColor/DrawColorTwo, picks the variant via overrideGraphicIndex,
+        // and draws the material through the shader's UI variant (the
+        // ShaderTypeDef's uiShaderPath), so the mask and both colors render the
+        // way vanilla draws any colored item icon. That keeps the preview
+        // decoupled from how a given weapon (vanilla or a downstream mod) maps
+        // state to appearance — any override reachable through the thing's
+        // graphic comes through for free. Two ceilings, both shared with
+        // vanilla's own inventory icons: an override that lives purely in a
         // draw-time patch and never changes the thing's graphic can't be
-        // reconstructed by anything short of invoking that draw path.)
+        // reconstructed here, and a shader whose ShaderTypeDef declares no
+        // uiShaderPath draws as a flat tint without its mask.
         //
         // One override needs a nudge rather than coming through for free: VEF /
         // Alpha Armoury's trait-driven graphic swap does change the thing's
         // graphicInt, but only recomputes on equip/load, neither of which fires
         // here. VEFWeaponTraitGraphicsIntegration.RefreshTraitGraphic runs that
         // recompute against the prospective traits so it lands in graphicInt
-        // before we read Graphic — still within the "ask the object" contract,
-        // just triggering the resolution VEF defers.
+        // before the icon reads Graphic — still within the "ask the object"
+        // contract, just triggering the resolution VEF defers.
         //
         // For appearance, only the trait list and the comp's color field need
         // setting: color one is read live from CompUniqueWeapon.ForceColor
@@ -340,29 +373,29 @@ namespace UniqueWeaponsUnbound
         // through the thing) can't be reconstructed here and won't show until
         // the weapon is actually crafted and equipped.
         //
-        // Building a Thing mutates global sim state, which the old graphic-only
-        // path never touched: Thing.PostMake pulls a UniqueIDsManager id and
-        // CompUniqueWeapon.PostPostMake rolls random traits/name/color off the
-        // global Rand. Two guards keep that from leaking (a multiplayer desync
-        // risk, since rebuilds run during GUI layout, off the synchronized
-        // tick): the make is wrapped in Rand.Push/PopState so the throwaway
-        // rolls don't perturb the shared Rand stream, and the Thing is cached
-        // on previewThing and re-made only when the result def changes — so the
-        // id draw fires per def, not per rebuild. Re-stamping color below
-        // touches no global state; StampTraits draws an ability id only when
-        // the stamp changes the desired ability trait — a bounded draw,
-        // documented on the method itself. The cached thing is never spawned,
-        // never scribed, and never destroyed — simply dropped with the dialog.
-        // That lifecycle is also what makes the identity stamp's shared
-        // references (art TaleReference, relic precept, coded pawn) safe: the
-        // destroy and save paths, the only places a shared reference could tear
-        // down or fork state the real weapon still owns, never run. Destroy()
-        // must NOT be added here — it would fire CompArt.PostDestroy /
-        // Notify_ThingLost against the live weapon's tale and precept.
-        private Graphic BuildPreviewGraphic(ThingDef resultDef, ColorDef colorDef)
+        // Building a Thing mutates global sim state: Thing.PostMake pulls a
+        // UniqueIDsManager id and CompUniqueWeapon.PostPostMake rolls random
+        // traits/name/color off the global Rand. Two guards keep that from
+        // leaking (a multiplayer desync risk, since syncs run during GUI
+        // drawing, off the synchronized tick): the make is wrapped in
+        // Rand.Push/PopState so the throwaway rolls don't perturb the shared
+        // Rand stream, and the Thing is cached on previewThing and re-made only
+        // when the result def changes — so the id draw fires per def, not per
+        // sync. Re-stamping color below touches no global state; StampTraits
+        // draws an ability id only when the stamp changes the desired ability
+        // trait — a bounded draw, documented on the method itself. The cached
+        // thing is never spawned, never scribed, and never destroyed — simply
+        // dropped with the dialog. That lifecycle is also what makes the
+        // identity stamp's shared references (art TaleReference, relic precept,
+        // coded pawn) safe: the destroy and save paths, the only places a
+        // shared reference could tear down or fork state the real weapon still
+        // owns, never run. Destroy() must NOT be added here — it would fire
+        // CompArt.PostDestroy / Notify_ThingLost against the live weapon's tale
+        // and precept.
+        private void StampPreviewThing(ThingDef resultDef, ColorDef colorDef)
         {
             if (resultDef?.graphicData == null)
-                return null;
+                return;
 
             if (previewThing == null || previewThing.def != resultDef)
             {
@@ -420,111 +453,32 @@ namespace UniqueWeaponsUnbound
                 WeaponModificationUtility.StampTraits(previewThing, desiredTraits, weapon);
 
                 // Write color one and invalidate the cached graphic (SetColor fires
-                // Notify_ColorChanged), so Graphic rebuilds against the prospective
-                // state below. Color two is left to the thing's own DrawColorTwo.
+                // Notify_ColorChanged), so the next icon draw resolves Graphic
+                // against the prospective state. Color two is left to the thing's
+                // own DrawColorTwo.
                 WeaponModificationUtility.SetColor(previewThing, colorDef);
             }
 
-            // Keep the thing-side texture variant in step with the preview. The
-            // dialog renders variants by indexing into the graphic directly, but
-            // the info card's icon resolves through the thing (Widgets.ThingIcon
-            // → ExtractInnerGraphicFor → Graphic_Random.SubGraphicFor), which
-            // without an override falls back to hashing the throwaway
-            // thingIDNumber — a random variant, not the desired one. Runs every
-            // rebuild because the desired index is preview state, unlike the
-            // stamped identity above.
+            // Keep the thing-side texture variant in step with the dialog. Both
+            // the icon widget and the info card resolve the variant through the
+            // thing (ExtractInnerGraphicFor → Graphic_Random.SubGraphicFor),
+            // which without an override falls back to hashing the throwaway
+            // thingIDNumber — a random variant, not the desired one.
             WeaponModificationUtility.SetTextureIndex(previewThing, desiredTextureIndex);
 
             // Drive VEF / Alpha Armoury's trait-driven graphic override against the
             // prospective trait set, exactly as an equip would. It writes the
-            // resolved graphic into the thing's graphicInt (read via Graphic below);
-            // a no-op when VEF is absent or no trait overrides this def, leaving the
-            // vanilla graphic SetColor just invalidated. Must run after SetColor — it
-            // reads the comp's color-one to tint the override.
+            // resolved graphic into the thing's graphicInt (read via Graphic by the
+            // icon widget); a no-op when VEF is absent or no trait overrides this
+            // def, leaving the vanilla graphic SetColor just invalidated. Must run
+            // after SetColor — it reads the comp's color-one to tint the override.
             VEFWeaponTraitGraphicsIntegration.RefreshTraitGraphic(previewThing);
-
-            return previewThing.Graphic;
         }
 
-        // Blits one texture variant of a prebuilt, already-colored top-level
-        // graphic into a fresh RenderTexture. Shared by the main preview icon
-        // and the texture variant grid (which reuses one graphic across all
-        // variants).
-        private RenderTexture BuildVariantPreview(Graphic topLevel, int textureIndex, int rtSize)
-        {
-            if (topLevel == null)
-                return null;
-
-            // Select the texture variant, mirroring Graphic_Random.SubGraphicFor at
-            // draw time. The coloring preserves the wrapper types, so unwrap rotation
-            // then index into the variants.
-            Graphic graphic = topLevel;
-            if (graphic is Graphic_RandomRotated rotated)
-                graphic = rotated.SubGraphic;
-            if (graphic is Graphic_Random random)
-                graphic = random.SubGraphicAtIndex(textureIndex);
-
-            // Unity-overloaded == (not ?.) so a destroyed Material also bails out
-            // instead of throwing MissingReferenceException on .mainTexture (UNT0008).
-            Material mat = graphic.MatSingle;
-            if (mat == null)
-                return null;
-            Texture mainTex = mat.mainTexture;
-            if (mainTex == null)
-                return null;
-
-            RenderTexture rt = new RenderTexture(rtSize, rtSize, 0, RenderTextureFormat.ARGB32);
-
-            // Save and restore RenderTexture.active around the entire operation.
-            // Graphics.Blit sets it to the destination and does NOT restore it —
-            // leaving it set would redirect all subsequent UI rendering into our texture.
-            RenderTexture prev = RenderTexture.active;
-
-            // Clear to transparent so clipped pixels (alpha < cutoff) stay transparent
-            RenderTexture.active = rt;
-            GL.Clear(true, true, Color.clear);
-
-            // Blit through the material's shader — CutoutComplex reads the mask
-            // texture to selectively apply the color, matching in-game rendering
-            Graphics.Blit(mainTex, rt, mat);
-
-            RenderTexture.active = prev;
-            return rt;
-        }
-
-        private void EnsureTextureVariantPreviews()
-        {
-            ThingDef resultDef = ResultingDef;
-            ColorDef effectiveColor = IsRevertedToBase ? null : EffectiveColor;
-
-            bool needsRebuild = textureVariantPreviews == null
-                || cachedTextureGridColor != effectiveColor
-                || cachedTextureGridDef != resultDef
-                || !SameTraits(cachedTextureGridTraits, desiredTraits);
-
-            if (!needsRebuild || Event.current.type != EventType.Layout)
-                return;
-
-            DestroyTextureVariantPreviews();
-            textureVariantPreviews = new RenderTexture[uniqueVariantIndexes.Count];
-
-            // The variants share def/color/traits and differ only by index, so
-            // build the prospective graphic once and index into it per tile.
-            // Only the deduped display list gets a preview.
-            Graphic topLevel = BuildPreviewGraphic(resultDef, effectiveColor);
-            for (int k = 0; k < textureVariantPreviews.Length; k++)
-                textureVariantPreviews[k] = BuildVariantPreview(
-                    topLevel, uniqueVariantIndexes[k], TextureGridRTSize);
-
-            cachedTextureGridColor = effectiveColor;
-            cachedTextureGridDef = resultDef;
-            cachedTextureGridTraits = new List<WeaponTraitDef>(desiredTraits);
-        }
-
-        // Ordered equality for the two preview caches' trait snapshots. Order
-        // matters — color resolution is order-sensitive (e.g. "last forced
-        // color wins" / "first body-color trait wins"). A null cached snapshot
-        // (first build) never matches, forcing the initial rebuild.
+        // Ordered equality for the preview's trait snapshot. Order matters —
+        // color resolution is order-sensitive (e.g. "last forced color wins" /
+        // "first body-color trait wins"). A null cached snapshot (first sync)
+        // never matches, forcing the initial stamp.
         private static bool SameTraits(List<WeaponTraitDef> cached, List<WeaponTraitDef> current)
         {
             if (cached == null)
@@ -537,39 +491,6 @@ namespace UniqueWeaponsUnbound
                     return false;
             }
             return true;
-        }
-
-        private void DestroyPreviewRT()
-        {
-            if (previewRT != null)
-            {
-                previewRT.Release();
-                UnityEngine.Object.Destroy(previewRT);
-                previewRT = null;
-            }
-        }
-
-        private void DestroyTextureVariantPreviews()
-        {
-            if (textureVariantPreviews != null)
-            {
-                foreach (RenderTexture rt in textureVariantPreviews)
-                {
-                    if (rt != null)
-                    {
-                        rt.Release();
-                        UnityEngine.Object.Destroy(rt);
-                    }
-                }
-                textureVariantPreviews = null;
-            }
-        }
-
-        public override void PreClose()
-        {
-            base.PreClose();
-            DestroyPreviewRT();
-            DestroyTextureVariantPreviews();
         }
     }
 }

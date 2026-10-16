@@ -70,42 +70,46 @@ namespace UniqueWeaponsUnbound
             Rect innerRect = new Rect(0f, 0f, scrollWidth, innerHeight);
 
             Widgets.BeginScrollView(rect, ref colorTabScroll, innerRect);
-
-            float curY = 0f;
-            float startX = 0f;
-
-            // --- Weapon colors ---
-            Text.Font = GameFont.Small;
-            Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
-                "UWU_WeaponColors".Translate());
-            curY += SectionHeaderHeight;
-
-            DrawColorGrid(ref curY, startX, cols, availableWeaponColors, false);
-
-            // --- Ideology colors (Ideo + Misc palette, when DLC active) ---
-            if (UWU_Mod.Settings.enableIdeologyColors
-                && availableIdeoColors?.Count > 0)
+            try
             {
-                curY += 10f;
+                float curY = 0f;
+                float startX = 0f;
+
+                // --- Weapon colors ---
+                Text.Font = GameFont.Small;
                 Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
-                    "UWU_IdeologyColors".Translate());
+                    "UWU_WeaponColors".Translate());
                 curY += SectionHeaderHeight;
 
-                DrawColorGrid(ref curY, startX, cols, availableIdeoColors, true);
-            }
+                DrawColorGrid(ref curY, startX, cols, availableWeaponColors, false);
 
-            // --- Structure colors ---
-            if (UWU_Mod.Settings.enableStructureColors && availableStructureColors.Count > 0)
+                // --- Ideology colors (Ideo + Misc palette, when DLC active) ---
+                if (UWU_Mod.Settings.enableIdeologyColors
+                    && availableIdeoColors?.Count > 0)
+                {
+                    curY += 10f;
+                    Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
+                        "UWU_IdeologyColors".Translate());
+                    curY += SectionHeaderHeight;
+
+                    DrawColorGrid(ref curY, startX, cols, availableIdeoColors, true);
+                }
+
+                // --- Structure colors ---
+                if (UWU_Mod.Settings.enableStructureColors && availableStructureColors.Count > 0)
+                {
+                    curY += 10f;
+                    Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
+                        "UWU_StructureColors".Translate());
+                    curY += SectionHeaderHeight;
+
+                    DrawColorGrid(ref curY, startX, cols, availableStructureColors, false);
+                }
+            }
+            finally
             {
-                curY += 10f;
-                Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
-                    "UWU_StructureColors".Translate());
-                curY += SectionHeaderHeight;
-
-                DrawColorGrid(ref curY, startX, cols, availableStructureColors, false);
+                Widgets.EndScrollView();
             }
-
-            Widgets.EndScrollView();
         }
 
         private void DrawColorGrid(

@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Customization dialog previews now draw through the game's own item icon renderer instead of an offscreen render pass.
+
 ### Fixed
 
 - Vanilla Skills Expanded integration now works with the Steam Workshop version of the mod.

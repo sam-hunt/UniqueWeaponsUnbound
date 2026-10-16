@@ -28,7 +28,8 @@ namespace UniqueWeaponsUnbound
             catch (Exception ex)
             {
                 Log.Error("[Unique Weapons Unbound] Skipped customization menu construction at "
-                    + (clickedThing?.LabelShortCap ?? "(null)") + " due to error: " + ex);
+                    + SafeLabel(clickedThing) + " ("
+                    + (clickedThing?.def?.defName ?? "?") + ") due to error: " + ex);
             }
 
             if (options == null)

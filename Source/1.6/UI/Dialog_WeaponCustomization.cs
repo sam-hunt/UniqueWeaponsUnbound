@@ -627,7 +627,7 @@ namespace UniqueWeaponsUnbound
                 if (sub == null)
                     continue;
                 // Unity-overloaded == (not ?.) so a destroyed Material bails out
-                // instead of throwing on .mainTexture — see BuildVariantPreview.
+                // instead of throwing on .mainTexture (UNT0008, see CLAUDE.md).
                 Material mat = sub.MatSingle;
                 if (mat == null)
                     continue;
@@ -704,6 +704,12 @@ namespace UniqueWeaponsUnbound
             catch (Exception ex)
             {
                 renderErrored = true;
+                // The throw may have left per-draw GUI state mid-change (the
+                // scroll views restore themselves via try/finally); reset the
+                // rest so the next window drawn this frame starts clean.
+                Text.Anchor = TextAnchor.UpperLeft;
+                Text.Font = GameFont.Small;
+                GUI.color = Color.white;
                 // Per-frame surfaces (cost pipelines, modded trait workers,
                 // the JobDriver cast in the Confirm path) can throw inside
                 // vanilla's window pump. Without this guard the dialog would
