@@ -69,11 +69,9 @@ Unique Weapons Unbound.
 | sealed / fogged | scellé / brouillard | | Odyssey `AncientSealedCrate` = caisse scellée; *brouillard* for map fog |
 | melee weapon names | épée longue / lance / masse / couteau / glaive / hache / massue / épée mono-moléculaire / épée plasmique | | `MeleeWeapon_*` — native words, not transliterations |
 
-`Reset to defaults` = **Réinitialiser les valeurs par défaut** (matches the
-`l10n/` row) disambiguates the same way de's `ResetBinding` phrasing does:
-`RestoreToDefaultSettings` = *Utiliser les paramètres par défaut* reads as
-applying the defaults, not resetting them, so the reset phrasing is the only
-one that says what our button does.
+The mod settings' reset button uses vanilla's `RestoreToDefaultSettings`
+(fr: *Utiliser les paramètres par défaut*), translated by the game, so it has
+no Keyed entry here; don't reintroduce a custom key for it.
 
 ## Research `generalRules` — UWU's three research defs
 

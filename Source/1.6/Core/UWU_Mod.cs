@@ -306,7 +306,7 @@ namespace UniqueWeaponsUnbound
             listing.End();
             Widgets.EndScrollView();
 
-            if (Widgets.ButtonText(buttonRect, "UWU_ResetToDefaults".Translate()))
+            if (Widgets.ButtonText(buttonRect, "RestoreToDefaultSettings".Translate()))
             {
                 Settings.ResetToDefaults();
                 skillCheckExpanded = null;

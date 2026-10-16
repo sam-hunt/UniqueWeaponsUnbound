@@ -75,7 +75,6 @@
        Reset (= Réinitialiser); RestoreToDefaultSettings is "Utiliser les paramètres
        par défaut", which reads as applying them rather than resetting. -->
   <!-- EN: Reset to defaults -->
-  <UWU_ResetToDefaults>Réinitialiser les valeurs par défaut</UWU_ResetToDefaults>
 
   <!-- Dialog: Tabs -->
   <!-- EN: Traits -->
