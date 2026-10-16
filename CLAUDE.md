@@ -74,7 +74,7 @@ BetterTradersGuild v1.1.0 CWTL incident).
 
 ### Key Patterns
 
-**Mod-active checks from C#:** always `ModDetection.IsActive(packageId)` (`Utilities/ModDetection.cs`), never `ModsConfig.IsActive(string)`: the latter is an exact match on the stored ids, and Steam Workshop installs are stored with a `_steam` postfix, so it is false for every Workshop build. The engine's own `MayRequire`/`IfModActive` gates are postfix-tolerant, so XML never had the problem.
+**Mod-active checks from C#:** always `ModDetection.IsActive(packageId)` (`Utilities/ModDetection.cs`), never `ModsConfig.IsActive(string)`: the latter is an exact match on the stored ids, and when a packageId is installed both locally and from the Workshop, the Workshop copy is stored with a `_steam` postfix, so the exact match misses it whenever that copy is the active one (a Workshop-only install keeps the plain id; decompile-verified in `ModLister.TryAddMod` on 1.6 and 1.7). The engine's own `MayRequire`/`IfModActive` gates are postfix-tolerant, so XML never had the problem.
 
 **Namespace Convention:** Use `*Patches` suffix for patch namespaces to avoid RimWorld type conflicts.
 

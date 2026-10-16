@@ -11,15 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Customization dialog previews now draw through the game's own item icon renderer instead of an offscreen render pass.
-- Settings reset button now uses the game's own translated "Restore defaults" label.
-
-### Fixed
-
-- Vanilla Skills Expanded integration now works with the Steam Workshop version of the mod.
-- Customization preview now fits its box for weapons that draw larger than their footprint.
-- An error inside the customization dialog no longer leaves the rest of the screen drawing with the wrong font, color or clipping.
-- The customize menu option no longer fails when another mod's weapon has a broken label.
+- Hardened the customization dialog so an error inside it no longer breaks the rest of the UI.
+- Hardened the customize menu option against weapons with broken labels.
+- Preview now uses the game's own icon renderer.
+- Reset button now uses vanilla's translated "Restore defaults" label.
 
 ## [1.7.0] - 2026-10-15
 
