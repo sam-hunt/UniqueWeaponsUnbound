@@ -101,73 +101,77 @@ namespace UniqueWeaponsUnbound
                     Rect chipsInnerRect = new Rect(0f, 0f, innerWidth, chipsContentHeight);
 
                     Widgets.BeginScrollView(chipsOuterRect, ref desiredTraitsScroll, chipsInnerRect);
-
-                    float chipY = 0f;
-                    foreach (WeaponTraitDef trait in desiredTraits)
+                    try
                     {
-                        Rect chipRect = new Rect(0f, chipY, innerWidth, TraitRowHeight);
-
-                        // Chip background with hover highlight
-                        bool hovered = Mouse.IsOver(chipRect);
-                        Widgets.DrawBoxSolid(chipRect, hovered
-                            ? new Color(0.3f, 0.3f, 0.3f, 0.5f)
-                            : new Color(0.2f, 0.2f, 0.2f, 0.4f));
-
-                        // Label — yellow when removing this trait would empty the
-                        // player's pool of available sources for it (progression mode).
-                        bool isLastSource = progressionPool?.IsLastNonHostileSource(trait, originalTraits) == true;
-                        Text.Anchor = TextAnchor.MiddleLeft;
-                        Rect labelRect = new Rect(
-                            chipRect.x + 4f, chipRect.y,
-                            chipRect.width * 0.5f, chipRect.height);
-                        Color prevLabelColor = GUI.color;
-                        if (isLastSource)
-                            GUI.color = ColorLibrary.Yellow;
-                        Widgets.Label(labelRect, trait.LabelCap);
-                        GUI.color = prevLabelColor;
-
-                        // Cost icons (right-aligned) — only for newly added traits
-                        if (!originalTraits.Contains(trait))
+                        float chipY = 0f;
+                        foreach (WeaponTraitDef trait in desiredTraits)
                         {
-                            List<ThingDefCountClass> chipCosts = GetAdditionCost(trait);
-                            Rect chipCostRect = new Rect(
-                                labelRect.xMax, chipRect.y,
-                                chipRect.xMax - labelRect.xMax - 4f, chipRect.height);
-                            DrawCostIcons(chipCostRect, chipCosts, rightAlign: true,
-                                insufficientResources: insufficientResources);
+                            Rect chipRect = new Rect(0f, chipY, innerWidth, TraitRowHeight);
+
+                            // Chip background with hover highlight
+                            bool hovered = Mouse.IsOver(chipRect);
+                            Widgets.DrawBoxSolid(chipRect, hovered
+                                ? new Color(0.3f, 0.3f, 0.3f, 0.5f)
+                                : new Color(0.2f, 0.2f, 0.2f, 0.4f));
+
+                            // Label — yellow when removing this trait would empty the
+                            // player's pool of available sources for it (progression mode).
+                            bool isLastSource = progressionPool?.IsLastNonHostileSource(trait, originalTraits) == true;
+                            Text.Anchor = TextAnchor.MiddleLeft;
+                            Rect labelRect = new Rect(
+                                chipRect.x + 4f, chipRect.y,
+                                chipRect.width * 0.5f, chipRect.height);
+                            Color prevLabelColor = GUI.color;
+                            if (isLastSource)
+                                GUI.color = ColorLibrary.Yellow;
+                            Widgets.Label(labelRect, trait.LabelCap);
+                            GUI.color = prevLabelColor;
+
+                            // Cost icons (right-aligned) — only for newly added traits
+                            if (!originalTraits.Contains(trait))
+                            {
+                                List<ThingDefCountClass> chipCosts = GetAdditionCost(trait);
+                                Rect chipCostRect = new Rect(
+                                    labelRect.xMax, chipRect.y,
+                                    chipRect.xMax - labelRect.xMax - 4f, chipRect.height);
+                                DrawCostIcons(chipCostRect, chipCosts, rightAlign: true,
+                                    insufficientResources: insufficientResources);
+                            }
+
+                            Text.Anchor = TextAnchor.UpperLeft;
+
+                            // Tooltip (same as traits tab). The "last source" warning
+                            // gets its own tooltip box stacked alongside, so it reads as
+                            // a distinct alert rather than being lost at the bottom of
+                            // a long stat block.
+                            string tooltip = BuildTraitTooltip(trait);
+                            if (!string.IsNullOrEmpty(tooltip))
+                                TooltipHandler.TipRegion(chipRect, tooltip);
+                            if (isLastSource)
+                            {
+                                // Color the tooltip body to match the chip's yellow label,
+                                // so the visual cue and the explanatory tip share an identity.
+                                // Hex matches ColorLibrary.Yellow (#ffff14).
+                                TooltipHandler.TipRegion(chipRect,
+                                    "<color=#ffff14>" + "UWU_LastTraitSourceWarning".Translate() + "</color>");
+                            }
+
+                            // Click: switch to traits tab and scroll trait into view
+                            if (Widgets.ButtonInvisible(chipRect))
+                            {
+                                activeTab = 0;
+                                int traitIndex = compatibleTraits.IndexOf(trait);
+                                if (traitIndex >= 0)
+                                    traitListScroll.y = traitIndex * (TraitRowHeight + TraitRowGap);
+                            }
+
+                            chipY += chipStride;
                         }
-
-                        Text.Anchor = TextAnchor.UpperLeft;
-
-                        // Tooltip (same as traits tab). The "last source" warning
-                        // gets its own tooltip box stacked alongside, so it reads as
-                        // a distinct alert rather than being lost at the bottom of
-                        // a long stat block.
-                        string tooltip = BuildTraitTooltip(trait);
-                        if (!string.IsNullOrEmpty(tooltip))
-                            TooltipHandler.TipRegion(chipRect, tooltip);
-                        if (isLastSource)
-                        {
-                            // Color the tooltip body to match the chip's yellow label,
-                            // so the visual cue and the explanatory tip share an identity.
-                            // Hex matches ColorLibrary.Yellow (#ffff14).
-                            TooltipHandler.TipRegion(chipRect,
-                                "<color=#ffff14>" + "UWU_LastTraitSourceWarning".Translate() + "</color>");
-                        }
-
-                        // Click: switch to traits tab and scroll trait into view
-                        if (Widgets.ButtonInvisible(chipRect))
-                        {
-                            activeTab = 0;
-                            int traitIndex = compatibleTraits.IndexOf(trait);
-                            if (traitIndex >= 0)
-                                traitListScroll.y = traitIndex * (TraitRowHeight + TraitRowGap);
-                        }
-
-                        chipY += chipStride;
                     }
-
-                    Widgets.EndScrollView();
+                    finally
+                    {
+                        Widgets.EndScrollView();
+                    }
                 }
 
                 bool hasSurplus = currentSurplus?.Count > 0;

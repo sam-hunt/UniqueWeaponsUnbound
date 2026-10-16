@@ -73,16 +73,20 @@ namespace UniqueWeaponsUnbound
                     traitListOuterRect.width - 16f, totalTraitHeight);
 
                 Widgets.BeginScrollView(traitListOuterRect, ref traitListScroll, traitListInnerRect);
-
-                float scrollY = 0f;
-                foreach (WeaponTraitDef trait in compatibleTraits)
+                try
                 {
-                    if (ShouldShowTrait(trait))
-                        DrawTraitRow(traitListInnerRect.x, ref scrollY,
-                            traitListInnerRect.width, trait);
+                    float scrollY = 0f;
+                    foreach (WeaponTraitDef trait in compatibleTraits)
+                    {
+                        if (ShouldShowTrait(trait))
+                            DrawTraitRow(traitListInnerRect.x, ref scrollY,
+                                traitListInnerRect.width, trait);
+                    }
                 }
-
-                Widgets.EndScrollView();
+                finally
+                {
+                    Widgets.EndScrollView();
+                }
             }
             curY += traitListHeight;
 

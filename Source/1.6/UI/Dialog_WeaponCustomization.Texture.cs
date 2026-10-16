@@ -42,56 +42,60 @@ namespace UniqueWeaponsUnbound
 
             Rect innerRect = new Rect(0f, 0f, scrollWidth, innerHeight);
             Widgets.BeginScrollView(rect, ref textureTabScroll, innerRect);
-
-            float curY = 0f;
-            int col = 0;
-            for (int k = 0; k < cellCount; k++)
+            try
             {
-                int variantIndex = uniqueVariantIndexes[k];
-                Rect cellRect = new Rect(
-                    col * (TextureCellSize + TextureCellGap),
-                    curY,
-                    TextureCellSize,
-                    TextureCellSize);
-
-                // Cell background
-                Widgets.DrawBoxSolid(cellRect, new Color(0.15f, 0.15f, 0.15f, 0.5f));
-
-                // Draw texture variant preview (array is cell-indexed)
-                if (textureVariantPreviews != null
-                    && k < textureVariantPreviews.Length
-                    && textureVariantPreviews[k] != null)
+                float curY = 0f;
+                int col = 0;
+                for (int k = 0; k < cellCount; k++)
                 {
-                    Rect previewRect = cellRect.ContractedBy(8f);
-                    GUI.DrawTexture(previewRect, textureVariantPreviews[k],
-                        ScaleMode.ScaleToFit, true);
-                }
+                    int variantIndex = uniqueVariantIndexes[k];
+                    Rect cellRect = new Rect(
+                        col * (TextureCellSize + TextureCellGap),
+                        curY,
+                        TextureCellSize,
+                        TextureCellSize);
 
-                // Selected highlight (no border on unselected)
-                if (IsSelectedVariantCell(variantIndex))
-                {
-                    Widgets.DrawBox(cellRect, 2);
-                    GUI.color = Color.white;
-                    Widgets.DrawBox(cellRect, 3);
-                }
+                    // Cell background
+                    Widgets.DrawBoxSolid(cellRect, new Color(0.15f, 0.15f, 0.15f, 0.5f));
 
-                // Hover highlight
-                if (Mouse.IsOver(cellRect))
-                    Widgets.DrawHighlight(cellRect);
+                    // Draw texture variant preview (array is cell-indexed)
+                    if (textureVariantPreviews != null
+                        && k < textureVariantPreviews.Length
+                        && textureVariantPreviews[k] != null)
+                    {
+                        Rect previewRect = cellRect.ContractedBy(8f);
+                        GUI.DrawTexture(previewRect, textureVariantPreviews[k],
+                            ScaleMode.ScaleToFit, true);
+                    }
 
-                // Click to select
-                if (Widgets.ButtonInvisible(cellRect))
-                    desiredTextureIndex = variantIndex;
+                    // Selected highlight (no border on unselected)
+                    if (IsSelectedVariantCell(variantIndex))
+                    {
+                        Widgets.DrawBox(cellRect, 2);
+                        GUI.color = Color.white;
+                        Widgets.DrawBox(cellRect, 3);
+                    }
 
-                col++;
-                if (col >= cols)
-                {
-                    col = 0;
-                    curY += TextureCellSize + TextureCellGap;
+                    // Hover highlight
+                    if (Mouse.IsOver(cellRect))
+                        Widgets.DrawHighlight(cellRect);
+
+                    // Click to select
+                    if (Widgets.ButtonInvisible(cellRect))
+                        desiredTextureIndex = variantIndex;
+
+                    col++;
+                    if (col >= cols)
+                    {
+                        col = 0;
+                        curY += TextureCellSize + TextureCellGap;
+                    }
                 }
             }
-
-            Widgets.EndScrollView();
+            finally
+            {
+                Widgets.EndScrollView();
+            }
         }
     }
 }
