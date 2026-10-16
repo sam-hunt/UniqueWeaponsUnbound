@@ -7,15 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Entries are short one-liners ready to paste as Steam Workshop change notes: what changed for the player, no rationale, no def names, no sub-bullets. -->
 
-## [Unreleased]
+## [1.7.1] - 2026-10-16
 
 ### Changed
 
 - Customization dialog previews now draw through the game's own item icon renderer instead of an offscreen render pass.
+- Settings reset button now uses the game's own translated "Restore defaults" label.
 
 ### Fixed
 
 - Vanilla Skills Expanded integration now works with the Steam Workshop version of the mod.
+- Customization preview now fits its box for weapons that draw larger than their footprint.
+- An error inside the customization dialog no longer leaves the rest of the screen drawing with the wrong font, color or clipping.
+- The customize menu option no longer fails when another mod's weapon has a broken label.
 
 ## [1.7.0] - 2026-10-15
 
@@ -253,6 +257,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.7.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.1
 [1.7.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.0
 [1.6.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.6.0
 [1.5.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.5.2
