@@ -2,7 +2,7 @@
 
 ## Features
 
-- can we use defmodextension for the gizmo instead of a patch?
+- can we use defmodextension for the customize gizmo instead of a patch?
 - Mod setting: quality cost influence slider (0–200% scale on the quality
   multiplier's effect on trait costs; deferred 2026-08-02 while the rarity cap
   and complexity floor sliders bed in)
@@ -34,7 +34,3 @@
   items above (`UWU_Blood`'s ungating comment and the Alpha Armoury TODOs) —
   no other gating exclusions exist today.
 - Dedupe glossary/Japanese.md's UMW melee-term block against UniqueMeleeWeapons' own glossary/Japanese.md (both hold a copy since the 2026-08-18 l10n consolidation)
-
-## Pre-release checks
-
-- Verify the gizmo texture fix in-game: switch language from the main menu without restarting, then confirm the customize gizmo icon still renders (then switch back).
