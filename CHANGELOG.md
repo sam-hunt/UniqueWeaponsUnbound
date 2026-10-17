@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Entries are short one-liners ready to paste as Steam Workshop change notes: what changed for the player, no rationale, no def names, no sub-bullets. -->
 
+## [1.7.2] - 2026-10-17
+
+### Changed
+
+- Mod preview image now shows RimWorld 1.7.
+
 ## [1.7.1] - 2026-10-16
 
 ### Changed
@@ -252,6 +258,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.7.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.2
 [1.7.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.1
 [1.7.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.0
 [1.6.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.6.0
