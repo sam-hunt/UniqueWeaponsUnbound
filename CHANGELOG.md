@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Entries are short one-liners ready to paste as Steam Workshop change notes: what changed for the player, no rationale, no def names, no sub-bullets. -->
 
+## [Unreleased]
+
+### Changed
+
+- Smaller download: the shipped XML no longer carries developer comments, and every image is recompressed without any change to the pixels
+
 ## [1.7.2] - 2026-10-17
 
 ### Changed

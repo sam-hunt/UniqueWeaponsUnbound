@@ -152,8 +152,58 @@
     </ItemGroup>
     <RemoveDir Directories="$(StageDir)" />
     <Copy SourceFiles="@(_ModFiles)" DestinationFiles="@(_ModFiles->'%(Dest)')" />
-    <Message Text="Staged @(_ModFiles->Count()) mod files -> $(StageDir)" Importance="high" />
+    <!-- Comments never ship. Every staged .xml is rewritten without its comment nodes
+         (the def headers, the patch rationale, the EN: lines the translation checker
+         keys on), which is the bulk of the XML bytes the Workshop page counts. Only the
+         staged copy changes: the checker, the probe and the tests read the repo, and the
+         smoke test boots this stripped copy, so it is what gets exercised. A file with
+         no comment is copied byte-for-byte; a stripped file is re-indented by the
+         writer, which the game's XmlDocument loader does not care about. -->
+    <StripXmlComments Files="@(_ModFiles->'%(Dest)')">
+      <Output TaskParameter="Stripped" PropertyName="_StrippedXmlCount" />
+    </StripXmlComments>
+    <Message Text="Staged @(_ModFiles->Count()) mod files ($(_StrippedXmlCount) XML files stripped of comments) -> $(StageDir)" Importance="high" />
   </Target>
+
+  <!-- Inline task behind StageMod's comment strip: XDocument in, comment nodes removed,
+       written back as UTF-8 without a BOM and with Unix newlines. Whitespace-only text
+       between elements is dropped by the loader and recreated by the indenting writer;
+       text inside an element is kept verbatim, so every value the game reads is
+       unchanged. Nothing but .xml is touched. -->
+  <UsingTask TaskName="StripXmlComments" TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <Stripped ParameterType="System.Int32" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Xml" />
+      <Using Namespace="System.Xml.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        var settings = new XmlWriterSettings
+        {
+            Indent = true,
+            IndentChars = "  ",
+            NewLineChars = "\n",
+            Encoding = new UTF8Encoding(false),
+        };
+        foreach (var item in Files)
+        {
+            var path = item.ItemSpec;
+            if (!path.EndsWith(".xml", StringComparison.OrdinalIgnoreCase)) continue;
+            var doc = XDocument.Load(path);
+            var comments = doc.DescendantNodes().OfType<XComment>().ToList();
+            if (comments.Count == 0) continue;
+            foreach (var c in comments) c.Remove();
+            using (var writer = XmlWriter.Create(path, settings)) doc.Save(writer);
+            Stripped++;
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
 
   <!-- After every local Release build, atomically redeploy into the RimWorld Mods
        folder. Release-only: `dotnet test` builds Debug by default via a Tests
