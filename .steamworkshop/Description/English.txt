@@ -59,7 +59,7 @@ Customization is gated behind three tiers of research that mirror weapon craftin
 [*]Safe to remove from saves (safe-to-ignore red errors only)
 [*]Automatically compatible with mods that add new unique weapons, weapon traits, or crafting recipes. No hard-coded def references
 [*]Modded workbenches that inherit vanilla weapon recipes are detected automatically
-[*]Works with CE, PUAH, Ideology, Simple sidearms, Make it Unique, Alpha Armory
+[*]Works with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2890901044]CE[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1279012058]PUAH[/url], Ideology, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=927155256]Simple sidearms[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3550576656]Make it Unique[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3622294464]Alpha Armoury[/url]
 [*]Modders can extend the cost pipeline with XML-only rules or custom C# workers (see [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Modder's Guide[/url]). The XML API is pretty basic at the moment, but it will be getting some major love soon.
 [/list]
 
