@@ -2,7 +2,15 @@
 
 Publishing metadata for the mod's Steam Workshop page. Nothing in this folder
 ships with the mod (the StageMod manifest never matches it) or is loaded by
-RimWorld. A `Media/` folder for Workshop images can live here later.
+RimWorld.
+
+## Images/
+
+The page's gallery images, uploaded by hand through the page's images and
+videos UI. Steam takes still images and GIFs only, no video files such as
+MP4, and rejects any image of 2 MB or more, so a gameplay clip has to be a GIF
+cut down to fit (lower frame rate, scale and palette) from a screen recording
+kept outside the repo.
 
 ## Description/
 
