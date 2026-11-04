@@ -162,6 +162,11 @@ class appears as the namespace-qualified `UniqueWeaponsUnbound.TraitCostRuleDef`
 sidecar and `DefInjected/`. The public language roster lives in CONTRIBUTING.md and must move in
 the same commit as any language change.
 
+- **Player-facing text follows `l10n/languages/English.md`** (def labels and descriptions, `Keyed/`,
+  `About.xml`, `.steamworkshop/`): read it before writing or changing any. Its mechanical rules (no
+  dashes, semicolons, "Whether" openers or parenthetical asides) are checked by
+  `Scripts/check-translations.py` as `[player text]` warnings, which `--strict` turns into release
+  errors. Code comments, def comments and this file are unaffected.
 - **Shared l10n toolkit (`l10n/` submodule):** the family-wide translation process, per-language
   mechanics references, cross-language lessons, Workshop conventions, and the checker/refresh
   script engines live in the `rimworld-l10n` repo, consumed here as the `l10n/` git submodule

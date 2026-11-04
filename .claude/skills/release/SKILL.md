@@ -101,6 +101,14 @@ python3 Scripts/check-translations.py --strict
   ~1-2 min; the L10nProbe dev mod dumps every DefInjected key the live game
   expects, then quits). This is what surfaces vanilla-inherited and
   C#-default strings a def-XML scan cannot see. Report its diff summary.
+- Player text register: diff the English player-facing text since the last
+  stable tag (Keyed, def labels and descriptions, `About.xml`, the English
+  Workshop page) and read every changed string against
+  `l10n/languages/English.md` § 2. The checker's `[player text]` warnings
+  cover the mechanical tells and fail this step under `--strict`; this read
+  covers the judgment ones (a sentence frame repeated across strings,
+  telegraphese, tricolons, coinages). Fix the English before any translation
+  step, since a tell in the English ships in every language.
 - If the diff shows **added or changed keys**, translate them in every
   language now (the `translate` skill's update pass), then rerun the checker.
 - Report the per-language checker result (missing keys, stale entries,
