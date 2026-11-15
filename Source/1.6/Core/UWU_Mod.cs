@@ -23,6 +23,11 @@ namespace UniqueWeaponsUnbound
         // re-derives.
         private static bool? skillCheckExpanded;
 
+        // The declared defaults, read off a fresh instance so the tooltips'
+        // "Default: {0}." and the sliders' "(default)" suffix cannot drift
+        // from the field initializers in UWU_Settings.
+        private static readonly UWU_Settings Defaults = new UWU_Settings();
+
         public UWU_Mod(ModContentPack content) : base(content)
         {
             Settings = GetSettings<UWU_Settings>();
@@ -61,7 +66,7 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_RestrictTraitsToDiscovered".Translate(),
                 ref Settings.restrictTraitsToDiscovered,
-                "UWU_RestrictTraitsToDiscoveredDesc".Translate());
+                "UWU_RestrictTraitsToDiscoveredDesc".Translate(StateWord(Defaults.restrictTraitsToDiscovered)).Resolve());
 
             listing.Gap(18.0f);
 
@@ -73,22 +78,23 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_UseRecipeBaseCost".Translate(),
                 ref Settings.useRecipeBaseCost,
-                "UWU_UseRecipeBaseCostDesc".Translate());
+                "UWU_UseRecipeBaseCostDesc".Translate(StateWord(Defaults.useRecipeBaseCost)).Resolve());
 
             listing.Gap();
 
-            string costPct = (Settings.traitCostMultiplier * 100f).ToString("F0");
+            string costPct = PercentText(Settings.traitCostMultiplier);
             string costLabel = "UWU_TraitCostMultiplier".Translate(costPct);
-            if (Settings.traitCostMultiplier == 1f)
+            if (Settings.traitCostMultiplier == Defaults.traitCostMultiplier)
                 costLabel += "UWU_DefaultSuffix".Translate();
-            listing.Label(costLabel);
+            listing.Label(costLabel, tooltip: "UWU_TraitCostMultiplierDesc".Translate(
+                PercentText(Defaults.traitCostMultiplier)));
             Settings.traitCostMultiplier = listing.Slider(Settings.traitCostMultiplier, 0f, 5f);
             Settings.traitCostMultiplier = Mathf.Round(Settings.traitCostMultiplier * 20f) / 20f;
 
             bool costsFree = Settings.traitCostMultiplier == 0f;
-            string refundPct = (Settings.traitRefundRate * 100f).ToString("F0");
+            string refundPct = PercentText(Settings.traitRefundRate);
             string refundLabel = "UWU_TraitRefundRate".Translate(refundPct);
-            if (Settings.traitRefundRate == 0.5f)
+            if (Settings.traitRefundRate == Defaults.traitRefundRate)
                 refundLabel += "UWU_DefaultSuffix".Translate();
             if (costsFree)
             {
@@ -97,7 +103,8 @@ namespace UniqueWeaponsUnbound
             }
             else
             {
-                listing.Label(refundLabel);
+                listing.Label(refundLabel, tooltip: "UWU_TraitRefundRateDesc".Translate(
+                    PercentText(Defaults.traitRefundRate)));
                 Settings.traitRefundRate = listing.Slider(Settings.traitRefundRate, 0f, 1f);
                 Settings.traitRefundRate = Mathf.Round(Settings.traitRefundRate * 20f) / 20f;
             }
@@ -106,7 +113,7 @@ namespace UniqueWeaponsUnbound
 
             string rarityCapText = Settings.rarityCostCap.ToString("0.##");
             string rarityCapLabel = "UWU_RarityCostCap".Translate(rarityCapText);
-            if (Settings.rarityCostCap == 2f)
+            if (Settings.rarityCostCap == Defaults.rarityCostCap)
                 rarityCapLabel += "UWU_DefaultSuffix".Translate();
             if (costsFree)
             {
@@ -115,16 +122,17 @@ namespace UniqueWeaponsUnbound
             }
             else
             {
-                listing.Label(rarityCapLabel, tooltip: "UWU_RarityCostCapDesc".Translate());
+                listing.Label(rarityCapLabel, tooltip: "UWU_RarityCostCapDesc".Translate(
+                    Defaults.rarityCostCap.ToString("0.##")));
                 Settings.rarityCostCap = listing.Slider(Settings.rarityCostCap, 1f, 4f);
                 Settings.rarityCostCap = Mathf.Round(Settings.rarityCostCap * 4f) / 4f;
             }
 
             listing.Gap();
 
-            string floorPct = (Settings.complexityFloorScale * 100f).ToString("F0");
+            string floorPct = PercentText(Settings.complexityFloorScale);
             string floorLabel = "UWU_ComplexityFloorScale".Translate(floorPct);
-            if (Settings.complexityFloorScale == 1f)
+            if (Settings.complexityFloorScale == Defaults.complexityFloorScale)
                 floorLabel += "UWU_DefaultSuffix".Translate();
             if (costsFree)
             {
@@ -133,7 +141,8 @@ namespace UniqueWeaponsUnbound
             }
             else
             {
-                listing.Label(floorLabel, tooltip: "UWU_ComplexityFloorScaleDesc".Translate());
+                listing.Label(floorLabel, tooltip: "UWU_ComplexityFloorScaleDesc".Translate(
+                    PercentText(Defaults.complexityFloorScale)));
                 Settings.complexityFloorScale = listing.Slider(Settings.complexityFloorScale, 0f, 2f);
                 Settings.complexityFloorScale = Mathf.Round(Settings.complexityFloorScale * 20f) / 20f;
             }
@@ -146,11 +155,12 @@ namespace UniqueWeaponsUnbound
             listing.Gap(6f);
 
             string qualityLabel = "UWU_MinimumQuality".Translate(Settings.minimumQuality.GetLabel());
-            if (Settings.minimumQuality == QualityCategory.Awful)
+            if (Settings.minimumQuality == Defaults.minimumQuality)
                 qualityLabel += "UWU_DefaultSuffix".Translate();
             else if (Settings.minimumQuality == QualityCategory.Normal)
                 qualityLabel += "UWU_RecommendedSuffix".Translate();
-            listing.Label(qualityLabel, tooltip: "UWU_MinimumQualityDesc".Translate());
+            listing.Label(qualityLabel, tooltip: "UWU_MinimumQualityDesc".Translate(
+                Defaults.minimumQuality.GetLabel()));
             float qualityValue = (int)Settings.minimumQuality;
             qualityValue = listing.Slider(qualityValue, 0f, (int)QualityCategory.Legendary);
             Settings.minimumQuality = (QualityCategory)Mathf.RoundToInt(qualityValue);
@@ -160,7 +170,7 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_AllowDefConversion".Translate(),
                 ref Settings.allowDefConversion,
-                "UWU_AllowDefConversionDesc".Translate());
+                "UWU_AllowDefConversionDesc".Translate(StateWord(Defaults.allowDefConversion)).Resolve());
 
             listing.Gap();
 
@@ -170,28 +180,32 @@ namespace UniqueWeaponsUnbound
                 "UWU_RequireCustomizationResearchDesc".Translate(
                     UWU_ResearchDefOf.UniqueSmithing.label,
                     UWU_ResearchDefOf.UniqueMachining.label,
-                    UWU_ResearchDefOf.UniqueFabrication.label));
+                    UWU_ResearchDefOf.UniqueFabrication.label,
+                    StateWord(Defaults.requireCustomizationResearch)).Resolve());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
                 "UWU_RequireRecipeResearch".Translate(),
                 ref Settings.requireRecipeResearch,
-                "UWU_RequireRecipeResearchDesc".Translate(UWU_ThingDefOf.Gun_ChargeRifle.label, UWU_ResearchDefOf.ChargedShot.label));
+                "UWU_RequireRecipeResearchDesc".Translate(
+                    UWU_ThingDefOf.Gun_ChargeRifle.label,
+                    UWU_ResearchDefOf.ChargedShot.label,
+                    StateWord(Defaults.requireRecipeResearch)).Resolve());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
                 "UWU_RequireWorkbench".Translate(),
                 ref Settings.requireAppropriateWorkbench,
-                "UWU_RequireWorkbenchDesc".Translate());
+                "UWU_RequireWorkbenchDesc".Translate(StateWord(Defaults.requireAppropriateWorkbench)).Resolve());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
                 "UWU_AllowUncraftable".Translate(),
                 ref Settings.allowUncraftableCustomization,
-                "UWU_AllowUncraftableDesc".Translate());
+                "UWU_AllowUncraftableDesc".Translate(StateWord(Defaults.allowUncraftableCustomization)).Resolve());
 
             listing.Gap();
 
@@ -217,7 +231,9 @@ namespace UniqueWeaponsUnbound
                 listing.CheckboxLabeled(
                     "UWU_AllowUltratech".Translate(),
                     ref Settings.allowUltratechCustomization,
-                    "UWU_AllowUltratechDesc".Translate(UWU_ResearchDefOf.UniqueFabrication.label));
+                    "UWU_AllowUltratechDesc".Translate(
+                        UWU_ResearchDefOf.UniqueFabrication.label,
+                        StateWord(Defaults.allowUltratechCustomization)).Resolve());
             }
 
             listing.Gap();
@@ -225,7 +241,9 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_AllowArchotech".Translate(),
                 ref Settings.allowArchotechCustomization,
-                "UWU_AllowArchotechDesc".Translate(UWU_ResearchDefOf.UniqueFabrication.label));
+                "UWU_AllowArchotechDesc".Translate(
+                    UWU_ResearchDefOf.UniqueFabrication.label,
+                    StateWord(Defaults.allowArchotechCustomization)).Resolve());
 
             listing.Gap();
 
@@ -266,7 +284,7 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_EnableGroundCustomization".Translate(),
                 ref Settings.enableGroundCustomization,
-                "UWU_EnableGroundCustomizationDesc".Translate());
+                "UWU_EnableGroundCustomizationDesc".Translate(StateWord(Defaults.enableGroundCustomization)).Resolve());
 
             listing.Gap();
 
@@ -275,7 +293,8 @@ namespace UniqueWeaponsUnbound
                 listing.CheckboxLabeled(
                     "UWU_EnableIdeoColors".Translate(),
                     ref Settings.enableIdeologyColors,
-                    "UWU_EnableIdeoColorsDesc".Translate());
+                    "UWU_EnableIdeoColorsDesc".Translate(
+                        StateWord(Defaults.enableIdeologyColors)).Resolve());
 
                 listing.Gap();
             }
@@ -283,28 +302,28 @@ namespace UniqueWeaponsUnbound
             listing.CheckboxLabeled(
                 "UWU_EnableStructureColors".Translate(),
                 ref Settings.enableStructureColors,
-                "UWU_EnableStructureColorsDesc".Translate());
+                "UWU_EnableStructureColorsDesc".Translate(StateWord(Defaults.enableStructureColors)).Resolve());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
                 "UWU_EnforceTraitColors".Translate(),
                 ref Settings.enforceTraitColors,
-                "UWU_EnforceTraitColorsDesc".Translate());
+                "UWU_EnforceTraitColorsDesc".Translate(StateWord(Defaults.enforceTraitColors)).Resolve());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
                 "UWU_EnforceMaxTraitLimit".Translate(),
                 ref Settings.enforceMaxTraitLimit,
-                "UWU_EnforceMaxTraitLimitDesc".Translate());
+                "UWU_EnforceMaxTraitLimitDesc".Translate(StateWord(Defaults.enforceMaxTraitLimit)).Resolve());
 
             listing.Gap();
 
             listing.CheckboxLabeled(
                 "UWU_EnforceSoleTrait".Translate(),
                 ref Settings.enforceCanGenerateAlone,
-                "UWU_EnforceSoleTraitDesc".Translate());
+                "UWU_EnforceSoleTraitDesc".Translate(StateWord(Defaults.enforceCanGenerateAlone)).Resolve());
 
             listing.Gap(60f);
 
@@ -348,7 +367,8 @@ namespace UniqueWeaponsUnbound
 
             bool expanded = skillCheckExpanded.Value;
             listing.CheckboxLabeled("UWU_SkillCheckEnable".Translate(), ref expanded,
-                "UWU_SkillCheckEnableDesc".Translate());
+                "UWU_SkillCheckEnableDesc".Translate(
+                    StateWord(Defaults.skillCheckSubject != SkillCheckSubject.None)).Resolve());
             if (expanded != skillCheckExpanded.Value)
             {
                 skillCheckExpanded = expanded;
@@ -430,7 +450,9 @@ namespace UniqueWeaponsUnbound
             // (no "(default)" suffix here — on a radio row it would read as the
             // default option rather than the default level).
             string flatLabel = "UWU_SkillCheckKindFlat".Translate(flatLevel);
-            string flatTip = enabled ? "UWU_SkillCheckKindFlatDesc".Translate() : inertTip;
+            string flatTip = enabled
+                ? "UWU_SkillCheckKindFlatDesc".Translate(Defaults.skillCheckMinimumLevel)
+                : inertTip;
             if (DrawRadioOption(listing, flatLabel, flatTip,
                 active: effective == SkillCheckKind.FlatMinimum,
                 enabled: enabled, tabIn: optionTab))
@@ -485,6 +507,19 @@ namespace UniqueWeaponsUnbound
                 Settings.skillCheckSubject = subject;
             }
         }
+
+        // A 0..1 (or wider) fraction as the whole-number percentage the slider
+        // labels and their tooltips' defaults show; the "%" itself is in the
+        // Keyed strings.
+        private static string PercentText(float fraction) => (fraction * 100f).ToString("F0");
+
+        // A checkbox's default as its tooltip names it, in the colours of the
+        // box's two states. Colorize returns a tagged plain string, so the
+        // composed tooltip needs Resolve() rather than the implicit
+        // TaggedString-to-string conversion, which strips the colour tags.
+        private static string StateWord(bool enabled) => enabled
+            ? "UWU_Enabled".Translate().Colorize(Color.green)
+            : "UWU_Disabled".Translate().Colorize(ColorLibrary.RedReadable);
 
         // The per-tier minimums for the radio tooltips ("neolithic 4, medieval
         // 5, ..."), read from the rule table so the text can't drift from the

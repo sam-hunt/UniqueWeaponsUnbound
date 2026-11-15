@@ -129,40 +129,46 @@
   <UWU_VanillaSuffix> (vanilla)</UWU_VanillaSuffix>
   <UWU_ExperimentalSuffix> (experimental)</UWU_ExperimentalSuffix>
 
+  <!-- Settings: A checkbox's default, as the last argument of its tooltip ("Default: {0}.") -->
+  <UWU_Enabled>enabled</UWU_Enabled>
+  <UWU_Disabled>disabled</UWU_Disabled>
+
   <!-- Settings: Trait costs -->
   <UWU_TraitCostMultiplier>Trait cost multiplier: {0}%</UWU_TraitCostMultiplier>
+  <UWU_TraitCostMultiplierDesc>Adjust the material cost of customizing weapons. At 0%, customization is free. Default: {0}%.</UWU_TraitCostMultiplierDesc>
   <UWU_TraitRefundRate>Trait refund rate: {0}%</UWU_TraitRefundRate>
+  <UWU_TraitRefundRateDesc>The share of a trait's cost that is returned when the trait is removed. Negative traits cost this share to add or remove instead. Default: {0}%.</UWU_TraitRefundRateDesc>
   <UWU_RefundRateNoEffect>The trait refund rate has no effect while the trait cost multiplier is 0%.</UWU_RefundRateNoEffect>
   <UWU_UseRecipeBaseCost>Derive base cost from crafting recipe</UWU_UseRecipeBaseCost>
-  <UWU_UseRecipeBaseCostDesc>When enabled, the cost of adding a trait will be based on the weapon's crafting recipe. When disabled, every weapon of the same tech level will use the same flat cost, so cheap weapons no longer have cheap traits.</UWU_UseRecipeBaseCostDesc>
+  <UWU_UseRecipeBaseCostDesc>When enabled, the cost of adding a trait will be based on the weapon's crafting recipe. When disabled, every weapon of the same tech level will use the same flat cost, so cheap weapons no longer have cheap traits. Default: {0}.</UWU_UseRecipeBaseCostDesc>
   <UWU_RarityCostCap>Rare trait cost cap: {0}x</UWU_RarityCostCap>
-  <UWU_RarityCostCapDesc>A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost.</UWU_RarityCostCapDesc>
+  <UWU_RarityCostCapDesc>A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. Default: {0}x.</UWU_RarityCostCapDesc>
   <UWU_ComplexityFloorScale>Advanced trait minimum cost: {0}%</UWU_ComplexityFloorScale>
-  <UWU_ComplexityFloorScaleDesc>Spacer-tech traits will always cost a minimum number of advanced components, even on weapons made without components, such as melee weapons and bows. At 0%, there is no minimum.</UWU_ComplexityFloorScaleDesc>
+  <UWU_ComplexityFloorScaleDesc>Spacer-tech traits will always cost a minimum number of advanced components, even on weapons made without components, such as melee weapons and bows. At 0%, there is no minimum. Default: {0}%.</UWU_ComplexityFloorScaleDesc>
   <UWU_CostSettingNoEffect>This setting has no effect while the trait cost multiplier is 0%.</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <UWU_MinimumQuality>Minimum weapon quality: {0}</UWU_MinimumQuality>
-  <UWU_MinimumQualityDesc>The lowest quality a weapon can have and still be customized. At awful, every weapon qualifies.</UWU_MinimumQualityDesc>
+  <UWU_MinimumQualityDesc>The lowest quality a weapon can have and still be customized. At awful, every weapon qualifies. Default: {0}.</UWU_MinimumQualityDesc>
   <UWU_RequireCustomizationResearch>Require customization research</UWU_RequireCustomizationResearch>
   <!-- {0} = unique smithing, {1} = unique machining, {2} = unique fabrication (research labels) -->
-  <UWU_RequireCustomizationResearchDesc>When enabled, a weapon can only be customized after researching {0}, {1} or {2}, depending on its tech level. When disabled, these projects will be hidden from the research window.</UWU_RequireCustomizationResearchDesc>
+  <UWU_RequireCustomizationResearchDesc>When enabled, a weapon can only be customized after researching {0}, {1} or {2}, depending on its tech level. When disabled, these projects will be hidden from the research window. Default: {3}.</UWU_RequireCustomizationResearchDesc>
   <UWU_RequireRecipeResearch>Require weapon crafting research</UWU_RequireRecipeResearch>
   <!-- {0} = ChargeRifle label, {1} = pulse-charged munitions (vanilla ChargedShot research label) -->
-  <UWU_RequireRecipeResearchDesc>When enabled, a weapon can only be customized once the research needed to craft it is complete. For example, customizing a {0} will require {1}.</UWU_RequireRecipeResearchDesc>
+  <UWU_RequireRecipeResearchDesc>When enabled, a weapon can only be customized once the research needed to craft it is complete. For example, customizing a {0} will require {1}. Default: {2}.</UWU_RequireRecipeResearchDesc>
   <UWU_RequireWorkbench>Require appropriate workbench</UWU_RequireWorkbench>
-  <UWU_RequireWorkbenchDesc>When enabled, a weapon must be customized at a workbench of its own tech level. When disabled, any workbench that can craft weapons will do.</UWU_RequireWorkbenchDesc>
+  <UWU_RequireWorkbenchDesc>When enabled, a weapon must be customized at a workbench of its own tech level. When disabled, any workbench that can craft weapons will do. Default: {0}.</UWU_RequireWorkbenchDesc>
   <UWU_AllowUncraftable>Allow customizing uncraftable weapons</UWU_AllowUncraftable>
-  <UWU_AllowUncraftableDesc>When enabled, weapons that have no crafting recipe can also be customized.</UWU_AllowUncraftableDesc>
+  <UWU_AllowUncraftableDesc>When enabled, weapons that have no crafting recipe can also be customized. Default: {0}.</UWU_AllowUncraftableDesc>
   <UWU_AllowUltratech>Allow customizing ultratech weapons</UWU_AllowUltratech>
   <!-- {0} = unique fabrication (research label) -->
-  <UWU_AllowUltratechDesc>When enabled, ultratech weapons can be customized once {0} is researched.</UWU_AllowUltratechDesc>
+  <UWU_AllowUltratechDesc>When enabled, ultratech weapons can be customized once {0} is researched. Default: {1}.</UWU_AllowUltratechDesc>
   <UWU_AllowUltratechImpliedDesc>Always enabled while "Allow customizing archotech weapons" is enabled, because both need the same research.</UWU_AllowUltratechImpliedDesc>
   <UWU_AllowArchotech>Allow customizing archotech weapons</UWU_AllowArchotech>
   <!-- {0} = unique fabrication (research label) -->
-  <UWU_AllowArchotechDesc>When enabled, archotech weapons can be customized once {0} is researched.</UWU_AllowArchotechDesc>
+  <UWU_AllowArchotechDesc>When enabled, archotech weapons can be customized once {0} is researched. Default: {1}.</UWU_AllowArchotechDesc>
   <UWU_SkillCheckEnable>Require minimum crafting skill</UWU_SkillCheckEnable>
-  <UWU_SkillCheckEnableDesc>When enabled, customizing a weapon will require crafting skill. The options below set whose skill counts and how much is needed.</UWU_SkillCheckEnableDesc>
+  <UWU_SkillCheckEnableDesc>When enabled, customizing a weapon will require crafting skill. The options below set whose skill counts and how much is needed. Default: {0}.</UWU_SkillCheckEnableDesc>
   <UWU_SkillCheckSubject>Skill check applies to</UWU_SkillCheckSubject>
   <UWU_SkillCheckSubjectDesc>The colonist whose skill must meet the requirement.</UWU_SkillCheckSubjectDesc>
   <UWU_SkillCheckSubjectNone>No one</UWU_SkillCheckSubjectNone>
@@ -186,28 +192,28 @@
   <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
   <UWU_SkillCheckKindTechTierDesc>Require a minimum crafting skill set by the weapon's tech level, ignoring its crafting recipe: {0}.</UWU_SkillCheckKindTechTierDesc>
   <UWU_SkillCheckKindFlat>Minimum crafting skill: {0}</UWU_SkillCheckKindFlat>
-  <UWU_SkillCheckKindFlatDesc>Require at least this crafting skill level for every weapon.</UWU_SkillCheckKindFlatDesc>
+  <UWU_SkillCheckKindFlatDesc>Require at least this crafting skill level for every weapon. Default: {0}.</UWU_SkillCheckKindFlatDesc>
   <UWU_SkillCheckFlatSliderSelects>Adjusting this slider will select "Minimum crafting skill".</UWU_SkillCheckFlatSliderSelects>
   <UWU_SkillCheckKindWeaponsmith>Weaponsmithing expertise (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
   <UWU_SkillCheckKindWeaponsmithDesc>Require the weaponsmithing expertise from Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
 
   <!-- Settings: Miscellaneous -->
   <UWU_AllowDefConversion>Allow making weapons unique</UWU_AllowDefConversion>
-  <UWU_AllowDefConversionDesc>When enabled, adding a trait to a weapon that is not unique will turn it into its unique version, and removing every trait will turn it back. When disabled, only weapons that are already unique can be customized, and one with no traits left will stay unique.</UWU_AllowDefConversionDesc>
+  <UWU_AllowDefConversionDesc>When enabled, adding a trait to a weapon that is not unique will turn it into its unique version, and removing every trait will turn it back. When disabled, only weapons that are already unique can be customized, and one with no traits left will stay unique. Default: {0}.</UWU_AllowDefConversionDesc>
   <UWU_EnableIdeoColors>Enable Ideology color options</UWU_EnableIdeoColors>
-  <UWU_EnableIdeoColorsDesc>Show Ideology and miscellaneous color palettes in the weapon customization color picker.</UWU_EnableIdeoColorsDesc>
+  <UWU_EnableIdeoColorsDesc>Show Ideology and miscellaneous color palettes in the weapon customization color picker. Default: {0}.</UWU_EnableIdeoColorsDesc>
   <UWU_EnableStructureColors>Enable structure color options</UWU_EnableStructureColors>
-  <UWU_EnableStructureColorsDesc>Show the structure color palette in the weapon customization color picker.</UWU_EnableStructureColorsDesc>
+  <UWU_EnableStructureColorsDesc>Show the structure color palette in the weapon customization color picker. Default: {0}.</UWU_EnableStructureColorsDesc>
   <UWU_EnforceTraitColors>Enforce trait colors</UWU_EnforceTraitColors>
-  <UWU_EnforceTraitColorsDesc>Some traits, such as gold inlay and tox rounds, set the color of the weapon. When enabled, a weapon with one of these traits will always use that color. When disabled, adding the trait will select its color, but any other color can be picked instead.</UWU_EnforceTraitColorsDesc>
+  <UWU_EnforceTraitColorsDesc>Some traits, such as gold inlay and tox rounds, set the color of the weapon. When enabled, a weapon with one of these traits will always use that color. When disabled, adding the trait will select its color, but any other color can be picked instead. Default: {0}.</UWU_EnforceTraitColorsDesc>
   <UWU_EnforceMaxTraitLimit>Enforce trait count limit</UWU_EnforceMaxTraitLimit>
-  <UWU_EnforceMaxTraitLimitDesc>Unique weapons found in the world never have more than three traits. When enabled, the same limit will apply to customization. When disabled, a weapon can have any number of traits that do not conflict.</UWU_EnforceMaxTraitLimitDesc>
+  <UWU_EnforceMaxTraitLimitDesc>Unique weapons found in the world never have more than three traits. When enabled, the same limit will apply to customization. When disabled, a weapon can have any number of traits that do not conflict. Default: {0}.</UWU_EnforceMaxTraitLimitDesc>
   <UWU_EnforceSoleTrait>Enforce lone trait restrictions</UWU_EnforceSoleTrait>
-  <UWU_EnforceSoleTraitDesc>Some traits never appear as the only trait on a unique weapon found in the world. When enabled, the same restriction will apply to customization.</UWU_EnforceSoleTraitDesc>
+  <UWU_EnforceSoleTraitDesc>Some traits never appear as the only trait on a unique weapon found in the world. When enabled, the same restriction will apply to customization. Default: {0}.</UWU_EnforceSoleTraitDesc>
   <UWU_RestrictTraitsToDiscovered>Restrict available traits to discovered weapons</UWU_RestrictTraitsToDiscovered>
-  <UWU_RestrictTraitsToDiscoveredDesc>When enabled, only traits found on unique weapons on your maps or in your caravans can be added. Weapons hidden by fog, sealed away or carried by hostiles do not count. When disabled, every trait can be added.</UWU_RestrictTraitsToDiscoveredDesc>
+  <UWU_RestrictTraitsToDiscoveredDesc>When enabled, only traits found on unique weapons on your maps or in your caravans can be added. Weapons hidden by fog, sealed away or carried by hostiles do not count. When disabled, every trait can be added. Default: {0}.</UWU_RestrictTraitsToDiscoveredDesc>
   <UWU_EnableGroundCustomization>Enable ground weapon right-click menu</UWU_EnableGroundCustomization>
-  <UWU_EnableGroundCustomizationDesc>When enabled, right-clicking a weapon on the ground will offer to customize it. When disabled, the right-click menu stays shorter, and weapons can still be customized by selecting them and pressing the Customize button.</UWU_EnableGroundCustomizationDesc>
+  <UWU_EnableGroundCustomizationDesc>When enabled, right-clicking a weapon on the ground will offer to customize it. When disabled, the right-click menu stays shorter, and weapons can still be customized by selecting them and pressing the Customize button. Default: {0}.</UWU_EnableGroundCustomizationDesc>
 
   <!-- Settings: Haul planner -->
   <UWU_HaulPlannerSequential>Sequential</UWU_HaulPlannerSequential>
