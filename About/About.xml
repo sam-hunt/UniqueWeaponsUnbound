@@ -4,7 +4,11 @@
   <author>Sam Hunt</author>
   <packageId>shunter.uniqueweaponsunbound</packageId>
   <modVersion>1.7.2</modVersion>
-  <description>Add, remove, and swap unique weapon traits at workbenches with research gates and recipe-based material costs. Includes color, texture, and name customization. Fully configurable balance.</description>
+  <description>Customize unique weapons at your workbenches. Colonists can add and remove weapon traits, turn a normal weapon into a unique one, and change a weapon's color, texture and name.
+
+Customizing a weapon requires research and costs materials based on the weapon's crafting recipe and the trait being added. The costs and requirements can be adjusted in the mod options.
+
+Requires Odyssey. Works with unique weapons and traits added by other mods.</description>
   <supportedVersions>
     <li>1.6</li>
     <li>1.7</li>

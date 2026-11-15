@@ -4,7 +4,7 @@
   <ResearchProjectDef>
     <defName>UniqueMachining</defName>
     <label>unique machining</label>
-    <description>Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs.</description>
+    <description>Upgrade and customize industrial weapons at a machining table, adding or removing traits to suit your needs.</description>
     <baseCost>1200</baseCost>
     <techLevel>Industrial</techLevel>
     <prerequisites>

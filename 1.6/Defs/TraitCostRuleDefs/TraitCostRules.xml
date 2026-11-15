@@ -6,7 +6,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_BaseCostFromTechLevel</defName>
     <label>base cost from tech level</label>
-    <description>Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components</description>
+    <description>Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components.</description>
     <workerClass>UniqueWeaponsUnbound.TechLevelCostWorker</workerClass>
     <priority>50</priority>
   </UniqueWeaponsUnbound.TraitCostRuleDef>
@@ -54,7 +54,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_ToxSwap</defName>
     <label>toxic component swap</label>
-    <description>Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity.</description>
+    <description>Replaces components with three times as much herbal medicine, reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity.</description>
     <workerClass>UniqueWeaponsUnbound.ToxSwapWorker</workerClass>
     <priority>1000</priority>
     <labelKeywords>
@@ -73,7 +73,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_IncendiarySwap</defName>
     <label>incendiary component swap</label>
-    <description>Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity.</description>
+    <description>Replaces components with ten times as much chemfuel, reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity.</description>
     <workerClass>UniqueWeaponsUnbound.IncendiarySwapWorker</workerClass>
     <priority>1100</priority>
     <labelKeywords>
@@ -139,7 +139,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_HeavyScrap</defName>
     <label>heavy scrap flat cost</label>
-    <description>Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk.</description>
+    <description>Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap, so bolted-on junk is all it takes.</description>
     <workerClass>UniqueWeaponsUnbound.SlagReplacementWorker</workerClass>
     <priority>1500</priority>
     <requireAllKeywords>true</requireAllKeywords>
@@ -348,7 +348,7 @@
   <UniqueWeaponsUnbound.TraitCostRuleDef>
     <defName>UWU_MaterialOverride</defName>
     <label>material override fallback</label>
-    <description>Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule.</description>
+    <description>Detects a material named in the trait label, such as the gold in gold inlay, and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule.</description>
     <workerClass>UniqueWeaponsUnbound.MaterialOverrideWorker</workerClass>
     <priority>9000</priority>
   </UniqueWeaponsUnbound.TraitCostRuleDef>

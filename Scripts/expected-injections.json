@@ -1,6 +1,6 @@
 {
   "meta": {
-    "gameBuild": "1.7.4981 rev136",
+    "gameBuild": "1.7.5005 rev1082",
     "activeDlcs": [
       "Core",
       "Royalty",
@@ -66,7 +66,7 @@
         "required": true
       },
       "UniqueMachining.description": {
-        "english": "Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs.",
+        "english": "Upgrade and customize industrial weapons at a machining table, adding or removing traits to suit your needs.",
         "required": true
       },
       "UniqueMachining.generalRules.rulesStrings": {
@@ -137,7 +137,7 @@
         "required": true
       },
       "UWU_BaseCostFromTechLevel.description": {
-        "english": "Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components",
+        "english": "Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components.",
         "required": true
       },
       "UWU_BaseCostFromTechLevel.label": {
@@ -281,7 +281,7 @@
         "fullListAllowed": true
       },
       "UWU_HeavyScrap.description": {
-        "english": "Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk.",
+        "english": "Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap, so bolted-on junk is all it takes.",
         "required": true
       },
       "UWU_HeavyScrap.label": {
@@ -297,7 +297,7 @@
         "fullListAllowed": true
       },
       "UWU_IncendiarySwap.description": {
-        "english": "Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity.",
+        "english": "Replaces components with ten times as much chemfuel, reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity.",
         "required": true
       },
       "UWU_IncendiarySwap.label": {
@@ -352,7 +352,7 @@
         "fullListAllowed": true
       },
       "UWU_MaterialOverride.description": {
-        "english": "Detects material names in the trait label (e.g. \"gold\" in \"Gold Inlay\") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule.",
+        "english": "Detects a material named in the trait label, such as the gold in gold inlay, and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule.",
         "required": true
       },
       "UWU_MaterialOverride.label": {
@@ -449,7 +449,7 @@
         "required": true
       },
       "UWU_ToxSwap.description": {
-        "english": "Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity.",
+        "english": "Replaces components with three times as much herbal medicine, reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity.",
         "required": true
       },
       "UWU_ToxSwap.label": {
