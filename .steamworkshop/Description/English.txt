@@ -1,7 +1,7 @@
 Unique Weapons Unbound
 
 [h1]About[/h1]
-The perfect unique weapon rarely drops with the perfect traits. Now you can close the gap: at existing crafting workbenches, with research gates, material costs, and balance settings that keep it feeling earned.
+Unique weapons rarely come with the traits you want. This mod lets your colonists change them at crafting workbenches you already have, for a fair cost in research and materials that you can fully adjust in mod settings.
 
 [hr][/hr]
 [h2]Trait Customization[/h2]
@@ -9,7 +9,7 @@ The perfect unique weapon rarely drops with the perfect traits. Now you can clos
 [*]Add and remove weapon traits at smithies, machining tables, and fabrication benches etc
 [*]Convert normal weapons into unique variants by adding their first trait
 [*]Remove all traits to revert a unique weapon back to its base form
-[*]Full vanilla validation: max 3 traits, conflict rules, and category restrictions are all enforced
+[*]Full vanilla validation. Max 3 traits, conflict rules, and category restrictions: all enforced by default
 [/list]
 
 [h2]Thematic Costs[/h2]
@@ -23,7 +23,7 @@ Trait modifications aren't free. The cost system uses the weapon's own crafting 
 
 [h2]Colors, Textures & Names[/h2]
 [list]
-[*]Pick from standard weapon, Ideology (when DLC is active) and structure color palettes.
+[*]Pick from weapon, structure and, with Ideology, ideoligion color palettes
 [*]Browse texture variants for weapons with multiple visual styles
 [*]Auto-generate names using vanilla grammar or type your own
 [*]Trait-locked colors are clearly indicated so you know which trait controls the color
@@ -78,13 +78,10 @@ A: If the mod adds unique weapons using vanilla's CompUniqueWeapon system, they'
 A: That's up to you. The default settings require research, matching workbenches, and meaningful material costs. If you want it harder, crank up the cost multiplier. If you want it easier, wind them down or skip the researches. Your colony, your rules.
 
 [b]Q: Can I interrupt a customization job safely?[/b]
-A: Yes. Each trait change is a separate crafting job. Interrupting won't lose resources; unfinished work is simply cancelled.
+A: Yes. Each trait change is a separate crafting job. Interrupting won't lose resources. Unfinished work is simply cancelled.
 
 [b]Q: Combat Extended?[/b]
 A: Yes? I don't know much about CE, but testing showed no errors. Trait costs adjust automatically for CE's adjusted crafting costs.
-
-[b]Q: Was this made with LLM assistance?[/b]
-A: Some of the grunt code, and most localizations. I'm a software engineer by trade, and have been writing code for 25 years. All code is manually reviewed and tested; all bug reports and mod-conflicts followed up personally as time and detail allows. All art is either commissioned from humans, hand-authored in Krita, or both.
 
 
 [h2]Links[/h2]
