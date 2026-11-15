@@ -47,6 +47,7 @@
   <UWU_ColorDeterminedBy>Color determined by {0}</UWU_ColorDeterminedBy>
 
   <!-- Dialog: Color sections -->
+  <UWU_TraitColor>Trait color</UWU_TraitColor>
   <UWU_WeaponColors>Weapon colors</UWU_WeaponColors>
   <UWU_IdeologyColors>Ideology colors</UWU_IdeologyColors>
   <UWU_StructureColors>Structure colors</UWU_StructureColors>
@@ -205,6 +206,8 @@
   <UWU_EnableIdeoColorsDesc>Show Ideology and miscellaneous color palettes in the weapon customization color picker.</UWU_EnableIdeoColorsDesc>
   <UWU_EnableStructureColors>Enable structure color options</UWU_EnableStructureColors>
   <UWU_EnableStructureColorsDesc>Show structure color palette in the weapon customization color picker.</UWU_EnableStructureColorsDesc>
+  <UWU_EnforceTraitColors>Enforce trait colors</UWU_EnforceTraitColors>
+  <UWU_EnforceTraitColorsDesc>Some traits set the color of the weapon, such as gold inlay and tox rounds. When enabled, a weapon with one of these traits will always use that color. When disabled, adding the trait will select its color, but any other color can be picked instead. The color of a trait can only be used while the weapon has that trait.</UWU_EnforceTraitColorsDesc>
   <UWU_EnforceMaxTraitLimit>Enforce trait count limit</UWU_EnforceMaxTraitLimit>
   <UWU_EnforceMaxTraitLimitDesc>Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply).</UWU_EnforceMaxTraitLimitDesc>
   <UWU_EnforceSoleTrait>Enforce sole-trait restrictions</UWU_EnforceSoleTrait>

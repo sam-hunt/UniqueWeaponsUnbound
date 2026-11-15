@@ -61,7 +61,13 @@ namespace UniqueWeaponsUnbound
                 return;
             }
 
-            // Normal: scrollable swatch grids
+            // Normal: scrollable swatch grids. Reaching here with a staged
+            // color trait means trait colors are not enforced (enforced, the
+            // branch above returned), so a non-empty list is what shows the
+            // trait section; enforced with no color trait staged, the list
+            // is empty and the section hides itself.
+            TraitColorRules.StagedTraitColors(desiredTraits, stagedTraitColors);
+
             float scrollWidth = rect.width - 16f;
             int cols = Mathf.Max(1,
                 Mathf.FloorToInt(scrollWidth / (ColorSwatchSize + ColorSwatchGap)));
@@ -75,13 +81,26 @@ namespace UniqueWeaponsUnbound
                 float curY = 0f;
                 float startX = 0f;
 
-                // --- Weapon colors ---
                 Text.Font = GameFont.Small;
+
+                // --- Trait colors (colors of the staged traits; these are
+                // offered nowhere else, so each is gone once its trait is) ---
+                if (stagedTraitColors.Count > 0)
+                {
+                    Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
+                        "UWU_TraitColor".Translate());
+                    curY += SectionHeaderHeight;
+
+                    DrawColorGrid(ref curY, startX, cols, stagedTraitColors, false, false);
+                    curY += 10f;
+                }
+
+                // --- Weapon colors ---
                 Widgets.Label(new Rect(startX, curY, scrollWidth, SectionHeaderHeight),
                     "UWU_WeaponColors".Translate());
                 curY += SectionHeaderHeight;
 
-                DrawColorGrid(ref curY, startX, cols, availableWeaponColors, false);
+                DrawColorGrid(ref curY, startX, cols, availableWeaponColors, false, true);
 
                 // --- Ideology colors (Ideo + Misc palette, when DLC active) ---
                 if (UWU_Mod.Settings.enableIdeologyColors
@@ -92,7 +111,7 @@ namespace UniqueWeaponsUnbound
                         "UWU_IdeologyColors".Translate());
                     curY += SectionHeaderHeight;
 
-                    DrawColorGrid(ref curY, startX, cols, availableIdeoColors, true);
+                    DrawColorGrid(ref curY, startX, cols, availableIdeoColors, true, true);
                 }
 
                 // --- Structure colors ---
@@ -103,7 +122,7 @@ namespace UniqueWeaponsUnbound
                         "UWU_StructureColors".Translate());
                     curY += SectionHeaderHeight;
 
-                    DrawColorGrid(ref curY, startX, cols, availableStructureColors, false);
+                    DrawColorGrid(ref curY, startX, cols, availableStructureColors, false, true);
                 }
             }
             finally
@@ -112,9 +131,12 @@ namespace UniqueWeaponsUnbound
             }
         }
 
+        // isPalette marks the regular palettes, whose picks are remembered as
+        // the color to return to when a trait-only color loses its trait.
         private void DrawColorGrid(
             ref float curY, float startX, int cols,
-            System.Collections.Generic.List<ColorDef> colors, bool showIdeoOverlays)
+            System.Collections.Generic.List<ColorDef> colors, bool showIdeoOverlays,
+            bool isPalette)
         {
             int col = 0;
             foreach (ColorDef colorDef in colors)
@@ -144,7 +166,11 @@ namespace UniqueWeaponsUnbound
                 }
 
                 if (Widgets.ButtonInvisible(swatchRect))
+                {
                     desiredColor = colorDef;
+                    if (isPalette)
+                        lastPaletteColor = colorDef;
+                }
 
                 col++;
                 if (col >= cols)
@@ -161,6 +187,14 @@ namespace UniqueWeaponsUnbound
         private float MeasureColorSections(int cols)
         {
             float height = 0f;
+
+            // Trait colors (stagedTraitColors is filled by DrawColorTab first)
+            if (stagedTraitColors.Count > 0)
+            {
+                height += SectionHeaderHeight;
+                height += GridHeight(stagedTraitColors.Count, cols);
+                height += 10f;
+            }
 
             // Weapon colors
             height += SectionHeaderHeight;

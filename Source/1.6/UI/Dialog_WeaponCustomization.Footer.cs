@@ -255,9 +255,18 @@ namespace UniqueWeaponsUnbound
             List<WeaponTraitDef> removes = TraitsToRemove.ToList();
             List<WeaponTraitDef> adds = TraitsToAdd.ToList();
 
-            bool hasForcedColorTraits =
-                removes.Any(t => t.forcedColor != null) ||
-                adds.Any(t => t.forcedColor != null);
+            // Trait colors reach the ops only while traits force the color.
+            // With enforceTraitColors off the color is the player's own pick
+            // (desiredColor, which staging a color trait pre-selects), so it
+            // travels as an ordinary cosmetic and no trait op may touch it —
+            // otherwise the weapon would flip to the trait's color, or lose
+            // its color, mid-job and stay that way if the job were
+            // interrupted before finalize. The setting is baked into the
+            // spec here; the job driver never reads it.
+            bool enforceTraitColors = UWU_Mod.Settings.enforceTraitColors;
+            bool hasForcedColorTraits = enforceTraitColors
+                && (removes.Any(t => t.forcedColor != null)
+                    || adds.Any(t => t.forcedColor != null));
 
             // 1. Removal ops
             var remainingOriginalTraits = new List<WeaponTraitDef>(originalTraits);
@@ -284,7 +293,7 @@ namespace UniqueWeaponsUnbound
 
                 remainingOriginalTraits.Remove(trait);
 
-                if (trait.forcedColor != null)
+                if (enforceTraitColors && trait.forcedColor != null)
                 {
                     // Revert to the next remaining forced color, or clear to default
                     // if no forced-color traits remain (weapon shows natural material).
@@ -374,7 +383,7 @@ namespace UniqueWeaponsUnbound
                     cost = GetAdditionCost(trait),
                 };
 
-                if (trait.forcedColor != null)
+                if (enforceTraitColors && trait.forcedColor != null)
                     op.colorToApply = trait.forcedColor;
 
                 // Merge deferred cosmetics into the first AddTrait op

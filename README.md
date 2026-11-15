@@ -62,6 +62,7 @@ All balance levers are configurable from the in-game mod settings:
 - **Uncraftable weapons** — allow customization of weapons with no crafting recipe
 - **Skill check** (off by default) — require crafting skill from the customizing pawn or your best colonist, based on the weapon's recipe, its tech level, a flat minimum, or Vanilla Skills Expanded's weaponsmithing expertise
 - **Sole-trait enforcement** — optionally enforce vanilla's sole-trait generation restrictions during customization
+- **Trait color enforcement** (on by default) — turn off to give a weapon any color while it keeps a color-setting trait such as tox rounds or gold inlay; the trait's own color stays available only while the weapon has the trait
 
 ### Mod Compatibility
 

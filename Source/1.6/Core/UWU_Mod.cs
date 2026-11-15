@@ -288,6 +288,13 @@ namespace UniqueWeaponsUnbound
             listing.Gap();
 
             listing.CheckboxLabeled(
+                "UWU_EnforceTraitColors".Translate(),
+                ref Settings.enforceTraitColors,
+                "UWU_EnforceTraitColorsDesc".Translate());
+
+            listing.Gap();
+
+            listing.CheckboxLabeled(
                 "UWU_EnforceMaxTraitLimit".Translate(),
                 ref Settings.enforceMaxTraitLimit,
                 "UWU_EnforceMaxTraitLimitDesc".Translate());

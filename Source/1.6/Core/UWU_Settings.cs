@@ -36,6 +36,7 @@ namespace UniqueWeaponsUnbound
         public bool enableGroundCustomization = true;
         public bool enableIdeologyColors = true;
         public bool enableStructureColors = true;
+        public bool enforceTraitColors = true;
         public bool enforceMaxTraitLimit = true;
         public bool enforceCanGenerateAlone;
 
@@ -66,6 +67,7 @@ namespace UniqueWeaponsUnbound
             enableGroundCustomization = true;
             enableIdeologyColors = true;
             enableStructureColors = true;
+            enforceTraitColors = true;
             enforceMaxTraitLimit = true;
             enforceCanGenerateAlone = false;
         }
@@ -98,6 +100,7 @@ namespace UniqueWeaponsUnbound
             Scribe_Values.Look(ref enableGroundCustomization, "enableGroundCustomization", true);
             Scribe_Values.Look(ref enableIdeologyColors, "enableIdeologyColors", true);
             Scribe_Values.Look(ref enableStructureColors, "enableStructureColors", true);
+            Scribe_Values.Look(ref enforceTraitColors, "enforceTraitColors", true);
             Scribe_Values.Look(ref enforceMaxTraitLimit, "enforceMaxTraitLimit", true);
             Scribe_Values.Look(ref enforceCanGenerateAlone, "enforceCanGenerateAlone");
         }

@@ -305,13 +305,13 @@ namespace UniqueWeaponsUnbound
                     && TraitValidationUtility.CanRemoveTrait(desiredTraits, trait))
                 {
                     desiredTraits.Remove(trait);
-                    OnTraitsChanged();
+                    OnTraitsChanged(removed: trait);
                 }
             }
             else if (!isDisabled && Widgets.ButtonInvisible(rowRect))
             {
                 desiredTraits.Add(trait);
-                OnTraitsChanged();
+                OnTraitsChanged(added: trait);
             }
 
             curY += TraitRowHeight + TraitRowGap;

@@ -84,6 +84,16 @@ namespace UniqueWeaponsUnbound
         private int desiredTextureIndex;
         private ColorDef desiredColor;
 
+        // The last color the selection held that a regular palette offers
+        // (the weapon's own color at open, or a palette swatch the player
+        // clicked). It is what the selection returns to when a trait-only
+        // color loses its trait; null until one is known, in which case a
+        // random weapon color is rolled then and kept here.
+        private ColorDef lastPaletteColor;
+
+        // Scratch list for the color tab's trait section, refilled each draw.
+        private readonly List<ColorDef> stagedTraitColors = new List<ColorDef>();
+
         // UI state
         private Vector2 traitListScroll;
         private Vector2 desiredTraitsScroll;
@@ -300,6 +310,7 @@ namespace UniqueWeaponsUnbound
             if (desiredColor == null && availableWeaponColors.Count > 0)
                 desiredColor = availableWeaponColors.RandomElement();
             initialDesiredColor = desiredColor;
+            lastPaletteColor = IsOfferedByPalette(desiredColor) ? desiredColor : null;
 
             // Snapshot original texture index. The modulo fallback must use the
             // FULL variant count — it mirrors how vanilla picked the variant
@@ -356,18 +367,31 @@ namespace UniqueWeaponsUnbound
         // otherwise the player's manual choice.
         private ColorDef EffectiveColor => GetForcedColor() ?? desiredColor;
 
-        // Returns the forced color from the last desired trait with forcedColor
-        // != null, or null if no trait forces a color. Mirrors vanilla
-        // iteration order (last wins).
+        // Returns the color the desired traits force on the weapon, or null
+        // if none does or the enforceTraitColors setting is off. With the
+        // setting off nothing is ever forced, so every reader of this and of
+        // EffectiveColor (preview, tab swatch, name grammar, HasChanges, the
+        // spec's finalColor) falls through to desiredColor. See
+        // TraitColorRules for the two modes.
         private ColorDef GetForcedColor()
         {
-            ColorDef forced = null;
-            foreach (WeaponTraitDef trait in desiredTraits)
-            {
-                if (trait.forcedColor != null)
-                    forced = trait.forcedColor;
-            }
-            return forced;
+            return TraitColorRules.ForcedColor(
+                desiredTraits, UWU_Mod.Settings.enforceTraitColors);
+        }
+
+        // Whether one of the color tab's regular palettes currently offers
+        // the color, as opposed to it being reachable only through a trait.
+        private bool IsOfferedByPalette(ColorDef color)
+        {
+            if (color == null)
+                return false;
+            if (availableWeaponColors.Contains(color))
+                return true;
+            if (UWU_Mod.Settings.enableIdeologyColors
+                && availableIdeoColors != null && availableIdeoColors.Contains(color))
+                return true;
+            return UWU_Mod.Settings.enableStructureColors
+                && availableStructureColors.Contains(color);
         }
 
         private bool HasChanges
@@ -408,21 +432,38 @@ namespace UniqueWeaponsUnbound
             lastAutoName = null;
             desiredTextureIndex = originalTextureIndex;
             desiredColor = initialDesiredColor;
+            lastPaletteColor = IsOfferedByPalette(desiredColor) ? desiredColor : null;
             traitListScroll = Vector2.zero;
             desiredTraitsScroll = Vector2.zero;
         }
 
-        private void OnTraitsChanged()
+        // Called after desiredTraits changes, naming the trait that was
+        // staged or un-staged.
+        private void OnTraitsChanged(WeaponTraitDef added = null, WeaponTraitDef removed = null)
         {
-            // If the last forced-color trait was removed and desiredColor is still
-            // the inherited forced color (not manually changed by the player),
-            // pick a random fallback so the preview updates.
-            if (GetForcedColor() == null && desiredColor == originalColor
-                && originalTraits.Any(t => t.forcedColor == originalColor
-                    && !desiredTraits.Contains(t)))
+            // With trait colors not enforced, staging a color trait still
+            // selects its color — the color is part of the trait's identity,
+            // most of all for the cosmetic ones (gold and jade inlay) — but
+            // as an ordinary selection the player can then change. Enforced,
+            // GetForcedColor overrides desiredColor instead and it is left
+            // alone, so it is still the player's pick if the trait goes.
+            if (added?.forcedColor != null && !UWU_Mod.Settings.enforceTraitColors)
+                desiredColor = added.forcedColor;
+
+            // A trait-only color leaves with its trait, in both modes: when
+            // the selection was the un-staged trait's color (inherited from
+            // the weapon, or selected above) and nothing else entitles the
+            // weapon to it, return to the last palette color, or roll one if
+            // the weapon never had one. Checked at the removal itself, so a
+            // color the weapon already had on some other ground is never
+            // touched.
+            if (removed != null && TraitColorRules.RemovalStrandsSelection(
+                    removed, desiredTraits, desiredColor, IsOfferedByPalette(desiredColor)))
             {
-                if (availableWeaponColors.Count > 0)
-                    desiredColor = availableWeaponColors.RandomElement();
+                if (lastPaletteColor == null && availableWeaponColors.Count > 0)
+                    lastPaletteColor = availableWeaponColors.RandomElement();
+                if (lastPaletteColor != null)
+                    desiredColor = lastPaletteColor;
             }
 
             if (!nameLocked && !isRelic && desiredTraits.Count > 0 && !IsRevertedToBase)

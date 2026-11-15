@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Setting to stop traits from enforcing their color, so a weapon with a trait such as tox rounds or gold inlay can be given any color. Enforced by default, as before.
+
 ### Changed
 
 - Smaller download: the shipped XML no longer carries developer comments, and every image is recompressed without any change to the pixels
