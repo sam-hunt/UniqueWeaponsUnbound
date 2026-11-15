@@ -1,40 +1,75 @@
 using System;
 using System.Collections.Generic;
-using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
 
-namespace UniqueWeaponsUnbound.Patches
+namespace UniqueWeaponsUnbound
 {
-    // Comp-scoped postfix instead of ThingWithComps.GetGizmos so the patch
-    // body only runs for Things whose def carries CompForbiddable — items,
-    // some buildings, doors. Pawns, walls, plants, and terrain features
-    // never enter this code. Every weapon that can be selected on the
-    // ground carries CompForbiddable, so the gizmo's reachability set is
-    // unchanged.
+    // The ground-weapon customize gizmo, delivered through vanilla's own comp
+    // hook (ThingWithComps.GetGizmos loops comps[i].CompGetGizmosExtra) rather
+    // than a Harmony patch. The comp is not declared in XML: which defs have a
+    // customization path is computed by WeaponRegistry (a unique def, or a
+    // base weapon some unique def resolves to), so InjectIntoWeaponDefs
+    // appends the props to exactly those defs once the registry is built.
+    // Every other Thing in the game never sees this code.
     //
-    // CompUniqueWeapon would be the narrowest possible target (unique
-    // weapons only) but vanilla doesn't override CompGetGizmosExtra on it,
-    // so there's no method body to postfix. It would also miss base
-    // weapons with a registered unique variant, which still need the
-    // gizmo to start a base→unique conversion.
-    [HarmonyPatch(typeof(CompForbiddable), nameof(CompForbiddable.CompGetGizmosExtra))]
-    public static class CompForbiddable_CompGetGizmosExtra_Patch
+    // The comp scribes nothing, and vanilla rebuilds a thing's comp list from
+    // def.comps on every load (ThingWithComps.ExposeData -> InitializeComps),
+    // so it leaves no trace in a save: adding or removing the mod is safe.
+    //
+    // DefModExtension was the other candidate for a def-level marker, but it
+    // has no runtime hooks (only ConfigErrors/ResolveReferences), so reading
+    // one would still need a patch on a GetGizmos method. Verified on 1.6 and
+    // 1.7.
+    public class CompCustomizeGizmo : ThingComp
     {
-        [HarmonyPostfix]
-        public static IEnumerable<Gizmo> Postfix(
-            IEnumerable<Gizmo> __result, CompForbiddable __instance)
+        // Appends this comp's props to every def with a customization path.
+        // Runs once per play-data load from UWU_Startup.Run, after
+        // WeaponRegistry.Initialize and before any Thing exists (a thing made
+        // before injection keeps its comp list until it is next loaded). Like
+        // the other Initialize methods, a non-null report absorbs a fatal
+        // exception so the rest of the mod still comes up.
+        public static void InjectIntoWeaponDefs(InitDiagnostics report = null)
         {
-            foreach (Gizmo g in __result)
-                yield return g;
+            try
+            {
+                foreach (ThingDef def in WeaponRegistry.AllCustomizableDefs)
+                    EnsureOn(def);
+            }
+            catch (Exception ex)
+            {
+                if (report == null) throw;
+                report.RecordFailure(nameof(CompCustomizeGizmo), ex);
+            }
+        }
 
+        // Adds the props to one weapon def unless it already carries them, and
+        // reports whether it added. A reload hands us fresh defs, so the
+        // HasComp check is what keeps a repeat call, a def listed twice, or
+        // two defs sharing one comps list from ending up with a second copy.
+        // ThingDef.HasComp walks comps without a null check, hence the guard
+        // ahead of it.
+        internal static bool EnsureOn(ThingDef def)
+        {
+            if (!def.IsWeapon)
+                return false;
+            if (def.comps == null)
+                def.comps = new List<CompProperties>();
+            else if (def.HasComp(typeof(CompCustomizeGizmo)))
+                return false;
+            def.comps.Add(new CompProperties(typeof(CompCustomizeGizmo)));
+            return true;
+        }
+
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
             // Analysis is wrapped in a try/catch helper because an uncaught
             // throw here would propagate into vanilla's gizmo iterator and
-            // break selection rendering on the host Thing — including
-            // unrelated gizmos contributed by other comps.
-            Gizmo customize = TryBuildCustomizeGizmo(__instance.parent);
+            // break selection rendering on the host Thing, including the
+            // gizmos contributed by its other comps.
+            Gizmo customize = TryBuildCustomizeGizmo(parent);
             if (customize != null)
                 yield return customize;
         }
@@ -60,11 +95,11 @@ namespace UniqueWeaponsUnbound.Patches
 
         private static Gizmo BuildCustomizeGizmo(Thing parent)
         {
-            // Layer 1: Hidden — skip non-weapons and non-customizable weapons.
-            // Registry membership isn't checked here so CustomizationRules.IsCustomizable
-            // can still surface its HiddenUnlessDev rejection reasons as a
-            // visible-but-disabled gizmo in dev mode.
-            if (!parent.def.IsWeapon || !parent.Spawned)
+            // Layer 1: Hidden. Only defs with a customization path carry this
+            // comp, so the dev-mode "no unique variant" reason never reaches
+            // the gizmo (the right-click options still show it); the other
+            // HiddenUnlessDev reasons surface below as a disabled gizmo.
+            if (!parent.Spawned)
                 return null;
 
             // Multi-select: identical customize gizmos would merge into one

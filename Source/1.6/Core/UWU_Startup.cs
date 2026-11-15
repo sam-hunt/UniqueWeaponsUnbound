@@ -1,8 +1,9 @@
 namespace UniqueWeaponsUnbound
 {
     // Startup work that must run against the CURRENT DefDatabase: the weapon
-    // pair registry, the workbench tier sets (and their display labels), and
-    // the trait-cost rule pipeline. Runs once per play-data LOAD, not once per
+    // pair registry, the customize gizmo comp it places on those weapon defs,
+    // the workbench tier sets (and their display labels), and the trait-cost
+    // rule pipeline. Runs once per play-data LOAD, not once per
     // process: an in-process reload (a mid-session language change) replaces
     // every def instance, and a [StaticConstructorOnStartup] type initializer
     // never re-runs, which would leave these caches pointing at the previous
@@ -26,6 +27,8 @@ namespace UniqueWeaponsUnbound
         public static void Run(InitDiagnostics report)
         {
             report.Time("WeaponRegistry", () => WeaponRegistry.Initialize(report));
+            // Needs the registry built above: it decides which defs get the comp.
+            report.Time("CompCustomizeGizmo", () => CompCustomizeGizmo.InjectIntoWeaponDefs(report));
             report.Time("WorkbenchUtility", () => WorkbenchUtility.Initialize(report));
             report.Time("TraitCostUtility", () => TraitCostUtility.Initialize(report));
         }

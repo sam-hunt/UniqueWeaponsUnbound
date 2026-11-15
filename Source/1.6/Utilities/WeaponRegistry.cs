@@ -166,6 +166,14 @@ namespace UniqueWeaponsUnbound
         // Used by the startup diagnostic to bucket pairs by source mod.
         public static IEnumerable<ThingDef> AllUniqueDefs => uniqueToBase.Keys;
 
+        // Every def with a customization path: each unique def (paired or
+        // orphan) and each base weapon a unique def resolved to. Matches what
+        // CustomizationRules.IsCustomizable admits before its settings and
+        // research checks; the customize gizmo comp is injected into exactly
+        // this set.
+        public static IEnumerable<ThingDef> AllCustomizableDefs =>
+            uniqueToBase.Keys.Concat(orphanUniqueDefs).Concat(baseToUnique.Keys);
+
         // Unique-comp ThingDefs that loaded with no detectable base weapon (no
         // descriptionHyperlinks pointing at a non-unique weapon and no matching
         // '{BaseDefName}_Unique' naming). Still customizable, but cannot revert

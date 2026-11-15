@@ -2,7 +2,6 @@
 
 ## Features
 
-- can we use defmodextension for the customize gizmo instead of a patch?
 - Mod setting: quality cost influence slider (0–200% scale on the quality
   multiplier's effect on trait costs; deferred 2026-08-02 while the rarity cap
   and complexity floor sliders bed in)
