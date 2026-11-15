@@ -81,23 +81,6 @@ namespace UniqueWeaponsUnbound
             return true;
         }
 
-        // Returns the reason a trait cannot be removed, or null if removal is
-        // allowed.
-        public static string GetRemovalRejectionReason(
-            List<WeaponTraitDef> desiredTraits, WeaponTraitDef toRemove)
-        {
-            if (UWU_Mod.Settings.enforceCanGenerateAlone
-                && !CanRemoveTrait(desiredTraits, toRemove) && desiredTraits.Count == 2)
-            {
-                WeaponTraitDef remaining = desiredTraits[0] == toRemove
-                    ? desiredTraits[1]
-                    : desiredTraits[0];
-                if (!remaining.canGenerateAlone)
-                    return "UWU_TraitCannotBeOnlyTrait".Translate(remaining.label).CapitalizeFirst();
-            }
-            return null;
-        }
-
         // Whether two traits overlap — same def or shared exclusion tags.
         // Mirrors the vanilla WeaponTraitDef.Overlaps() logic.
         public static bool TraitsOverlap(WeaponTraitDef a, WeaponTraitDef b)

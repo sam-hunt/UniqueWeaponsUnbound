@@ -63,14 +63,6 @@
   <UWU_DevTechLevelBeyondComprehension>{0} dépasse l'entendement</UWU_DevTechLevelBeyondComprehension>
 
   <!-- Dialog: Buttons -->
-  <!-- EN: Cancel -->
-  <UWU_Cancel>Annuler</UWU_Cancel>
-  <!-- EN: Reset -->
-  <UWU_Reset>Réinitialiser</UWU_Reset>
-  <!-- EN: Confirm -->
-  <UWU_Confirm>Confirmer</UWU_Confirm>
-  <!-- EN: Randomize -->
-  <UWU_Randomize>Aléatoire</UWU_Randomize>
   <!-- Vanilla ResetBinding is the only string that distinguishes this from plain
        Reset (= Réinitialiser); RestoreToDefaultSettings is "Utiliser les paramètres
        par défaut", which reads as applying them rather than resetting. -->
@@ -162,8 +154,6 @@
   <UWU_ConflictsWith>En conflit avec {0}</UWU_ConflictsWith>
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>Ne peut pas être le seul trait</UWU_CannotBeOnlyTrait>
-  <!-- EN: {0} cannot be the only trait -->
-  <UWU_TraitCannotBeOnlyTrait>{0} ne peut pas être le seul trait</UWU_TraitCannotBeOnlyTrait>
   <!-- "prendre à" is the idiomatic way to say taking a weapon off someone; French
        "désarmer" takes the person as its object, not the weapon. -->
   <!-- EN: Must disarm from hostile -->
@@ -207,8 +197,6 @@
   <UWU_GatheringMaterials>rassemble les matériaux pour {0}.</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
   <UWU_AdmiringWork>admire son travail.</UWU_AdmiringWork>
-  <!-- EN: Not enough resources to customize this weapon. -->
-  <UWU_InsufficientResources>Pas assez de ressources pour personnaliser cette arme.</UWU_InsufficientResources>
   <!-- The interruption family below leads with "Personnalisation", which is
        invariably feminine, so the participle agrees with it instead of with the
        injected weapon label — the same restructure the de and es passes needed. -->

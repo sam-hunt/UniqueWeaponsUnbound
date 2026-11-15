@@ -79,14 +79,6 @@
        settings-page verb RestoreToDefaultSettings = "Restaurar Padrões"
        (lowercased to our sentence case), which pt-BR keeps distinct from the
        keybinding-specific ResetBinding = "Restaurar padrão". -->
-  <!-- EN: Cancel -->
-  <UWU_Cancel>Cancelar</UWU_Cancel>
-  <!-- EN: Reset -->
-  <UWU_Reset>Redefinir</UWU_Reset>
-  <!-- EN: Confirm -->
-  <UWU_Confirm>Confirmar</UWU_Confirm>
-  <!-- EN: Randomize -->
-  <UWU_Randomize>Aleatorizar</UWU_Randomize>
   <!-- EN: Reset to defaults -->
 
   <!-- Dialog: Tabs -->
@@ -185,8 +177,6 @@
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>Não pode ser a única característica</UWU_CannotBeOnlyTrait>
   <!-- {0} = a trait label -->
-  <!-- EN: {0} cannot be the only trait -->
-  <UWU_TraitCannotBeOnlyTrait>{0} não pode ser a única característica</UWU_TraitCannotBeOnlyTrait>
   <!-- Unlike Spanish, pt-BR has no collision on "desarmar" (Deconstruct =
        Descontrução, Uninstall = Desinstalação), and DisarmedTime = Desarmado
        plus Biotech's ArmedChildren attest the weapon sense. -->
@@ -237,8 +227,6 @@
   <UWU_GatheringMaterials>reunindo materiais para {0}.</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
   <UWU_AdmiringWork>admirando o trabalho.</UWU_AdmiringWork>
-  <!-- EN: Not enough resources to customize this weapon. -->
-  <UWU_InsufficientResources>Recursos insuficientes para personalizar esta arma.</UWU_InsufficientResources>
 
   <!-- Every UWU_Bail*/UWU_Finalize*/UWU_Dialog* line below leads with the
        feminine "Personalização" so its participle (interrompida / falhou /

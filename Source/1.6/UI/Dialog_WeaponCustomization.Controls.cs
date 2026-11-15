@@ -87,7 +87,7 @@ namespace UniqueWeaponsUnbound
             {
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
-                Widgets.ButtonText(randomRect, "UWU_Randomize".Translate());
+                Widgets.ButtonText(randomRect, "Randomize".Translate());
                 GUI.color = prevColor;
                 if (isRelic && !disabled)
                     TooltipHandler.TipRegion(randomRect, RelicNameTooltip);
@@ -95,7 +95,7 @@ namespace UniqueWeaponsUnbound
                     TooltipHandler.TipRegion(randomRect,
                         "UWU_SelectTraitFirst".Translate());
             }
-            else if (Widgets.ButtonText(randomRect, "UWU_Randomize".Translate()))
+            else if (Widgets.ButtonText(randomRect, "Randomize".Translate()))
             {
                 string regenerated = GenerateWeaponName();
                 if (regenerated != null)

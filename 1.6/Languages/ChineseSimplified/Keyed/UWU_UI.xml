@@ -41,14 +41,6 @@
   <UWU_DevTechLevelBeyondComprehension>{0}超乎理解</UWU_DevTechLevelBeyondComprehension>
 
   <!-- Dialog: Buttons -->
-  <!-- EN: Cancel -->
-  <UWU_Cancel>取消</UWU_Cancel>
-  <!-- EN: Reset -->
-  <UWU_Reset>重设</UWU_Reset>
-  <!-- EN: Confirm -->
-  <UWU_Confirm>确定</UWU_Confirm>
-  <!-- EN: Randomize -->
-  <UWU_Randomize>随机</UWU_Randomize>
   <!-- EN: Reset to defaults -->
 
   <!-- Dialog: Tabs -->
@@ -132,8 +124,6 @@
   <UWU_ConflictsWith>与“{0}”冲突</UWU_ConflictsWith>
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>不能作为唯一的特性</UWU_CannotBeOnlyTrait>
-  <!-- EN: {0} cannot be the only trait -->
-  <UWU_TraitCannotBeOnlyTrait>“{0}”不能作为唯一的特性</UWU_TraitCannotBeOnlyTrait>
   <!-- EN: Must disarm from hostile -->
   <UWU_OnlyOnHostiles>必须从敌人手中缴获</UWU_OnlyOnHostiles>
   <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
@@ -170,8 +160,6 @@
   <UWU_GatheringMaterials>为{0}收集材料。</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
   <UWU_AdmiringWork>欣赏成果。</UWU_AdmiringWork>
-  <!-- EN: Not enough resources to customize this weapon. -->
-  <UWU_InsufficientResources>资源不足，无法自定义这把武器。</UWU_InsufficientResources>
   <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
   <UWU_IngredientShortfall>{0}的自定义已中断：在应用“{1}”之前材料已丢失。</UWU_IngredientShortfall>
   <!-- EN: {0} customization interrupted: workbench is no longer available. -->

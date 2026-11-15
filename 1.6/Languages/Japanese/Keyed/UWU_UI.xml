@@ -38,14 +38,6 @@
   <UWU_DevTechLevelBeyondComprehension>{0}は理解を超えている</UWU_DevTechLevelBeyondComprehension>
 
   <!-- Dialog: Buttons -->
-  <!-- EN: Cancel -->
-  <UWU_Cancel>キャンセル</UWU_Cancel>
-  <!-- EN: Reset -->
-  <UWU_Reset>リセット</UWU_Reset>
-  <!-- EN: Confirm -->
-  <UWU_Confirm>了承</UWU_Confirm>
-  <!-- EN: Randomize -->
-  <UWU_Randomize>ランダム</UWU_Randomize>
   <!-- EN: Reset to defaults -->
 
   <!-- Dialog: Tabs -->
@@ -129,8 +121,6 @@
   <UWU_ConflictsWith>{0}と競合</UWU_ConflictsWith>
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>唯一の特性にはできない</UWU_CannotBeOnlyTrait>
-  <!-- EN: {0} cannot be the only trait -->
-  <UWU_TraitCannotBeOnlyTrait>{0}を唯一の特性にはできない</UWU_TraitCannotBeOnlyTrait>
   <!-- EN: Must disarm from hostile -->
   <UWU_OnlyOnHostiles>敵対者からの武装解除が必要</UWU_OnlyOnHostiles>
   <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
@@ -167,8 +157,6 @@
   <UWU_GatheringMaterials>{0}の材料を集めている</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
   <UWU_AdmiringWork>出来栄えを鑑賞している</UWU_AdmiringWork>
-  <!-- EN: Not enough resources to customize this weapon. -->
-  <UWU_InsufficientResources>この武器をカスタマイズするための資源が足りません.</UWU_InsufficientResources>
   <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
   <UWU_IngredientShortfall>{0}のカスタマイズが中断されました: {1}を適用する前に材料が失われました.</UWU_IngredientShortfall>
   <!-- EN: {0} customization interrupted: workbench is no longer available. -->

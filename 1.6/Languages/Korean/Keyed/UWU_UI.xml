@@ -41,14 +41,6 @@
   <UWU_DevTechLevelBeyondComprehension>{0}(은)는 이해 범위를 넘어섬</UWU_DevTechLevelBeyondComprehension>
 
   <!-- Dialog: Buttons -->
-  <!-- EN: Cancel -->
-  <UWU_Cancel>취소</UWU_Cancel>
-  <!-- EN: Reset -->
-  <UWU_Reset>초기화</UWU_Reset>
-  <!-- EN: Confirm -->
-  <UWU_Confirm>확인</UWU_Confirm>
-  <!-- EN: Randomize -->
-  <UWU_Randomize>섞기</UWU_Randomize>
   <!-- EN: Reset to defaults -->
 
   <!-- Dialog: Tabs -->
@@ -132,8 +124,6 @@
   <UWU_ConflictsWith>{0}(와)과 충돌</UWU_ConflictsWith>
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>단독 특성이 될 수 없음</UWU_CannotBeOnlyTrait>
-  <!-- EN: {0} cannot be the only trait -->
-  <UWU_TraitCannotBeOnlyTrait>{0}(은)는 단독 특성이 될 수 없습니다</UWU_TraitCannotBeOnlyTrait>
   <!-- EN: Must disarm from hostile -->
   <UWU_OnlyOnHostiles>적에게서 무장 해제로 획득해야 함</UWU_OnlyOnHostiles>
   <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
@@ -170,8 +160,6 @@
   <UWU_GatheringMaterials>{0}에 쓸 재료 모으는 중</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
   <UWU_AdmiringWork>작업물 감상 중</UWU_AdmiringWork>
-  <!-- EN: Not enough resources to customize this weapon. -->
-  <UWU_InsufficientResources>이 무기를 개조할 자원이 부족합니다.</UWU_InsufficientResources>
   <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
   <UWU_IngredientShortfall>{0} 개조가 중단됐습니다: {1}(을)를 적용하기 전에 재료를 잃었습니다.</UWU_IngredientShortfall>
   <!-- EN: {0} customization interrupted: workbench is no longer available. -->

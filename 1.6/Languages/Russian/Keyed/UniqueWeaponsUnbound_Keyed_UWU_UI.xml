@@ -36,14 +36,6 @@
   <!-- EN: {0} is beyond comprehension -->
   <UWU_DevTechLevelBeyondComprehension>{0} выходит за пределы понимания</UWU_DevTechLevelBeyondComprehension>
   <!-- Dialog: Buttons -->
-  <!-- EN: Cancel -->
-  <UWU_Cancel>Отменить</UWU_Cancel>
-  <!-- EN: Reset -->
-  <UWU_Reset>Сбросить</UWU_Reset>
-  <!-- EN: Confirm -->
-  <UWU_Confirm>Подтвердить</UWU_Confirm>
-  <!-- EN: Randomize -->
-  <UWU_Randomize>Случайно</UWU_Randomize>
   <!-- EN: Reset to defaults -->
   <!-- Dialog: Tabs -->
   <!-- EN: Traits -->
@@ -120,8 +112,6 @@
   <UWU_ConflictsWith>Конфликтует с {0}</UWU_ConflictsWith>
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>Не может быть единственным свойством</UWU_CannotBeOnlyTrait>
-  <!-- EN: {0} cannot be the only trait -->
-  <UWU_TraitCannotBeOnlyTrait>{0} не может быть единственным свойством</UWU_TraitCannotBeOnlyTrait>
   <!-- EN: Must disarm from hostile -->
   <UWU_OnlyOnHostiles>Должно быть отобрано у враждебного</UWU_OnlyOnHostiles>
   <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
@@ -156,8 +146,6 @@
   <UWU_GatheringMaterials>Сбор материалов для {0}</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
   <UWU_AdmiringWork>Любование работой</UWU_AdmiringWork>
-  <!-- EN: Not enough resources to customize this weapon. -->
-  <UWU_InsufficientResources>Недостаточно ресурсов для настройки этого оружия.</UWU_InsufficientResources>
   <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
   <UWU_IngredientShortfall>Настройка {0} прервана: ингредиенты потеряны до того, как можно было применить {1}.</UWU_IngredientShortfall>
   <!-- EN: {0} customization interrupted: workbench is no longer available. -->

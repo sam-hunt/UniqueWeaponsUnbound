@@ -113,7 +113,7 @@ namespace UniqueWeaponsUnbound
                 buttonY,
                 ButtonSize.x,
                 ButtonSize.y);
-            if (Widgets.ButtonText(cancelRect, "UWU_Cancel".Translate()))
+            if (Widgets.ButtonText(cancelRect, "Cancel".Translate()))
             {
                 Close();
             }
@@ -126,7 +126,7 @@ namespace UniqueWeaponsUnbound
                 ButtonSize.y);
             if (HasChanges)
             {
-                if (Widgets.ButtonText(resetRect, "UWU_Reset".Translate()))
+                if (Widgets.ButtonText(resetRect, "Reset".Translate()))
                 {
                     ResetToOriginal();
                 }
@@ -135,7 +135,7 @@ namespace UniqueWeaponsUnbound
             {
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
-                Widgets.ButtonText(resetRect, "UWU_Reset".Translate());
+                Widgets.ButtonText(resetRect, "Reset".Translate());
                 GUI.color = prevColor;
             }
 
@@ -160,7 +160,7 @@ namespace UniqueWeaponsUnbound
 
             if (canConfirm)
             {
-                if (Widgets.ButtonText(confirmRect, "UWU_Confirm".Translate()))
+                if (Widgets.ButtonText(confirmRect, "Confirm".Translate()))
                 {
                     // Auto-generate name if result is unique but name is empty
                     if (ResultingDef == uniqueDef
@@ -220,7 +220,7 @@ namespace UniqueWeaponsUnbound
             {
                 Color prevColor = GUI.color;
                 GUI.color = Color.gray;
-                Widgets.ButtonText(confirmRect, "UWU_Confirm".Translate());
+                Widgets.ButtonText(confirmRect, "Confirm".Translate());
                 GUI.color = prevColor;
 
                 if (insufficientForConfirm)

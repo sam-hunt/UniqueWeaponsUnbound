@@ -44,14 +44,6 @@
   <UWU_DevTechLevelBeyondComprehension>el nivel tecnológico {0} está más allá de toda comprensión</UWU_DevTechLevelBeyondComprehension>
 
   <!-- Dialog: Buttons -->
-  <!-- EN: Cancel -->
-  <UWU_Cancel>Cancelar</UWU_Cancel>
-  <!-- EN: Reset -->
-  <UWU_Reset>Restablecer</UWU_Reset>
-  <!-- EN: Confirm -->
-  <UWU_Confirm>Confirmar</UWU_Confirm>
-  <!-- EN: Randomize -->
-  <UWU_Randomize>Aleatorizar</UWU_Randomize>
   <!-- EN: Reset to defaults -->
 
   <!-- Dialog: Tabs -->
@@ -141,8 +133,6 @@
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>No puede ser el único rasgo</UWU_CannotBeOnlyTrait>
   <!-- {0} = trait label -->
-  <!-- EN: {0} cannot be the only trait -->
-  <UWU_TraitCannotBeOnlyTrait>{0} no puede ser el único rasgo</UWU_TraitCannotBeOnlyTrait>
   <!-- EN: Must disarm from hostile -->
   <UWU_OnlyOnHostiles>Hay que quitarle el arma a un hostil</UWU_OnlyOnHostiles>
   <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
@@ -182,8 +172,6 @@
   <UWU_GatheringMaterials>Reuniendo materiales para {0}</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
   <UWU_AdmiringWork>Admirando el trabajo</UWU_AdmiringWork>
-  <!-- EN: Not enough resources to customize this weapon. -->
-  <UWU_InsufficientResources>No hay suficientes recursos para personalizar esta arma.</UWU_InsufficientResources>
   <!-- The "{0} customization ..." keys below lead with the head noun (Personalización de {0})
        so nothing has to agree in gender with the injected weapon label. -->
   <!-- {0} = weapon label, {1} = trait label -->

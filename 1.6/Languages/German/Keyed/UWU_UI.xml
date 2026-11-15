@@ -41,14 +41,6 @@
   <UWU_DevTechLevelBeyondComprehension>{0} übersteigt das Fassungsvermögen</UWU_DevTechLevelBeyondComprehension>
 
   <!-- Dialog: Buttons -->
-  <!-- EN: Cancel -->
-  <UWU_Cancel>Abbrechen</UWU_Cancel>
-  <!-- EN: Reset -->
-  <UWU_Reset>Zurücksetzen</UWU_Reset>
-  <!-- EN: Confirm -->
-  <UWU_Confirm>Bestätigen</UWU_Confirm>
-  <!-- EN: Randomize -->
-  <UWU_Randomize>Zufällig</UWU_Randomize>
   <!-- EN: Reset to defaults -->
 
   <!-- Dialog: Tabs -->
@@ -132,8 +124,6 @@
   <UWU_ConflictsWith>Kollidiert mit '{0}'</UWU_ConflictsWith>
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>Kann nicht das einzige Merkmal sein</UWU_CannotBeOnlyTrait>
-  <!-- EN: {0} cannot be the only trait -->
-  <UWU_TraitCannotBeOnlyTrait>'{0}' kann nicht das einzige Merkmal sein</UWU_TraitCannotBeOnlyTrait>
   <!-- EN: Must disarm from hostile -->
   <UWU_OnlyOnHostiles>Muss Feinden abgenommen werden</UWU_OnlyOnHostiles>
   <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
@@ -170,8 +160,6 @@
   <UWU_GatheringMaterials>sammelt Materialien für {0}.</UWU_GatheringMaterials>
   <!-- EN: Admiring work -->
   <UWU_AdmiringWork>bewundert die Arbeit.</UWU_AdmiringWork>
-  <!-- EN: Not enough resources to customize this weapon. -->
-  <UWU_InsufficientResources>Nicht genügend Ressourcen, um diese Waffe anzupassen.</UWU_InsufficientResources>
   <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
   <UWU_IngredientShortfall>Anpassung von {0} unterbrochen: Zutaten gingen verloren, bevor {1} angewendet werden konnte.</UWU_IngredientShortfall>
   <!-- EN: {0} customization interrupted: workbench is no longer available. -->
