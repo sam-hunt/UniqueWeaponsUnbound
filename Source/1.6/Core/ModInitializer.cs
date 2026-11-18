@@ -13,7 +13,11 @@ namespace UniqueWeaponsUnbound
             report.Time("Harmony patching", () =>
             {
                 var harmony = new Harmony("shunter.uniqueweaponsunbound");
-                harmony.PatchAll();
+                // The assembly is named through a type of ours: Harmony 3 obsoletes the
+                // parameterless PatchAll(), whose caller detection can fail after inlining or
+                // tail calls, and Assembly.GetExecutingAssembly() has returned Harmony's own
+                // assembly from a constructor another mod patched (HarmonyRimWorld #52).
+                harmony.PatchAll(typeof(UniqueWeaponsUnboundMod).Assembly);
             });
 
             // The load-time StatDef.SetImmutability ran before any mod static
