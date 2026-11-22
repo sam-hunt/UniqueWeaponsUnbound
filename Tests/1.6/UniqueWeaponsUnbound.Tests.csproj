@@ -76,6 +76,17 @@
     <ProjectReference Include="..\..\Source\1.6\UniqueWeaponsUnbound.csproj" />
   </ItemGroup>
 
+  <!-- xunit.runner.json turns off xunit's shadow copy, which the net472 runner applies to the
+       test folder by default. Mono's shadow copy (mono_make_shadow_copy) takes no lock, and
+       the test classes xunit runs in parallel each load xunit.assert on their first assertion:
+       every thread deletes, rewrites and maps the one shadow file, and a thread that opens it
+       mid-rewrite crashes the host or leaves every test failing with "Method has zero rva".
+       Shadow copy exists so a build can overwrite DLLs a Windows test host holds locked, which
+       mono never does. The runner reads the file from beside the test DLL, hence the copy. -->
+  <ItemGroup>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <!-- The trait-cost pipeline tests run against the rule set that actually
        ships, parsed straight out of the def XML, so they can't drift from it.
        Copied beside the test assembly because test execution happens from a
