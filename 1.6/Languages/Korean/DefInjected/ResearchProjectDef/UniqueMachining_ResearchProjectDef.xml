@@ -3,8 +3,8 @@
 
   <!-- EN: unique machining -->
   <UniqueMachining.label>고유 무기 기계 가공</UniqueMachining.label>
-  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
-  <UniqueMachining.description>기계 작업대에서 산업 시대 무기를 개선하고 개조할 수 있습니다. 필요에 따라 특성을 추가하거나 제거할 수 있습니다.</UniqueMachining.description>
+  <!-- EN: Upgrade and customize industrial weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>기계 작업대에서 산업 무기를 개선하고 개조할 수 있습니다. 필요에 따라 특성을 추가하거나 제거할 수 있습니다.</UniqueMachining.description>
 
   <!-- EN: Upgrade and customize industrial unique weapons -->
   <UniqueMachining.customUnlockTexts.0>산업 시대 고유 무기 개선 및 개조</UniqueMachining.customUnlockTexts.0>

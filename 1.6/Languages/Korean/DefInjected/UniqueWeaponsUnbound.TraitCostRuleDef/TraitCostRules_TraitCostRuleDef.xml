@@ -5,7 +5,7 @@
 
   <!-- EN: base cost from tech level -->
   <UWU_BaseCostFromTechLevel.label>기술 수준 기반 기본 비용</UWU_BaseCostFromTechLevel.label>
-  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components -->
+  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components. -->
   <UWU_BaseCostFromTechLevel.description>무기의 기술 수준에서 산출한 예비 기본 비용을 제공합니다. 제작 레시피가 없는 무기에도 개조 비용이 반드시 있도록 보장합니다. 원시 시대는 목재, 중세는 강철, 산업 시대는 강철과 부품, 우주 시대 이상은 플라스틸과 고급 부품을 사용합니다.</UWU_BaseCostFromTechLevel.description>
 
   <!-- EN: base cost from recipe -->
@@ -52,8 +52,8 @@
 
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>독성 부품 교체</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
-  <UWU_ToxSwap.description>필요한 유기 독소를 반영해 부품을 생약(부품 개수의 3배)으로 교체합니다. 비용에 부품이 없는 무기는 대신 무기의 제작 복잡도에 비례한 생약을 추가합니다.</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with three times as much herbal medicine, reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>필요한 유기 독소를 반영해 부품을 세 배 분량의 생약으로 교체합니다. 비용에 부품이 없는 무기는 대신 무기의 제작 복잡도에 비례한 생약을 추가합니다.</UWU_ToxSwap.description>
   <!-- EN: tox, toxic, paralytic, acid-injector, venom, envenomed, poisoned, opiated, sedative -->
   <UWU_ToxSwap.labelKeywords>
     <li>tox</li>
@@ -72,8 +72,8 @@
 
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>소이 부품 교체</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
-  <UWU_IncendiarySwap.description>필요한 휘발성 연료를 반영해 부품을 화학연료(부품 개수의 10배)로 교체합니다. 여기서는 고급 부품도 부품으로 취급합니다. 비용에 부품이 없는 무기는 대신 무기의 제작 복잡도에 비례한 화학연료를 추가합니다.</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with ten times as much chemfuel, reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>필요한 휘발성 연료를 반영해 부품을 열 배 분량의 화학연료로 교체합니다. 여기서는 고급 부품도 부품으로 취급합니다. 비용에 부품이 없는 무기는 대신 무기의 제작 복잡도에 비례한 화학연료를 추가합니다.</UWU_IncendiarySwap.description>
   <!-- EN: incendiary, blast, blasts, pitch-soaked, detonation, chemburster, flaming, searing, burning, ember -->
   <UWU_IncendiarySwap.labelKeywords>
     <li>incendiary</li>
@@ -128,8 +128,8 @@
 
   <!-- EN: heavy scrap flat cost -->
   <UWU_HeavyScrap.label>고철 고정 비용</UWU_HeavyScrap.label>
-  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk. -->
-  <UWU_HeavyScrap.description>모든 비용을 고철 덩어리 한 개로 대체합니다. 고철 개조는 조잡하고 저렴합니다. 잡동사니를 볼트로 붙이기만 하면 됩니다.</UWU_HeavyScrap.description>
+  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap, so bolted-on junk is all it takes. -->
+  <UWU_HeavyScrap.description>모든 비용을 고철 덩어리 한 개로 대체합니다. 고철 개조는 조잡하고 저렴해서, 잡동사니를 붙이기만 하면 됩니다.</UWU_HeavyScrap.description>
 
   <!-- EN: charge weapons (category-gated) -->
   <UWU_ChargeCategoryGated.label>충전 무기(분류 제한)</UWU_ChargeCategoryGated.label>
@@ -274,8 +274,8 @@
 
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>재료 대체 예비 규칙</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>특성 이름에 포함된 재료 이름(예: "Gold Inlay"의 "gold")을 감지해 원자재 비용을 같은 시장 가치만큼의 그 재료로 대체합니다. 전용 주제 규칙이 없는 특성을 모두 받아내는 역할을 합니다.</UWU_MaterialOverride.description>
+  <!-- EN: Detects a material named in the trait label, such as the gold in gold inlay, and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>특성 이름에 금 상감의 금처럼 재료 이름이 들어 있으면 그 재료를 감지해, 원자재 비용을 같은 시장 가치의 그 재료로 대체합니다. 전용 주제 규칙이 없는 특성을 모두 받아내는 역할을 합니다.</UWU_MaterialOverride.description>
 
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>비용 재료 정리</UWU_CostPrune.label>

@@ -6,8 +6,8 @@
   <!-- pt-BR is consistent for this tier, unlike fr: the Machining research is
        "usinagem" and TableMachining is "mesa de usinagem". (AncientTableMachining
        = "Bancada de Mecanica Ancestral" is the ruin variant only.) -->
-  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
-  <UniqueMachining.description>Melhore e personalize armas da era industrial em uma mesa de usinagem, adicionando ou removendo características conforme suas necessidades.</UniqueMachining.description>
+  <!-- EN: Upgrade and customize industrial weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>Melhore e personalize armas industriais em uma mesa de usinagem, adicionando ou removendo características conforme suas necessidades.</UniqueMachining.description>
 
   <!-- EN: Upgrade and customize industrial unique weapons -->
   <UniqueMachining.customUnlockTexts.0>Melhore e personalize armas únicas industriais</UniqueMachining.customUnlockTexts.0>

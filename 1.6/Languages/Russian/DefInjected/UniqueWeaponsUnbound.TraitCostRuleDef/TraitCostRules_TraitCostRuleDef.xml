@@ -28,8 +28,8 @@
 
   <!-- EN: base cost from tech level -->
   <UWU_BaseCostFromTechLevel.label>базовая стоимость зависит от технологического уровня</UWU_BaseCostFromTechLevel.label>
-  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components -->
-  <UWU_BaseCostFromTechLevel.description>Определяет базовую стоимость исходя из технологического уровня оружия. Гарантирует, что у любого оружия будет стоимость настройки, даже если у него нет рецепта крафта. Для неолита используется дерево, для средневековья — сталь, для индустриальной эпохи — сталь и компоненты, для космической и выше — пласталь и продвинутые компоненты.</UWU_BaseCostFromTechLevel.description>
+  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components. -->
+  <UWU_BaseCostFromTechLevel.description>Определяет базовую стоимость исходя из технологического уровня оружия. Гарантирует, что у любого оружия будет стоимость настройки, даже если у него нет рецепта крафта. Для неолита используется дерево, для средневековья сталь, для индустриальной эпохи сталь и компоненты, для космической и выше пласталь и продвинутые компоненты.</UWU_BaseCostFromTechLevel.description>
   <!-- EN: base cost from recipe -->
   <UWU_BaseCostFromRecipe.label>базовая стоимость из рецепта</UWU_BaseCostFromRecipe.label>
   <!-- EN: Replaces the tech-level fallback with the weapon's actual crafting recipe costs, including both fixed ingredients and stuff costs. Only acts when the weapon has a craftable base definition. -->
@@ -48,8 +48,8 @@
   <UWU_NegativeDowngrade.description>Понижает материалы стоимости на один технологический уровень для негативных свойств. Компоненты космической эпохи становятся индустриальными, пласталь становится сталью, сталь становится деревом. Отражает тот факт, что негативные модификации используют более грубые и дешёвые методы.</UWU_NegativeDowngrade.description>
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>замена на токсичные компоненты</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
-  <UWU_ToxSwap.description>Заменяет компоненты на лекарственные травы (в 3-кратном количестве), что отражает потребность в органических токсинах. Если в стоимости оружия нет компонентов, вместо этого добавляются лекарственные травы в количестве, зависящем от сложности изготовления оружия.</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with three times as much herbal medicine, reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>Заменяет компоненты на лекарственные травы в тройном количестве, что отражает потребность в органических токсинах. Если в стоимости оружия нет компонентов, вместо этого добавляются лекарственные травы в количестве, зависящем от сложности изготовления оружия.</UWU_ToxSwap.description>
 
   <!-- отравленное = UMW_Envenomed, опиатное = UMW_Opiated ("опиатное остриё"),
        парализующие = ParalyticArrows, токсичные = ToxRounds/ToxPellets. токсичное is
@@ -77,8 +77,8 @@
 
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>замена на зажигательные компоненты</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
-  <UWU_IncendiarySwap.description>Заменяет компоненты на химическое топливо (в 10-кратном количестве), отражая потребность в летучем топливе. Продвинутые компоненты здесь считаются компонентами. Если в стоимости оружия нет компонентов, вместо этого добавляется химическое топливо в количестве, зависящем от сложности изготовления оружия.</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with ten times as much chemfuel, reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>Заменяет компоненты на химическое топливо в десятикратном количестве, отражая потребность в летучем топливе. Продвинутые компоненты здесь считаются компонентами. Если в стоимости оружия нет компонентов, вместо этого добавляется химическое топливо в количестве, зависящем от сложности изготовления оружия.</UWU_IncendiarySwap.description>
 
   <!-- зажигательные = IncendiaryRounds/IncendiaryPellets; зажигательное is the
        neuter-singular projection. The remaining English keywords (blast, detonation,
@@ -143,8 +143,8 @@
   <UWU_Flarestriker.description>Конвертирует 70% стоимости базовых материалов в биоферрит по рыночной стоимости, отражая потребность в экзотическом топливе для ракетниц.</UWU_Flarestriker.description>
   <!-- EN: heavy scrap flat cost -->
   <UWU_HeavyScrap.label>фиксированная стоимость из металлолома</UWU_HeavyScrap.label>
-  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk. -->
-  <UWU_HeavyScrap.description>Заменяет все затраты на один кусок металлолома. Модификации из металлолома грубы и дёшевы — просто прикрутите какой-нибудь хлам.</UWU_HeavyScrap.description>
+  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap, so bolted-on junk is all it takes. -->
+  <UWU_HeavyScrap.description>Заменяет все затраты на один кусок металлолома. Модификации из металлолома грубы и дёшевы, так что хватит и прикрученного хлама.</UWU_HeavyScrap.description>
   <!-- EN: charge weapons (category-gated) -->
   <UWU_ChargeCategoryGated.label>энергетическое оружие (с ограничением по категории)</UWU_ChargeCategoryGated.label>
   <!-- EN: Converts all costs into advanced components by market value for charge-type weapon traits, representing the spacer technology required for pulse and beam modifications. -->
@@ -335,8 +335,8 @@
 
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>замена материала (резервная)</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>Обнаруживает названия материалов в названии свойства (например, «золото» в «Золотая инкрустация») и заменяет затраты ресурсов на равную по рыночной стоимости долю этого материала. Служит универсальным решением для свойств без специального тематического правила.</UWU_MaterialOverride.description>
+  <!-- EN: Detects a material named in the trait label, such as the gold in gold inlay, and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>Находит в названии свойства материал, например золото в «золотая инкрустация», и заменяет затраты сырья на равную по рыночной стоимости долю этого материала. Служит универсальным решением для свойств без специального тематического правила.</UWU_MaterialOverride.description>
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>сокращение типов материалов</UWU_CostPrune.label>
   <!-- EN: Limits the cost to at most 3 material types to prevent UI overflow. When there are more than 3, the cheapest materials by unit price are trimmed first. -->

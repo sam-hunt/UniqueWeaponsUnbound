@@ -5,7 +5,7 @@
 
   <!-- EN: base cost from tech level -->
   <UWU_BaseCostFromTechLevel.label>依科技等級的基礎成本</UWU_BaseCostFromTechLevel.label>
-  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components -->
+  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components. -->
   <UWU_BaseCostFromTechLevel.description>提供依武器科技等級推算的備用基礎成本。即使武器沒有可製作的配方，也能確保它擁有自訂成本。原始部落使用木頭，中世紀使用鋼鐵，工業時代使用鋼鐵與零件，太空科技及以上使用塑鋼與高級零件。</UWU_BaseCostFromTechLevel.description>
 
   <!-- EN: base cost from recipe -->
@@ -49,8 +49,8 @@
 
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>毒性零件替換</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
-  <UWU_ToxSwap.description>將零件替換為草藥(數量為零件的3倍)，以反映所需的有機毒素。成本中不含零件的武器，則改為依武器的製作複雜度追加草藥。</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with three times as much herbal medicine, reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>將零件替換為三倍數量的草藥，以反映所需的有機毒素。成本中不含零件的武器，則改為依武器的製作複雜度追加草藥。</UWU_ToxSwap.description>
   <!-- EN: tox, toxic, paralytic, acid-injector, venom, envenomed, poisoned, opiated, sedative -->
   <UWU_ToxSwap.labelKeywords>
     <li>tox</li>
@@ -70,8 +70,8 @@
 
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>燃燒零件替換</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
-  <UWU_IncendiarySwap.description>將零件替換為化合燃料(數量為零件的10倍)，以反映所需的易燃燃料。此處高級零件同樣算作零件。成本中不含零件的武器，則改為依武器的製作複雜度追加化合燃料。</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with ten times as much chemfuel, reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>將零件替換為十倍數量的化合燃料，以反映所需的易燃燃料。此處高級零件同樣算作零件。成本中不含零件的武器，則改為依武器的製作複雜度追加化合燃料。</UWU_IncendiarySwap.description>
   <!-- EN: incendiary, blast, blasts, pitch-soaked, detonation, chemburster, flaming, searing, burning, ember -->
   <UWU_IncendiarySwap.labelKeywords>
     <li>incendiary</li>
@@ -117,8 +117,8 @@
 
   <!-- EN: heavy scrap flat cost -->
   <UWU_HeavyScrap.label>重型廢料固定成本</UWU_HeavyScrap.label>
-  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk. -->
-  <UWU_HeavyScrap.description>將全部成本替換為一塊金屬碎片。廢料改造既粗糙又廉價，不過是拿螺栓鎖上一些破銅爛鐵罷了。</UWU_HeavyScrap.description>
+  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap, so bolted-on junk is all it takes. -->
+  <UWU_HeavyScrap.description>將全部成本替換為一塊金屬碎片。廢料改造粗糙又廉價，隨便鎖上一些破銅爛鐵就夠了。</UWU_HeavyScrap.description>
 
   <!-- EN: charge weapons (category-gated) -->
   <UWU_ChargeCategoryGated.label>電能武器(限定類別)</UWU_ChargeCategoryGated.label>
@@ -245,8 +245,8 @@
 
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>材料覆寫備用規則</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>偵測特質名稱中的材料名(例如「鑲金」中的「金」)，並依相同的市場價值將原料成本替換為該材料。作為沒有專屬主題規則的特質的統包規則。</UWU_MaterialOverride.description>
+  <!-- EN: Detects a material named in the trait label, such as the gold in gold inlay, and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>偵測特質名稱中提到的材料，例如鑲金中的金，並將原料成本替換為該材料的等值市場價值。可作為沒有專屬主題規則之特質的通用規則。</UWU_MaterialOverride.description>
 
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>成本材料精簡</UWU_CostPrune.label>

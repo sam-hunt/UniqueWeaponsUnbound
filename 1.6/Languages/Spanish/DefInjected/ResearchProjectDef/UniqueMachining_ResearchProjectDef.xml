@@ -3,8 +3,8 @@
 
   <!-- EN: unique machining -->
   <UniqueMachining.label>maquinado de armas únicas</UniqueMachining.label>
-  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
-  <UniqueMachining.description>Mejora y personaliza armas de la era industrial en una mesa de maquinado, añadiendo o quitando rasgos según tus necesidades.</UniqueMachining.description>
+  <!-- EN: Upgrade and customize industrial weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>Mejora y personaliza armas industriales en una mesa de maquinado, añadiendo o quitando rasgos según tus necesidades.</UniqueMachining.description>
 
   <!-- EN: Upgrade and customize industrial unique weapons -->
   <UniqueMachining.customUnlockTexts.0>Mejorar y personalizar armas únicas industriales</UniqueMachining.customUnlockTexts.0>

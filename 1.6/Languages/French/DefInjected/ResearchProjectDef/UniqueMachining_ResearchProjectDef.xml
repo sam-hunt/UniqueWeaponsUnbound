@@ -7,8 +7,8 @@
        research is "usinage" — the building and the research diverge, and the
        building's word ("assemblage") also turns up in the Fabrication research name.
        Always look the specific def up rather than reusing a stem. -->
-  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
-  <UniqueMachining.description>Vous permet d'améliorer et de personnaliser les armes de l'ère industrielle sur un établi d'assemblage, en ajoutant ou en retirant des traits selon vos besoins.</UniqueMachining.description>
+  <!-- EN: Upgrade and customize industrial weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>Vous permet d'améliorer et de personnaliser les armes industrielles sur un établi d'assemblage, en ajoutant ou en retirant des traits selon vos besoins.</UniqueMachining.description>
 
   <!-- EN: Upgrade and customize industrial unique weapons -->
   <UniqueMachining.customUnlockTexts.0>Améliorer et personnaliser les armes uniques industrielles</UniqueMachining.customUnlockTexts.0>

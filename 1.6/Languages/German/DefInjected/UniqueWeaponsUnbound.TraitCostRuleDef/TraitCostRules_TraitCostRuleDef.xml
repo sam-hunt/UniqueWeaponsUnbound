@@ -5,7 +5,7 @@
 
   <!-- EN: base cost from tech level -->
   <UWU_BaseCostFromTechLevel.label>Grundkosten aus der Techstufe</UWU_BaseCostFromTechLevel.label>
-  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components -->
+  <!-- EN: Provides a fallback base cost derived from the weapon's tech level. Ensures all weapons have a customization cost even if they lack a craftable recipe. Neolithic uses wood, medieval uses steel, industrial uses steel and components, and spacer and above use plasteel and advanced components. -->
   <UWU_BaseCostFromTechLevel.description>Liefert Ersatz-Grundkosten, die aus der Techstufe der Waffe abgeleitet werden. Damit haben alle Waffen Anpassungskosten, auch wenn es für sie keinen herstellbaren Auftrag gibt. Neolithisch nutzt Holz, mittelalterlich Stahl, industriell Stahl und Bauteile, Raumfahrt und höher Plastahl und Hightech-Bauteile.</UWU_BaseCostFromTechLevel.description>
 
   <!-- EN: base cost from recipe -->
@@ -53,8 +53,8 @@
 
   <!-- EN: toxic component swap -->
   <UWU_ToxSwap.label>Bauteiltausch für Giftmunition</UWU_ToxSwap.label>
-  <!-- EN: Replaces components with herbal medicine (3x the component count), reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
-  <UWU_ToxSwap.description>Ersetzt Bauteile durch Kräutermedizin (dreifache Anzahl der Bauteile), was die benötigten organischen Giftstoffe widerspiegelt. Bei Waffen, deren Kosten keine Bauteile enthalten, wird stattdessen Kräutermedizin passend zur Herstellungskomplexität der Waffe hinzugefügt.</UWU_ToxSwap.description>
+  <!-- EN: Replaces components with three times as much herbal medicine, reflecting the organic toxins needed. Weapons whose costs carry no components instead add herbal medicine scaled to the weapon's crafting complexity. -->
+  <UWU_ToxSwap.description>Ersetzt Bauteile durch die dreifache Menge Kräutermedizin, was die benötigten organischen Giftstoffe widerspiegelt. Bei Waffen, deren Kosten keine Bauteile enthalten, wird stattdessen Kräutermedizin passend zur Herstellungskomplexität der Waffe hinzugefügt.</UWU_ToxSwap.description>
   <!-- Odyssey ToxRounds/ToxPellets/ParalyticArrows labels; UMW Envenomed/Opiated. -->
   <!-- EN: tox, toxic, paralytic, acid-injector, venom, envenomed, poisoned, opiated, sedative -->
   <UWU_ToxSwap.labelKeywords>
@@ -76,8 +76,8 @@
 
   <!-- EN: incendiary component swap -->
   <UWU_IncendiarySwap.label>Bauteiltausch für Brandmunition</UWU_IncendiarySwap.label>
-  <!-- EN: Replaces components with chemfuel (10x the component count), reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
-  <UWU_IncendiarySwap.description>Ersetzt Bauteile durch Sprit (zehnfache Anzahl der Bauteile), was den benötigten leicht entzündlichen Treibstoff widerspiegelt. Hightech-Bauteile gelten hier als Bauteile. Bei Waffen, deren Kosten keine Bauteile enthalten, wird stattdessen Sprit passend zur Herstellungskomplexität der Waffe hinzugefügt.</UWU_IncendiarySwap.description>
+  <!-- EN: Replaces components with ten times as much chemfuel, reflecting the volatile fuel needed. Advanced components count as components here. Weapons whose costs carry no components instead add chemfuel scaled to the weapon's crafting complexity. -->
+  <UWU_IncendiarySwap.description>Ersetzt Bauteile durch die zehnfache Menge Sprit, was den benötigten leicht entzündlichen Treibstoff widerspiegelt. Hightech-Bauteile gelten hier als Bauteile. Bei Waffen, deren Kosten keine Bauteile enthalten, wird stattdessen Sprit passend zur Herstellungskomplexität der Waffe hinzugefügt.</UWU_IncendiarySwap.description>
   <!-- Odyssey IncendiaryRounds/IncendiaryLauncher/IncendiaryPellets labels. -->
   <!-- EN: incendiary, blast, blasts, pitch-soaked, detonation, chemburster, flaming, searing, burning, ember -->
   <UWU_IncendiarySwap.labelKeywords>
@@ -131,8 +131,8 @@
 
   <!-- EN: heavy scrap flat cost -->
   <UWU_HeavyScrap.label>Pauschalkosten bei Schwerschrott</UWU_HeavyScrap.label>
-  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap — just bolt on some junk. -->
-  <UWU_HeavyScrap.description>Ersetzt alle Kosten durch einen einzigen Stahlschrott. Schrott-Umarbeitungen sind grob und billig – man schraubt einfach etwas Gerümpel an.</UWU_HeavyScrap.description>
+  <!-- EN: Replaces all costs with a single steel slag chunk. Scrap modifications are crude and cheap, so bolted-on junk is all it takes. -->
+  <UWU_HeavyScrap.description>Ersetzt alle Kosten durch einen einzigen Stahlschrott. Schrott-Umarbeitungen sind grob und billig, es genügt also, etwas Gerümpel anzuschrauben.</UWU_HeavyScrap.description>
 
   <!-- EN: charge weapons (category-gated) -->
   <UWU_ChargeCategoryGated.label>Impulswaffen (kategoriegebunden)</UWU_ChargeCategoryGated.label>
@@ -307,8 +307,8 @@
 
   <!-- EN: material override fallback -->
   <UWU_MaterialOverride.label>Ersatzregel für Materialüberschreibung</UWU_MaterialOverride.label>
-  <!-- EN: Detects material names in the trait label (e.g. "gold" in "Gold Inlay") and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
-  <UWU_MaterialOverride.description>Erkennt Materialnamen in der Merkmalsbezeichnung (z.B. 'gold' in 'Gold Inlay') und ersetzt die Rohstoffkosten durch denselben Marktwert dieses Materials. Fängt alle Merkmale auf, für die es keine eigene thematische Regel gibt.</UWU_MaterialOverride.description>
+  <!-- EN: Detects a material named in the trait label, such as the gold in gold inlay, and replaces raw resource costs with an equal market value of that material. Acts as a catch-all for traits without a specific thematic rule. -->
+  <UWU_MaterialOverride.description>Erkennt ein in der Merkmalsbezeichnung genanntes Material, etwa Gold bei 'vergoldet', und ersetzt die Rohstoffkosten durch denselben Marktwert dieses Materials. Fängt alle Merkmale auf, für die es keine eigene thematische Regel gibt.</UWU_MaterialOverride.description>
 
   <!-- EN: cost material pruning -->
   <UWU_CostPrune.label>Kürzung der Kostenmaterialien</UWU_CostPrune.label>

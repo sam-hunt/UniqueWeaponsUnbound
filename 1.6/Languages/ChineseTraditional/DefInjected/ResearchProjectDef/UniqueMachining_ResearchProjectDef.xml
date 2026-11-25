@@ -3,8 +3,8 @@
 
   <!-- EN: unique machining -->
   <UniqueMachining.label>獨特武器機械加工</UniqueMachining.label>
-  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
-  <UniqueMachining.description>在機械加工桌上升級並自訂工業時代的武器，依你的需求加入或移除特質。</UniqueMachining.description>
+  <!-- EN: Upgrade and customize industrial weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>在機械加工桌上升級並自訂工業武器，依你的需求加入或移除特質。</UniqueMachining.description>
 
   <!-- EN: Upgrade and customize industrial unique weapons -->
   <UniqueMachining.customUnlockTexts.0>升級並自訂工業時代的獨特武器</UniqueMachining.customUnlockTexts.0>

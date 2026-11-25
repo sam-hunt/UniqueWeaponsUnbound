@@ -37,9 +37,9 @@
        {0} = skill label (lowercase, e.g. crafting) or expertise label; {1} = required level -->
   <!-- EN: requires {0} expertise -->
   <UWU_RequiresExpertise>nécessite l'expertise en {0}</UWU_RequiresExpertise>
-  <!-- EN: no colonist has {0} {1} -->
+  <!-- EN: no colonist has {0} level {1} -->
   <UWU_NoColonistWithSkill>aucun colon n'a de compétence en {0} de niveau {1}</UWU_NoColonistWithSkill>
-  <!-- EN: no colonist on this map has {0} {1} -->
+  <!-- EN: no colonist on this map has {0} level {1} -->
   <UWU_NoColonistOnMapWithSkill>aucun colon de cette carte n'a de compétence en {0} de niveau {1}</UWU_NoColonistOnMapWithSkill>
   <!-- EN: no colonist has {0} expertise -->
   <UWU_NoColonistWithExpertise>aucun colon n'a l'expertise en {0}</UWU_NoColonistWithExpertise>
@@ -77,26 +77,28 @@
   <UWU_TabColor>Couleur</UWU_TabColor>
 
   <!-- Dialog: Controls -->
-  <!-- EN: This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion. -->
-  <UWU_RelicNameTooltip>Cette arme est une relique idéologique. Son nom ne peut être modifié qu'au moment de créer ou de réformer une idéoligion.</UWU_RelicNameTooltip>
+  <!-- EN: This weapon is a relic. Its name can only be changed when forming or reforming the ideoligion. -->
+  <UWU_RelicNameTooltip>Cette arme est une relique. Son nom ne peut être modifié qu'au moment de créer ou de réformer l'idéoligion.</UWU_RelicNameTooltip>
   <!-- EN: Select at least one trait first -->
   <UWU_SelectTraitFirst>Sélectionnez d'abord au moins un trait</UWU_SelectTraitFirst>
-  <!-- EN: Auto-regenerate name when traits change -->
-  <UWU_AutoRegenName>Régénérer le nom automatiquement quand les traits changent</UWU_AutoRegenName>
+  <!-- EN: Rename automatically when traits change -->
+  <UWU_AutoRegenName>Renommer automatiquement quand les traits changent</UWU_AutoRegenName>
   <!-- EN: Hide negative traits -->
   <UWU_HideNegativeTraits>Masquer les traits négatifs</UWU_HideNegativeTraits>
 
   <!-- Dialog: Disabled-state messages -->
-  <!-- EN: Select traits to customize texture -->
-  <UWU_SelectTraitsForTexture>Sélectionnez des traits pour personnaliser la texture</UWU_SelectTraitsForTexture>
-  <!-- EN: Select traits to customize color -->
-  <UWU_SelectTraitsForColor>Sélectionnez des traits pour personnaliser la couleur</UWU_SelectTraitsForColor>
+  <!-- EN: Select at least one trait to customize the texture -->
+  <UWU_SelectTraitsForTexture>Sélectionnez au moins un trait pour personnaliser la texture</UWU_SelectTraitsForTexture>
+  <!-- EN: Select at least one trait to customize the color -->
+  <UWU_SelectTraitsForColor>Sélectionnez au moins un trait pour personnaliser la couleur</UWU_SelectTraitsForColor>
   <!-- {0} = a trait label. Leading with "Couleur" keeps the participle agreeing
        with a noun we control, not with the injected label. -->
-  <!-- EN: Color determined by {0} -->
-  <UWU_ColorDeterminedBy>Couleur déterminée par {0}</UWU_ColorDeterminedBy>
+  <!-- EN: Color is set by {0} -->
+  <UWU_ColorDeterminedBy>Couleur définie par {0}</UWU_ColorDeterminedBy>
 
   <!-- Dialog: Color sections -->
+  <!-- EN: Trait color -->
+  <UWU_TraitColor>Couleur du trait</UWU_TraitColor>
   <!-- EN: Weapon colors -->
   <UWU_WeaponColors>Couleurs de l'arme</UWU_WeaponColors>
   <!-- EN: Ideology colors -->
@@ -115,19 +117,19 @@
   <UWU_NetCost>Coût net : </UWU_NetCost>
   <!-- EN: Free -->
   <UWU_CostFree>Gratuit</UWU_CostFree>
-  <!-- EN: Missing resources -->
-  <UWU_MissingResources>Ressources manquantes</UWU_MissingResources>
-  <!-- EN: Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position. -->
-  <UWU_NotEnoughMaterials>Les matériaux requis sont insuffisants, interdits, réservés par un autre colon, ou impossibles à atteindre depuis la position de ce colon.</UWU_NotEnoughMaterials>
-  <!-- EN: Could not customize {0}: no viable haul plan. -->
-  <UWU_CouldNotStartPlanInfeasible>Impossible de personnaliser {0} : aucun plan de transport viable.</UWU_CouldNotStartPlanInfeasible>
-  <!-- EN: Could not customize {0}: failed to reserve {1} x{2}. -->
-  <UWU_CouldNotStartReservationConflict>Impossible de personnaliser {0} : échec de la réservation de {1} x{2}.</UWU_CouldNotStartReservationConflict>
+  <!-- EN: Missing ingredients -->
+  <UWU_MissingResources>Ingrédients manquants</UWU_MissingResources>
+  <!-- EN: Some ingredients are missing, forbidden, reserved by someone else, or out of this colonist's reach. -->
+  <UWU_NotEnoughMaterials>Certains ingrédients manquent, sont interdits, sont réservés par quelqu'un d'autre ou ne sont pas accessibles à ce colon.</UWU_NotEnoughMaterials>
+  <!-- EN: Could not customize {0}: could not gather enough ingredients. -->
+  <UWU_CouldNotStartPlanInfeasible>Impossible de personnaliser {0} : les ingrédients n'ont pas pu être rassemblés en quantité suffisante.</UWU_CouldNotStartPlanInfeasible>
+  <!-- EN: Could not customize {0}: {1} x{2} could not be reserved. -->
+  <UWU_CouldNotStartReservationConflict>Impossible de personnaliser {0} : la réservation de {1} x{2} a échoué.</UWU_CouldNotStartReservationConflict>
   <!-- "en possession de {3}" avoids a participle that would have to agree with {1}. -->
-  <!-- EN: Could not customize {0}: failed to reserve {1} x{2} (held by {3}). -->
-  <UWU_CouldNotStartReservationConflictHeldBy>Impossible de personnaliser {0} : échec de la réservation de {1} x{2} (en possession de {3}).</UWU_CouldNotStartReservationConflictHeldBy>
-  <!-- EN: Could not customize {0}: internal error. See log. -->
-  <UWU_CouldNotStartInternalError>Impossible de personnaliser {0} : erreur interne. Consultez le journal.</UWU_CouldNotStartInternalError>
+  <!-- EN: Could not customize {0}: {1} x{2} is reserved by {3}. -->
+  <UWU_CouldNotStartReservationConflictHeldBy>Impossible de personnaliser {0} : {3} a déjà réservé {1} x{2}.</UWU_CouldNotStartReservationConflictHeldBy>
+  <!-- EN: Could not customize {0}: an error occurred. See error log for more information. -->
+  <UWU_CouldNotStartInternalError>Impossible de personnaliser {0} : une erreur s'est produite. Veuillez lire le journal des erreurs pour plus d'informations.</UWU_CouldNotStartInternalError>
 
   <!-- Trait tooltips -->
   <!-- EN: Effects: -->
@@ -136,7 +138,7 @@
   <UWU_DamageType>Type de dégâts</UWU_DamageType>
   <!-- EN: Extra damage -->
   <UWU_ExtraDamage>Dégâts supplémentaires</UWU_ExtraDamage>
-  <!-- EN: Burst speed -->
+  <!-- EN: Fire rate -->
   <UWU_BurstSpeed>Cadence de tir</UWU_BurstSpeed>
   <!-- EN: Burst count -->
   <UWU_BurstCount>Nombre de tirs par rafale</UWU_BurstCount>
@@ -156,14 +158,14 @@
   <UWU_CannotBeOnlyTrait>Ne peut pas être le seul trait</UWU_CannotBeOnlyTrait>
   <!-- "prendre à" is the idiomatic way to say taking a weapon off someone; French
        "désarmer" takes the person as its object, not the weapon. -->
-  <!-- EN: Must disarm from hostile -->
-  <UWU_OnlyOnHostiles>Doit être pris à un hostile</UWU_OnlyOnHostiles>
-  <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
-  <UWU_LastTraitSourceWarning>Avertissement : c'est la seule arme de votre réserve à posséder ce trait. Le retirer supprimera ce trait de la liste de ceux que vous pouvez appliquer à d'autres armes.</UWU_LastTraitSourceWarning>
+  <!-- EN: Only on weapons held by hostiles -->
+  <UWU_OnlyOnHostiles>Uniquement sur les armes tenues par des hostiles</UWU_OnlyOnHostiles>
+  <!-- EN: Warning: This is your only weapon with this trait. If you remove the trait, you will not be able to add it to other weapons until you find another weapon that has it. -->
+  <UWU_LastTraitSourceWarning>Avertissement : c'est votre seule arme à posséder ce trait. Si vous le retirez, vous ne pourrez plus l'ajouter à d'autres armes avant d'en trouver une autre qui le possède.</UWU_LastTraitSourceWarning>
   <!-- EN: No traits match your search. -->
   <UWU_NoTraitsMatchSearch>Aucun trait ne correspond à votre recherche.</UWU_NoTraitsMatchSearch>
-  <!-- EN: No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization. -->
-  <UWU_NoTraitsDiscovered>Aucun trait disponible pour le moment.\n\nRécupérez des armes uniques via des quêtes ou du butin sur\nla carte du monde pour débloquer leurs traits.</UWU_NoTraitsDiscovered>
+  <!-- EN: No traits available yet.\n\nFind unique weapons through quests or exploration to unlock their traits. -->
+  <UWU_NoTraitsDiscovered>Aucun trait disponible pour le moment.\n\nTrouvez des armes uniques lors de quêtes ou d'explorations pour débloquer leurs traits.</UWU_NoTraitsDiscovered>
   <!-- EN: All available traits for this weapon are negative. Disable "Hide negative traits" below to view them. -->
   <UWU_NoTraitsAfterHideNegative>Tous les traits disponibles pour cette arme sont négatifs. Désactivez « Masquer les traits négatifs » ci-dessous pour les afficher.</UWU_NoTraitsAfterHideNegative>
   <!-- EN: No traits are compatible with this weapon. -->
@@ -183,34 +185,34 @@
        subject, WITH a terminal period (Core BuildSnowman = "construit un bonhomme
        de neige."). This differs from ja and ko, which take no period, and from the
        es gerund form — check the target language's own JobDef data, never carry over. -->
-  <!-- EN: Customizing {0} -->
+  <!-- EN: customizing {0}. -->
   <UWU_CustomizingWeapon>personnalise {0}.</UWU_CustomizingWeapon>
-  <!-- EN: Adding {0} to {1} -->
+  <!-- EN: adding {0} to {1}. -->
   <UWU_AddingTrait>ajoute {0} à {1}.</UWU_AddingTrait>
-  <!-- EN: Removing {0} from {1} -->
+  <!-- EN: removing {0} from {1}. -->
   <UWU_RemovingTrait>retire {0} de {1}.</UWU_RemovingTrait>
-  <!-- EN: Customizing appearance of {0} -->
+  <!-- EN: customizing appearance of {0}. -->
   <UWU_ApplyingCosmetics>personnalise l'apparence de {0}.</UWU_ApplyingCosmetics>
-  <!-- EN: Placing {0} on {1} -->
+  <!-- EN: placing {0} on {1}. -->
   <UWU_PlacingWeapon>place {0} sur {1}.</UWU_PlacingWeapon>
-  <!-- EN: Gathering materials for {0} -->
-  <UWU_GatheringMaterials>rassemble les matériaux pour {0}.</UWU_GatheringMaterials>
-  <!-- EN: Admiring work -->
+  <!-- EN: gathering ingredients for {0}. -->
+  <UWU_GatheringMaterials>rassemble les ingrédients pour {0}.</UWU_GatheringMaterials>
+  <!-- EN: admiring work. -->
   <UWU_AdmiringWork>admire son travail.</UWU_AdmiringWork>
   <!-- The interruption family below leads with "Personnalisation", which is
        invariably feminine, so the participle agrees with it instead of with the
        injected weapon label — the same restructure the de and es passes needed. -->
-  <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
-  <UWU_IngredientShortfall>Personnalisation de {0} interrompue : ingrédients perdus avant que {1} puisse être appliqué.</UWU_IngredientShortfall>
-  <!-- EN: {0} customization interrupted: workbench is no longer available. -->
+  <!-- EN: {0} customization interrupted: ingredients were lost before {1} could be added. -->
+  <UWU_IngredientShortfall>Personnalisation de {0} interrompue : des ingrédients ont été perdus avant l'ajout de {1}.</UWU_IngredientShortfall>
+  <!-- EN: {0} customization interrupted: the workbench is no longer available. -->
   <UWU_BailWorkbenchUnavailable>Personnalisation de {0} interrompue : l'établi n'est plus disponible.</UWU_BailWorkbenchUnavailable>
-  <!-- EN: {0} customization interrupted: workbench became unreachable. -->
+  <!-- EN: {0} customization interrupted: the workbench can no longer be reached. -->
   <UWU_BailWorkbenchUnreachable>Personnalisation de {0} interrompue : l'établi est devenu inaccessible.</UWU_BailWorkbenchUnreachable>
-  <!-- EN: {0} customization interrupted: workbench has no power or fuel. -->
+  <!-- EN: {0} customization interrupted: the workbench has no power or fuel. -->
   <UWU_BailWorkbenchInactive>Personnalisation de {0} interrompue : l'établi n'a plus d'électricité ni de combustible.</UWU_BailWorkbenchInactive>
-  <!-- EN: {0} customization interrupted: weapon was lost. -->
+  <!-- EN: {0} customization interrupted: the weapon was lost. -->
   <UWU_BailWeaponLost>Personnalisation de {0} interrompue : l'arme a été perdue.</UWU_BailWeaponLost>
-  <!-- EN: {0} customization interrupted: weapon is no longer accessible. -->
+  <!-- EN: {0} customization interrupted: the weapon is no longer accessible. -->
   <UWU_BailWeaponInaccessible>Personnalisation de {0} interrompue : l'arme n'est plus accessible.</UWU_BailWeaponInaccessible>
   <!-- EN: {0} customization interrupted: an ingredient was lost while hauling. -->
   <UWU_BailIngredientLost>Personnalisation de {0} interrompue : un ingrédient a été perdu pendant le transport.</UWU_BailIngredientLost>
@@ -228,14 +230,14 @@
   <UWU_BailOpCosmeticsFailed>Personnalisation de {0} interrompue : une erreur est survenue lors de l'application des changements esthétiques.</UWU_BailOpCosmeticsFailed>
   <!-- EN: {0} customization failed unexpectedly. -->
   <UWU_BailUnexpected>Personnalisation de {0} : échec inattendu.</UWU_BailUnexpected>
-  <!-- EN: {0} customization interrupted: the customization dialog could not be opened. See log. -->
-  <UWU_BailDialogOpenFailed>Personnalisation de {0} interrompue : la fenêtre de personnalisation n'a pas pu être ouverte. Consultez le journal.</UWU_BailDialogOpenFailed>
-  <!-- EN: {0} customization dialog errored and was closed. See log. -->
-  <UWU_DialogErrored>La fenêtre de personnalisation de {0} a rencontré une erreur et a été fermée. Consultez le journal.</UWU_DialogErrored>
-  <!-- EN: {0} customized, but ability state could not be reconciled. See log. -->
-  <UWU_FinalizeAbilitySyncFailed>Personnalisation de {0} terminée, mais l'état des capacités n'a pas pu être réconcilié. Consultez le journal.</UWU_FinalizeAbilitySyncFailed>
-  <!-- EN: {0} customized, but the final color could not be applied. See log. -->
-  <UWU_FinalizeColorFailed>Personnalisation de {0} terminée, mais la couleur finale n'a pas pu être appliquée. Consultez le journal.</UWU_FinalizeColorFailed>
+  <!-- EN: {0} customization interrupted: the customization window could not be opened. See error log for more information. -->
+  <UWU_BailDialogOpenFailed>Personnalisation de {0} interrompue : la fenêtre de personnalisation n'a pas pu être ouverte. Veuillez lire le journal des erreurs pour plus d'informations.</UWU_BailDialogOpenFailed>
+  <!-- EN: The customization window for {0} closed because of an error. See error log for more information. -->
+  <UWU_DialogErrored>La fenêtre de personnalisation de {0} a été fermée à cause d'une erreur. Veuillez lire le journal des erreurs pour plus d'informations.</UWU_DialogErrored>
+  <!-- EN: {0} was customized, but its abilities could not be updated. See error log for more information. -->
+  <UWU_FinalizeAbilitySyncFailed>Personnalisation de {0} terminée, mais ses capacités n'ont pas pu être mises à jour. Veuillez lire le journal des erreurs pour plus d'informations.</UWU_FinalizeAbilitySyncFailed>
+  <!-- EN: {0} was customized, but the final color could not be applied. See error log for more information. -->
+  <UWU_FinalizeColorFailed>Personnalisation de {0} terminée, mais la couleur finale n'a pas pu être appliquée. Veuillez lire le journal des erreurs pour plus d'informations.</UWU_FinalizeColorFailed>
   <!-- {0} = a precept label, {1} = an ideoligion name; both arrive wrapped in colour
        markup, which blocks the elision worker, so keep "de {0}" phrasing that reads
        correctly unelided. Never carry the English "'s" across. -->
@@ -266,101 +268,111 @@
   <!-- EN:  (experimental) -->
   <UWU_ExperimentalSuffix> (expérimental)</UWU_ExperimentalSuffix>
 
+  <!-- Settings: A checkbox's default, as the last argument of its tooltip ("Par défaut : {0}.") -->
+  <!-- EN: enabled -->
+  <UWU_Enabled>activé</UWU_Enabled>
+  <!-- EN: disabled -->
+  <UWU_Disabled>désactivé</UWU_Disabled>
+
   <!-- Settings: Trait costs -->
   <!-- EN: Trait cost multiplier: {0}% -->
   <UWU_TraitCostMultiplier>Multiplicateur du coût des traits : {0}%</UWU_TraitCostMultiplier>
+  <!-- EN: Adjust the material cost of customizing weapons. At 0%, customization is free. Default: {0}%. -->
+  <UWU_TraitCostMultiplierDesc>Ajuste le coût en matériaux de la personnalisation des armes. À 0%, la personnalisation est gratuite. Par défaut : {0}%.</UWU_TraitCostMultiplierDesc>
   <!-- EN: Trait refund rate: {0}% -->
   <UWU_TraitRefundRate>Taux de remboursement des traits : {0}%</UWU_TraitRefundRate>
-  <!-- EN: Trait refund rate has no effect while trait cost multiplier is 0%. -->
+  <!-- EN: The share of a trait's cost that is returned when the trait is removed. Negative traits cost this share to add or remove instead. Default: {0}%. -->
+  <UWU_TraitRefundRateDesc>La part du coût d'un trait qui est remboursée quand le trait est retiré. Un trait négatif coûte à la place cette part à l'ajout comme au retrait. Par défaut : {0}%.</UWU_TraitRefundRateDesc>
+  <!-- EN: The trait refund rate has no effect while the trait cost multiplier is 0%. -->
   <UWU_RefundRateNoEffect>Le taux de remboursement des traits n'a aucun effet tant que le multiplicateur du coût des traits est à 0%.</UWU_RefundRateNoEffect>
   <!-- EN: Derive base cost from crafting recipe -->
   <UWU_UseRecipeBaseCost>Déduire le coût de base de la recette de fabrication</UWU_UseRecipeBaseCost>
-  <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
-  <UWU_UseRecipeBaseCostDesc>Lorsque cette option est active, le coût en matériaux de base pour ajouter des traits est déduit de la recette de fabrication de l'arme. Lorsqu'elle est inactive, un coût fixe fondé sur des ressources génériques correspondant au niveau technique de l'arme est utilisé à la place. La désactiver empêche les armes peu coûteuses à fabriquer d'avoir des coûts de traits déraisonnablement bas, mais peut aussi empêcher les armes atypiques ou issues de mods d'avoir des coûts thématiquement adaptés.</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: When enabled, the cost of adding a trait will be based on the weapon's crafting recipe. When disabled, every weapon of the same tech level will use the same flat cost, so cheap weapons no longer have cheap traits. Default: {0}. -->
+  <UWU_UseRecipeBaseCostDesc>Si cette option est activée, le coût d'ajout d'un trait se base sur la recette de fabrication de l'arme. Si elle est désactivée, toutes les armes du même niveau technique ont le même coût fixe, si bien que les armes bon marché n'ont plus de traits bon marché. Par défaut : {0}.</UWU_UseRecipeBaseCostDesc>
   <!-- EN: Rare trait cost cap: {0}x -->
   <UWU_RarityCostCap>Plafond du coût des traits rares : {0}x</UWU_RarityCostCap>
-  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
-  <UWU_RarityCostCapDesc>La rareté d'un trait indique la fréquence à laquelle il apparaît sur les armes uniques trouvées dans le monde. Les traits plus rares coûtent plus cher, jusqu'à ce multiple de leur coût de base. À 1x, la rareté n'affecte pas le coût.</UWU_RarityCostCapDesc>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. Default: {0}x. -->
+  <UWU_RarityCostCapDesc>La rareté d'un trait indique la fréquence à laquelle il apparaît sur les armes uniques trouvées dans le monde. Les traits plus rares coûtent plus cher, jusqu'à ce multiple de leur coût de base. À 1x, la rareté n'affecte pas le coût. Par défaut : {0}x.</UWU_RarityCostCapDesc>
   <!-- EN: Advanced trait minimum cost: {0}% -->
   <UWU_ComplexityFloorScale>Coût minimum des traits avancés : {0}%</UWU_ComplexityFloorScale>
-  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
-  <UWU_ComplexityFloorScaleDesc>Les traits de niveau spatial coûtent un nombre minimum de composants avancés sur les armes fabriquées sans composants, comme les armes de mêlée ou les arcs. Ce minimum varie selon le travail de fabrication, la qualité et la rareté du trait. 0% le supprime.</UWU_ComplexityFloorScaleDesc>
-  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <!-- EN: Spacer-tech traits will always cost a minimum number of advanced components, even on weapons made without components, such as melee weapons and bows. At 0%, there is no minimum. Default: {0}%. -->
+  <UWU_ComplexityFloorScaleDesc>Les traits de niveau spatial coûtent toujours un minimum de composants avancés, même sur les armes fabriquées sans composants, comme les armes de mêlée et les arcs. À 0%, il n'y a pas de minimum. Par défaut : {0}%.</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while the trait cost multiplier is 0%. -->
   <UWU_CostSettingNoEffect>Ce paramètre n'a aucun effet tant que le multiplicateur du coût des traits est à 0%.</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->
   <UWU_MinimumQuality>Qualité minimale de l'arme : {0}</UWU_MinimumQuality>
-  <!-- EN: Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation. -->
-  <UWU_MinimumQualityDesc>Limite la personnalisation aux armes ayant au moins cette qualité. « horrible » n'impose aucune restriction. Les armes en dessous du minimum afficheront tout de même l'option de personnalisation, mais celle-ci sera désactivée avec une explication.</UWU_MinimumQualityDesc>
+  <!-- EN: The lowest quality a weapon can have and still be customized. At awful, every weapon qualifies. Default: {0}. -->
+  <UWU_MinimumQualityDesc>La qualité minimale qu'une arme doit avoir pour pouvoir être personnalisée. À « horrible », toutes les armes sont admises. Par défaut : {0}.</UWU_MinimumQualityDesc>
   <!-- EN: Require customization research -->
   <UWU_RequireCustomizationResearch>Exiger la recherche de personnalisation</UWU_RequireCustomizationResearch>
   <!-- {0} = unique smithing, {1} = unique machining, {2} = unique fabrication (research labels) -->
-  <!-- EN: Require the completion of the {0}, {1}, or {2} research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
-  <UWU_RequireCustomizationResearchDesc>Exige l'achèvement des projets de recherche "{0}", "{1}" ou "{2}" avant de personnaliser des armes du niveau technique correspondant. Lorsque cette option est inactive, ces projets de recherche sont masqués dans l'arbre de recherche.</UWU_RequireCustomizationResearchDesc>
+  <!-- EN: When enabled, a weapon can only be customized after researching {0}, {1} or {2}, depending on its tech level. When disabled, these projects will be hidden from the research window. Default: {3}. -->
+  <UWU_RequireCustomizationResearchDesc>Si cette option est activée, une arme ne peut être personnalisée qu'après les recherches "{0}", "{1}" ou "{2}", selon son niveau technique. Si elle est désactivée, ces projets sont masqués dans l'écran de recherche. Par défaut : {3}.</UWU_RequireCustomizationResearchDesc>
   <!-- EN: Require weapon crafting research -->
   <UWU_RequireRecipeResearch>Exiger la recherche de fabrication de l'arme</UWU_RequireRecipeResearch>
   <!-- {0} = ChargeRifle label, {1} = pulse-charged munitions (vanilla ChargedShot research label) -->
   <!-- English puts an indefinite article on {0}, which French cannot supply without
        knowing the label's gender. Leading with "la personnalisation de" removes the
        need for one; quoting also stops the elision worker from touching it. -->
-  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a {0} would require {1}. -->
-  <UWU_RequireRecipeResearchDesc>Exige l'achèvement de toute recherche qui permettrait de fabriquer l'arme. Par exemple, la personnalisation de "{0}" nécessiterait la recherche "{1}".</UWU_RequireRecipeResearchDesc>
+  <!-- EN: When enabled, a weapon can only be customized once the research needed to craft it is complete. For example, customizing a {0} will require {1}. Default: {2}. -->
+  <UWU_RequireRecipeResearchDesc>Si cette option est activée, une arme ne peut être personnalisée qu'une fois la recherche nécessaire à sa fabrication terminée. Par exemple, personnaliser "{0}" nécessitera la recherche "{1}". Par défaut : {2}.</UWU_RequireRecipeResearchDesc>
   <!-- EN: Require appropriate workbench -->
   <UWU_RequireWorkbench>Exiger un établi approprié</UWU_RequireWorkbench>
-  <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
-  <UWU_RequireWorkbenchDesc>Exige que l'établi corresponde au niveau technique de l'arme. Lorsque cette option est inactive, n'importe quel établi capable de fabriquer des armes suffit pour personnaliser toutes les armes.</UWU_RequireWorkbenchDesc>
+  <!-- EN: When enabled, a weapon must be customized at a workbench of its own tech level. When disabled, any workbench that can craft weapons will do. Default: {0}. -->
+  <UWU_RequireWorkbenchDesc>Si cette option est activée, une arme doit être personnalisée sur un établi de son propre niveau technique. Si elle est désactivée, n'importe quel établi capable de fabriquer des armes convient. Par défaut : {0}.</UWU_RequireWorkbenchDesc>
   <!-- EN: Allow customizing uncraftable weapons -->
   <UWU_AllowUncraftable>Autoriser la personnalisation des armes non fabricables</UWU_AllowUncraftable>
-  <!-- EN: Allow customization of weapons that have no crafting recipe. -->
-  <UWU_AllowUncraftableDesc>Autorise la personnalisation des armes qui n'ont aucune recette de fabrication.</UWU_AllowUncraftableDesc>
-  <!-- EN: Allow customizing ultratech-level weapons -->
-  <UWU_AllowUltratech>Autoriser la personnalisation des armes de niveau ultra</UWU_AllowUltratech>
+  <!-- EN: When enabled, weapons that have no crafting recipe can also be customized. Default: {0}. -->
+  <UWU_AllowUncraftableDesc>Si cette option est activée, les armes sans recette de fabrication peuvent aussi être personnalisées. Par défaut : {0}.</UWU_AllowUncraftableDesc>
+  <!-- EN: Allow customizing ultratech weapons -->
+  <UWU_AllowUltratech>Autoriser la personnalisation des armes ultra</UWU_AllowUltratech>
   <!-- {0} = unique fabrication (research label) -->
-  <!-- EN: Allow customization of ultratech weapons, requiring {0} research. -->
-  <UWU_AllowUltratechDesc>Autorise la personnalisation des armes ultra, avec la recherche "{0}" comme prérequis.</UWU_AllowUltratechDesc>
-  <!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
-  <UWU_AllowUltratechImpliedDesc>Activé automatiquement parce que « Autoriser la personnalisation des armes de niveau archotech » est actif. Les deux niveaux partagent le même prérequis de recherche.</UWU_AllowUltratechImpliedDesc>
-  <!-- EN: Allow customizing archotech-level weapons -->
-  <UWU_AllowArchotech>Autoriser la personnalisation des armes de niveau archotech</UWU_AllowArchotech>
+  <!-- EN: When enabled, ultratech weapons can be customized once {0} is researched. Default: {1}. -->
+  <UWU_AllowUltratechDesc>Si cette option est activée, les armes ultra peuvent être personnalisées une fois la recherche "{0}" terminée. Par défaut : {1}.</UWU_AllowUltratechDesc>
+  <!-- EN: Always enabled while "Allow customizing archotech weapons" is enabled, because both need the same research. -->
+  <UWU_AllowUltratechImpliedDesc>Toujours activé tant que « Autoriser la personnalisation des armes archotech » est activé, car les deux demandent la même recherche.</UWU_AllowUltratechImpliedDesc>
+  <!-- EN: Allow customizing archotech weapons -->
+  <UWU_AllowArchotech>Autoriser la personnalisation des armes archotech</UWU_AllowArchotech>
   <!-- {0} = unique fabrication (research label) -->
-  <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
-  <UWU_AllowArchotechDesc>Autorise la personnalisation des armes archotech, avec la recherche "{0}" comme prérequis.</UWU_AllowArchotechDesc>
+  <!-- EN: When enabled, archotech weapons can be customized once {0} is researched. Default: {1}. -->
+  <UWU_AllowArchotechDesc>Si cette option est activée, les armes archotech peuvent être personnalisées une fois la recherche "{0}" terminée. Par défaut : {1}.</UWU_AllowArchotechDesc>
   <!-- EN: Require minimum crafting skill -->
   <UWU_SkillCheckEnable>Exiger un niveau minimal en artisanat</UWU_SkillCheckEnable>
-  <!-- EN: Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. -->
-  <UWU_SkillCheckEnableDesc>Exige un niveau en artisanat avant qu'une arme puisse être personnalisée. Choisissez ci-dessous de qui la compétence est vérifiée et ce qui est exigé.</UWU_SkillCheckEnableDesc>
+  <!-- EN: When enabled, customizing a weapon will require crafting skill. The options below set whose skill counts and how much is needed. Default: {0}. -->
+  <UWU_SkillCheckEnableDesc>Si cette option est activée, la personnalisation d'une arme exige un niveau en artisanat. Les options ci-dessous indiquent de qui la compétence est prise en compte et quel niveau est exigé. Par défaut : {0}.</UWU_SkillCheckEnableDesc>
   <!-- EN: Skill check applies to -->
   <UWU_SkillCheckSubject>La vérification de compétence s'applique à</UWU_SkillCheckSubject>
-  <!-- EN: Whose skill is checked. What is required is set below. -->
-  <UWU_SkillCheckSubjectDesc>De qui la compétence est vérifiée. Ce qui est exigé se règle ci-dessous.</UWU_SkillCheckSubjectDesc>
+  <!-- EN: The colonist whose skill must meet the requirement. -->
+  <UWU_SkillCheckSubjectDesc>Le colon dont la compétence doit satisfaire l'exigence.</UWU_SkillCheckSubjectDesc>
   <!-- EN: No one -->
   <UWU_SkillCheckSubjectNone>Personne</UWU_SkillCheckSubjectNone>
-  <!-- EN: Any pawn can customize weapons. -->
-  <UWU_SkillCheckSubjectNoneDesc>N'importe quel pion peut personnaliser des armes.</UWU_SkillCheckSubjectNoneDesc>
-  <!-- EN: The pawn doing the customization -->
-  <UWU_SkillCheckSubjectPawn>Le pion qui effectue la personnalisation</UWU_SkillCheckSubjectPawn>
-  <!-- EN: The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall. -->
-  <UWU_SkillCheckSubjectPawnDesc>Le pion chargé de personnaliser l'arme doit remplir l'exigence. Lorsque vous choisissez un pion pour une arme posée au sol, survoler un colon insuffisamment qualifié affiche ce qui lui manque.</UWU_SkillCheckSubjectPawnDesc>
+  <!-- EN: Anyone can customize weapons. -->
+  <UWU_SkillCheckSubjectNoneDesc>Tout le monde peut personnaliser des armes.</UWU_SkillCheckSubjectNoneDesc>
+  <!-- EN: The colonist doing the work -->
+  <UWU_SkillCheckSubjectPawn>Le colon qui effectue le travail</UWU_SkillCheckSubjectPawn>
+  <!-- EN: The colonist ordered to customize the weapon must have the skill themselves. -->
+  <UWU_SkillCheckSubjectPawnDesc>Le colon chargé de personnaliser l'arme doit posséder lui-même la compétence.</UWU_SkillCheckSubjectPawnDesc>
   <!-- EN: The most skilled colonist on the map -->
   <UWU_SkillCheckSubjectMap>Le colon le plus qualifié de la carte</UWU_SkillCheckSubjectMap>
-  <!-- EN: Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves. -->
-  <UWU_SkillCheckSubjectMapDesc>N'importe quel colon de la carte de l'arme peut remplir l'exigence au nom de la colonie. Le pion qui fait le travail n'a pas besoin de posséder lui-même la compétence.</UWU_SkillCheckSubjectMapDesc>
+  <!-- EN: At least one colonist on the weapon's map must have the skill. The colonist doing the work does not need it. -->
+  <UWU_SkillCheckSubjectMapDesc>Au moins un colon de la carte de l'arme doit posséder la compétence. Le colon qui effectue le travail n'en a pas besoin.</UWU_SkillCheckSubjectMapDesc>
   <!-- EN: The most skilled colonist anywhere -->
   <UWU_SkillCheckSubjectWorld>Le colon le plus qualifié où qu'il soit</UWU_SkillCheckSubjectWorld>
-  <!-- EN: Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf. -->
-  <UWU_SkillCheckSubjectWorldDesc>N'importe quel colon, où qu'il soit dans le monde, y compris dans des caravanes et des transports, peut remplir l'exigence au nom de la colonie.</UWU_SkillCheckSubjectWorldDesc>
+  <!-- EN: At least one of your colonists must have the skill, wherever they are, including in caravans and transports. -->
+  <UWU_SkillCheckSubjectWorldDesc>Au moins un de vos colons doit posséder la compétence, où qu'il soit, y compris dans des caravanes et des transports.</UWU_SkillCheckSubjectWorldDesc>
   <!-- EN: Skill requirement -->
   <UWU_SkillCheckKind>Compétence exigée</UWU_SkillCheckKind>
-  <!-- EN: What the checked pawn must have. -->
-  <UWU_SkillCheckKindDesc>Ce que doit posséder le pion vérifié.</UWU_SkillCheckKindDesc>
-  <!-- EN: Has no effect while the skill check applies to no one. -->
-  <UWU_SkillCheckKindNoEffect>N'a aucun effet tant que la vérification de compétence ne s'applique à personne.</UWU_SkillCheckKindNoEffect>
+  <!-- EN: How much skill is required. -->
+  <UWU_SkillCheckKindDesc>Le niveau de compétence exigé.</UWU_SkillCheckKindDesc>
+  <!-- EN: This setting has no effect while the skill check applies to no one. -->
+  <UWU_SkillCheckKindNoEffect>Ce paramètre n'a aucun effet tant que la vérification de compétence ne s'applique à personne.</UWU_SkillCheckKindNoEffect>
   <!-- EN: Based on the weapon's crafting recipe -->
   <UWU_SkillCheckKindRecipe>Selon la recette de fabrication de l'arme</UWU_SkillCheckKindRecipe>
   <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
-  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}. -->
-  <UWU_SkillCheckKindRecipeDesc>Utilise les compétences exigées par la recette de fabrication de l'arme, de sorte que quiconque pourrait fabriquer une arme peut aussi la personnaliser. Les armes sans recette exigent un niveau minimal en artisanat selon le niveau technique : {0}.</UWU_SkillCheckKindRecipeDesc>
+  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so anyone who could craft a weapon can customize it. A weapon without a recipe will require a minimum crafting skill for its tech level: {0}. -->
+  <UWU_SkillCheckKindRecipeDesc>Utilise les compétences exigées par la recette de fabrication de l'arme, si bien que quiconque pourrait fabriquer une arme peut aussi la personnaliser. Une arme sans recette exige un niveau minimal en artisanat selon son niveau technique : {0}.</UWU_SkillCheckKindRecipeDesc>
   <!-- {0} = tech level (lowercase), {1} = required crafting level -->
   <!-- EN: {0} {1} -->
   <UWU_SkillCheckTierEntry>{0} {1}</UWU_SkillCheckTierEntry>
@@ -372,57 +384,61 @@
   <UWU_SkillCheckKindTechTierDesc>Exige un niveau minimal en artisanat fixé par le niveau technique de l'arme, sans tenir compte de sa recette de fabrication : {0}.</UWU_SkillCheckKindTechTierDesc>
   <!-- EN: Minimum crafting skill: {0} -->
   <UWU_SkillCheckKindFlat>Niveau minimal en artisanat : {0}</UWU_SkillCheckKindFlat>
-  <!-- EN: Require at least this crafting skill level for every weapon. -->
-  <UWU_SkillCheckKindFlatDesc>Exige au moins ce niveau en artisanat pour toutes les armes.</UWU_SkillCheckKindFlatDesc>
-  <!-- EN: Adjusting this selects "Minimum crafting skill". -->
-  <UWU_SkillCheckFlatSliderSelects>Ajuster ceci sélectionne « Niveau minimal en artisanat ».</UWU_SkillCheckFlatSliderSelects>
+  <!-- EN: Require at least this crafting skill level for every weapon. Default: {0}. -->
+  <UWU_SkillCheckKindFlatDesc>Exige au moins ce niveau en artisanat pour toutes les armes. Par défaut : {0}.</UWU_SkillCheckKindFlatDesc>
+  <!-- EN: Adjusting this slider will select "Minimum crafting skill". -->
+  <UWU_SkillCheckFlatSliderSelects>Ajuster ce curseur sélectionne « Niveau minimal en artisanat ».</UWU_SkillCheckFlatSliderSelects>
   <!-- EN: Weaponsmithing expertise (Vanilla Skills Expanded) -->
   <UWU_SkillCheckKindWeaponsmith>Expertise en armurerie (Vanilla Skills Expanded)</UWU_SkillCheckKindWeaponsmith>
   <!-- EN: Require the weaponsmithing expertise from Vanilla Skills Expanded. -->
   <UWU_SkillCheckKindWeaponsmithDesc>Exige l'expertise en armurerie de Vanilla Skills Expanded.</UWU_SkillCheckKindWeaponsmithDesc>
 
   <!-- Settings: Miscellaneous -->
-  <!-- EN: Allow weapon def conversion -->
-  <UWU_AllowDefConversion>Autoriser la conversion des defs d'armes</UWU_AllowDefConversion>
-  <!-- EN: Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon. -->
-  <UWU_AllowDefConversionDesc>Autorise les armes à passer de leur def de base à leur def unique et inversement pendant la personnalisation. Lorsque cette option est inactive, seules les armes déjà uniques peuvent être personnalisées, et retirer tous les traits conserve l'arme comme une arme unique sans aucun trait au lieu de la ramener à son arme de base.</UWU_AllowDefConversionDesc>
+  <!-- EN: Allow making weapons unique -->
+  <UWU_AllowDefConversion>Autoriser la transformation en armes uniques</UWU_AllowDefConversion>
+  <!-- EN: When enabled, adding a trait to a weapon that is not unique will turn it into its unique version, and removing every trait will turn it back. When disabled, only weapons that are already unique can be customized, and one with no traits left will stay unique. Default: {0}. -->
+  <UWU_AllowDefConversionDesc>Si cette option est activée, ajouter un trait à une arme non unique la transforme en sa version unique, et retirer tous les traits la ramène à sa version de base. Si elle est désactivée, seules les armes déjà uniques peuvent être personnalisées, et une arme sans trait reste unique. Par défaut : {0}.</UWU_AllowDefConversionDesc>
   <!-- EN: Enable Ideology color options -->
   <UWU_EnableIdeoColors>Activer les options de couleur d'idéologie</UWU_EnableIdeoColors>
-  <!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. -->
-  <UWU_EnableIdeoColorsDesc>Affiche les palettes de couleurs d'idéologie et les palettes diverses dans le sélecteur de couleur de la personnalisation d'armes.</UWU_EnableIdeoColorsDesc>
+  <!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. Default: {0}. -->
+  <UWU_EnableIdeoColorsDesc>Affiche les palettes de couleurs d'idéologie et les palettes diverses dans le sélecteur de couleur de la personnalisation d'armes. Par défaut : {0}.</UWU_EnableIdeoColorsDesc>
   <!-- EN: Enable structure color options -->
   <UWU_EnableStructureColors>Activer les options de couleur de structure</UWU_EnableStructureColors>
-  <!-- EN: Show structure color palette in the weapon customization color picker. -->
-  <UWU_EnableStructureColorsDesc>Affiche la palette de couleurs de structure dans le sélecteur de couleur de la personnalisation d'armes.</UWU_EnableStructureColorsDesc>
+  <!-- EN: Show the structure color palette in the weapon customization color picker. Default: {0}. -->
+  <UWU_EnableStructureColorsDesc>Affiche la palette de couleurs de structure dans le sélecteur de couleur de la personnalisation d'armes. Par défaut : {0}.</UWU_EnableStructureColorsDesc>
+  <!-- EN: Enforce trait colors -->
+  <UWU_EnforceTraitColors>Appliquer les couleurs des traits</UWU_EnforceTraitColors>
+  <!-- EN: Some traits, such as gold inlay and tox rounds, set the color of the weapon. When enabled, a weapon with one of these traits will always use that color. When disabled, adding the trait will select its color, but any other color can be picked instead. Default: {0}. -->
+  <UWU_EnforceTraitColorsDesc>Certains traits, comme incrusté d'or ou munitions toxiques, définissent la couleur de l'arme. Si cette option est activée, une arme dotée d'un de ces traits utilise toujours cette couleur. Si elle est désactivée, l'ajout du trait sélectionne sa couleur, mais n'importe quelle autre couleur peut être choisie à la place. Par défaut : {0}.</UWU_EnforceTraitColorsDesc>
   <!-- EN: Enforce trait count limit -->
   <UWU_EnforceMaxTraitLimit>Appliquer la limite du nombre de traits</UWU_EnforceMaxTraitLimit>
-  <!-- EN: Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply). -->
-  <UWU_EnforceMaxTraitLimitDesc>Dans le jeu de base, les armes uniques sont générées avec trois traits au maximum. Activez cette option pour appliquer la même limite pendant la personnalisation. Désactivez-la pour autoriser un nombre quelconque de traits (les autres règles, comme les restrictions de catégorie et d'exclusion, continuent de s'appliquer).</UWU_EnforceMaxTraitLimitDesc>
-  <!-- EN: Enforce sole-trait restrictions -->
-  <UWU_EnforceSoleTrait>Appliquer les restrictions de trait unique</UWU_EnforceSoleTrait>
-  <!-- EN: Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization. -->
-  <UWU_EnforceSoleTraitDesc>Certains traits ne peuvent pas être le seul trait d'une arme lors de la génération dans le jeu de base. Activez cette option pour appliquer la même restriction pendant la personnalisation.</UWU_EnforceSoleTraitDesc>
+  <!-- EN: Unique weapons found in the world never have more than three traits. When enabled, the same limit will apply to customization. When disabled, a weapon can have any number of traits that do not conflict. Default: {0}. -->
+  <UWU_EnforceMaxTraitLimitDesc>Les armes uniques trouvées dans le monde n'ont jamais plus de trois traits. Si cette option est activée, la même limite s'applique à la personnalisation. Si elle est désactivée, une arme peut avoir autant de traits qu'on le souhaite, tant qu'ils ne sont pas en conflit. Par défaut : {0}.</UWU_EnforceMaxTraitLimitDesc>
+  <!-- EN: Enforce lone trait restrictions -->
+  <UWU_EnforceSoleTrait>Appliquer les restrictions sur les traits seuls</UWU_EnforceSoleTrait>
+  <!-- EN: Some traits never appear as the only trait on a unique weapon found in the world. When enabled, the same restriction will apply to customization. Default: {0}. -->
+  <UWU_EnforceSoleTraitDesc>Certains traits n'apparaissent jamais comme seul trait d'une arme unique trouvée dans le monde. Si cette option est activée, la même restriction s'applique à la personnalisation. Par défaut : {0}.</UWU_EnforceSoleTraitDesc>
   <!-- EN: Restrict available traits to discovered weapons -->
   <UWU_RestrictTraitsToDiscovered>Limiter les traits disponibles aux armes découvertes</UWU_RestrictTraitsToDiscovered>
-  <!-- EN: Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately. -->
-  <UWU_RestrictTraitsToDiscoveredDesc>Système de progression léger. Lorsque cette option est active, la fenêtre de personnalisation ne propose que les traits présents sur des armes uniques actuellement visibles par la colonie : sur une carte chargée (hors brouillard, non scellée et non détenue par des hostiles) ou dans une caravane de votre faction. Aucune donnée persistante n'est ajoutée aux sauvegardes. La désactiver rétablit immédiatement la liste complète des traits.</UWU_RestrictTraitsToDiscoveredDesc>
+  <!-- EN: When enabled, only traits found on unique weapons on your maps or in your caravans can be added. Weapons hidden by fog, sealed away or carried by hostiles do not count. When disabled, every trait can be added. Default: {0}. -->
+  <UWU_RestrictTraitsToDiscoveredDesc>Si cette option est activée, seuls les traits présents sur des armes uniques de vos cartes ou de vos caravanes peuvent être ajoutés. Les armes cachées par le brouillard, scellées ou portées par des hostiles ne comptent pas. Si elle est désactivée, tous les traits peuvent être ajoutés. Par défaut : {0}.</UWU_RestrictTraitsToDiscoveredDesc>
   <!-- EN: Enable ground weapon right-click menu -->
   <UWU_EnableGroundCustomization>Activer le menu contextuel des armes au sol</UWU_EnableGroundCustomization>
-  <!-- EN: Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button. -->
-  <UWU_EnableGroundCustomizationDesc>Affiche les options « Personnaliser » lors d'un clic droit sur des armes au sol. Désactivez cette option pour alléger le menu contextuel, en particulier avec des mods de stockage qui empilent les objets dans une même case. Les armes peuvent toujours être personnalisées en les sélectionnant puis en utilisant le bouton de commande.</UWU_EnableGroundCustomizationDesc>
+  <!-- EN: When enabled, right-clicking a weapon on the ground will offer to customize it. When disabled, the right-click menu stays shorter, and weapons can still be customized by selecting them and pressing the Customize button. Default: {0}. -->
+  <UWU_EnableGroundCustomizationDesc>Si cette option est activée, un clic droit sur une arme au sol propose de la personnaliser. Si elle est désactivée, le menu contextuel reste plus court, et les armes peuvent toujours être personnalisées en les sélectionnant puis en appuyant sur le bouton « Personnaliser ». Par défaut : {0}.</UWU_EnableGroundCustomizationDesc>
 
   <!-- Settings: Haul planner -->
   <!-- EN: Sequential -->
   <UWU_HaulPlannerSequential>Séquentiel</UWU_HaulPlannerSequential>
-  <!-- EN: Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations. -->
-  <UWU_HaulPlannerSequentialDesc>Comportement du jeu de base. Les colons transportent au maximum une pile d'ingrédients à la fois, en prenant toujours la plus proche en premier. Simple et prévisible, mais cela implique de nombreux petits trajets pour les personnalisations gourmandes en ressources.</UWU_HaulPlannerSequentialDesc>
+  <!-- EN: Colonists will carry one stack of ingredients at a time, taking the nearest first, the same way they do for bills. This is simple and predictable, but expensive customizations will take many short trips. -->
+  <UWU_HaulPlannerSequentialDesc>Les colons transportent une pile d'ingrédients à la fois, en prenant toujours la plus proche, comme pour les tâches d'un établi. C'est simple et prévisible, mais les personnalisations coûteuses demandent beaucoup de petits trajets.</UWU_HaulPlannerSequentialDesc>
   <!-- EN: Sweep -->
   <UWU_HaulPlannerSweep>Balayage</UWU_HaulPlannerSweep>
-  <!-- EN: Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead. -->
-  <UWU_HaulPlannerSweepDesc>Les colons anticipent et utilisent l'espace libre de leur inventaire pour transporter davantage en une fois, tout en optimisant leur itinéraire entre les ramassages. Beaucoup moins de trajets qu'avec « Séquentiel », pour un coût de planification négligeable.</UWU_HaulPlannerSweepDesc>
+  <!-- EN: Colonists will plan ahead, using spare inventory space to carry more at once and taking a shorter route between pickups. This takes far fewer trips than Sequential and has almost no effect on performance. -->
+  <UWU_HaulPlannerSweepDesc>Les colons anticipent : ils profitent de l'espace libre de leur inventaire pour transporter davantage en une fois et suivent un itinéraire plus court entre les ramassages. Cela demande bien moins de trajets qu'avec « Séquentiel » et n'a presque aucun effet sur les performances.</UWU_HaulPlannerSweepDesc>
   <!-- EN: Thorough -->
   <UWU_HaulPlannerThorough>Approfondi</UWU_HaulPlannerThorough>
-  <!-- EN: Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze. -->
-  <UWU_HaulPlannerThoroughDesc>Comme « Balayage », mais évalue aussi dans quelles piles puiser lorsque la carte en propose plusieurs, au lieu de toujours prendre la plus proche. Plus lent à planifier, mais trouve généralement les trajets les plus courts quand les ingrédients sont dispersés ou que la capacité de transport est limitée. Revient à « Balayage » pour les transports trop complexes à analyser entièrement.</UWU_HaulPlannerThoroughDesc>
+  <!-- EN: Like Sweep, but colonists will also weigh which stacks to take from when there are several to choose from, instead of always taking the closest. This is slower to plan, but will usually find the shortest trips when ingredients are scattered or carrying capacity is tight. It will fall back to Sweep for hauls too complex to analyze fully. -->
+  <UWU_HaulPlannerThoroughDesc>Comme « Balayage », mais les colons évaluent aussi dans quelles piles puiser quand il y en a plusieurs, au lieu de toujours prendre la plus proche. La planification est plus lente, mais elle trouve en général les trajets les plus courts quand les ingrédients sont dispersés ou que la capacité de transport est limitée. Pour les transports trop complexes à analyser entièrement, elle revient à « Balayage ».</UWU_HaulPlannerThoroughDesc>
 
 </LanguageData>

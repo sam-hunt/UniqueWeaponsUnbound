@@ -3,8 +3,8 @@
 
   <!-- EN: unique machining -->
   <UniqueMachining.label>Maschinenbau einzigartiger Waffen</UniqueMachining.label>
-  <!-- EN: Upgrade and customize industrial-era weapons at a machining table, adding or removing traits to suit your needs. -->
-  <UniqueMachining.description>Werte Waffen des Industriezeitalters an einer Werkbank auf und passe sie an, indem du Merkmale nach Bedarf hinzufügst oder entfernst.</UniqueMachining.description>
+  <!-- EN: Upgrade and customize industrial weapons at a machining table, adding or removing traits to suit your needs. -->
+  <UniqueMachining.description>Werte industrielle Waffen an einer Werkbank auf und passe sie an, indem du Merkmale nach Bedarf hinzufügst oder entfernst.</UniqueMachining.description>
 
   <!-- EN: Upgrade and customize industrial unique weapons -->
   <UniqueMachining.customUnlockTexts.0>Einzigartige Waffen des Industriezeitalters aufwerten und anpassen</UniqueMachining.customUnlockTexts.0>

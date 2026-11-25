@@ -16,10 +16,10 @@
        {0} = skill label (lowercase, e.g. crafting) or expertise label; {1} = required level -->
   <!-- EN: requires {0} expertise -->
   <UWU_RequiresExpertise>需要{0}专精</UWU_RequiresExpertise>
-  <!-- EN: no colonist has {0} {1} -->
-  <UWU_NoColonistWithSkill>没有殖民者拥有{1}级{0}技能</UWU_NoColonistWithSkill>
-  <!-- EN: no colonist on this map has {0} {1} -->
-  <UWU_NoColonistOnMapWithSkill>此地图上没有殖民者拥有{1}级{0}技能</UWU_NoColonistOnMapWithSkill>
+  <!-- EN: no colonist has {0} level {1} -->
+  <UWU_NoColonistWithSkill>没有殖民者的{0}技能达到{1}级</UWU_NoColonistWithSkill>
+  <!-- EN: no colonist on this map has {0} level {1} -->
+  <UWU_NoColonistOnMapWithSkill>此地图上没有殖民者的{0}技能达到{1}级</UWU_NoColonistOnMapWithSkill>
   <!-- EN: no colonist has {0} expertise -->
   <UWU_NoColonistWithExpertise>没有殖民者拥有{0}专精</UWU_NoColonistWithExpertise>
   <!-- EN: no colonist on this map has {0} expertise -->
@@ -52,22 +52,24 @@
   <UWU_TabColor>颜色</UWU_TabColor>
 
   <!-- Dialog: Controls -->
-  <!-- EN: This weapon is an ideology relic. Its name can only be changed when forming or reforming an ideoligion. -->
-  <UWU_RelicNameTooltip>这把武器是文化圣物。只有在创建或改革文化时才能更改它的名称。</UWU_RelicNameTooltip>
+  <!-- EN: This weapon is a relic. Its name can only be changed when forming or reforming the ideoligion. -->
+  <UWU_RelicNameTooltip>这把武器是圣物。只有在创建或改革文化时才能更改它的名称。</UWU_RelicNameTooltip>
   <!-- EN: Select at least one trait first -->
   <UWU_SelectTraitFirst>请先选择至少一项特性</UWU_SelectTraitFirst>
-  <!-- EN: Auto-regenerate name when traits change -->
-  <UWU_AutoRegenName>特性变更时自动重新生成名称</UWU_AutoRegenName>
+  <!-- EN: Rename automatically when traits change -->
+  <UWU_AutoRegenName>特性变更时自动重命名</UWU_AutoRegenName>
   <!-- EN: Hide negative traits -->
   <UWU_HideNegativeTraits>隐藏负面特性</UWU_HideNegativeTraits>
 
   <!-- Dialog: Disabled-state messages -->
-  <!-- EN: Select traits to customize texture -->
-  <UWU_SelectTraitsForTexture>选择特性后才能自定义贴图</UWU_SelectTraitsForTexture>
-  <!-- EN: Select traits to customize color -->
-  <UWU_SelectTraitsForColor>选择特性后才能自定义颜色</UWU_SelectTraitsForColor>
-  <!-- EN: Color determined by {0} -->
+  <!-- EN: Select at least one trait to customize the texture -->
+  <UWU_SelectTraitsForTexture>至少选择一项特性后才能自定义贴图</UWU_SelectTraitsForTexture>
+  <!-- EN: Select at least one trait to customize the color -->
+  <UWU_SelectTraitsForColor>至少选择一项特性后才能自定义颜色</UWU_SelectTraitsForColor>
+  <!-- EN: Color is set by {0} -->
   <UWU_ColorDeterminedBy>颜色由“{0}”决定</UWU_ColorDeterminedBy>
+  <!-- EN: Trait color -->
+  <UWU_TraitColor>特性颜色</UWU_TraitColor>
 
   <!-- Dialog: Color sections -->
   <!-- EN: Weapon colors -->
@@ -86,18 +88,18 @@
   <UWU_NetCost>实际成本: </UWU_NetCost>
   <!-- EN: Free -->
   <UWU_CostFree>免费</UWU_CostFree>
-  <!-- EN: Missing resources -->
-  <UWU_MissingResources>资源不足</UWU_MissingResources>
-  <!-- EN: Required materials are insufficient, forbidden, reserved by another pawn, or unreachable from this pawn's position. -->
-  <UWU_NotEnoughMaterials>所需材料不足、已禁用、已预留给其他角色，或从该角色所在位置无法到达。</UWU_NotEnoughMaterials>
-  <!-- EN: Could not customize {0}: no viable haul plan. -->
-  <UWU_CouldNotStartPlanInfeasible>无法自定义{0}：没有可行的搬运计划。</UWU_CouldNotStartPlanInfeasible>
-  <!-- EN: Could not customize {0}: failed to reserve {1} x{2}. -->
+  <!-- EN: Missing ingredients -->
+  <UWU_MissingResources>缺少原料</UWU_MissingResources>
+  <!-- EN: Some ingredients are missing, forbidden, reserved by someone else, or out of this colonist's reach. -->
+  <UWU_NotEnoughMaterials>部分原料缺失、已禁用、已被其他人预留，或该殖民者无法到达。</UWU_NotEnoughMaterials>
+  <!-- EN: Could not customize {0}: could not gather enough ingredients. -->
+  <UWU_CouldNotStartPlanInfeasible>无法自定义{0}：无法凑齐足够的原料。</UWU_CouldNotStartPlanInfeasible>
+  <!-- EN: Could not customize {0}: {1} x{2} could not be reserved. -->
   <UWU_CouldNotStartReservationConflict>无法自定义{0}：无法预留{1} x{2}。</UWU_CouldNotStartReservationConflict>
-  <!-- EN: Could not customize {0}: failed to reserve {1} x{2} (held by {3}). -->
-  <UWU_CouldNotStartReservationConflictHeldBy>无法自定义{0}：无法预留{1} x{2}（由{3}持有）。</UWU_CouldNotStartReservationConflictHeldBy>
-  <!-- EN: Could not customize {0}: internal error. See log. -->
-  <UWU_CouldNotStartInternalError>无法自定义{0}：内部错误。请查看日志。</UWU_CouldNotStartInternalError>
+  <!-- EN: Could not customize {0}: {1} x{2} is reserved by {3}. -->
+  <UWU_CouldNotStartReservationConflictHeldBy>无法自定义{0}：{1} x{2}已被{3}预留。</UWU_CouldNotStartReservationConflictHeldBy>
+  <!-- EN: Could not customize {0}: an error occurred. See error log for more information. -->
+  <UWU_CouldNotStartInternalError>无法自定义{0}：发生了错误。查看错误日志以了解更多信息。</UWU_CouldNotStartInternalError>
 
   <!-- Trait tooltips -->
   <!-- EN: Effects: -->
@@ -106,7 +108,7 @@
   <UWU_DamageType>伤害类型</UWU_DamageType>
   <!-- EN: Extra damage -->
   <UWU_ExtraDamage>额外伤害</UWU_ExtraDamage>
-  <!-- EN: Burst speed -->
+  <!-- EN: Fire rate -->
   <UWU_BurstSpeed>射速</UWU_BurstSpeed>
   <!-- EN: Burst count -->
   <UWU_BurstCount>连射次数</UWU_BurstCount>
@@ -124,14 +126,14 @@
   <UWU_ConflictsWith>与“{0}”冲突</UWU_ConflictsWith>
   <!-- EN: Cannot be the only trait -->
   <UWU_CannotBeOnlyTrait>不能作为唯一的特性</UWU_CannotBeOnlyTrait>
-  <!-- EN: Must disarm from hostile -->
-  <UWU_OnlyOnHostiles>必须从敌人手中缴获</UWU_OnlyOnHostiles>
-  <!-- EN: Warning: this is the only weapon in your pool with this trait. Removing it will remove the trait from the pool of traits you can apply to other weapons. -->
-  <UWU_LastTraitSourceWarning>警告：这是你的武器池中唯一拥有该特性的武器。移除它会使该特性从可应用于其他武器的特性池中消失。</UWU_LastTraitSourceWarning>
+  <!-- EN: Only on weapons held by hostiles -->
+  <UWU_OnlyOnHostiles>仅限敌人持有的武器</UWU_OnlyOnHostiles>
+  <!-- EN: Warning: This is your only weapon with this trait. If you remove the trait, you will not be able to add it to other weapons until you find another weapon that has it. -->
+  <UWU_LastTraitSourceWarning>警告：这是你唯一拥有该特性的武器。移除该特性后，在找到另一把带有它的武器之前，你将无法把它添加到其他武器上。</UWU_LastTraitSourceWarning>
   <!-- EN: No traits match your search. -->
   <UWU_NoTraitsMatchSearch>没有符合搜索条件的特性。</UWU_NoTraitsMatchSearch>
-  <!-- EN: No traits available yet.\n\nRecover unique weapons via quests or world loot\nto unlock their traits for customization. -->
-  <UWU_NoTraitsDiscovered>暂无可用的特性。\n\n通过任务或世界地图战利品回收特化武器，\n即可解锁其特性用于自定义。</UWU_NoTraitsDiscovered>
+  <!-- EN: No traits available yet.\n\nFind unique weapons through quests or exploration to unlock their traits. -->
+  <UWU_NoTraitsDiscovered>暂无可用的特性。\n\n通过任务或探索找到特化武器，即可解锁其特性。</UWU_NoTraitsDiscovered>
   <!-- EN: All available traits for this weapon are negative. Disable "Hide negative traits" below to view them. -->
   <UWU_NoTraitsAfterHideNegative>这把武器所有可用的特性都是负面的。请关闭下方的“隐藏负面特性”以查看它们。</UWU_NoTraitsAfterHideNegative>
   <!-- EN: No traits are compatible with this weapon. -->
@@ -146,31 +148,31 @@
   <UWU_ColorFallback>蓝色</UWU_ColorFallback>
 
   <!-- Jobs -->
-  <!-- EN: Customizing {0} -->
+  <!-- EN: customizing {0}. -->
   <UWU_CustomizingWeapon>自定义{0}。</UWU_CustomizingWeapon>
-  <!-- EN: Adding {0} to {1} -->
+  <!-- EN: adding {0} to {1}. -->
   <UWU_AddingTrait>为{1}添加“{0}”。</UWU_AddingTrait>
-  <!-- EN: Removing {0} from {1} -->
+  <!-- EN: removing {0} from {1}. -->
   <UWU_RemovingTrait>从{1}移除“{0}”。</UWU_RemovingTrait>
-  <!-- EN: Customizing appearance of {0} -->
+  <!-- EN: customizing appearance of {0}. -->
   <UWU_ApplyingCosmetics>自定义{0}的外观。</UWU_ApplyingCosmetics>
-  <!-- EN: Placing {0} on {1} -->
+  <!-- EN: placing {0} on {1}. -->
   <UWU_PlacingWeapon>将{0}放到{1}上。</UWU_PlacingWeapon>
-  <!-- EN: Gathering materials for {0} -->
-  <UWU_GatheringMaterials>为{0}收集材料。</UWU_GatheringMaterials>
-  <!-- EN: Admiring work -->
+  <!-- EN: gathering ingredients for {0}. -->
+  <UWU_GatheringMaterials>为{0}收集原料。</UWU_GatheringMaterials>
+  <!-- EN: admiring work. -->
   <UWU_AdmiringWork>欣赏成果。</UWU_AdmiringWork>
-  <!-- EN: {0} customization interrupted: ingredients lost before {1} could be applied. -->
-  <UWU_IngredientShortfall>{0}的自定义已中断：在应用“{1}”之前材料已丢失。</UWU_IngredientShortfall>
-  <!-- EN: {0} customization interrupted: workbench is no longer available. -->
+  <!-- EN: {0} customization interrupted: ingredients were lost before {1} could be added. -->
+  <UWU_IngredientShortfall>{0}的自定义已中断：在添加“{1}”之前原料已丢失。</UWU_IngredientShortfall>
+  <!-- EN: {0} customization interrupted: the workbench is no longer available. -->
   <UWU_BailWorkbenchUnavailable>{0}的自定义已中断：工作台已不可用。</UWU_BailWorkbenchUnavailable>
-  <!-- EN: {0} customization interrupted: workbench became unreachable. -->
+  <!-- EN: {0} customization interrupted: the workbench can no longer be reached. -->
   <UWU_BailWorkbenchUnreachable>{0}的自定义已中断：工作台已无法到达。</UWU_BailWorkbenchUnreachable>
-  <!-- EN: {0} customization interrupted: workbench has no power or fuel. -->
+  <!-- EN: {0} customization interrupted: the workbench has no power or fuel. -->
   <UWU_BailWorkbenchInactive>{0}的自定义已中断：工作台没有电力或燃料。</UWU_BailWorkbenchInactive>
-  <!-- EN: {0} customization interrupted: weapon was lost. -->
+  <!-- EN: {0} customization interrupted: the weapon was lost. -->
   <UWU_BailWeaponLost>{0}的自定义已中断：武器已丢失。</UWU_BailWeaponLost>
-  <!-- EN: {0} customization interrupted: weapon is no longer accessible. -->
+  <!-- EN: {0} customization interrupted: the weapon is no longer accessible. -->
   <UWU_BailWeaponInaccessible>{0}的自定义已中断：已无法取用该武器。</UWU_BailWeaponInaccessible>
   <!-- EN: {0} customization interrupted: an ingredient was lost while hauling. -->
   <UWU_BailIngredientLost>{0}的自定义已中断：搬运过程中有材料丢失。</UWU_BailIngredientLost>
@@ -188,14 +190,14 @@
   <UWU_BailOpCosmeticsFailed>{0}的自定义已中断：应用外观变更时发生错误。</UWU_BailOpCosmeticsFailed>
   <!-- EN: {0} customization failed unexpectedly. -->
   <UWU_BailUnexpected>{0}的自定义意外失败。</UWU_BailUnexpected>
-  <!-- EN: {0} customization interrupted: the customization dialog could not be opened. See log. -->
-  <UWU_BailDialogOpenFailed>{0}的自定义已中断：无法打开自定义窗口。请查看日志。</UWU_BailDialogOpenFailed>
-  <!-- EN: {0} customization dialog errored and was closed. See log. -->
-  <UWU_DialogErrored>{0}的自定义窗口发生错误并已关闭。请查看日志。</UWU_DialogErrored>
-  <!-- EN: {0} customized, but ability state could not be reconciled. See log. -->
-  <UWU_FinalizeAbilitySyncFailed>{0}已自定义完成，但无法同步能力状态。请查看日志。</UWU_FinalizeAbilitySyncFailed>
-  <!-- EN: {0} customized, but the final color could not be applied. See log. -->
-  <UWU_FinalizeColorFailed>{0}已自定义完成，但无法应用最终颜色。请查看日志。</UWU_FinalizeColorFailed>
+  <!-- EN: {0} customization interrupted: the customization window could not be opened. See error log for more information. -->
+  <UWU_BailDialogOpenFailed>{0}的自定义已中断：无法打开自定义窗口。查看错误日志以了解更多信息。</UWU_BailDialogOpenFailed>
+  <!-- EN: The customization window for {0} closed because of an error. See error log for more information. -->
+  <UWU_DialogErrored>{0}的自定义窗口因错误而关闭。查看错误日志以了解更多信息。</UWU_DialogErrored>
+  <!-- EN: {0} was customized, but its abilities could not be updated. See error log for more information. -->
+  <UWU_FinalizeAbilitySyncFailed>{0}已自定义完成，但无法更新其能力。查看错误日志以了解更多信息。</UWU_FinalizeAbilitySyncFailed>
+  <!-- EN: {0} was customized, but the final color could not be applied. See error log for more information. -->
+  <UWU_FinalizeColorFailed>{0}已自定义完成，但无法应用最终颜色。查看错误日志以了解更多信息。</UWU_FinalizeColorFailed>
   <!-- EN: {0}'s ideoligion color. This weapon is a relic of the {1} ideoligion. -->
   <UWU_RelicIdeoColorTip>{0}的文化颜色。这把武器是{1}文化的圣物。</UWU_RelicIdeoColorTip>
 
@@ -222,95 +224,103 @@
   <UWU_VanillaSuffix>（原版）</UWU_VanillaSuffix>
   <!-- EN:  (experimental) -->
   <UWU_ExperimentalSuffix>（实验性）</UWU_ExperimentalSuffix>
+  <!-- EN: enabled -->
+  <UWU_Enabled>启用</UWU_Enabled>
+  <!-- EN: disabled -->
+  <UWU_Disabled>禁用</UWU_Disabled>
 
   <!-- Settings: Trait costs -->
   <!-- EN: Trait cost multiplier: {0}% -->
   <UWU_TraitCostMultiplier>特性成本倍率: {0}%</UWU_TraitCostMultiplier>
+  <!-- EN: Adjust the material cost of customizing weapons. At 0%, customization is free. Default: {0}%. -->
+  <UWU_TraitCostMultiplierDesc>调整自定义武器所需的材料成本。为0%时，自定义无需花费任何材料。默认：{0}%。</UWU_TraitCostMultiplierDesc>
   <!-- EN: Trait refund rate: {0}% -->
   <UWU_TraitRefundRate>特性返还率: {0}%</UWU_TraitRefundRate>
-  <!-- EN: Trait refund rate has no effect while trait cost multiplier is 0%. -->
+  <!-- EN: The share of a trait's cost that is returned when the trait is removed. Negative traits cost this share to add or remove instead. Default: {0}%. -->
+  <UWU_TraitRefundRateDesc>移除特性时返还的特性成本比例。负面特性则相反，添加或移除时都要支付这一比例的成本。默认：{0}%。</UWU_TraitRefundRateDesc>
+  <!-- EN: The trait refund rate has no effect while the trait cost multiplier is 0%. -->
   <UWU_RefundRateNoEffect>当特性成本倍率为0%时，特性返还率不起作用。</UWU_RefundRateNoEffect>
   <!-- EN: Derive base cost from crafting recipe -->
   <UWU_UseRecipeBaseCost>根据制作配方推算基础成本</UWU_UseRecipeBaseCost>
-  <!-- EN: When enabled, the base material cost for adding traits is derived from the weapon's crafting recipe. When disabled, a flat cost based on generic resources at the weapon's tech level are used instead. Disabling this prevents cheap-to-craft weapons from having unreasonably low trait costs, but may also prevent distinct/modded weapons from having appropriately thematic costs. -->
-  <UWU_UseRecipeBaseCostDesc>启用后，添加特性的基础材料成本将根据武器的制作配方推算。禁用后，则改用基于武器科技等级对应通用资源的固定成本。禁用此项可避免制作成本低廉的武器拥有过低的特性成本，但也可能使特色武器或模组武器无法拥有贴合主题的成本。</UWU_UseRecipeBaseCostDesc>
+  <!-- EN: When enabled, the cost of adding a trait will be based on the weapon's crafting recipe. When disabled, every weapon of the same tech level will use the same flat cost, so cheap weapons no longer have cheap traits. Default: {0}. -->
+  <UWU_UseRecipeBaseCostDesc>启用后，添加特性的成本将根据武器的制作配方计算。禁用后，科技等级相同的武器都使用同一个固定成本，因此廉价武器的特性也不再廉价。默认：{0}。</UWU_UseRecipeBaseCostDesc>
   <!-- EN: Rare trait cost cap: {0}x -->
   <UWU_RarityCostCap>稀有特性成本上限: {0}倍</UWU_RarityCostCap>
-  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. -->
-  <UWU_RarityCostCapDesc>特性的稀有度是指该特性在世界中已发现的特化武器上出现的稀有程度。越稀有的特性成本越高，最多可达其基础成本的该倍数。上限为1倍时，稀有度不会影响成本。</UWU_RarityCostCapDesc>
+  <!-- EN: A trait's rarity is how rarely it appears on unique weapons found in the world. Rarer traits cost more, up to this many times their base cost. At 1x, rarity does not affect cost. Default: {0}x. -->
+  <UWU_RarityCostCapDesc>特性的稀有度是指它在世界中发现的特化武器上出现得有多罕见。越稀有的特性成本越高，最高可达基础成本的这个倍数。为1倍时，稀有度不影响成本。默认：{0}倍。</UWU_RarityCostCapDesc>
   <!-- EN: Advanced trait minimum cost: {0}% -->
   <UWU_ComplexityFloorScale>太空时代特性最低成本: {0}%</UWU_ComplexityFloorScale>
-  <!-- EN: Spacer-tech traits cost a minimum number of advanced components on weapons built without components, such as melee weapons or bows. The minimum scales with crafting work, quality, and trait rarity. 0% removes it. -->
-  <UWU_ComplexityFloorScaleDesc>对于本身不使用零部件建造的武器（例如近战武器或弓），太空时代特性的成本中至少包含一定数量的高级零部件。该最低数量会随制作工作量、品质与特性稀有度而变化。为0%时移除此限制。</UWU_ComplexityFloorScaleDesc>
-  <!-- EN: This setting has no effect while trait cost multiplier is 0%. -->
+  <!-- EN: Spacer-tech traits will always cost a minimum number of advanced components, even on weapons made without components, such as melee weapons and bows. At 0%, there is no minimum. Default: {0}%. -->
+  <UWU_ComplexityFloorScaleDesc>即使是不使用零部件制作的武器，例如近战武器和弓，太空时代特性也始终至少需要一定数量的高级零部件。为0%时没有最低数量。默认：{0}%。</UWU_ComplexityFloorScaleDesc>
+  <!-- EN: This setting has no effect while the trait cost multiplier is 0%. -->
   <UWU_CostSettingNoEffect>当特性成本倍率为0%时，此设置不起作用。</UWU_CostSettingNoEffect>
 
   <!-- Settings: Prerequisites -->
   <!-- EN: Minimum weapon quality: {0} -->
   <UWU_MinimumQuality>武器最低品质: {0}</UWU_MinimumQuality>
-  <!-- EN: Restrict customization to weapons of at least this quality. Awful imposes no restriction. Weapons below the minimum will still show the customization option, but it will be disabled with an explanation. -->
-  <UWU_MinimumQualityDesc>仅允许自定义达到该品质及以上的武器。设为“极差”时不作任何限制。低于最低品质的武器仍会显示自定义选项，但该选项会被禁用并附上说明。</UWU_MinimumQualityDesc>
+  <!-- EN: The lowest quality a weapon can have and still be customized. At awful, every weapon qualifies. Default: {0}. -->
+  <UWU_MinimumQualityDesc>武器至少要达到此品质才能自定义。设为极差时，所有武器都符合要求。默认：{0}。</UWU_MinimumQualityDesc>
   <!-- EN: Require customization research -->
   <UWU_RequireCustomizationResearch>需要自定义研究</UWU_RequireCustomizationResearch>
-  <!-- EN: Require the completion of the {0}, {1}, or {2} research projects before customizing weapons of the corresponding tech level. When disabled, these research projects are hidden from the research tree. -->
-  <UWU_RequireCustomizationResearchDesc>自定义对应科技等级的武器前，需要先完成“{0}”、“{1}”或“{2}”研究项目。禁用后，这些研究项目将从研究界面中隐藏。</UWU_RequireCustomizationResearchDesc>
+  <!-- EN: When enabled, a weapon can only be customized after researching {0}, {1} or {2}, depending on its tech level. When disabled, these projects will be hidden from the research window. Default: {3}. -->
+  <UWU_RequireCustomizationResearchDesc>启用后，武器要先完成“{0}”、“{1}”或“{2}”研究才能自定义，具体取决于其科技等级。禁用后，这些研究项目将从研究界面中隐藏。默认：{3}。</UWU_RequireCustomizationResearchDesc>
   <!-- EN: Require weapon crafting research -->
   <UWU_RequireRecipeResearch>需要武器制作研究</UWU_RequireRecipeResearch>
-  <!-- EN: Require the completion of any research that would enable crafting the weapon. For example, customizing a {0} would require {1}. -->
-  <UWU_RequireRecipeResearchDesc>需要先完成能够解锁该武器制作的研究。例如，自定义{0}需要“{1}”研究。</UWU_RequireRecipeResearchDesc>
+  <!-- EN: When enabled, a weapon can only be customized once the research needed to craft it is complete. For example, customizing a {0} will require {1}. Default: {2}. -->
+  <UWU_RequireRecipeResearchDesc>启用后，武器要在制作它所需的研究完成后才能自定义。例如，自定义{0}需要“{1}”研究。默认：{2}。</UWU_RequireRecipeResearchDesc>
   <!-- EN: Require appropriate workbench -->
   <UWU_RequireWorkbench>需要合适的工作台</UWU_RequireWorkbench>
-  <!-- EN: Require that the workbench matches the weapon's tech level. When disabled, any workbench that can craft weapons is sufficient for customizing all weapons. -->
-  <UWU_RequireWorkbenchDesc>要求工作台与武器的科技等级相匹配。禁用后，任何能制作武器的工作台都可用于自定义所有武器。</UWU_RequireWorkbenchDesc>
+  <!-- EN: When enabled, a weapon must be customized at a workbench of its own tech level. When disabled, any workbench that can craft weapons will do. Default: {0}. -->
+  <UWU_RequireWorkbenchDesc>启用后，武器必须在与其科技等级相同的工作台上自定义。禁用后，任何能制作武器的工作台都可以。默认：{0}。</UWU_RequireWorkbenchDesc>
   <!-- EN: Allow customizing uncraftable weapons -->
   <UWU_AllowUncraftable>允许自定义无法制作的武器</UWU_AllowUncraftable>
-  <!-- EN: Allow customization of weapons that have no crafting recipe. -->
-  <UWU_AllowUncraftableDesc>允许自定义没有制作配方的武器。</UWU_AllowUncraftableDesc>
-  <!-- EN: Allow customizing ultratech-level weapons -->
-  <UWU_AllowUltratech>允许自定义极致科技级武器</UWU_AllowUltratech>
-  <!-- EN: Allow customization of ultratech weapons, requiring {0} research. -->
-  <UWU_AllowUltratechDesc>允许自定义极致科技武器，需要“{0}”研究。</UWU_AllowUltratechDesc>
-  <!-- EN: Automatically enabled because "Allow customizing archotech-level weapons" is on. Both tiers share the same research gate. -->
-  <UWU_AllowUltratechImpliedDesc>因“允许自定义超凡科技级武器”已开启而自动启用。两个等级共用同一个研究前置条件。</UWU_AllowUltratechImpliedDesc>
-  <!-- EN: Allow customizing archotech-level weapons -->
-  <UWU_AllowArchotech>允许自定义超凡科技级武器</UWU_AllowArchotech>
-  <!-- EN: Allow customization of archotech weapons, requiring {0} research. -->
-  <UWU_AllowArchotechDesc>允许自定义超凡科技武器，需要“{0}”研究。</UWU_AllowArchotechDesc>
+  <!-- EN: When enabled, weapons that have no crafting recipe can also be customized. Default: {0}. -->
+  <UWU_AllowUncraftableDesc>启用后，没有制作配方的武器也可以自定义。默认：{0}。</UWU_AllowUncraftableDesc>
+  <!-- EN: Allow customizing ultratech weapons -->
+  <UWU_AllowUltratech>允许自定义极致科技武器</UWU_AllowUltratech>
+  <!-- EN: When enabled, ultratech weapons can be customized once {0} is researched. Default: {1}. -->
+  <UWU_AllowUltratechDesc>启用后，完成“{0}”研究即可自定义极致科技武器。默认：{1}。</UWU_AllowUltratechDesc>
+  <!-- EN: Always enabled while "Allow customizing archotech weapons" is enabled, because both need the same research. -->
+  <UWU_AllowUltratechImpliedDesc>在“允许自定义超凡科技武器”启用期间始终启用，因为两者需要同一项研究。</UWU_AllowUltratechImpliedDesc>
+  <!-- EN: Allow customizing archotech weapons -->
+  <UWU_AllowArchotech>允许自定义超凡科技武器</UWU_AllowArchotech>
+  <!-- EN: When enabled, archotech weapons can be customized once {0} is researched. Default: {1}. -->
+  <UWU_AllowArchotechDesc>启用后，完成“{0}”研究即可自定义超凡科技武器。默认：{1}。</UWU_AllowArchotechDesc>
   <!-- EN: Require minimum crafting skill -->
   <UWU_SkillCheckEnable>要求最低手工技能</UWU_SkillCheckEnable>
-  <!-- EN: Require crafting skill before a weapon can be customized. Choose whose skill is checked and what is required below. -->
-  <UWU_SkillCheckEnableDesc>自定义武器前要求具备手工技能。可在下方选择检查谁的技能以及具体要求。</UWU_SkillCheckEnableDesc>
+  <!-- EN: When enabled, customizing a weapon will require crafting skill. The options below set whose skill counts and how much is needed. Default: {0}. -->
+  <UWU_SkillCheckEnableDesc>启用后，自定义武器需要具备手工技能。下方的选项决定检查谁的技能，以及需要多高。默认：{0}。</UWU_SkillCheckEnableDesc>
   <!-- EN: Skill check applies to -->
   <UWU_SkillCheckSubject>技能检查对象</UWU_SkillCheckSubject>
-  <!-- EN: Whose skill is checked. What is required is set below. -->
-  <UWU_SkillCheckSubjectDesc>检查谁的技能。具体要求在下方设置。</UWU_SkillCheckSubjectDesc>
+  <!-- EN: The colonist whose skill must meet the requirement. -->
+  <UWU_SkillCheckSubjectDesc>技能必须达到要求的殖民者。</UWU_SkillCheckSubjectDesc>
   <!-- EN: No one -->
   <UWU_SkillCheckSubjectNone>无</UWU_SkillCheckSubjectNone>
-  <!-- EN: Any pawn can customize weapons. -->
+  <!-- EN: Anyone can customize weapons. -->
   <UWU_SkillCheckSubjectNoneDesc>任何人都可以自定义武器。</UWU_SkillCheckSubjectNoneDesc>
-  <!-- EN: The pawn doing the customization -->
-  <UWU_SkillCheckSubjectPawn>执行自定义的角色</UWU_SkillCheckSubjectPawn>
-  <!-- EN: The pawn ordered to customize the weapon must meet the requirement. When selecting a pawn for a weapon on the ground, hovering an under-skilled colonist shows their shortfall. -->
-  <UWU_SkillCheckSubjectPawnDesc>被命令自定义武器的角色必须满足要求。为地面上的武器选择角色时，将鼠标悬停在技能不足的殖民者上可查看其差距。</UWU_SkillCheckSubjectPawnDesc>
+  <!-- EN: The colonist doing the work -->
+  <UWU_SkillCheckSubjectPawn>执行工作的殖民者</UWU_SkillCheckSubjectPawn>
+  <!-- EN: The colonist ordered to customize the weapon must have the skill themselves. -->
+  <UWU_SkillCheckSubjectPawnDesc>被命令自定义武器的殖民者自己必须具备该技能。</UWU_SkillCheckSubjectPawnDesc>
   <!-- EN: The most skilled colonist on the map -->
   <UWU_SkillCheckSubjectMap>地图上技能最高的殖民者</UWU_SkillCheckSubjectMap>
-  <!-- EN: Any colonist on the weapon's map may meet the requirement on the colony's behalf. The pawn doing the work does not need the skill themselves. -->
-  <UWU_SkillCheckSubjectMapDesc>武器所在地图上的任何殖民者都可以代表殖民地满足要求。执行工作的角色自己无需具备该技能。</UWU_SkillCheckSubjectMapDesc>
+  <!-- EN: At least one colonist on the weapon's map must have the skill. The colonist doing the work does not need it. -->
+  <UWU_SkillCheckSubjectMapDesc>武器所在地图上至少要有一名殖民者具备该技能。执行工作的殖民者自己则不需要。</UWU_SkillCheckSubjectMapDesc>
   <!-- EN: The most skilled colonist anywhere -->
   <UWU_SkillCheckSubjectWorld>任意位置技能最高的殖民者</UWU_SkillCheckSubjectWorld>
-  <!-- EN: Any colonist anywhere in the world, including caravans and transports, may meet the requirement on the colony's behalf. -->
-  <UWU_SkillCheckSubjectWorldDesc>世界上任何位置的殖民者，包括远行队和运输舱中的殖民者，都可以代表殖民地满足要求。</UWU_SkillCheckSubjectWorldDesc>
+  <!-- EN: At least one of your colonists must have the skill, wherever they are, including in caravans and transports. -->
+  <UWU_SkillCheckSubjectWorldDesc>你的殖民者中至少要有一人具备该技能，无论对方身在何处，包括远行队和运输舱中。</UWU_SkillCheckSubjectWorldDesc>
   <!-- EN: Skill requirement -->
   <UWU_SkillCheckKind>技能要求</UWU_SkillCheckKind>
-  <!-- EN: What the checked pawn must have. -->
-  <UWU_SkillCheckKindDesc>被检查的角色必须具备什么。</UWU_SkillCheckKindDesc>
-  <!-- EN: Has no effect while the skill check applies to no one. -->
-  <UWU_SkillCheckKindNoEffect>技能检查对象为“无”时不起作用。</UWU_SkillCheckKindNoEffect>
+  <!-- EN: How much skill is required. -->
+  <UWU_SkillCheckKindDesc>需要多高的技能。</UWU_SkillCheckKindDesc>
+  <!-- EN: This setting has no effect while the skill check applies to no one. -->
+  <UWU_SkillCheckKindNoEffect>技能检查不针对任何人时，此设置不起作用。</UWU_SkillCheckKindNoEffect>
   <!-- EN: Based on the weapon's crafting recipe -->
   <UWU_SkillCheckKindRecipe>基于武器的制作配方</UWU_SkillCheckKindRecipe>
   <!-- {0} = comma-separated list of tech-tier entries, each formatted with UWU_SkillCheckTierEntry -->
-  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so whoever could craft a weapon can customize it. Weapons without a recipe require a minimum crafting skill by tech level: {0}. -->
-  <UWU_SkillCheckKindRecipeDesc>使用武器制作配方的技能要求，因此能制作武器的人就能自定义它。没有配方的武器按科技等级要求最低手工技能：{0}。</UWU_SkillCheckKindRecipeDesc>
+  <!-- EN: Use the skill requirements of the weapon's crafting recipe, so anyone who could craft a weapon can customize it. A weapon without a recipe will require a minimum crafting skill for its tech level: {0}. -->
+  <UWU_SkillCheckKindRecipeDesc>使用武器制作配方的技能要求，因此能制作武器的人就能自定义它。没有配方的武器，则按其科技等级要求最低手工技能：{0}。</UWU_SkillCheckKindRecipeDesc>
   <!-- {0} = tech level (lowercase), {1} = required crafting level -->
   <!-- EN: {0} {1} -->
   <UWU_SkillCheckTierEntry>{0} {1}级</UWU_SkillCheckTierEntry>
@@ -322,57 +332,61 @@
   <UWU_SkillCheckKindTechTierDesc>按武器的科技等级要求最低手工技能，忽略其制作配方：{0}。</UWU_SkillCheckKindTechTierDesc>
   <!-- EN: Minimum crafting skill: {0} -->
   <UWU_SkillCheckKindFlat>最低手工技能: {0}</UWU_SkillCheckKindFlat>
-  <!-- EN: Require at least this crafting skill level for every weapon. -->
-  <UWU_SkillCheckKindFlatDesc>每把武器都要求至少达到此手工技能等级。</UWU_SkillCheckKindFlatDesc>
-  <!-- EN: Adjusting this selects "Minimum crafting skill". -->
-  <UWU_SkillCheckFlatSliderSelects>调整此项将选中“最低手工技能”。</UWU_SkillCheckFlatSliderSelects>
+  <!-- EN: Require at least this crafting skill level for every weapon. Default: {0}. -->
+  <UWU_SkillCheckKindFlatDesc>每把武器都要求至少达到此手工技能等级。默认：{0}。</UWU_SkillCheckKindFlatDesc>
+  <!-- EN: Adjusting this slider will select "Minimum crafting skill". -->
+  <UWU_SkillCheckFlatSliderSelects>拖动此滑块将选中“最低手工技能”。</UWU_SkillCheckFlatSliderSelects>
   <!-- EN: Weaponsmithing expertise (Vanilla Skills Expanded) -->
   <UWU_SkillCheckKindWeaponsmith>武器锻造专精（Vanilla Skills Expanded）</UWU_SkillCheckKindWeaponsmith>
   <!-- EN: Require the weaponsmithing expertise from Vanilla Skills Expanded. -->
   <UWU_SkillCheckKindWeaponsmithDesc>要求具备 Vanilla Skills Expanded 中的武器锻造专精。</UWU_SkillCheckKindWeaponsmithDesc>
 
   <!-- Settings: Miscellaneous -->
-  <!-- EN: Allow weapon def conversion -->
-  <UWU_AllowDefConversion>允许武器def转换</UWU_AllowDefConversion>
-  <!-- EN: Allow weapons to convert between base and unique defs during customization. When disabled, only already-unique weapons can be customized, and removing all traits keeps the weapon as a zero-trait unique instead of reverting to its base weapon. -->
-  <UWU_AllowDefConversionDesc>允许武器在自定义过程中在基础def与特化def之间转换。禁用后，只有本身已是特化武器的武器才能自定义，且移除所有特性后武器会保持为不带特性的特化武器，而不会还原成基础武器。</UWU_AllowDefConversionDesc>
+  <!-- EN: Allow making weapons unique -->
+  <UWU_AllowDefConversion>允许将武器变为特化武器</UWU_AllowDefConversion>
+  <!-- EN: When enabled, adding a trait to a weapon that is not unique will turn it into its unique version, and removing every trait will turn it back. When disabled, only weapons that are already unique can be customized, and one with no traits left will stay unique. Default: {0}. -->
+  <UWU_AllowDefConversionDesc>启用后，为非特化武器添加特性会将其变为对应的特化版本，移除全部特性则会变回原样。禁用后，只有本身已是特化武器的武器才能自定义，特性被移除殆尽的武器仍保持为特化武器。默认：{0}。</UWU_AllowDefConversionDesc>
   <!-- EN: Enable Ideology color options -->
   <UWU_EnableIdeoColors>启用文化颜色选项</UWU_EnableIdeoColors>
-  <!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. -->
-  <UWU_EnableIdeoColorsDesc>在武器自定义的取色器中显示文化调色板及其他调色板。</UWU_EnableIdeoColorsDesc>
+  <!-- EN: Show Ideology and miscellaneous color palettes in the weapon customization color picker. Default: {0}. -->
+  <UWU_EnableIdeoColorsDesc>在武器自定义的取色器中显示文化调色板及其他调色板。默认：{0}。</UWU_EnableIdeoColorsDesc>
   <!-- EN: Enable structure color options -->
   <UWU_EnableStructureColors>启用建筑颜色选项</UWU_EnableStructureColors>
-  <!-- EN: Show structure color palette in the weapon customization color picker. -->
-  <UWU_EnableStructureColorsDesc>在武器自定义的取色器中显示建筑调色板。</UWU_EnableStructureColorsDesc>
+  <!-- EN: Show the structure color palette in the weapon customization color picker. Default: {0}. -->
+  <UWU_EnableStructureColorsDesc>在武器自定义的取色器中显示建筑调色板。默认：{0}。</UWU_EnableStructureColorsDesc>
+  <!-- EN: Enforce trait colors -->
+  <UWU_EnforceTraitColors>强制使用特性颜色</UWU_EnforceTraitColors>
+  <!-- EN: Some traits, such as gold inlay and tox rounds, set the color of the weapon. When enabled, a weapon with one of these traits will always use that color. When disabled, adding the trait will select its color, but any other color can be picked instead. Default: {0}. -->
+  <UWU_EnforceTraitColorsDesc>部分特性，例如黄金镶嵌和剧毒弹，会决定武器的颜色。启用后，带有这类特性的武器将始终使用该颜色。禁用后，添加特性时会选中它的颜色，但也可以改选其他任何颜色。默认：{0}。</UWU_EnforceTraitColorsDesc>
   <!-- EN: Enforce trait count limit -->
   <UWU_EnforceMaxTraitLimit>强制特性数量上限</UWU_EnforceMaxTraitLimit>
-  <!-- EN: Vanilla unique weapons generate with no more than three traits. Enable this to enforce the same limit during customization. Disable to allow any number of traits (other rules such as category and exclusion restrictions still apply). -->
-  <UWU_EnforceMaxTraitLimitDesc>原版特化武器生成时最多拥有三项特性。启用此项可在自定义时应用相同的上限。禁用则不限制特性数量（类别与互斥等其他规则仍然适用）。</UWU_EnforceMaxTraitLimitDesc>
-  <!-- EN: Enforce sole-trait restrictions -->
-  <UWU_EnforceSoleTrait>强制单一特性限制</UWU_EnforceSoleTrait>
-  <!-- EN: Some traits cannot be the only trait on a weapon during vanilla generation. Enable this to enforce the same restriction during customization. -->
-  <UWU_EnforceSoleTraitDesc>部分特性在原版生成时不能作为武器上唯一的特性。启用此项可在自定义时应用相同的限制。</UWU_EnforceSoleTraitDesc>
+  <!-- EN: Unique weapons found in the world never have more than three traits. When enabled, the same limit will apply to customization. When disabled, a weapon can have any number of traits that do not conflict. Default: {0}. -->
+  <UWU_EnforceMaxTraitLimitDesc>世界中发现的特化武器最多只有三项特性。启用后，自定义时也适用同样的上限。禁用后，武器可以拥有任意数量互不冲突的特性。默认：{0}。</UWU_EnforceMaxTraitLimitDesc>
+  <!-- EN: Enforce lone trait restrictions -->
+  <UWU_EnforceSoleTrait>强制唯一特性限制</UWU_EnforceSoleTrait>
+  <!-- EN: Some traits never appear as the only trait on a unique weapon found in the world. When enabled, the same restriction will apply to customization. Default: {0}. -->
+  <UWU_EnforceSoleTraitDesc>有些特性从不会作为世界中发现的特化武器上的唯一特性出现。启用后，自定义时也适用同样的限制。默认：{0}。</UWU_EnforceSoleTraitDesc>
   <!-- EN: Restrict available traits to discovered weapons -->
   <UWU_RestrictTraitsToDiscovered>将可用特性限制为已发现的武器</UWU_RestrictTraitsToDiscovered>
-  <!-- EN: Lightweight progression system. When enabled, the customization dialog only offers traits found on unique weapons currently visible to the colony: on a loaded map (not fogged, sealed, or possessed by hostiles) or in a player-faction caravan. No persistent state is added to saves; toggling this off restores the full trait list immediately. -->
-  <UWU_RestrictTraitsToDiscoveredDesc>轻量的进度系统。启用后，自定义窗口只会提供殖民地当前可见的特化武器所拥有的特性：位于已加载的地图上（不在迷雾中、未被封存、也不在敌对目标手中），或位于玩家派系的远行队中。不会向存档写入任何持久数据；关闭此项会立即恢复完整的特性列表。</UWU_RestrictTraitsToDiscoveredDesc>
+  <!-- EN: When enabled, only traits found on unique weapons on your maps or in your caravans can be added. Weapons hidden by fog, sealed away or carried by hostiles do not count. When disabled, every trait can be added. Default: {0}. -->
+  <UWU_RestrictTraitsToDiscoveredDesc>启用后，只有在你的地图或远行队中的特化武器上发现的特性才能添加。被迷雾遮蔽、被封存或在敌对者手中的武器不计算在内。禁用后，所有特性都可以添加。默认：{0}。</UWU_RestrictTraitsToDiscoveredDesc>
   <!-- EN: Enable ground weapon right-click menu -->
   <UWU_EnableGroundCustomization>启用地面武器的右键菜单</UWU_EnableGroundCustomization>
-  <!-- EN: Show "Customize" options when right-clicking weapons on the ground. Disable this to reduce float menu clutter, especially with storage mods that stack items in the same cell. Weapons can still be customized by selecting them and using the gizmo button. -->
-  <UWU_EnableGroundCustomizationDesc>右键单击地面上的武器时显示“自定义”选项。禁用此项可减少右键菜单的杂乱，在使用会把物品堆叠在同一格的储存类模组时尤为有用。仍可通过选中武器并使用指令按钮来自定义武器。</UWU_EnableGroundCustomizationDesc>
+  <!-- EN: When enabled, right-clicking a weapon on the ground will offer to customize it. When disabled, the right-click menu stays shorter, and weapons can still be customized by selecting them and pressing the Customize button. Default: {0}. -->
+  <UWU_EnableGroundCustomizationDesc>启用后，右键单击地面上的武器时会提供自定义选项。禁用后，右键菜单会更简短，仍然可以选中武器并点击「自定义」按钮来自定义。默认：{0}。</UWU_EnableGroundCustomizationDesc>
 
   <!-- Settings: Haul planner -->
   <!-- EN: Sequential -->
   <UWU_HaulPlannerSequential>逐次</UWU_HaulPlannerSequential>
-  <!-- EN: Vanilla behavior. Pawns carry up to one ingredient stack at a time, always grabbing the nearest first. Simple and predictable, but means lots of short trips for resource-heavy customizations. -->
-  <UWU_HaulPlannerSequentialDesc>原版行为。角色每次最多搬运一堆材料，且总是先取最近的一堆。简单且可预测，但材料消耗大的自定义会产生大量短途往返。</UWU_HaulPlannerSequentialDesc>
+  <!-- EN: Colonists will carry one stack of ingredients at a time, taking the nearest first, the same way they do for bills. This is simple and predictable, but expensive customizations will take many short trips. -->
+  <UWU_HaulPlannerSequentialDesc>殖民者每次搬运一堆原料，且总是先取最近的，与处理清单时的做法相同。这种方式简单且可预测，但原料消耗大的自定义会产生大量短途往返。</UWU_HaulPlannerSequentialDesc>
   <!-- EN: Sweep -->
   <UWU_HaulPlannerSweep>巡回</UWU_HaulPlannerSweep>
-  <!-- EN: Pawns plan ahead and use spare inventory space to carry more at once, while also routing more efficiently between pickups. Much fewer trips than Sequential, with negligible planning overhead. -->
-  <UWU_HaulPlannerSweepDesc>角色会提前规划，利用剩余的携带空间一次搬运更多材料，同时在各个取货点之间选择更高效的路线。往返次数远少于“逐次”，而规划开销可以忽略不计。</UWU_HaulPlannerSweepDesc>
+  <!-- EN: Colonists will plan ahead, using spare inventory space to carry more at once and taking a shorter route between pickups. This takes far fewer trips than Sequential and has almost no effect on performance. -->
+  <UWU_HaulPlannerSweepDesc>殖民者会提前规划，利用剩余的携带空间一次搬运更多，并在各个取货点之间选择更短的路线。往返次数远少于“逐次”，对性能几乎没有影响。</UWU_HaulPlannerSweepDesc>
   <!-- EN: Thorough -->
   <UWU_HaulPlannerThorough>彻底</UWU_HaulPlannerThorough>
-  <!-- EN: Like Sweep, but also weighs which stacks to draw from when the map has multiple candidates, rather than always taking the closest. Slower to plan, but usually finds the shortest runs when ingredients are scattered or carrying capacity is tight. Falls back to Sweep for hauls too complex to fully analyze. -->
-  <UWU_HaulPlannerThoroughDesc>与“巡回”类似，但当地图上有多个候选堆时，还会权衡该从哪些堆取用材料，而不是总取最近的。规划较慢，但在材料分散或携带能力紧张时，通常能找到最短的搬运路线。对于过于复杂而无法完整分析的搬运，会回退为“巡回”。</UWU_HaulPlannerThoroughDesc>
+  <!-- EN: Like Sweep, but colonists will also weigh which stacks to take from when there are several to choose from, instead of always taking the closest. This is slower to plan, but will usually find the shortest trips when ingredients are scattered or carrying capacity is tight. It will fall back to Sweep for hauls too complex to analyze fully. -->
+  <UWU_HaulPlannerThoroughDesc>与“巡回”类似，但当有多堆可选时，殖民者还会权衡该从哪几堆取用，而不是总取最近的。规划较慢，但在原料分散或携带能力紧张时，通常能找到最短的路线。对于过于复杂而无法完整分析的搬运，会回退为“巡回”。</UWU_HaulPlannerThoroughDesc>
 
 </LanguageData>
