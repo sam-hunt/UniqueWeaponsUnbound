@@ -1,15 +1,15 @@
 Armas únicas desatadas
 
 [h1]Acerca de[/h1]
-El arma única perfecta rara vez aparece con los rasgos perfectos. Ahora puedes cerrar esa brecha: en las mesas de trabajo que ya tienes, con investigaciones que sirven de requisito previo, costes de materiales y ajustes de equilibrio pensados para que todo se sienta merecido.
+Las armas únicas rara vez traen los rasgos que quieres. Con este mod, tus colonos pueden cambiarlos en las mesas de trabajo que ya tienes, a un precio justo en investigación y materiales que puedes ajustar por completo en los ajustes del mod.
 
 [hr][/hr]
 [h2]Personalización de rasgos[/h2]
 [list]
 [*]Añade y quita rasgos de armas en forjas, mesas de maquinado, mesas de ensamblaje y similares
-[*]Convierte armas normales en variantes únicas añadiéndoles su primer rasgo
+[*]Convierte armas comunes en variantes únicas añadiéndoles su primer rasgo
 [*]Quita todos los rasgos para devolver un arma única a su forma base
-[*]Validación completa según el juego base: se respetan el máximo de 3 rasgos, las reglas de conflicto y las restricciones de categoría
+[*]De forma predeterminada se respetan el límite de tres rasgos del juego base, sus reglas de conflicto y sus restricciones de categoría
 [/list]
 
 [h2]Costes temáticos[/h2]
@@ -23,7 +23,7 @@ Modificar rasgos no es gratis. El sistema de costes usa la propia receta de fabr
 
 [h2]Colores, texturas y nombres[/h2]
 [list]
-[*]Elige entre las paletas de colores estándar de las armas, las de Ideology (si el DLC está activo) y las de estructuras
+[*]Elige entre las paletas de colores de las armas y de las estructuras y, con Ideology, las de la ideoligión
 [*]Explora las variantes de textura de las armas que tienen varios estilos visuales
 [*]Genera nombres automáticamente con la gramática del juego base o escribe el tuyo propio
 [*]Los colores bloqueados por un rasgo se indican con claridad, para que sepas qué rasgo controla el color
@@ -59,7 +59,7 @@ La personalización está condicionada por tres niveles de investigación que re
 [*]Se puede quitar sin problemas de una partida (solo aparecerán errores en rojo que se pueden ignorar con seguridad)
 [*]Compatible automáticamente con mods que añaden armas únicas, rasgos de arma o recetas de fabricación nuevos. No usa referencias fijas a defs concretos
 [*]Las mesas de trabajo añadidas por mods que heredan las recetas de armas del juego base se detectan automáticamente
-[*]Funciona con CE, PUAH, Ideology, Simple sidearms, Make it Unique, Alpha Armory
+[*]Funciona con [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2890901044]CE[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1279012058]PUAH[/url], Ideology, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=927155256]Simple sidearms[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3550576656]Make it Unique[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3622294464]Alpha Armoury[/url]
 [*]Los creadores de mods pueden ampliar el sistema de costes con reglas solo en XML o con workers personalizados en C# (consulta la [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Guía para creadores de mods[/url]). Por ahora, la API de XML es bastante básica, pero pronto recibirá una mejora importante.
 [/list]
 
@@ -78,7 +78,7 @@ R: Si el mod añade armas únicas usando el sistema CompUniqueWeapon del juego b
 R: Eso depende de ti. Los ajustes por defecto exigen investigación, la mesa de trabajo adecuada y costes de materiales con sentido. Si quieres que sea más difícil, sube el multiplicador de coste. Si prefieres que sea más fácil, bájalo o sáltate las investigaciones. Tu colonia, tus reglas.
 
 [b]P: ¿Puedo interrumpir un trabajo de personalización sin problema?[/b]
-R: Sí. Cada cambio de rasgo es un trabajo de fabricación independiente. Interrumpirlo no hace perder recursos; el trabajo sin terminar simplemente se cancela.
+R: Sí. Cada cambio de rasgo es un trabajo de fabricación independiente. Interrumpirlo no hace perder recursos. El trabajo sin terminar simplemente se cancela.
 
 [b]P: ¿Combat Extended?[/b]
 R: ¿Sí? No sé mucho sobre CE, pero las pruebas no mostraron errores. Los costes de los rasgos se ajustan automáticamente a los costes de fabricación modificados por CE.

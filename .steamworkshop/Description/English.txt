@@ -9,7 +9,7 @@ Unique weapons rarely come with the traits you want. This mod lets your colonist
 [*]Add and remove weapon traits at smithies, machining tables, and fabrication benches etc
 [*]Convert ordinary weapons into unique variants by adding their first trait
 [*]Remove all traits to revert a unique weapon back to its base form
-[*]Full vanilla validation. Max 3 traits, conflict rules, and category restrictions: all enforced by default
+[*]Vanilla's limit of three traits, its conflict rules and its category restrictions are all enforced by default
 [/list]
 
 [h2]Thematic Costs[/h2]

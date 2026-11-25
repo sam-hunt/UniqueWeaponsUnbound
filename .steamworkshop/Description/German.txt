@@ -1,15 +1,15 @@
 Einzigartige Waffen entfesselt
 
 [h1]Über den Mod[/h1]
-Die perfekte einzigartige Waffe hat nur selten auch die perfekten Merkmale. Jetzt kannst du diese Lücke schließen – an bestehenden Arbeitsstationen, mit Forschungsvoraussetzungen, Materialkosten und Balance-Einstellungen, die dafür sorgen, dass es sich verdient anfühlt.
+Einzigartige Waffen haben selten die Merkmale, die du dir wünschst. Mit diesem Mod ändern deine Kolonisten sie an Arbeitsstationen, die du ohnehin schon hast, zu fairen Kosten an Forschung und Material, die du in den Mod-Einstellungen vollständig anpassen kannst.
 
 [hr][/hr]
 [h2]Merkmalsanpassung[/h2]
 [list]
 [*]Füge Waffenmerkmale an Schmieden, Werkbänken und Fabrikationstischen usw. hinzu oder entferne sie
-[*]Verwandle normale Waffen in einzigartige Varianten, indem du ihr erstes Merkmal hinzufügst
+[*]Verwandle nicht einzigartige Waffen in einzigartige Varianten, indem du ihr erstes Merkmal hinzufügst
 [*]Entferne alle Merkmale, um eine einzigartige Waffe in ihre Basisform zurückzuversetzen
-[*]Vollständige Grundspiel-Validierung: Maximal 3 Merkmale, Konfliktregeln und Kategoriebeschränkungen werden durchgesetzt
+[*]Standardmäßig gelten das Grundspiel-Limit von drei Merkmalen sowie dessen Konfliktregeln und Kategoriebeschränkungen
 [/list]
 
 [h2]Thematische Kosten[/h2]
@@ -23,7 +23,7 @@ Merkmalsänderungen sind nicht kostenlos. Das Kostensystem nutzt den eigenen Her
 
 [h2]Farben, Texturen & Namen[/h2]
 [list]
-[*]Wähle aus den Farbpaletten für Standardwaffen, Ideologie (bei aktivem DLC) und Strukturen.
+[*]Wähle aus Farbpaletten für Waffen und Strukturen, mit Ideology auch für Ideologien
 [*]Durchstöbere Texturvarianten für Waffen mit mehreren visuellen Stilen
 [*]Erzeuge automatisch Namen mit der Grammatik des Grundspiels oder gib eigene ein
 [*]Durch Merkmale festgelegte Farben werden deutlich gekennzeichnet, damit du weißt, welches Merkmal die Farbe bestimmt
@@ -59,7 +59,7 @@ Die Anpassung ist an drei Forschungsstufen gebunden, die den Fortschritt der Waf
 [*]Kann sicher aus Spielständen entfernt werden (nur unbedenkliche rote Fehlermeldungen)
 [*]Automatisch kompatibel mit Mods, die neue einzigartige Waffen, Waffenmerkmale oder Herstellungsaufträge hinzufügen. Keine hartcodierten Def-Referenzen
 [*]Arbeitsstationen aus Mods, die Grundspiel-Waffenaufträge erben, werden automatisch erkannt
-[*]Funktioniert mit CE, PUAH, Ideology, Simple sidearms, Make it Unique, Alpha Armory
+[*]Funktioniert mit [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2890901044]CE[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1279012058]PUAH[/url], Ideology, [url=https://steamcommunity.com/sharedfiles/filedetails/?id=927155256]Simple sidearms[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3550576656]Make it Unique[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3622294464]Alpha Armoury[/url]
 [*]Modder können die Kostenpipeline mit reinen XML-Regeln oder eigenen C#-Workern erweitern (siehe [url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]Leitfaden für Modder[/url]). Die XML-API ist derzeit noch recht simpel, wird aber bald deutlich ausgebaut.
 [/list]
 
@@ -78,7 +78,7 @@ A: Wenn der Mod einzigartige Waffen über das Grundspiel-System CompUniqueWeapon
 A: Das liegt bei dir. Die Standardeinstellungen erfordern Forschung, passende Arbeitsstationen und spürbare Materialkosten. Willst du es schwerer, drehe den Kostenmultiplikator hoch. Willst du es leichter, drehe ihn runter oder überspringe die Forschungen. Deine Kolonie, deine Regeln.
 
 [b]F: Kann ich einen Anpassungsauftrag gefahrlos unterbrechen?[/b]
-A: Ja. Jede Merkmalsänderung ist ein eigener Herstellungsauftrag. Beim Unterbrechen gehen keine Ressourcen verloren; unfertige Arbeit wird einfach abgebrochen.
+A: Ja. Jede Merkmalsänderung ist ein eigener Herstellungsauftrag. Beim Unterbrechen gehen keine Ressourcen verloren. Unfertige Arbeit wird einfach abgebrochen.
 
 [b]F: Combat Extended?[/b]
 A: Ja? Ich weiß nicht viel über CE, aber Tests zeigten keine Fehler. Merkmalskosten passen sich automatisch an die von CE angepassten Herstellungskosten an.

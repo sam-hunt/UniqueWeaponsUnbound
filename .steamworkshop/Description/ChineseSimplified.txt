@@ -1,7 +1,7 @@
 解放特化武器
 
 [h1]关于[/h1]
-完美的特化武器很少会自带理想的特性组合。现在你可以弥补这一差距：在现有的制作工作台上，通过研究前置、材料成本与平衡性设置，让每一次改造都来之不易。
+特化武器很少自带你想要的特性。本模组让你的殖民者在现有的制作工作台上改造它们，只需付出公平的研究与材料代价，而这些代价都可以在模组设置中自由调整。
 
 [hr][/hr]
 [h2]特性自定义[/h2]
@@ -9,7 +9,7 @@
 [*]在锻造台、机械加工台、精密装配台等工作台上添加或移除武器特性。
 [*]为武器添加首个特性，即可将普通武器转换为特化型武器。
 [*]移除全部特性，可将特化武器还原为基础形态。
-[*]完整支持原版验证规则：最多3项特性、冲突规则与类别限制均会强制生效。
+[*]原版的三项特性上限、冲突规则与类别限制，默认全部强制生效。
 [/list]
 
 [h2]主题成本[/h2]
@@ -23,7 +23,7 @@
 
 [h2]颜色、贴图与名称[/h2]
 [list]
-[*]可从标准武器、文化（需启用该DLC）与建筑三种调色板中选择颜色。
+[*]可从武器与建筑调色板中选择颜色，启用Ideology后还能使用文化调色板。
 [*]浏览拥有多种外观风格的武器的贴图变体。
 [*]使用原版语法规则自动生成名称，或自行输入。
 [*]特性锁定的颜色会明确标注，让你清楚知道是哪项特性决定了该颜色。
@@ -59,7 +59,7 @@
 [*]可安全地从存档中移除（仅会出现可忽略的红色错误）。
 [*]自动兼容添加新特化武器、武器特性或制作配方的模组，不依赖任何硬编码的def引用。
 [*]继承原版武器配方的模组工作台会被自动识别。
-[*]兼容CE、PUAH、Ideology、Simple sidearms、Make it Unique、Alpha Armory。
+[*]兼容[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2890901044]CE[/url]、[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1279012058]PUAH[/url]、Ideology、[url=https://steamcommunity.com/sharedfiles/filedetails/?id=927155256]Simple sidearms[/url]、[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3550576656]Make it Unique[/url]、[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3622294464]Alpha Armoury[/url]。
 [*]模组作者可通过纯XML规则或自定义C# worker来扩展成本计算流程（详见[url=https://github.com/sam-hunt/UniqueWeaponsUnbound/blob/main/MODDERS.md]模组作者指南[/url]）。目前XML API还比较基础，但很快会迎来重大升级。
 [/list]
 
@@ -78,7 +78,7 @@
 答：这取决于你自己。默认设置需要研究、匹配的工作台以及有实际意义的材料成本。如果想要更有挑战性，可以调高成本倍率；如果想要更轻松，可以调低设置或跳过相关研究。你的殖民地，你说了算。
 
 [b]问：可以安全地中断自定义作业吗？[/b]
-答：可以。每一次特性变更都是独立的制作作业。中断不会造成资源损失，未完成的工作只会被直接取消。
+答：可以。每一次特性变更都是独立的制作作业。中断不会造成资源损失。未完成的工作只会被直接取消。
 
 [b]问：Combat Extended呢？[/b]
 答：应该可以？我对CE了解不多，但测试中没有出现错误。特性成本会根据CE调整后的制作成本自动适配。
