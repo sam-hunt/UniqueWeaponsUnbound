@@ -7,15 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Entries are short one-liners ready to paste as Steam Workshop change notes: what changed for the player, no rationale, no def names, no sub-bullets. -->
 
-## [Unreleased]
+## [1.8.0] - 2026-11-26
 
 ### Added
 
 - Setting to stop traits from enforcing their color, so a weapon with a trait such as tox rounds or gold inlay can be given any color. Enforced by default, as before.
+- Every setting's tooltip now shows its default, and the trait cost and refund rate sliders gain tooltips.
 
 ### Changed
 
 - Smaller download: the shipped XML no longer carries developer comments, and every image is recompressed without any change to the pixels
+- Settings, messages and descriptions reworded to match the game's own wording, such as colonist, ingredients and fire rate.
+- Customization dialog buttons use the game's own translated labels.
+- The Customize button on weapons is now delivered more efficiently, and also appears on modded weapons that cannot be forbidden.
+- Translations updated for every language.
 
 ## [1.7.2] - 2026-10-17
 
@@ -268,6 +273,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for unique weapons without a base weapon variant
 - Full localization support — all UI strings extracted into keyed files
 
+[1.8.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.8.0
 [1.7.2]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.2
 [1.7.1]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.1
 [1.7.0]: https://github.com/sam-hunt/UniqueWeaponsUnbound/releases/tag/v1.7.0

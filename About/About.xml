@@ -3,7 +3,7 @@
   <name>Unique Weapons Unbound</name>
   <author>Sam Hunt</author>
   <packageId>shunter.uniqueweaponsunbound</packageId>
-  <modVersion>1.7.2</modVersion>
+  <modVersion>1.8.0</modVersion>
   <description>Customize unique weapons at your workbenches. Colonists can add and remove weapon traits, turn an ordinary weapon into a unique one, and change a weapon's color, texture and name.
 
 Customizing a weapon requires research and costs materials based on the weapon's crafting recipe and the trait being added. The costs and requirements can be adjusted in the mod options.
