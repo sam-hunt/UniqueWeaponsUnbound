@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- Techprints are a Royalty-only game system. Without Royalty, ResearchProjectDef.PostLoad
+       force-zeros techprintCount; the leftover heldByFactionCategoryTags then trips a config
+       error ("requires no techprints but has heldByFactionCategoryTags."). The Empire faction
+       category tag is also Royalty-defined. So the base def in Defs/ ships techprint-free and we
+       re-add the whole techprint mechanic here only when Royalty is active.
+
+       The Royalty gate is this file's load root (LoadFolders.xml, IfModActive by package id),
+       not a PatchOperationFindMod: FindMod matches the DLC's display name, which is translated,
+       so it silently missed after a main-menu language switch when the game had started in a
+       language that translates "Royalty". MayRequire cannot gate the added nodes either, since
+       the loader honors it only on defs and list items, not on plain fields like
+       techprintCount (decompile-verified in DirectXmlToObject on 1.7). -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/ResearchProjectDef[defName="UniqueFabrication"]</xpath>
+    <value>
+      <techprintCount>1</techprintCount>
+      <techprintCommonality>5</techprintCommonality>
+      <techprintMarketValue>1500</techprintMarketValue>
+      <heldByFactionCategoryTags>
+        <li>Empire</li>
+        <li>Outlander</li>
+        <li>TradersGuild</li>
+      </heldByFactionCategoryTags>
+    </value>
+  </Operation>
+
+</Patch>

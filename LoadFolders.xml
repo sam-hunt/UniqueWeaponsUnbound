@@ -3,12 +3,21 @@
   <v1.6>
     <li>/</li>
     <li>1.6</li>
+    <!-- Optional-content compat roots live under 1.6/Mods/<Mod Name>/, one gated entry
+         each, gated by package id (IfModActive is language-independent, unlike
+         PatchOperationFindMod, which matches the translated display name). Safe to
+         nest inside 1.6 because the game only scans well-known folders (Defs/,
+         Patches/, Languages/, ...) directly under a load root, so the plain 1.6
+         entry above never sees Mods/. -->
+    <li IfModActive="ludeon.rimworld.royalty">1.6/Mods/Royalty</li>
   </v1.6>
   <v1.7>
     <!-- 1.7 runs the 1.6 tree unchanged: the Waylith CLR maps every UnityEngine
          reference onto UnityStubs, so the net472 assembly loads as-is. Listed
-         explicitly rather than left to the game's highest-lower-version fallback. -->
+         explicitly rather than left to the game's highest-lower-version fallback.
+         Every root (compat roots included) that <v1.6> lists belongs here too. -->
     <li>/</li>
     <li>1.6</li>
+    <li IfModActive="ludeon.rimworld.royalty">1.6/Mods/Royalty</li>
   </v1.7>
 </loadFolders>
